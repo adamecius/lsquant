@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
 		double output = 0.0;
 		for( int m = 0 ; m < mu.HighestMomentNumber() ; m++)
 				output += delta_chebF(x,m)*mu(m,n).real() ;
-		output *=  mu.SystemSize()*mu.ScaleFactor();
+		output *=  mu.SystemSize()/mu.HalfWidth();
 //		outputfile<<x*mu.HalfWidth() + mu.BandCenter() <<" "<<output <<std::endl;}
 		outputfile<<n*mu.TimeDiff() <<" "<<output <<std::endl;
 		

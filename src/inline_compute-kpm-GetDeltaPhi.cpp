@@ -34,17 +34,12 @@ int main(int argc, char *argv[])
 		LABEL   = argv[1],
 		S_OP    = argv[2],
 		S_NMOM  = argv[3],
-		S_ENERGY= argv[4];
+		S_ENERGY= argv[4],
 
 	const int numMoms = atoi(S_NMOM.c_str() );
 	const int numTimes= 1;//atoi(S_NTIME.c_str() );
 	const double tmax = 1;//stod(S_TMAX );
-	const double Energy = stod(S_ENERGY);
-
-
-
-
-
+	const double Energy = stod(S_ENERGY)
 
 	chebyshev::MomentsTD chebMoms(numMoms, numTimes); //load number of moments
 
@@ -83,15 +78,14 @@ int main(int argc, char *argv[])
 	if( argc == 6)
 		gen  = qstates::LoadStateFile(argv[5]);
 
-	const double normalizedEnergy = chebMoms.Rescale2ChebyshevDomain(Energy);
-	chebyshev::ComputeDeltaPhi2(OP[1],chebMoms, gen ,normalizedEnergy);
+	chebyshev::ComputeDeltaPhi(OP[1],chebMoms, gen ,Energy);
 
 	
-	std::string outputfilename="DeltaPhi"+S_OP+LABEL+"KPM_M"+S_NMOM+"_state"+gen.StateLabel()+"_EF"+S_ENERGY+".chebmomTD";	
+	std::string outputfilename="DeltaPhi"+S_OP+LABEL+"KPM_M"+S_NMOM+"_state"+gen.StateLabel()+".chebmomTD";	
 	std::cout<<"Saving convergence data in "<<outputfilename<<std::endl;
   	ofstream outputfile(outputfilename.c_str());
-  	for ( auto wfcoef : chebMoms.DeltaPhi() ){
-    		outputfile << wfcoef.real() << " " << wfcoef.imag() << std::endl;}
+  	for ( auto wfcoef : chebMoms.DeltaPhi() )
+    		outputfile << wfcoef.real() << " " << wfcoef.imag() << std::endl;
   	outputfile.close();
 	std::cout<<"End of program"<<std::endl;
 	return 0;

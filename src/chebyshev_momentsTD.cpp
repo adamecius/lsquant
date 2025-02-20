@@ -1,20 +1,20 @@
 #include "chebyshev_moments.hpp"
 
-int chebyshev::MomentsTD::Deltaiter(double E)
+int chebyshev::MomentsTD::Deltaiter(double E energy)
 {
 
 	const auto NumMoms = this->HighestMomentNumber();
+	const auto dim = this->SystemSize();
 
-
-	/*if( this->Chebyshev0().size()!= dim )
-		std::cout<<"warning"<<std::endl;
+	if( this->Chebyshev0().size()!= dim )
 		this->Chebyshev0() = Moments::vector_t(dim,Moments::value_t(0)); 
 
 	if( this->Chebyshev1().size()!= dim )
-		std::cout<<"warning"<<std::endl;
 		this->Chebyshev1() = Moments::vector_t(dim,Moments::value_t(0)); 
-*/
 
+
+	if( this->DeltaPhi().size()!= dim )
+		this->DeltaPhi() = Moments::vector_t(dim,Moments::value_t(0)); 
 
 	//From now on this-> will be discarded in Chebyshev0() and Chebyshev1()
 
@@ -22,9 +22,6 @@ int chebyshev::MomentsTD::Deltaiter(double E)
   	double g_D_m=chebyshev::Moments::JacksonKernel(currentTm,  NumMoms );
 	double TE=cos(currentTm*acos(E));
 	if (currentTm==0){
-//  		for ( auto wfcoef : Chebyshev0())
-//    			std::cout << wfcoef.real() << " " << wfcoef.imag() << std::endl;
-		std::cout<<std::endl<<"First broadening term in step "<<currentTm<<" is "<<TE*delta_chebF(E,currentTm)*g_D_m<<std::endl; 
 		linalg::axpy( TE*delta_chebF(E,currentTm)*g_D_m , Chebyshev0(), DeltaPhi());
 		currentTm++;
 		return 0;
@@ -40,7 +37,6 @@ int chebyshev::MomentsTD::Deltaiter(double E)
 		Chebyshev0().swap(Chebyshev1());
 		linalg::axpy( TE*delta_chebF(E,currentTm)*g_D_m , Chebyshev1(), DeltaPhi());
 		currentTm++;
-		return 0;
 	}
 };
 
@@ -274,7 +270,7 @@ void chebyshev::MomentsTD::ApplyJacksonKernel( const double broad )
 
   for( size_t m = 0 ; m < maxMom ; m++)
   {
-	  g_D_m = ( (maxMom - m + 1) * cos(phi_J * m) + sin(phi_J * m) /tan(phi_J) ) * phi_J/M_PI;
+	  g_D_m = ( (maxMom - m + 1) * cos(phi_J * m) + sin(phi_J * m) / tan(phi_J) ) * phi_J/M_PI;
 	  for( size_t n = 0 ; n < this->MaxTimeStep() ; n++) this->operator()(m, n) *= g_D_m;
   }
 }

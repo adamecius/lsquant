@@ -196,70 +196,28 @@ int chebyshev::SpectralMoments( SparseMatrixType &OP,  chebyshev::Moments1D &che
 
 
 
-int chebyshev::ComputeDeltaPhi2( SparseMatrixType &OP,  chebyshev::MomentsTD &chebMoms, qstates::generator& gen ,double Energy)
+int chebyshev::ComputeDeltaPhi( SparseMatrixType &OP,  chebyshev::Moments1D &chebMoms, qstates::generator& gen ,double Energy)
 {
 	const auto Dim = chebMoms.SystemSize();
 	const auto NumMoms = chebMoms.HighestMomentNumber();
 
 	gen.SystemSize(Dim);
+	countState=0;
 	while( gen.getQuantumState() )
 	{		
-		auto Phi = gen.State();
-	  	chebMoms.resetCurrentTm();
 
+	  	chebMoms.resetCurrentTm()
+
+		auto Phi = gen.State();
 		//Set the evolved vector as initial vector of the chebyshev iterations
 		if (OP.isIdentity() )
 			chebMoms.SetInitVectors( Phi );
 		else
 			chebMoms.SetInitVectors( OP,Phi );
-		
 			
 		for(int m = 0 ; m < NumMoms ; m++ )
 		{
-  			double g_D_m=chebMoms.JacksonKernel(m,  NumMoms );
-			double scal=2.0/gen.NumberOfStates();
-			if( m==0) scal*=0.5;
-			linalg::axpy( scal*delta_chebF(Energy,m)*g_D_m /chebMoms.HalfWidth(), chebMoms.Chebyshev0(), chebMoms.DeltaPhi());
-			//chebMoms(m) += scal*linalg::vdot( Phi, chebMoms.Chebyshev0() ) ;
-			chebMoms.Iterate();
-		}
-	}
-	return 0;
-};
-
-
-
-
-
-int chebyshev::ComputeDeltaPhi( SparseMatrixType &OP,  chebyshev::MomentsLocal &chebMoms, qstates::generator& gen)
-{
-	const auto Dim = chebMoms.SystemSize();
-	const auto NumMoms = chebMoms.HighestMomentNumber();
-	const auto Norb= chebMoms.NumberOfOrbitals();
-
-	gen.SystemSize(Dim);
-	while( gen.getQuantumState() )
-	{		
-		auto Phi = gen.State();
-
-		//Set the evolved vector as initial vector of the chebyshev iterations
-		if (OP.isIdentity() )
-			chebMoms.SetInitVectors( Phi );
-		else
-			chebMoms.SetInitVectors( OP,Phi );
-		
-			
-		for(size_t m = 0 ; m < NumMoms ; m++ )
-		{
-			//std::cout<<m<<" "<<std::endl;//chebMoms(1073,1480+m)<<std::endl;
-			double scal=2.0/gen.NumberOfStates();
-			if( m==0) scal*=0.5;
-			for (size_t n = 0; n<Norb;n++)
-			{
-				chebMoms(m,n) += scal*conj(Phi[n])*( chebMoms.Chebyshev0()[n]);
-			}
-			//chebMoms(m) += scal*linalg::vdot( Phi, chebMoms.Chebyshev0() ) ;
-			chebMoms.Iterate();
+			chebMoms.Deltaiter(Energy)
 		}
 	}
 	return 0;
@@ -365,10 +323,10 @@ int chebyshev::MeanSquareDisplacement(chebyshev::MomentsTD &chebMoms, qstates::g
 			
 			//SaveWFatEachTimeSpace
 			std::string WFfilename= "WavefunctionatT"+std::to_string(chebMoms.CurrentTimeStep())+".dat";
-  			//ofstream outputfile(WFfilename.c_str());
-  			//for ( auto wfcoef : PhiL )
-    			//	outputfile << wfcoef.real() << " " << wfcoef.imag() << std::endl;
-  			//outputfile.close();
+  			ofstream outputfile(WFfilename.c_str());
+  			for ( auto wfcoef : PhiL )
+    				outputfile << wfcoef.real() << " " << wfcoef.imag() << std::endl;
+  			outputfile.close();
 			
 			
 			chebMoms.IncreaseTimeStep();
@@ -469,7 +427,7 @@ int chebyshev::TimeEvolvedProjectedOperator(SparseMatrixType &OP, SparseMatrixTy
 			{
 				double scal=2.0/gen.NumberOfStates();
 				if( m==0) scal*=0.5;
-				//scal*=2;//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////REMOVE
+//				scal*=2;//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////REMOVE
 				OP.Multiply( chebMoms.Chebyshev0(), PhiT );
 				chebMoms(m,n) += scal*linalg::vdot( PhiL, PhiT ) ;
 				chebMoms.Iterate();
@@ -526,7 +484,7 @@ int chebyshev::TimeEvolvedOperator(SparseMatrixType &OP,  chebyshev::MomentsTD &
 			{
 				double scal=2.0/gen.NumberOfStates();
 				if( m==0) scal*=0.5;
-				//scal*=2;//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////REMOVE
+//				scal*=2;//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////REMOVE
 				OP.Multiply( chebMoms.Chebyshev0(), PhiT );
 				chebMoms(m,n) += scal*linalg::vdot( PhiL, PhiT ) ;
 				chebMoms.Iterate();

@@ -60,13 +60,13 @@ class Moments
 	double ScaleFactor() const { return chebyshev::CUTOFF/HalfWidth(); };
 
 	inline
-	double ShiftFactor() const { return -BandCenter()/HalfWidth()*chebyshev::CUTOFF; };
+	double ShiftFactor() const { return -BandCenter()/HalfWidth()/chebyshev::CUTOFF; };
 
 	inline 
 	vector_t& MomentVector() { return mu ;}
 
 	inline
-	value_t& MomentVector(const size_t i){return  mu[i]; };
+	value_t& MomentVector(const int i){return  mu[i]; };
 
 	inline
 	Moments::vector_t& Chebyshev0(){ return ChebV0; } 
@@ -254,7 +254,7 @@ class Moments2D: public Moments
 
 	void Print();
 
-	protected:
+	private:
 	array<int, 2> numMoms;
 };
 
@@ -310,7 +310,7 @@ class Moments2D: public Moments
 	  Moments::vector_t& Chebyshevx1(){ return ChebVx1; } 
 
 	  inline
-	  Moments::vector_t& DeltaPhi(){ return DelPhi; } 
+	  Moments::vector_t& DeltaPhi(){ return DeltaPhi; } 
 
 	  inline
 	  Moments::vector_t& MSDWF(){ return WFGaussian; } 
@@ -358,9 +358,6 @@ class Moments2D: public Moments
 	  //SETTERS
 	
 	  void resetCurrentTm(){
-		  const auto dim = this->SystemSize();
-		  if( this->DeltaPhi().size()!= dim )
-			  this->DeltaPhi() = Moments::vector_t(dim,Moments::value_t(0)); 
 		  currentTm=0;
 	  }
 
@@ -382,8 +379,6 @@ class Moments2D: public Moments
 
 	  int Conv_Evolve(  vector_t& Phi);
 
-	  int Deltaiter(double E);
-
 	  int MSD_Evolve(  vector_t& Phi);
 
 	  //OPERATORS
@@ -403,177 +398,10 @@ class Moments2D: public Moments
 
   private:
     int currentTm;
-    Moments::vector_t ChebVx0,ChebVx1,WFGaussian,DelPhi;
+    Moments::vector_t ChebVx0,ChebVx1,WFGaussian,DeltaPhi;
     size_t _numMoms, _maxTimeStep, _timeStep;
     double _dt;
   };
-
-
-
-
-
-
-
-
-
-  class MomentsLocal : public Moments
-  {
-	  private:
-		SparseMatrixType* _pNCON;
-	  public:
-	  const double HBAR = 0.6582119624 ;//planck constant in eV.fs
-	 
-
-
-	  MomentsLocal():
-	  _numMoms(1), _Norb(1)
-	  {};
-	  
-	  MomentsLocal( const size_t m, const size_t n ): 
-	  _numMoms(m), _Norb(n)
-	  { this->MomentVector( Moments::vector_t(m*n, 0.0) );    };
-	  
-//	  MomentsLocal( std::string momfilename );
-
-	  MomentsLocal( std::string momfilename,bool binflag);
-
-
-	  //GETTERS
-	  inline
-	  size_t MomentNumber() const { return _numMoms;};
-	  
-	  inline
-	  size_t HighestMomentNumber() const { return _numMoms;};
-	  
-	  inline
-	  size_t CurrentOrbital() const { return _currentOrbital;};
-
-	  inline 
-	  size_t NumberOfOrbitals() const { return _Norb; };
-	  
-	  inline
-	  double ChebyshevFreq() const   { return HalfWidth()/chebyshev::CUTOFF/HBAR; };
-
-	  inline
-	  double ChebyshevFreq_0() const   { return BandCenter()/HBAR; };
-	  
-	  inline
-	  Moments::vector_t& DeltaPhi(){ return DelPhi; } 
-
-
-
-
-
-	  //SETTERS
-	
-	  void resetCurrentTm(){
-		  const auto dim = this->SystemSize();
-		  if( this->DeltaPhi().size()!= dim )
-			  this->DeltaPhi() = Moments::vector_t(dim,Moments::value_t(0)); 
-		  currentTm=0;
-	  }
-
-	  void MomentNumber(const size_t mom);
-	  
-	  void NumberOfOrbitals(const  size_t Norb )  {  _Norb = Norb; };
-
-	  inline
-	  void IncreaseCurrentOrbital(){ _currentOrbital++; };
-
-	  inline
-	  void ResetOrbital(){ _currentOrbital=0; };
-	  
-	  
-	  int Deltaiter(double E);
-
-	  //OPERATORS
-	  inline
-	  Moments::value_t& operator()(const size_t m, const size_t n)
-	  {	  //size_t otherm=1073;
-//	  	  for (size_t i=0;i<NumberOfOrbitals()*HighestMomentNumber();i++){
-//			  size_t idx=otherm*NumberOfOrbitals()+i;
-//			  std::cout<<idx<<std::endl;
-//			  std::cout<<" "<<i<<" "<<idx<<" "<<MomentVector(idx)<<std::endl;
-//		  }	  
-//		  if (m>1072){
-//		  std::cout<<m*NumberOfOrbitals()+n<<std::endl;
-//		  }
-		  return this->MomentVector( m*NumberOfOrbitals() + n );
-	  };
-	  
-	  //Transformation
-	  void ApplyJacksonKernel( const double broad );
-	  
-	  //COSTFUL FUNCTIONS
-	  void saveIn(std::string filename);
-
-	  void saveInBin(std::string filename);
-
-
-	  void Print();
-
-  private:
-    int currentTm;
-    Moments::vector_t WFGaussian,DelPhi;
-    size_t _numMoms, _Norb, _currentOrbital;
-  };
-
-
-
-
-
-
-
-
-class MomentsAC: public Moments2D
-{
- public:
-	MomentsAC( std::string momfilename );
-	//SETTERS
-	bool Freq(std::string frequenciesfilename);
-	void Freq(vector<double> freq_){freq=freq_;}
-	void HighestFreq(double freq){highestFreq=freq;}
-	void NumFreq(int numFreq_){numFreq=numFreq_;}
-	//GETTERS
-	double CurrentFreq(){return freq[currentFreq];}
-	int NumFreq(){return numFreq;}
-	double HighestFreq(){return highestFreq;}
-	
-	
-	double IterateFreq(){return currentFreq++;}
-	void RescaleFreq(){for (int i=0;i<this->NumFreq();i++){freq[i]*=this->ScaleFactor();}}
-
- private:
-	std::vector< double > freq;
-	int currentFreq,numFreq;
-	double highestFreq;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 class Vectors : public Moments
 {

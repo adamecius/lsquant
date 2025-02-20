@@ -92,9 +92,9 @@ void chebyshev::Moments2D::ApplyJacksonKernel( const double b0, const double b1 
 		
 	int maxMom0=  ceil(M_PI/eta0);
 	int maxMom1=  ceil(M_PI/eta1);
-	//Removing the negatives to control the overflow
-	if(  maxMom0 > numMoms[0] || maxMom0<=0 ) maxMom0 = numMoms[0];
-	if(  maxMom1 > numMoms[1] || maxMom1<=0) maxMom1 = numMoms[1];
+
+	if(  maxMom0 > numMoms[0] ) maxMom0 = numMoms[0];
+	if(  maxMom1 > numMoms[1] ) maxMom1 = numMoms[1];
 	std::cout<<"Kernel reduced the number of moments to "<<maxMom0<<" "<<maxMom1<<std::endl;
 	this->MomentNumber( maxMom0,maxMom1 ) ;
 
