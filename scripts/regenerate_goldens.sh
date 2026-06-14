@@ -52,10 +52,16 @@ COUT="$OUT/chain1d"
   rm -rf operators; mkdir -p operators
   "$W2S" chain1d "$CHAIN_NX" 1 1 VX -o operators   # emits HAM + VX only (minimal fixture)
   printf -- "-2 2\n" > BOUNDS                       # EXACT band
-  "$BUILD/inline_compute-kpm-nonEqOp"  chain1d VX VX "$M"   # #3 KG moments -> .chebmom2D
-  "$BUILD/inline_compute-kpm-spectralOp" chain1d 1 "$M" )   # #1 DOS moments (op "1"=identity) -> .chebmom1D
-CMOM="$(cd "$COUT" && ls NonEqOp*chain1d*KPM_M"${M}"x"${M}"*.chebmom2D | head -1)"
-DMOM="$(cd "$COUT" && ls SpectralOp1chain1d*KPM_M"${M}"*.chebmom1D | head -1)"
+  # EXACT TRACE: a local-state set over the full basis e_0..e_{D-1} makes
+  # SpectralMoments compute Sum_i <e_i|T_m|e_i>/D = Tr[T_m]/D exactly (no random
+  # vector, deterministic, machine precision). Uses LinQT's own kernel; no source change.
+  DIM=$(head -1 operators/chain1d.HAM.CSR | awk '{print $1}')
+  { echo local; echo "$DIM"; seq 0 $((DIM-1)); } > exact
+  "$BUILD/inline_compute-kpm-nonEqOp"  chain1d VX VX "$M" exact   # #3 KG moments (exact) -> .chebmom2D
+  "$BUILD/inline_compute-kpm-spectralOp" chain1d 1 "$M" exact     # #1 DOS moments (exact) -> .chebmom1D
+  rm -f exact )
+CMOM="$(cd "$COUT" && ls NonEqOp*chain1d*KPM_M"${M}"x"${M}"_stateexact.chebmom2D | head -1)"
+DMOM="$(cd "$COUT" && ls SpectralOp1chain1d*KPM_M"${M}"_stateexact.chebmom1D | head -1)"
 # (The analytic reference is the closed form embedded in the C++ comparators -- the
 #  proven oracle formula -- so there is nothing to (re)generate here and no Python dep.)
 

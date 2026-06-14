@@ -35,12 +35,12 @@ endif()
 # comparators embed the closed-form reference (the proven oracle formula in
 # lsquant_chain_reference.py), so there is NO Python / data-file dependency to build
 # or run ctest. The oracle .py remain committed only as the symbolic derivation.
-set(CHAIN1D_KG_MOM  ${GOLDEN_DIR}/chain1d/NonEqOpVX-VXchain1dKPM_M64x64_statedefault.chebmom2D)
-set(CHAIN1D_DOS_MOM ${GOLDEN_DIR}/chain1d/SpectralOp1chain1dKPM_M64_statedefault.chebmom1D)
+set(CHAIN1D_KG_MOM  ${GOLDEN_DIR}/chain1d/NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D)
+set(CHAIN1D_DOS_MOM ${GOLDEN_DIR}/chain1d/SpectralOp1chain1dKPM_M64_stateexact.chebmom1D)
 # TOL justified by the single random-vector (R=1, N=2048) stochastic-trace error
 # (~1/sqrt(N)): observed max residual ~0.05 (KG) / ~0.066 (DOS); 0.10 leaves margin
 # while the structure is resolved to ~0.05. Deterministic under KPM_SEED=12345.
-set(CHAIN1D_TOL 0.10)
+set(CHAIN1D_TOL 1e-9)   # exact trace -> machine precision (was 0.10 stochastic)
 
 # #3 Kubo-Greenwood moment matrix vs B.15 normalized form.
 add_executable(chain1d_analytic_test chain1d_analytic_test.cpp)
@@ -57,7 +57,7 @@ add_test(NAME chain1d_dos
 # DOS averaged over N_r=128 single-vector runs (M=64, exact bounds); regenerate with
 # test/dos_reconstructed.sh. Reference is the oracle closed form (not another run).
 set(CHAIN1D_DOS_RECON ${GOLDEN_DIR}/chain1d/DOS_reconstructed.dat)
-set(DOS_RECON_TOL 0.01)
+set(DOS_RECON_TOL 0.005)   # exact trace -> kernel-limited; 0.5% (was 1% stochastic)
 add_executable(dos_reconstructed_test dos_reconstructed_test.cpp)
 add_test(NAME dos_reconstructed
          COMMAND dos_reconstructed_test ${CHAIN1D_DOS_RECON} ${DOS_RECON_TOL})
