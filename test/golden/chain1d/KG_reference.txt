@@ -1,0 +1,13 @@
+# Kubo-Greenwood Chebyshev moment matrix M[m,n] for the 1D chain.
+# GENERATED from lsquant_chain_reference.kg_moment_matrix (B.15 normalized).
+# Do NOT hand-edit; oracle proven in lsquant_derive_core.py. Leading 10x10:
+ 0.5  0 -0.5  0  0  0  0  0  0  0
+ 0  0.5  0 -0.5  0  0  0  0  0  0
+-0.5  0  1  0 -0.5  0  0  0  0  0
+ 0 -0.5  0  1  0 -0.5  0  0  0  0
+ 0  0 -0.5  0  1  0 -0.5  0  0  0
+ 0  0  0 -0.5  0  1  0 -0.5  0  0
+ 0  0  0  0 -0.5  0  1  0 -0.5  0
+ 0  0  0  0  0 -0.5  0  1  0 -0.5
+ 0  0  0  0  0  0 -0.5  0  1  0
+ 0  0  0  0  0  0  0 -0.5  0  1
