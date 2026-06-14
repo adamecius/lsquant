@@ -10,6 +10,7 @@
 #include <complex>
 #include <numeric>
 #include <iostream>
+#include <random>
 using namespace std; // for std::complex<double> , and std::vector
 
 
@@ -35,12 +36,14 @@ namespace qstates
 		public:
 
 	  generator():count(0),dim(0),label("default"), num_states(1),kind(RANDOM_STATE){
-		// Seed the random-state RNG from KPM_SEED when set (reproducible goldens),
-		// else fall back to wall-clock time. Mirrors FillWithRandomPhase().
-		int kpm_seed = time(0);
+		// Deterministic random-phase RNG: per-instance std::mt19937 (NOT the global
+		// C rand()), so multiple generators never clobber each other's stream.
+		// Seed = KPM_SEED env when set, else the fixed compile-time default 12345.
+		// Never time(0) -> goldens are bitwise reproducible from a single seed.
+		unsigned long kpm_seed = 12345UL;
 		if( getenv("KPM_SEED") )
-			kpm_seed = std::stoi(string(getenv("KPM_SEED")));
-		srand( kpm_seed );
+			kpm_seed = std::stoul(string(getenv("KPM_SEED")));
+		rng_.seed( static_cast<std::mt19937::result_type>(kpm_seed) );
 	  }
 
 		int SystemSize() const
@@ -92,18 +95,18 @@ namespace qstates
 						
 						
 					case RANDOM_STATE:
-					  //std::srand(47);
-					  //std::cout<<"HACKED for testing: random state set to atom in the middle. "<<count<<std::endl;
+					{
+						// Random phases drawn from the per-instance mt19937 engine.
+						// Phase convention unchanged: x = (cos f + i sin f)/sqrt(N), f = 2*pi*u, u in [0,1).
 						const double norm = sqrt(out.size());
+						std::uniform_real_distribution<double> uni(0.0, 1.0);
 						for( auto&x : out )
 						{
-							auto phi = 2.0*M_PI*(double)rand() / (double)RAND_MAX ;
+							auto phi = 2.0*M_PI*uni(rng_);
 							x = Complex(cos(phi)/norm,sin(phi)/norm );
 						}
-								
-					        //std::fill(out.begin(), out.etimend(), 0.0);
-						//out[count] = 1.0;
 						break;
+					}
 				}
 				count++;
 				return true;
@@ -130,7 +133,8 @@ namespace qstates
 		int dim;
 		int num_states;
 		StateType kind;
-		
+		std::mt19937 rng_; // per-instance random-phase engine (deterministic; see ctor)
+
 };
 	
 	inline 

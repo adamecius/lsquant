@@ -38,7 +38,30 @@ rm -rf operators; mkdir -p operators
 MOM="$(ls NonEqOp*"${SEED}"*KPM_M"${M}"x"${M}"*.chebmom2D | head -1)"
 "$BUILD/inline_kuboBastinFromChebmom" "$MOM" "$M"
 
+# --- chain1d ANALYTIC goldens: DOS moments (#1) + Kubo-Greenwood matrix (#3) ---
+# EXACT spectral bounds = the true band [-2,2] are MANDATORY. For the DOS the rescaled
+# band must fill [-1,1] exactly so the moments collapse to delta_{m,0} (a pad leaves the
+# divergent band-edge weight out and ruins it); the KG (v^2-weighted, edge weight -> 0)
+# is happy at [-2,2] too. The driver reads bounds from a BOUNDS file (else [-100,100]).
+# NX=2048 keeps the single random vector's stochastic residual (~1/sqrt(N)) small while
+# staying tiny to commit.
+CHAIN_NX=2048
+COUT="$OUT/chain1d"
+[ -f "$COUT/chain1d.xyz" ] || { echo "ERROR: committed chain1d seed $COUT/chain1d.xyz missing"; exit 1; }
+( cd "$COUT"
+  rm -rf operators; mkdir -p operators
+  "$W2S" chain1d "$CHAIN_NX" 1 1 VX -o operators   # emits HAM + VX only (minimal fixture)
+  printf -- "-2 2\n" > BOUNDS                       # EXACT band
+  "$BUILD/inline_compute-kpm-nonEqOp"  chain1d VX VX "$M"   # #3 KG moments -> .chebmom2D
+  "$BUILD/inline_compute-kpm-spectralOp" chain1d 1 "$M" )   # #1 DOS moments (op "1"=identity) -> .chebmom1D
+CMOM="$(cd "$COUT" && ls NonEqOp*chain1d*KPM_M"${M}"x"${M}"*.chebmom2D | head -1)"
+DMOM="$(cd "$COUT" && ls SpectralOp1chain1d*KPM_M"${M}"*.chebmom1D | head -1)"
+# (The analytic reference is the closed form embedded in the C++ comparators -- the
+#  proven oracle formula -- so there is nothing to (re)generate here and no Python dep.)
+
 cd "$REPO"
-echo "KPM_SEED=$KPM_SEED  w2s_sha=511f4db  linqt_head=$(git rev-parse HEAD)  Nx=$NX Ny=$NY Nz=$NZ M=$M  ops=VX,VX" \
-    > GOLDEN_PROVENANCE.txt
-echo "Goldens regenerated under test/golden (operators/*.CSR, $MOM, KuboBastin_*.dat)."
+{
+  echo "graphene: KPM_SEED=$KPM_SEED w2s_sha=511f4db linqt_head=$(git rev-parse HEAD) Nx=$NX Ny=$NY Nz=$NZ M=$M ops=VX,VX"
+  echo "chain1d:  KPM_SEED=$KPM_SEED w2s_sha=511f4db linqt_head=$(git rev-parse HEAD) Nx=$CHAIN_NX Ny=1 Nz=1 M=$M bounds=[-2,2] KG=$CMOM(ops=VX,VX) DOS=$DMOM(op=1) ref=oracle:lsquant_chain_reference.py"
+} > GOLDEN_PROVENANCE.txt
+echo "Goldens regenerated: graphene ($MOM, KuboBastin), chain1d KG ($CMOM) + DOS ($DMOM) vs oracle."

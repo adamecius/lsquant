@@ -4,3 +4,5 @@ build/
 *.d
 .projectile
 .cache/
+.venv/
+__pycache__/

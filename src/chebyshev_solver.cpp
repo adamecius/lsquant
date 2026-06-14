@@ -457,6 +457,16 @@ void chebyshev::evolution(chebyshev::MomentsTD &         H,
 
 std::array<double,2> utility::SpectralBounds( SparseMatrixType& HAM)
 {
+	// DESIGN -- spectral-bounds safeguard.
+	// A BOUNDS file ("lo hi" in the run dir) gives tight, exact bounds and is REQUIRED
+	// for analytic work (loose bounds distort the moment matrix; thesis Fig. 4.2).
+	// When it is absent we must NOT fall back to an arbitrary window (the old -100..100
+	// silently rescaled every spectrum into a tiny sub-interval and corrupted results).
+	// Safeguard: estimate from the Hamiltonian itself via Gershgorin -- for a Hermitian
+	// H every eigenvalue satisfies |lambda| <= max_i sum_j |H_ij| (the inf-norm, a
+	// rigorous spectral-radius bound) -- then pad by 10% for safety. This guarantees the
+	// spectrum is enclosed; it is a SAFE default, not a tight one, so it is printed
+	// loudly and a BOUNDS file should still be supplied for accurate analytics.
 	double highest=0, lowest=0;
 	std::ifstream bounds_file( "BOUNDS" );
 	if( bounds_file.is_open() )
@@ -466,8 +476,23 @@ std::array<double,2> utility::SpectralBounds( SparseMatrixType& HAM)
 	}
 	else
 	{
-		lowest = -100;
-		highest = 100;
+		const double PAD = 0.10; // 10% safety margin on the Gershgorin enclosure
+		auto& mat = HAM.eigen_matrix();
+		double rho = 0.0;        // max absolute row sum = ||H||_inf >= spectral radius
+		for (int r = 0; r < mat.outerSize(); ++r)
+		{
+			double rowsum = 0.0;
+			for (Eigen::SparseMatrix<complex<double>, Eigen::RowMajor, indexType>::InnerIterator it(mat, r); it; ++it)
+				rowsum += std::abs(it.value());
+			if (rowsum > rho) rho = rowsum;
+		}
+		if (rho <= 0.0) rho = 1.0; // degenerate guard
+		highest =  rho*(1.0+PAD);
+		lowest  = -rho*(1.0+PAD);
+		std::cerr << "[SpectralBounds] no BOUNDS file: using Gershgorin estimate |E|<="
+		          << rho << " with " << (int)(PAD*100) << "% pad -> [" << lowest << ", "
+		          << highest << "]. Supply a BOUNDS file ('lo hi') for tight/exact bounds."
+		          << std::endl;
 	}
 	return { lowest, highest};
 };
