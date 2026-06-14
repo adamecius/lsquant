@@ -1,2 +1,2 @@
-graphene: KPM_SEED=12345 w2s_sha=511f4db linqt_head=87eac2b3cc7400e0aaeb7c76477d3569e1eed872 Nx=8 Ny=8 Nz=1 M=64 ops=VX,VX
-chain1d:  KPM_SEED=12345 w2s_sha=511f4db linqt_head=87eac2b3cc7400e0aaeb7c76477d3569e1eed872 Nx=2048 Ny=1 Nz=1 M=64 bounds=[-2,2] KG=NonEqOpVX-VXchain1dKPM_M64x64_statedefault.chebmom2D(ops=VX,VX) DOS=SpectralOp1chain1dKPM_M64_statedefault.chebmom1D(op=1) ref=oracle:lsquant_chain_reference.py
+graphene: KPM_SEED=12345 w2s_sha=511f4db linqt_head=abcef0655c8bd8dc1a4417ffc1c27a5c72d275ab Nx=8 Ny=8 Nz=1 M=64 ops=VX,VX
+chain1d:  KPM_SEED=12345 w2s_sha=511f4db linqt_head=abcef0655c8bd8dc1a4417ffc1c27a5c72d275ab Nx=2048 Ny=1 Nz=1 M=64 bounds=[-2,2] KG=NonEqOpVX-VXchain1dKPM_M64x64_statedefault.chebmom2D(ops=VX,VX) DOS=SpectralOp1chain1dKPM_M64_statedefault.chebmom1D(op=1) ref=oracle:lsquant_chain_reference.py
