@@ -1,7 +1,5 @@
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake) # project specific cmake dir
-set(CMAKE_CXX_STANDARD 11) # tODO move up to a general cmake config for all sub projects ?
-
-#Directories where make is going to look for new projects
-add_subdirectory(wannier2sparse)
-add_subdirectory(wannier2sparse2)
+# Helper utilities. The vendored wannier2sparse and wannier2sparse2 generators
+# have been removed: input generation now uses the standalone, externally-built
+# github.com/adamecius/wannier2sparse (see LINQT_BUILD_INPUT_TOOLS). siesta2sparse
+# is pure Python and self-contained.
 add_subdirectory(python)

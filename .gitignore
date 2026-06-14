@@ -1,5 +1,6 @@
 .vscode*
-*.o 
+*.o
 build/
 *.d
 .projectile
+.cache/

@@ -34,7 +34,14 @@ namespace qstates
 	{
 		public:
 
-	  generator():count(0),dim(0),label("default"), num_states(1),kind(RANDOM_STATE){ srand(time(0));}
+	  generator():count(0),dim(0),label("default"), num_states(1),kind(RANDOM_STATE){
+		// Seed the random-state RNG from KPM_SEED when set (reproducible goldens),
+		// else fall back to wall-clock time. Mirrors FillWithRandomPhase().
+		int kpm_seed = time(0);
+		if( getenv("KPM_SEED") )
+			kpm_seed = std::stoi(string(getenv("KPM_SEED")));
+		srand( kpm_seed );
+	  }
 
 		int SystemSize() const
 		{
