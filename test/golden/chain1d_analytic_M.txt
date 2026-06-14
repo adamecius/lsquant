@@ -1,0 +1,25 @@
+# Analytic Kubo-Greenwood Chebyshev moment matrix M[m,n] for the monoatomic 1D chain.
+# Source: Angel's thesis (TEGADPS.pdf), Eq. (4.9) / App. B Eq. (B.15).
+#
+# Disorder-free, periodic, zero-onsite chain  H = sum_k (-2t cos(k a)) |k><k|.
+# Closed form (Eq. 4.9), prefactor t^2 a^2 / hbar^2 normalized to unity
+# ("unit-coefficient" manipulation, thesis Fig. 4.2 KPM panel):
+#
+#   M[m,n] = delta_{m,n} / (1 + delta_{m,0} + delta_{m,1})   (diagonal: 1/2 for m=0,1; 1 for m>=2)
+#          - (1/2) * delta_{|m-n|, 2}                        (the |m-n|=2 band: -1/2)
+#          = 0  otherwise.
+#
+# The LinQT moments .chebmom2D already carry the Algorithm-1 folding g_m*g_n
+# (g_m = 2/(1+delta_{m,0})); the only remaining map to M is one overall scale
+# (the t^2 a^2/hbar^2 prefactor), fixed by the m>=2 diagonal plateau.
+# Leading 10x10 block (real; VX,VX on a 1D chain => real moments):
+ 0.5   0.0  -0.5   0.0   0.0   0.0   0.0   0.0   0.0   0.0
+ 0.0   0.5   0.0  -0.5   0.0   0.0   0.0   0.0   0.0   0.0
+-0.5   0.0   1.0   0.0  -0.5   0.0   0.0   0.0   0.0   0.0
+ 0.0  -0.5   0.0   1.0   0.0  -0.5   0.0   0.0   0.0   0.0
+ 0.0   0.0  -0.5   0.0   1.0   0.0  -0.5   0.0   0.0   0.0
+ 0.0   0.0   0.0  -0.5   0.0   1.0   0.0  -0.5   0.0   0.0
+ 0.0   0.0   0.0   0.0  -0.5   0.0   1.0   0.0  -0.5   0.0
+ 0.0   0.0   0.0   0.0   0.0  -0.5   0.0   1.0   0.0  -0.5
+ 0.0   0.0   0.0   0.0   0.0   0.0  -0.5   0.0   1.0   0.0
+ 0.0   0.0   0.0   0.0   0.0   0.0   0.0  -0.5   0.0   1.0

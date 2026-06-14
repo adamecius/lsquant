@@ -1,1 +1,2 @@
-KPM_SEED=12345  w2s_sha=511f4db  linqt_head=6ac20545a0beaf8899f40fbb5746a4898c651668  Nx=8 Ny=8 Nz=1 M=64  ops=VX,VX
+graphene: KPM_SEED=12345 w2s_sha=511f4db linqt_head=9dd4e13e047b9816707d48ee92b02542f979bb0c Nx=8 Ny=8 Nz=1 M=64 ops=VX,VX
+chain1d:  KPM_SEED=12345 w2s_sha=511f4db linqt_head=9dd4e13e047b9816707d48ee92b02542f979bb0c Nx=2048 Ny=1 Nz=1 M=64 ops=VX,VX bounds=[-2.05,2.05] ref=test/golden/chain1d_analytic_M.txt(thesis Eq.4.9)
