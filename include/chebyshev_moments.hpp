@@ -1,4 +1,17 @@
 // With contributions made by Angel D. Prieto S.
+/**
+ * @file chebyshev_moments.hpp
+ * @brief Chebyshev moment containers (the KPM moment tables) and their I/O.
+ *
+ * Defines the `chebyshev::Moments` family that stores the Chebyshev expansion produced by
+ * the solver and reconstructed by the post-processing drivers:
+ *  - `Moments1D` — 1D moments `mu_m` (DOS, spectral functions),
+ *  - `Moments2D` — 2D moments `mu_{m,n}` (Kubo–Greenwood / Bastin, the `.chebmom2D` files),
+ *  - `MomentsTD` — time-dependent moments `mu_{m,n}(t)` (evolution, correlations, MSD).
+ *
+ * Each holds the system size, the rescaling (bandwidth / band-centre), the kernel, and
+ * `saveIn`/load helpers for the `.chebmom*` files.
+ */
 #ifndef CHEBYSHEV_MOMENTS
 #define CHEBYSHEV_MOMENTS
 
