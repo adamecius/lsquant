@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-SHA=511f4dbf83dfb031ac7d91dd7fe39c55b2026f5d
+SHA=a7dac9290c3f4ba5b68719561cd4f2520ef02fa5
 CACHE="${W2S_CACHE:-$PWD/.cache/wannier2sparse}"
 BIN="$CACHE/build/wannier2sparse"
 [ -x "$BIN" ] && { echo "$BIN"; exit 0; }                      # cache hit, offline-safe
