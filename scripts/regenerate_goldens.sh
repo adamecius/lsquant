@@ -56,12 +56,8 @@ COUT="$OUT/chain1d"
   "$BUILD/inline_compute-kpm-spectralOp" chain1d 1 "$M" )   # #1 DOS moments (op "1"=identity) -> .chebmom1D
 CMOM="$(cd "$COUT" && ls NonEqOp*chain1d*KPM_M"${M}"x"${M}"*.chebmom2D | head -1)"
 DMOM="$(cd "$COUT" && ls SpectralOp1chain1d*KPM_M"${M}"*.chebmom1D | head -1)"
-
-# Refresh the analytic reference files FROM the oracle (best-effort; needs the venv).
-PYREF=""
-for p in "$REPO/.venv/bin/python" python3; do command -v "$p" >/dev/null 2>&1 && { "$p" -c "import numpy" 2>/dev/null && PYREF="$p" && break; }; done
-if [ -n "$PYREF" ]; then "$PYREF" "$REPO/test/golden/gen_chain1d_reference.py";
-else echo "WARNING: no python+numpy; committed oracle references left as-is"; fi
+# (The analytic reference is the closed form embedded in the C++ comparators -- the
+#  proven oracle formula -- so there is nothing to (re)generate here and no Python dep.)
 
 cd "$REPO"
 {
