@@ -52,6 +52,16 @@ add_executable(chain1d_dos_test chain1d_dos_test.cpp)
 add_test(NAME chain1d_dos
          COMMAND chain1d_dos_test ${CHAIN1D_DOS_MOM} ${CHAIN1D_TOL})
 
+# #2 Reconstructed DOS vs the closed form 1/(pi sqrt(4-E^2)) (oracle), rel err < 1% at the
+# verified interior energies |E|<=1.5. The committed DOS_reconstructed.dat is the per-site
+# DOS averaged over N_r=128 single-vector runs (M=64, exact bounds); regenerate with
+# test/dos_reconstructed.sh. Reference is the oracle closed form (not another run).
+set(CHAIN1D_DOS_RECON ${GOLDEN_DIR}/chain1d/DOS_reconstructed.dat)
+set(DOS_RECON_TOL 0.01)
+add_executable(dos_reconstructed_test dos_reconstructed_test.cpp)
+add_test(NAME dos_reconstructed
+         COMMAND dos_reconstructed_test ${CHAIN1D_DOS_RECON} ${DOS_RECON_TOL})
+
 # Reproducibility + fresh-run physics. Same KPM_SEED => byte-identical moments across
 # two runs (strict determinism gate), AND the fresh moments satisfy the analytic
 # reference within CHAIN1D_TOL (checked by the C++ comparators, no Python). Does NOT

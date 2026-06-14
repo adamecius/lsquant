@@ -59,6 +59,9 @@ DMOM="$(cd "$COUT" && ls SpectralOp1chain1d*KPM_M"${M}"*.chebmom1D | head -1)"
 # (The analytic reference is the closed form embedded in the C++ comparators -- the
 #  proven oracle formula -- so there is nothing to (re)generate here and no Python dep.)
 
+# #2 reconstructed-DOS golden (averaged over N_r runs; vs closed form in the comparator).
+bash "$REPO/test/dos_reconstructed.sh" "$BUILD"
+
 cd "$REPO"
 {
   echo "graphene: KPM_SEED=$KPM_SEED w2s_sha=26cab4a linqt_head=$(git rev-parse HEAD) Nx=$NX Ny=$NY Nz=$NZ M=$M ops=VX,VX"
