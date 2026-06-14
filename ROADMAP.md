@@ -21,12 +21,15 @@ and projected time-evolution operators, and the non-orthogonal solver (further
 developed than any branch). No feature met the bar to merge, so nothing was
 merged into `main`; the genuinely-open items below are kept for review.
 
-> **Verification note.** This evaluation could not build/run the library in its
-> environment (no Intel MKL and no GSL available; could not be installed). Per
-> the operating rule *"never merge code you cannot verify; doubt → roadmap"*,
-> any feature that would require a build-and-smoke-test to confirm is listed
-> here rather than merged. Re-run the merge evaluation in an environment with
-> the GCC+Eigen+FFTW+GSL toolchain (`toolchain-gcc.cmake`) to close them.
+> **Verification note.** `main` builds cleanly via `toolchain-gcc.cmake`
+> (GCC + Eigen + FFTW + GSL + Boost; no Intel MKL required) — the core
+> `libkpm_lib.a` and all executables compile with zero errors and launch
+> (verified reachable). A full physics smoke run (e.g. DOS integrating to ~1)
+> is still pending — it needs a model→moments pipeline. Nothing was merged
+> regardless, because every feature evaluated is already implemented in `main`
+> (superseded); the open items below are the only candidates, and any future
+> merge must still pass build + smoke verification per *"never merge code you
+> cannot verify; doubt → roadmap"*.
 
 ## Dropped during this pass (recoverable via `archive/<name>`)
 
