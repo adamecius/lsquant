@@ -39,6 +39,8 @@ void SparseMatrixType::ConvertFromCOO(vector<indexType> &rows, vector<indexType>
 
 #include <cmath>
 #include <numeric> // For std::accumulate
+#include <stdexcept> // std::runtime_error (Hermiticity guard)
+#include <algorithm> // std::max
 
 
 double compute_norm(const std::vector<complex<double>>& vec) {
@@ -121,13 +123,30 @@ void SparseMatrixType::ConvertFromCSR(vector<indexType> &cols, vector<indexType>
 	
 	//Eigen::SelfAdjointView<Eigen::SparseMatrix<double>, Eigen::Upper> symmetric_view(sparse_matrix);// ->Maybe saves half the memory? Couldnt see the documentation
 
-	std::cout<<"We are no longer assuming a triangular matrix here!"<<std::endl;
-	//std::cout<<"We are assuming a triangular matrix here! considering the bottom triangle as filled with 0s. We are adding the adjoint to the Hamiltonian"<<std::endl;
-	Eigen::SparseMatrix<complex<double>, Eigen::RowMajor, indexType> transp = Eigen::SparseMatrix<complex<double>, Eigen::RowMajor, indexType>( matrix_.adjoint() ); 
-	//if( ( transp - matrix_ ).norm() != 0 ){
-	//std::cout<<"Hamiltonian has to be symmetrized."<<std::endl;
-	matrix_ =  0.5 * (transp + matrix_); 
-	  //}
+	// --- Hermiticity guard: validate the RAW input before folding ---
+	// Computed on matrix_ as read, before the H = 0.5*(M + M^dagger) fold below.
+	const double num = (matrix_ - Eigen::SparseMatrix<complex<double>, Eigen::RowMajor, indexType>(matrix_.adjoint())).norm();
+	const double den = std::max(matrix_.norm(), 1e-300);
+	const double herm_res = num / den;
+	const double herm_tol = 1e-8;
+	if (herm_res > herm_tol) {
+		std::cerr << "[CSR] non-Hermitian input: ||M-M^H||/||M|| = " << herm_res
+		          << " (tol " << herm_tol << "). Likely an upper-triangle file read "
+		             "under the full-matrix convention; off-diagonals would be halved."
+		          << std::endl;
+		throw std::runtime_error("ConvertFromCSR: non-Hermitian CSR input under full-matrix convention");
+	}
+
+	// Input CSR is the FULL Hermitian operator. Fold to enforce/clean Hermiticity:
+	//   H = 0.5*(M + M^dagger)   (identity for an exactly-Hermitian M).
+	// A large self-adjointness residual ||M - M^dagger|| / ||M|| means the producer
+	// wrote a half/triangle matrix under the full convention (off-diagonals would be
+	// silently halved) -> fail rather than corrupt; see the assertion above.
+	// Do NOT reintroduce a plain "U + U^dagger" path: on a diagonal-bearing triangle it
+	// doubles the on-site terms. A real triangle mode must use U + U^dagger - diag(U)
+	// and be selected by an explicit storage tag, never assumed.
+	Eigen::SparseMatrix<complex<double>, Eigen::RowMajor, indexType> transp = Eigen::SparseMatrix<complex<double>, Eigen::RowMajor, indexType>( matrix_.adjoint() );
+	matrix_ =  0.5 * (transp + matrix_);
 
 	
 
