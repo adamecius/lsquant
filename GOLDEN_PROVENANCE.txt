@@ -1,1 +1,1 @@
-KPM_SEED=12345  w2s_sha=511f4db  linqt_head=ac58a949d341470b32dce5a7066b9a629df770a7  Nx=8 Ny=8 Nz=1 M=64  ops=VX,VX
+KPM_SEED=12345  w2s_sha=511f4db  linqt_head=6ac20545a0beaf8899f40fbb5746a4898c651668  Nx=8 Ny=8 Nz=1 M=64  ops=VX,VX
