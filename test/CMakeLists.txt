@@ -1,28 +1,31 @@
-# @author  Barthélémy von Haller
+# Golden-master harness for LinQT.
+#
+# Goldens (committed under test/golden/) are produced by the reference pipeline
+# external wannier2sparse -> inline_compute-kpm-nonEqOp -> inline_kuboBastinFromChebmom,
+# pinned by KPM_SEED (see scripts/regenerate_goldens.sh). The human refactors src/
+# and diffs the regenerated outputs against the committed goldens.
 
+set(GOLDEN_DIR    ${CMAKE_CURRENT_SOURCE_DIR}/golden)
+set(REGEN_SCRIPT  ${CMAKE_SOURCE_DIR}/scripts/regenerate_goldens.sh)
+set(GOLDEN_STAMP  ${GOLDEN_DIR}/operators/graphene_golden.HAM.CSR)
 
-# Compile C++ tests (here only one, but it will grab whatever cxx is in the test directory)
-file(GLOB_RECURSE TEST_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
+# On-demand: `cmake --build <dir> --target regenerate-goldens`
+add_custom_target(regenerate-goldens
+    COMMAND bash ${REGEN_SCRIPT} ${CMAKE_BINARY_DIR}
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    COMMENT "Regenerating golden masters (KPM_SEED-pinned)")
+add_dependencies(regenerate-goldens
+    inline_compute-kpm-nonEqOp inline_kuboBastinFromChebmom)
 
-set( TEST_ROOT ${CMAKE_BINARY_DIR}/test)
-#configure_file(graphene_hr.dat "${TEST_ROOT}/model_from_files/graphene_hr.dat" COPYONLY)
-#configure_file(spin_graphene_hr.dat "${TEST_ROOT}/density_and_current_from_files/spin_graphene_hr.dat" COPYONLY)
-#configure_file(spin_graphene.uc "${TEST_ROOT}/density_and_current_from_files/spin_graphene.uc" COPYONLY)
-#configure_file(spin_graphene.xyz "${TEST_ROOT}/density_and_current_from_files/spin_graphene.xyz" COPYONLY)
-
-
-set(MAIN_LIBRARY kpm_lib)
-
-# Iterate over all tests found. For each, declare an executable and add it to the tests list.
-set(ALL_TESTS)
-foreach(FILE ${TEST_FILES})
-    string(REGEX REPLACE ".cpp" "" NAME ${FILE}) # create exe name
-    set( TEST_DIR "${TEST_ROOT}/${NAME}")
-    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${TEST_DIR}" ) #create a directory for the test
-    add_executable(${NAME} ${FILE})
-    target_link_libraries(${NAME} ${MAIN_LIBRARY} ) # link against our lib and boost test
-    add_test(NAME ${NAME} COMMAND ${NAME} WORKING_DIRECTORY "${TEST_DIR}"  )                              # this is how to add tests to CMake
-endforeach(FILE ${TEST_FILES})
-
-include(CTest)
-
+# First-build bootstrap: generate goldens as part of ALL when they are absent
+# (or forced via -DLINQT_REGEN_GOLDENS=ON) AND the external input tool is enabled.
+# The EXISTS check is evaluated at configure time, so committed goldens make this
+# a no-op on subsequent configures (idempotent).
+if(LINQT_BUILD_INPUT_TOOLS AND (LINQT_REGEN_GOLDENS OR NOT EXISTS ${GOLDEN_STAMP}))
+    add_custom_target(bootstrap-goldens ALL
+        COMMAND bash ${REGEN_SCRIPT} ${CMAKE_BINARY_DIR}
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        COMMENT "Bootstrapping golden masters on first build")
+    add_dependencies(bootstrap-goldens
+        inline_compute-kpm-nonEqOp inline_kuboBastinFromChebmom)
+endif()
