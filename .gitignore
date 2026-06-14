@@ -4,3 +4,4 @@ build/
 *.d
 .projectile
 .cache/
+.venv/
