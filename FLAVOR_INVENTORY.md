@@ -48,3 +48,34 @@ flavor *solver* paths (§1) and the time-evolution machinery (§2) exist; only t
 - Time evolution: present.
 - Magnetic chain model: **missing** — the single prerequisite to build before G2.
 - The clearest density-in-boundary projector is Device-only (out of scope this pass).
+
+---
+
+## G2 readiness update (post Fases 1–4) + audit
+
+**Resolved since the inventory above:**
+- The magnetic chain now exists and is **generated + validated by wannier2sparse**
+  (`gen_models.py::magnetic_chain`, `validate.py` band edge ±2.1). lsquant ships it as a
+  fixture (`test/models/chain1d_mag/`).
+- Spin operators are now built **from the spin doubling** (w2s spin-support fix): for the
+  magnetic chain `S_x,S_y,S_z` satisfy the full su(2) algebra (Hermitian, traceless,
+  `S_a^2=I`, `[S_x,S_y]=2i S_z`); `S_z` is a proper sigma_z for collinear **and** SOC
+  models (graphene SOC `S_z` eig +/-1, was [-2,2]). `S_x != 0` with `[H,S_x] != 0` — the
+  precession source for #6.
+- Time-evolution driver `inline_compute-kpm-TimeEvProjetedOp LABEL OP OPPRJ M Ntime tmax`
+  exists and runs deterministically.
+
+**Audit (both repos, merged main / master): nothing broken.**
+lsquant ctest 3/3, goldens byte-stable, pin == w2s master, committed magnetic-chain
+operators byte-identical to pinned-w2s output; w2s ctest 20/20, `validate.py` 5/5;
+oracle scripts clean.
+
+**Still open before a #6 golden can be ASSERTED (do not guess):**
+The `.chebmomTD -> <sigma_x(E_F,t)>` reconstruction is non-trivial. A bounded exploration
+(`TimeEvProjetedOp chain1d_mag SX SX`, naive E_F=0 reconstruction
+`sum_m g_m*kernel*T_m(0)*C(m,n)`) does **not** reproduce the oracle
+`<sigma_x(t)> = cos(2 J_ex t)` (shape correlation ~0.05, wrong period). So the
+**state-vs-density flavor**, the **energy reconstruction + E_F choice**, and the
+**normalization** must be fixed against the thesis (Eqs. 4.11/4.12) before asserting --
+exactly the "test fails for a non-physics reason" trap. The pieces (model, operators,
+driver) are verified; only the reconstruction mapping remains.
