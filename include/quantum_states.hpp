@@ -1,3 +1,13 @@
+/**
+ * @file quantum_states.hpp
+ * @brief Source states for the stochastic-trace KPM evaluation.
+ *
+ * Defines `qstates::generator`, which yields the vectors whose expectation values
+ * approximate operator traces: random-phase states (the default, for the stochastic
+ * trace), local states, or user-supplied states. Random phases are drawn from a
+ * per-instance `std::mt19937` seeded deterministically from `KPM_SEED` (default 12345),
+ * so moment outputs are bitwise reproducible.
+ */
 #ifndef QUANTUM_STATES
 #define QUANTUM_STATES
 
@@ -31,6 +41,14 @@ namespace qstates
 {
 	typedef std::complex<double> scalar;
 
+	/**
+	 * @brief Iterator-style source-state generator for the stochastic trace.
+	 *
+	 * Call `getQuantumState()` repeatedly to fill the internal state vector (accessed via
+	 * `State()`) with successive source vectors until `NumberOfStates()` is exhausted.
+	 * `kind` selects random-phase, local, or user states; the random-phase engine is
+	 * seeded from `KPM_SEED` (else 12345) for reproducibility.
+	 */
 	struct generator
 	{
 		public:

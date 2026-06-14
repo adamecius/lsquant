@@ -1,3 +1,10 @@
+/**
+ * @file fftw_wrapper.hpp
+ * @brief Thin RAII wrapper around FFTW used by the FFT-based Kubo solvers.
+ *
+ * Manages FFTW plans/buffers (optionally OpenMP-threaded) for the forward/backward
+ * transforms in the Kubo–Greenwood / Kubo–Bastin reconstructions.
+ */
 #include<iostream>
 #include<cmath>
 #include<omp.h>

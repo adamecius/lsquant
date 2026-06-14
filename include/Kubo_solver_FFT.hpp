@@ -1,3 +1,11 @@
+/**
+ * @file Kubo_solver_FFT.hpp
+ * @brief FFT-accelerated Kubo–Bastin conductivity solver.
+ *
+ * Reconstructs the Kubo–Bastin conductivity from the 2D Chebyshev moments using an
+ * FFT over the Chebyshev/energy grid (see `Bastin_FFTs` / `Greenwood_FFTs`), which turns
+ * the double Chebyshev sum into FFTs for large moment counts.
+ */
 #ifndef KUBO_BASTIN_SOLVER_HPP
 #define KUBO_BASTIN_SOLVER_HPP
 

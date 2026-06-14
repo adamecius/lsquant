@@ -1,3 +1,17 @@
+/**
+ * @file chebyshev_solver.hpp
+ * @brief KPM solver entry points — the Chebyshev recursions that fill the moment tables.
+ *
+ * Declares the `chebyshev` routines that drive the Kernel Polynomial Method over a
+ * @ref SparseMatrixType Hamiltonian and a `qstates::generator` of source states, writing
+ * the result into the moment containers of `chebyshev_moments.hpp`:
+ *  - spectral / DOS moments (`SpectralMoments`),
+ *  - Kubo–Greenwood / non-equilibrium correlations (`CorrelationExpansionMoments`),
+ *  - time evolution and time-dependent / projected correlations (`TimeEvolved*`, MSD).
+ *
+ * `chebyshev::utility::SpectralBounds` supplies the rescaling window: it reads a `BOUNDS`
+ * file when present, else estimates a safe Gershgorin enclosure with a 10% pad.
+ */
 #ifndef CHEBYSHEV_SOLVER
 #define CHEBYSHEV_SOLVER
 
@@ -30,6 +44,8 @@ namespace chebyshev
 
 	namespace utility
 	{
+		/// @brief Spectral rescaling window [lo,hi]: from a `BOUNDS` file if present,
+		///        else a Gershgorin enclosure of the Hamiltonian padded by 10% (safe default).
 		std::array<double,2> SpectralBounds( SparseMatrixType& HAM);
 	};
 
@@ -60,10 +76,14 @@ namespace chebyshev
 										);
 
 	
+	/// @brief Fill the 2D Kubo–Greenwood moment table mu_{m,n} = Tr[T_m(H) OPL T_n(H) OPR]
+	///        (stochastic trace over @p gen). @p OPL,@p OPR are the operators (e.g. velocities).
 	int CorrelationExpansionMoments( SparseMatrixType &OPL, SparseMatrixType &OPR,  chebyshev::Moments2D &chebMoms, qstates::generator& gen );
 
+	/// @brief Time-dependent two-operator correlation moments (velocity autocorrelation, ...).
 	int TimeDependentCorrelations( SparseMatrixType &OPL, SparseMatrixType &OPR,  chebyshev::MomentsTD &chebMoms, qstates::generator& gen);
 
+	/// @brief Fill the 1D spectral moment table mu_m = Tr[T_m(H) OP] (DOS when OP is the identity).
 	int SpectralMoments(SparseMatrixType &OP,  chebyshev::Moments1D &chebMoms, qstates::generator& gen);
 
         int SpectralMoments_S_inv(SparseMatrixType &OP,  chebyshev::Moments1D &chebMoms, qstates::generator& gen, std::array<double,2> spectral_bounds);
