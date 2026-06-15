@@ -1,0 +1,6 @@
+observable: hamiltonian
+component: 
+units: eV
+provenance: wannier90 _hr.dat; bounds from Lanczos
+spectral_min: -2.0000000000000022
+spectral_max: 2.0000000000000004

@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
 		builder.BuildOPFromCSRFile(input);
 		
 		if( i == 0 ) //is hamiltonian, obtain automatically the energy bounds
-		 spectral_bounds = chebyshev::utility::SpectralBounds(OP[0]);
+		 spectral_bounds = chebyshev::utility::SpectralBounds(OP[0], "operators/" + LABEL + ".HAM.desc");
 	}
 	
 	//CONFIGURE THE CHEBYSHEV MOMENTS

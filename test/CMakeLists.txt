@@ -153,3 +153,21 @@ add_test(NAME greenwood_regression
 # units.hpp; (3) LSQUANT_RECON_ALPHA changes the reconstruction grid at runtime.
 add_test(NAME safety_factors_guard
          COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/safety_factors_guard.sh ${CMAKE_BINARY_DIR})
+
+# --- descriptor schema conformance (Phase 2) ------------------------------------
+# lsquant's .desc reader mirrors the w2s producer schema (duplicated-but-versioned, no
+# submodule). This parses committed w2s-produced .desc files and asserts every field
+# round-trips, so reader and writer cannot drift silently.
+add_executable(descriptor_conformance_test descriptor_conformance_test.cpp
+               ${CMAKE_SOURCE_DIR}/src/operator_descriptor.cpp)
+target_include_directories(descriptor_conformance_test PRIVATE ${CMAKE_SOURCE_DIR}/include)
+add_test(NAME descriptor_conformance
+         COMMAND descriptor_conformance_test
+                 ${GOLDEN_DIR}/operators/graphene_golden.HAM.desc
+                 ${GOLDEN_DIR}/operators/graphene_golden.VX.desc)
+
+# --- spectral bounds ingested from .desc (Phase 2) ------------------------------
+# Reconstructs the clean-chain DOS with NO BOUNDS file: the window (a,b) must come from the
+# committed chain1d.HAM.desc (Lanczos [-2,2]) and the DOS must match 1/(pi sqrt(4-E^2)).
+add_test(NAME descriptor_bounds
+         COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/descriptor_bounds.sh ${CMAKE_BINARY_DIR})

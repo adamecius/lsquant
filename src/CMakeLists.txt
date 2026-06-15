@@ -15,6 +15,7 @@ set(KPM_LIB_SOURCES
     chebyshev_momentsTD.cpp
     chebyshev_momentsLocal.cpp
     sparse_matrix.cpp
+    operator_descriptor.cpp
     special_functions.cpp
     Kubo_solver_FFT.cpp
     Kubo_solver_FFT_postProcess.cpp

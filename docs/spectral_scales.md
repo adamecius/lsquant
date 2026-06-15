@@ -45,19 +45,19 @@ modes follow if a reconstruction grid reaches the band edge:
    starting at the edge, so one leading NaN poisons the whole curve (the historical all-NaN
    graphene / Haldane Kubo `.dat`).
 
-**Fix.** Reconstruct only on `[-α, α]` with **`α = KPM_ALPHA = 0.95`**, defined alongside
+**Fix.** Reconstruct only on `[-α, α]` with **`α = recon_cutoff = 0.95`**, defined alongside
 `CUTOFF` in `include/chebyshev_moments.hpp`. This is **decoupled from `CUTOFF` on purpose**:
 
 | quantity            | scale used      | why                                              |
 |---------------------|-----------------|--------------------------------------------------|
 | Hamiltonian moments | `CUTOFF = 1.00` | band must fill `[-1,1]` for the oracle identities |
-| reconstruction grids| `KPM_ALPHA = 0.95` | stay off the `1/√(1-x²)` edge singularity     |
+| reconstruction grids| `safety_factors().recon_cutoff` (alpha = 0.95) | stay off the `1/√(1-x²)` edge singularity     |
 
 Two reconstruction paths consume `α`:
-- the **uniform grids** of the `*FromChebmom` drivers — `xbound = KPM_ALPHA`, so the energy
+- the **uniform grids** of the `*FromChebmom` drivers — `xbound = recon_cutoff`, so the energy
   grid runs over `[-α, α]` instead of `[-1, 1]`;
 - the **FFT route** (`Kubo_solver_FFT_postProcess`) — the integration edge cushion is
-  `safety_epsilon = 1 - KPM_ALPHA = 0.05`, so the Fermi-sea integral starts just inside the
+  `safety_epsilon = 1 - recon_cutoff = 0.05`, so the Fermi-sea integral starts just inside the
   edge.
 
 Validated (Haldane t1=-1, t2=0.15, φ=π/2; 16×16; M=256; exact trace): the Kubo-Bastin driver
