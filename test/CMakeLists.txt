@@ -138,3 +138,11 @@ add_test(NAME spin_precession
 add_executable(recon_kernel_oracle_test recon_kernel_oracle_test.cpp)
 target_include_directories(recon_kernel_oracle_test PRIVATE ${CMAKE_SOURCE_DIR}/include)
 add_test(NAME recon_kernel_oracle COMMAND recon_kernel_oracle_test 0.10)
+
+# --- Kubo-Greenwood reconstruction regression (Bug 1, Phase 0) -------------------
+# Pins PR #19: kuboGreenwoodFromChebmom multiplied by ShiftFactor() (==0 for centred bands)
+# so sigma_KG was identically 0. chain1d_analytic/graphene_regression guard MOMENTS, not the
+# reconstruction prefactor -- a regression to sigma_KG==0 would pass CI silently. This asserts
+# the reconstructed sigma_KG(E) from the committed graphene moments is finite and non-zero.
+add_test(NAME greenwood_regression
+         COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/greenwood_regression.sh ${CMAKE_BINARY_DIR})
