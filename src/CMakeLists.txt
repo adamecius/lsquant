@@ -17,6 +17,7 @@ set(KPM_LIB_SOURCES
     sparse_matrix.cpp
     operator_descriptor.cpp
     run_config.cpp
+    inspect.cpp
     reconstruction.cpp
     special_functions.cpp
     Kubo_solver_FFT.cpp
@@ -97,6 +98,7 @@ set(LINQT_APPS
     "inline_compute-Kubo-kpm-FFT-nonOrth|inline_compute-Kubo-kpm-FFT-nonOrth.cpp"
     "inline_compute-kpm-TimeEvOpwithWF|inline_compute-kpm-TimeEvOpwithWF.cpp"
     "lsquant_inspect|lsquant_inspect.cpp"
+    "lsquant|lsquant.cpp"
 )
 
 foreach(entry IN LISTS LINQT_APPS)
