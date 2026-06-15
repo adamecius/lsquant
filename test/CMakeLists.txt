@@ -130,3 +130,11 @@ add_test(NAME hall_haldane
 set(PREC_M 32)
 add_test(NAME spin_precession
          COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/spin_precession.sh ${CMAKE_BINARY_DIR} ${PREC_M})
+
+# --- synthetic reconstruction oracle (Phase R, operator-free) --------------------
+# Feeds analytically-known delta moments (mu_m = T_m(E0)) through the PRODUCTION kernel
+# delta_chebF and checks peak position, Jackson width law (~pi/M), unit weight, and the
+# alpha edge singularity -- isolating the reconstruction knobs from operators/recursion.
+add_executable(recon_kernel_oracle_test recon_kernel_oracle_test.cpp)
+target_include_directories(recon_kernel_oracle_test PRIVATE ${CMAKE_SOURCE_DIR}/include)
+add_test(NAME recon_kernel_oracle COMMAND recon_kernel_oracle_test 0.10)
