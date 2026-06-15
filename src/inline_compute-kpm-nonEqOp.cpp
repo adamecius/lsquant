@@ -11,6 +11,7 @@
 #include "sparse_matrix.hpp"
 #include "quantum_states.hpp"
 #include "chebyshev_solver.hpp"
+#include "run_config.hpp"
 
 namespace kpmKubo
 {
@@ -22,22 +23,34 @@ void printWelcomeMessage();
 }
 int main(int argc, char *argv[])
 {
-	if ( !(argc == 5 || argc == 6) )
+	// Two input paths, same computation:
+	//   lsquant ... --config run.json          (Phase 4: JSON config)
+	//   LABEL OPR OPL numMom [state]           (legacy positional argv -- fallback)
+	std::string LABEL, S_OPR, S_OPL, S_NUM_MOM, state_file;
+	bool have_state = false;
+
+	if ( argc == 3 && std::string(argv[1]) == "--config" )
+	{
+		const lsquant::RunConfig c = lsquant::read_run_config(argv[2]);
+		if ( !c.valid ) { std::cerr << "config error: " << c.error << std::endl; return 1; }
+		kpmKubo::printWelcomeMessage();
+		LABEL = c.label; S_OPR = c.operator_right; S_OPL = c.operator_left;
+		S_NUM_MOM = std::to_string(c.num_moments);
+		if ( c.state != "default" && !c.state.empty() ) { state_file = c.state; have_state = true; }
+	}
+	else if ( argc == 5 || argc == 6 )
+	{
+		kpmKubo::printWelcomeMessage();
+		LABEL = argv[1]; S_OPR = argv[2]; S_OPL = argv[3]; S_NUM_MOM = argv[4];
+		if ( argc == 6 ) { state_file = argv[5]; have_state = true; }
+	}
+	else
 	{
 		kpmKubo::printHelpMessage();
 		return 0;
 	}
-	else
-		kpmKubo::printWelcomeMessage();
-	
-	const std::string
-		LABEL = argv[1],
-		S_OPR = argv[2],
-		S_OPL = argv[3],
-		S_NUM_MOM = argv[4];
 
-
-	const int numMoms= atoi(argv[4]);
+	const int numMoms= atoi(S_NUM_MOM.c_str());
 	chebyshev::Moments2D chebMoms(numMoms,numMoms); //load number of moments
 
 	SparseMatrixType OP[3];
@@ -71,9 +84,9 @@ int main(int argc, char *argv[])
 
 	//Compute the chebyshev expansion table
 	qstates::generator gen;
-	if( argc == 6)	
-		gen  = qstates::LoadStateFile(argv[5]);
-	
+	if( have_state )
+		gen  = qstates::LoadStateFile(state_file);
+
 	chebyshev::CorrelationExpansionMoments( OP[1], OP[2], chebMoms, gen );
 
 	//Save the table in a file

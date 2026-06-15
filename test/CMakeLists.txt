@@ -184,3 +184,16 @@ add_test(NAME tb_descriptor
                  ${SPINOPS_DIR}/chain1d_mag.SX.CSR
                  ${SPINOPS_DIR}/chain1d_mag.SY.CSR
                  ${SPINOPS_DIR}/chain1d_mag.SZ.CSR)
+
+# --- JSON run-config equivalence + inspect (Phase 4) ----------------------------
+# A run.json reproduces the argv path byte-for-byte (same computation, new description), and
+# `lsquant inspect` reports the run + resolved numerical provenance (alpha, bounds source, hbar).
+add_test(NAME config_equivalence
+         COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/config_equivalence.sh ${CMAKE_BINARY_DIR})
+
+# --- CorrOp state-file regression (Phase 4 bug fix) -----------------------------
+# Pins the fix to the atoi(argv[7]) bug: the VAC driver now loads its 7th arg as a state file
+# (was misparsed as a vector count, so "exact" -> 0 -> default). Asserts the exact-trace spec
+# is honored (output tagged stateexact) and deterministic.
+add_test(NAME corrop_state_honored
+         COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/corrop_state_honored.sh ${CMAKE_BINARY_DIR})

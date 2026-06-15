@@ -16,6 +16,7 @@ set(KPM_LIB_SOURCES
     chebyshev_momentsLocal.cpp
     sparse_matrix.cpp
     operator_descriptor.cpp
+    run_config.cpp
     special_functions.cpp
     Kubo_solver_FFT.cpp
     Kubo_solver_FFT_postProcess.cpp
@@ -94,6 +95,7 @@ set(LINQT_APPS
     "device-postProcess_Graphene_NNN|device-postProcess_Graphene_NNN.cpp"
     "inline_compute-Kubo-kpm-FFT-nonOrth|inline_compute-Kubo-kpm-FFT-nonOrth.cpp"
     "inline_compute-kpm-TimeEvOpwithWF|inline_compute-kpm-TimeEvOpwithWF.cpp"
+    "lsquant_inspect|lsquant_inspect.cpp"
 )
 
 foreach(entry IN LISTS LINQT_APPS)

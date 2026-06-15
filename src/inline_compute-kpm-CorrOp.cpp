@@ -41,10 +41,6 @@ int main(int argc, char *argv[])
 	const int numMoms = atoi(S_NMOM.c_str() );
 	const int numTimes= atoi(S_NTIME.c_str() );
 	const double tmax = stod( S_TMAX );
-	int numStates = 1;
-
-	if (argc ==8 )
-		numStates = atoi( argv[7] );
 
 	chebyshev::MomentsTD chebMoms(numMoms, numTimes); //load number of moments
 
@@ -64,8 +60,8 @@ int main(int argc, char *argv[])
 		builder.BuildOPFromCSRFile(input);
 	
 		if( i == 0 ) //is hamiltonian
-		//Obtain automatically the energy bounds
-		 spectral_bounds = chebyshev::utility::SpectralBounds(OP[0]);
+		//Bounds from the descriptor if present (Phase 2), else BOUNDS file / Gershgorin
+		 spectral_bounds = chebyshev::utility::SpectralBounds(OP[0], "operators/" + LABEL + ".HAM.desc");
 	};
 	//CONFIGURE THE CHEBYSHEV MOMENTS
 	chebMoms.SystemLabel(LABEL);
@@ -75,10 +71,14 @@ int main(int argc, char *argv[])
 	chebMoms.SetAndRescaleHamiltonian(OP[0]);
 	chebMoms.Print();
 
-	//Compute the chebyshev expansion table
+	//Compute the chebyshev expansion table.
+	// Bug fix (Phase 4): the optional 7th argument is a STATE FILE (as in the MSD/nonEqOp
+	// drivers), loaded via LoadStateFile -- e.g. an exact-trace 'local'/'exact' spec. The old
+	// code did `numStates = atoi(argv[7])` (so "exact" -> 0) and never loaded the file (a dead
+	// `argc==5` branch), silently forcing the default single random vector.
 	qstates::generator gen;
-	if( argc == 5)
-		gen  = qstates::LoadStateFile(argv[5]);
+	if( argc == 8 )
+		gen  = qstates::LoadStateFile(argv[7]);
 
 	chebyshev::TimeDependentCorrelations( OP[1], OP[2], chebMoms, gen);
 
