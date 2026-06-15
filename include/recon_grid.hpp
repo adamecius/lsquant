@@ -3,10 +3,50 @@
 
 #include <cstdlib>   // getenv, atof
 
+// ============================================================================================
+// THREE distinct cutoff/margin constants live in the KPM pipeline. They are easy to confuse
+// because all three are "numbers near 1 that keep things inside [-1,1]", but they act at
+// DIFFERENT stages, on DIFFERENT quantities, with DIFFERENT correct values. Do NOT merge them.
+//
+//   name          value  where it lives               stage / what it scales
+//   -----------   -----  --------------------------   ---------------------------------------
+//   CUTOFF         1.00  chebyshev_moments.hpp         MOMENT RESCALE. ScaleFactor()=CUTOFF/
+//                        (chebyshev::CUTOFF)           HalfWidth(); ShiftFactor()=-BandCenter/
+//                                                      HalfWidth()*CUTOFF. Maps H -> H~ so the
+//                                                      band fills [-1,1]. *** SACRED = 1.00 ***:
+//                                                      the analytic moment identities (DOS
+//                                                      moments delta_{m,0}, KG matrix B.15) hold
+//                                                      ONLY at exact fill. Lowering it under-fills
+//                                                      the domain and moves every moment (oracle
+//                                                      residual 0.05-0.375 vs tol 1e-9).
+//
+//   recon_cutoff   0.95  recon_grid.hpp (this file)    RECONSTRUCTION GRID (alpha). The energy
+//   (alpha)              safety_factors().recon_cutoff grid runs on [-alpha,alpha] (uniform
+//                                                      route) or with edge cushion 1-alpha (FFT
+//                                                      route). Keeps the grid off the 1/sqrt(1-x^2)
+//                                                      reconstruction-kernel singularity at x=+-1
+//                                                      (the Kubo-Bastin all-NaN band edge).
+//                                                      Runtime-tunable; alpha=1.0 reproduces the
+//                                                      legacy/edge-unsafe grid. NEVER touches moments.
+//
+//   bounds_pad     0.10  recon_grid.hpp (this file)    SPECTRAL-BOUNDS ESTIMATE. Fractional margin
+//                        safety_factors().bounds_pad   on the Gershgorin enclosure of H (used only
+//                                                      when no BOUNDS file): bounds = +-rho*(1+
+//                                                      bounds_pad). Ensures H~ stays in [-1,1] so
+//                                                      the Chebyshev RECURSION is stable. It widens
+//                                                      the *band estimate*, not the recon grid.
+//
+// Mental model: CUTOFF sets how the band maps INTO the Chebyshev domain (moments); bounds_pad
+// makes the band *estimate* conservative enough that the recursion never leaves the domain;
+// recon_cutoff sets how far OUT toward the domain edge we dare to reconstruct. Coupling any two
+// of them is a bug -- the safety_factors_guard test fails if alpha leaks into ScaleFactor().
+// ============================================================================================
+
 namespace chebyshev
 {
 	// Two DISTINCT, named safety factors. Deliberately NOT a single "alpha": they do different
-	// jobs, live at different points, and have different correct values.
+	// jobs, live at different points, and have different correct values (see the table above;
+	// CUTOFF is the third constant and lives, sacred at 1.00, in chebyshev_moments.hpp).
 	struct SafetyFactors
 	{
 		// recon_cutoff (alpha): the reconstruction grid runs on [-alpha, alpha] (or, for the
