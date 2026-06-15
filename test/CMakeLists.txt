@@ -205,3 +205,11 @@ add_test(NAME corrop_state_honored
 # for the GRID_FFT_NODES backend in reconstruct_kubo.
 add_test(NAME fft_grid_regression
          COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/fft_grid_regression.sh ${CMAKE_BINARY_DIR})
+
+# --- Phase 6 scaffolding contract (interfaces only) -----------------------------
+# HamiltonianOp / MetricPolicy are placeholders for the deferred Phase 6 (the core is not
+# migrated onto them yet). This pins the contract: OrthogonalMetric is the identity; the
+# matrix-free and non-orthogonal placeholders THROW (never a silent no-op).
+add_executable(phase6_scaffolding_test phase6_scaffolding_test.cpp)
+target_include_directories(phase6_scaffolding_test PRIVATE ${CMAKE_SOURCE_DIR}/include)
+add_test(NAME phase6_scaffolding COMMAND phase6_scaffolding_test)
