@@ -16,7 +16,10 @@ This VX file is byte-identical to the committed chain1d_ballistic golden, so the
 mean-square-displacement driver reads it directly.
 
 Gershgorin puts the spectrum inside |E| <= 2|t| + W/2, so the bounds widen with
-disorder: BOUNDS = ( -(2 + W/2), +(2 + W/2) ).
+disorder: BOUNDS = ( -(2 + W/2), +(2 + W/2) ). The descriptor records the same
+bounds under the field names the .desc reader parses (`spectral_min`,
+`spectral_max`), so `lsquant inspect` reports them. The mean-square-displacement
+driver reads its bounds from the BOUNDS file, so this script writes BOUNDS too.
 
 The functions are importable (the lsqloc wrapper calls build_chain with a fresh
 seed per disorder realisation). The CLI builds one labelled set in place.
@@ -93,8 +96,8 @@ def _write_desc(path, label, N, W, seed, t=-1.0, csr_path=None):
         f.write(f"disorder_W_eV: {W:g}\n")
         f.write(f"disorder_seed: {seed}\n")
         f.write("has_bounds: true\n")
-        f.write(f"band_min_eV: {-edge:g}\n")
-        f.write(f"band_max_eV: {edge:g}\n")
+        f.write(f"spectral_min: {-edge:g}\n")       # field names the .desc reader parses
+        f.write(f"spectral_max: {edge:g}\n")
         f.write("basis_tags: site:s\n")
         f.write("spin: spinless\n")
         f.write("provenance: make_disordered_chain.py: 1D Anderson chain, periodic\n")

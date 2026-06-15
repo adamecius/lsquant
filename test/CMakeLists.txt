@@ -231,3 +231,10 @@ add_test(NAME example_dos_smoke
 # disordered MSD plateau is finite and far below the clean-chain ballistic value.
 add_test(NAME example_localization_smoke
          COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/example_localization_smoke.sh ${CMAKE_BINARY_DIR})
+
+# --- examples/03_haldane_hall pipeline smoke (matplotlib-free) -------------------
+# Runs the tutorial's modern pipeline: make_haldane.py + lsquant compute --config (bounds from
+# the .desc, no BOUNDS file) + lsquant reconstruct. Asserts the Hall gap plateau gives Chern +1
+# and the longitudinal sigma_xx vanishes in the gap.
+add_test(NAME example_haldane_smoke
+         COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/example_haldane_smoke.sh ${CMAKE_BINARY_DIR})

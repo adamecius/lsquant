@@ -18,7 +18,13 @@ For each size this script writes, inside the current example folder:
 
 The sidecar carries everything that defines the operator as a physical object
 (units, observable identity, basis tags, spectral bounds, provenance). The
-numerical CSR carries the matrix. They live side by side.
+numerical CSR carries the matrix. They live side by side. The bounds use the
+field names the .desc reader parses (`spectral_min`, `spectral_max`), so
+`lsquant inspect operators/<label>.HAM.desc` reports them.
+
+The spectral driver this tutorial uses (`inline_compute-kpm-spectralOp`) reads
+its bounds from the BOUNDS file, so this script writes BOUNDS as well; the
+descriptor travels alongside as the physical record.
 
 Usage:
     python make_chain.py 512
@@ -83,8 +89,8 @@ def write_desc(path, label, N, t=-1.0, csr_path=None):
         f.write("periodic: true\n")
         f.write(f"hopping_t_eV: {t:g}\n")
         f.write("has_bounds: true\n")
-        f.write(f"band_min_eV: {a:g}\n")
-        f.write(f"band_max_eV: {b:g}\n")
+        f.write(f"spectral_min: {a:g}\n")          # field names the .desc reader parses
+        f.write(f"spectral_max: {b:g}\n")
         f.write(f"band_width_eV: {b - a:g}\n")
         f.write(f"band_center_eV: {0.5 * (a + b):g}\n")
         f.write("basis_tags: site:s\n")          # one s-like orbital per site
