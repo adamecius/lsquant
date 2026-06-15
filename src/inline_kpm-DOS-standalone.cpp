@@ -123,7 +123,7 @@ void postProcess(chebyshev::Moments1D& mu ){
 	const int num_div = 30*mu.HighestMomentNumber();
 	
 	const double
-	xbound = chebyshev::CUTOFF;
+	xbound = chebyshev::KPM_ALPHA;
 		
 	std::vector< double >  energies(num_div,0);
 	for( int i=0; i < num_div; i++)

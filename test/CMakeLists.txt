@@ -94,3 +94,11 @@ add_executable(chebmom_compare chebmom_compare.cpp)
 set(GRAPHENE_REGR_TOL 1e-6)
 add_test(NAME graphene_regression
          COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/graphene_reproduce.sh ${CMAKE_BINARY_DIR} ${GRAPHENE_REGR_TOL})
+
+# --- reconstruction NaN/Inf guard (alpha safeguard, Phase 1) ---------------------
+# The Kubo-Bastin kernels carry 1/sqrt(1-x^2), NaN at the band edges x=+-1; the
+# cumulative integral then poisons the whole curve (the historical all-NaN .dat).
+# KPM_ALPHA=0.95 keeps the reconstruction grid off the singularity. This asserts the
+# Kubo-Bastin reconstruction of the committed graphene moments is finite everywhere.
+add_test(NAME reconstruction_nan_guard
+         COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/reconstruction_nan_guard.sh ${CMAKE_BINARY_DIR})
