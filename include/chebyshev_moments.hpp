@@ -34,6 +34,24 @@ namespace chebyshev
 {
 	const double CUTOFF = 1.00;
 
+	// KPM_ALPHA — the reconstruction-grid safety cutoff (the "alpha" safeguard).
+	//
+	// The Hamiltonian moments are rescaled so the band fills the Chebyshev domain
+	// [-1, 1] exactly (CUTOFF = 1.00 above); this is required for the analytic moment
+	// identities (DOS moments = delta_{m,0}, Kubo-Greenwood matrix = B.15) to hold.
+	//
+	// The *reconstruction* step is different: the kernels carry 1/sqrt(1 - x^2)
+	// (delta_chebF, greenR_chebF, DgreenR_chebF in chebyshev_coefficients.hpp), which
+	// is NaN at x = +-1. A uniform reconstruction grid that reaches +-1, or an FFT
+	// integration that runs all the way to the band edge, hits that singularity and
+	// (for the cumulative Kubo-Bastin integral) poisons the whole curve with NaN.
+	//
+	// Fix: reconstruct only on [-alpha, alpha] with alpha = 0.95 < 1, so the grid never
+	// touches the singularity. Decoupled from CUTOFF on purpose: moments stay at [-1, 1]
+	// (oracle-exact), only the reconstruction grids/edge use alpha. The FFT route uses
+	// the complementary cushion safety_epsilon = 1 - KPM_ALPHA.
+	const double KPM_ALPHA = 0.95;
+
 class Moments
 {
 	public:
