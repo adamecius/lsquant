@@ -213,3 +213,9 @@ add_test(NAME fft_grid_regression
 add_executable(phase6_scaffolding_test phase6_scaffolding_test.cpp)
 target_include_directories(phase6_scaffolding_test PRIVATE ${CMAKE_SOURCE_DIR}/include)
 add_test(NAME phase6_scaffolding COMMAND phase6_scaffolding_test)
+
+# --- single lsquant dispatcher binary (Phase 7) ---------------------------------
+# `lsquant <command>` subsumes the library-ized tasks: reconstruct (byte-identical to the legacy
+# inline_kubo* drivers) and inspect (shared lsquant::inspect_path with the standalone binary).
+add_test(NAME single_binary
+         COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/single_binary.sh ${CMAKE_BINARY_DIR})
