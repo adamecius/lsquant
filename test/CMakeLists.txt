@@ -146,3 +146,10 @@ add_test(NAME recon_kernel_oracle COMMAND recon_kernel_oracle_test 0.10)
 # the reconstructed sigma_KG(E) from the committed graphene moments is finite and non-zero.
 add_test(NAME greenwood_regression
          COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/greenwood_regression.sh ${CMAKE_BINARY_DIR})
+
+# --- Phase 1 safety-factor invariants (alpha decoupled, HBAR single, alpha runtime) ---
+# Guards: (1) ScaleFactor()/ShiftFactor() use CUTOFF only -- alpha must NEVER enter the moment
+# rescale (it would break the analytic moment identities); (2) the HBAR literal lives only in
+# units.hpp; (3) LSQUANT_RECON_ALPHA changes the reconstruction grid at runtime.
+add_test(NAME safety_factors_guard
+         COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/safety_factors_guard.sh ${CMAKE_BINARY_DIR})

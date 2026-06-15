@@ -6,6 +6,7 @@
 #include <complex>
 #include <vector>
 #include <string>
+#include "units.hpp"
 #include <array>
 
 #include "sparse_matrix.hpp" //contain SparseMatrixType
@@ -280,7 +281,6 @@ class Moments2D_Device: public Moments_Device
 	  private:
 		SparseMatrixType* _pNCON;
 	  public:
-	  const double HBAR = 0.6582119624 ;//planck constant in eV.fs
 	 
 
 
