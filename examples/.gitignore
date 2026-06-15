@@ -3,12 +3,17 @@
 __pycache__/
 operators/
 BOUNDS
+exact
 exact_*
+run_*.json
 SpectralOp*
 Correlation*
+NonEqOp*
 moments_*
 mean*JACKSON*.dat
 mean*EF*.dat
+KuboBastin*.dat
+KuboGreenWood*.dat
 *.chebmom1D
 *.chebmom2D
 *.chebmomTD
