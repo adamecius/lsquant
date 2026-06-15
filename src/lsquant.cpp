@@ -12,17 +12,31 @@
 
 #include "inspect.hpp"
 #include "observable.hpp"
+#include "compute.hpp"
+#include "run_config.hpp"
 #include "chebyshev_moments.hpp"
 
 static int usage(const char* prog)
 {
 	std::cerr << "usage: " << prog << " <command> [args...]\n\n"
 	          << "commands:\n"
-	          << "  inspect <run.json | operator.desc>\n"
-	          << "        print a run / operator and its resolved numerical provenance\n"
+	          << "  compute --config <run.json>\n"
+	          << "        compute the 2D Kubo moments for a run; writes NonEqOp*.chebmom2D\n"
 	          << "  reconstruct <moments.chebmom2D> <bastin|greenwood> <broadening_meV>\n"
-	          << "        reconstruct sigma(E) via the unified Kubo routine; writes Kubo*JACKSON.dat\n";
+	          << "        reconstruct sigma(E) via the unified Kubo routine; writes Kubo*JACKSON.dat\n"
+	          << "  inspect <run.json | operator.desc>\n"
+	          << "        print a run / operator and its resolved numerical provenance\n";
 	return 2;
+}
+
+static int cmd_compute(int argc, char** argv)
+{
+	if (argc != 4 || std::string(argv[2]) != "--config")
+	{ std::cerr << "usage: " << argv[0] << " compute --config <run.json>\n"; return 2; }
+	const lsquant::RunConfig c = lsquant::read_run_config(argv[3]);
+	if (!c.valid) { std::cerr << "config error: " << c.error << std::endl; return 1; }
+	const std::string state = (c.state != "default" && !c.state.empty()) ? c.state : std::string();
+	return lsquant::compute_noneq(c.label, c.operator_right, c.operator_left, c.num_moments, state);
 }
 
 static int cmd_reconstruct(int argc, char** argv)
@@ -59,6 +73,7 @@ int main(int argc, char** argv)
 		if (argc < 3) { std::cerr << "usage: " << argv[0] << " inspect <run.json | operator.desc>\n"; return 2; }
 		return lsquant::inspect_path(argv[2]);
 	}
+	if (cmd == "compute")     return cmd_compute(argc, argv);
 	if (cmd == "reconstruct") return cmd_reconstruct(argc, argv);
 	if (cmd == "--help" || cmd == "-h" || cmd == "help") { usage(argv[0]); return 0; }
 	std::cerr << "lsquant: unknown command '" << cmd << "'\n\n";
