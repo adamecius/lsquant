@@ -22,6 +22,9 @@
 #include <array>
 
 #include "sparse_matrix.hpp" //contain SparseMatrixType
+#include "hamiltonian_op.hpp" //Phase 6A: HamiltonianOp + SparseHamiltonianOp adapter
+#include "metric_policy.hpp"  //Phase 6A: MetricPolicy + OrthogonalMetric (identity default)
+#include <memory>            //std::shared_ptr (owned adapter)
 #include <cassert>			 //needed for assert
 #include <fstream>   		 //For ifstream and ofstream
 #include <limits>    		 //Needed for dbl::digits10
@@ -98,20 +101,29 @@ class Moments
 
 	inline
 	SparseMatrixType& Hamiltonian()
-	{ 
-		return *_pNHAM; 
+	{
+		return *_pNHAM;
 	};
 
+	// Phase 6A: the recursion's contract. op() is the live SparseHamiltonianOp over the (rescaled,
+	// in place) stored matrix; metric() is the basis metric policy (OrthogonalMetric by default --
+	// identity S^{-1}). _pNHAM and Hamiltonian() are kept during the transition.
+	inline
+	lsquant::HamiltonianOp& op() { return *_op; }
+
+	inline
+	lsquant::MetricPolicy& metric() { return *_metric; }
 
 
 	//SETTERS
 	inline
 	void SetHamiltonian( SparseMatrixType& NHAM )
-	{ 
+	{
 		if ( this->SystemSize() == 0 ) //Use the rank of the hamiltonian as system size
-			this->SystemSize( NHAM.rank() );	
+			this->SystemSize( NHAM.rank() );
 		assert( NHAM.rank() == this->SystemSize()  );
-		_pNHAM = &NHAM; 
+		_pNHAM = &NHAM;
+		_op = std::make_shared<lsquant::SparseHamiltonianOp>( NHAM, false );
 	};
 
 
@@ -119,6 +131,7 @@ class Moments
 	int  Rescale2ChebyshevDomain()
 	{
 		this->Hamiltonian().Rescale(this->ScaleFactor(),this->ShiftFactor());
+		_op = std::make_shared<lsquant::SparseHamiltonianOp>( *_pNHAM, true );
 		return 0;
 	};
 
@@ -168,6 +181,11 @@ class Moments
 
 	private:
 	SparseMatrixType* _pNHAM;
+	std::shared_ptr<lsquant::HamiltonianOp> _op;          //Phase 6A: live adapter over *_pNHAM
+	lsquant::MetricPolicy* _metric = &Moments::default_metric(); //default: shared OrthogonalMetric
+
+	static lsquant::MetricPolicy& default_metric()
+	{ static lsquant::OrthogonalMetric m; return m; }     //stateless identity metric, shared
 
 	Moments::vector_t ChebV0,ChebV1,OPV;
 	std::string system_label;

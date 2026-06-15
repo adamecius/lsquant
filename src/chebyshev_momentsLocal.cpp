@@ -36,7 +36,7 @@ int chebyshev::MomentsLocal::Deltaiter(double E)
 		return 0;
 	}
 	else{
-		this->Hamiltonian().Multiply(2.0,  Chebyshev1(), -1.0,  Chebyshev0() );
+		this->op().multiply(2.0,  Chebyshev1(), -1.0,  Chebyshev0() );
 		Chebyshev0().swap(Chebyshev1());
 		linalg::axpy( TE*delta_chebF(E,currentTm)*g_D_m , Chebyshev1(), DeltaPhi());
 		currentTm++;

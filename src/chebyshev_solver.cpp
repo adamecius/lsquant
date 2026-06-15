@@ -193,7 +193,7 @@ std::vector<cdouble> chebyshev::MomentosDelta(chebyshev::MomentsTD &  H,
 
     for (int i = 0; i < N; ++i) r_nm1[i] = psi[i];
 
-    H.Hamiltonian().Multiply ( 1.0, r_nm1.data(), 0.0, r_n.data());
+    H.op().multiply( 1.0, r_nm1, 0.0, r_n);
 
     mu[1] = linalg::vdot( psi, r_n ) - mu[1];
     mu[2] = 2.0 * linalg::vdot( r_n, r_n ) - mu[0];
@@ -202,7 +202,7 @@ std::vector<cdouble> chebyshev::MomentosDelta(chebyshev::MomentsTD &  H,
     for (int n = 3; n <= nMom / 2 + 1; ++n) {
         // One Chebyshev step + moment accumulation
       
-        H.Hamiltonian().Multiply ( 2.0, r_nm1.data(), 0.0, r_n.data());
+        H.op().multiply( 2.0, r_nm1, 0.0, r_n);
         mu[2*n - 3] = linalg::vdot( psi, r_n ) - mu[1];
 	mu[2*n - 2] = 2.0 * linalg::vdot( r_n, r_n ) - mu[0];
 
@@ -350,8 +350,8 @@ void chebyshev::evolution(chebyshev::MomentsTD &         H,
     // ═══════════════════════════════════════════════════════════════════════════
     {
       
-      H.Hamiltonian().Multiply( 1.0, xpn1psi.data(), 0.0, xpnpsi.data() );
-      H.Hamiltonian().Multiply(1.0,  ypn1psi.data(), 0.0, ypnpsi.data() );
+      H.op().multiply( 1.0, xpn1psi, 0.0, xpnpsi );
+      H.op().multiply(1.0,  ypn1psi, 0.0, ypnpsi );
 
   // n=0:  T_0 = I
         for (int i = 0; i < N; ++i) {
@@ -368,8 +368,8 @@ void chebyshev::evolution(chebyshev::MomentsTD &         H,
             }
 
 	    // T_{n+1} = 2*H_bar*T_n - T_{n-1}
-	    H.Hamiltonian().Multiply(2.0, xpnpsi.data(), -1.0, xpn1psi.data());
-	    H.Hamiltonian().Multiply(2.0, ypnpsi.data(), -1.0, ypn1psi.data());
+	    H.op().multiply(2.0, xpnpsi, -1.0, xpn1psi);
+	    H.op().multiply(2.0, ypnpsi, -1.0, ypn1psi);
 	    
             std::swap(xpnpsi, xpn1psi);
             std::swap(ypnpsi, ypn1psi);
@@ -399,7 +399,7 @@ void chebyshev::evolution(chebyshev::MomentsTD &         H,
     H.VX().Multiply( pn1psi.data(), xpnpsi.data());
     H.VY().Multiply( pn1psi.data(), ypnpsi.data());   
 
-    H.Hamiltonian().Multiply( pn1psi.data(), pnpsi.data());
+    H.op().multiply( pn1psi, pnpsi);
 
 
     for (int i = 0; i < N; ++i) 
@@ -415,9 +415,9 @@ void chebyshev::evolution(chebyshev::MomentsTD &         H,
             yupsi[i] += c[n] * ypnpsi[i];
         }
 
-	H.Hamiltonian().Multiply(2.0, pnpsi.data(), -1.0, pn1psi.data());
-	H.Hamiltonian().Multiply(2.0, xpnpsi.data(), -1.0, xpn1psi.data());	
-	H.Hamiltonian().Multiply(2.0, ypnpsi.data(), -1.0, ypn1psi.data());
+	H.op().multiply(2.0, pnpsi, -1.0, pn1psi);
+	H.op().multiply(2.0, xpnpsi, -1.0, xpn1psi);	
+	H.op().multiply(2.0, ypnpsi, -1.0, ypn1psi);
 
 	
 	H.VX().Multiply (pnpsi.data(), vel_tmp.data());

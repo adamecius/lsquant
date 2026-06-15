@@ -16,7 +16,7 @@ void chebyshev::Moments::SetInitVectors( SparseMatrixType &OP ,const Moments::ve
 
 	linalg::copy ( T0, this->Chebyshev1() );
 	OP.Multiply( 1.0, this->Chebyshev1(), 0.0, this->Chebyshev0() );
-	this->Hamiltonian().Multiply( 1.0, this->Chebyshev0(), 0.0, this->Chebyshev1() );
+	this->op().multiply( 1.0, this->Chebyshev0(), 0.0, this->Chebyshev1() );
 
 	return ;
 };
@@ -35,7 +35,7 @@ void chebyshev::Moments::SetInitVectors( const Moments::vector_t& T0 )
 	//From now on this-> will be discarded in Chebyshev0() and Chebyshev1()
 
 	linalg::copy ( T0, this->Chebyshev0() );
-	this->Hamiltonian().Multiply( 1.0, this->Chebyshev0(), 0.0, this->Chebyshev1() );
+	this->op().multiply( 1.0, this->Chebyshev0(), 0.0, this->Chebyshev1() );
 };
 
 
@@ -78,7 +78,7 @@ void chebyshev::Moments1D_nonOrth::SetInitVectors_nonOrthogonal( Moments::vector
 
 	
 	linalg::copy ( T0, this->Chebyshev0() );	
-	this->Hamiltonian().Multiply( 1.0, this->Chebyshev0(), 0.0, tmp_ );
+	this->op().multiply( 1.0, this->Chebyshev0(), 0.0, tmp_ );
         linalg::orthogonalize(*S_,  tmp_, this->Chebyshev1());
 
 	
@@ -112,7 +112,7 @@ void chebyshev::Moments1D_nonOrth::SetInitVectors_nonOrthogonal( SparseMatrixTyp
         OP.Multiply( 1.0, this->Chebyshev1(), 0.0, this->Chebyshev0() );
 
 	
-	this->Hamiltonian().Multiply( 1.0, this->Chebyshev0(), 0.0, tmp_ );
+	this->op().multiply( 1.0, this->Chebyshev0(), 0.0, tmp_ );
         linalg::orthogonalize(*S_, tmp_ , this->Chebyshev1());
 
 
@@ -180,7 +180,7 @@ double chebyshev::Moments1D_nonOrth::Iterate_nonOrthogonal_test( SparseMatrixTyp
 	double b =  this->ShiftFactor();
 
 	
-	this->Hamiltonian().Multiply( this->Chebyshev1(),tmp_);
+	this->op().multiply( this->Chebyshev1(),tmp_);
        	linalg::orthogonalize(*S_, tmp_, tmp_2_);
 
 	
@@ -213,7 +213,7 @@ int chebyshev::Moments1D_nonOrth::Iterate_nonOrthogonal( )
 
 
 	
-	this->Hamiltonian().Multiply( this->Chebyshev1(),tmp_);
+	this->op().multiply( this->Chebyshev1(),tmp_);
 	
        	linalg::orthogonalize(*S_, tmp_, tmp_2_);
 	
@@ -233,7 +233,7 @@ int chebyshev::Moments1D_nonOrth::Iterate_nonOrthogonal( )
 
 int chebyshev::Moments::Iterate( )
 {
-	this->Hamiltonian().Multiply(2.0,this->Chebyshev1(),-1.0,this->Chebyshev0());
+	this->op().multiply(2.0,this->Chebyshev1(),-1.0,this->Chebyshev0());
 	this->Chebyshev0().swap(this->Chebyshev1());
 	return 0;
 };
