@@ -18,6 +18,7 @@ set(KPM_LIB_SOURCES
     operator_descriptor.cpp
     run_config.cpp
     inspect.cpp
+    compute.cpp
     reconstruction.cpp
     special_functions.cpp
     Kubo_solver_FFT.cpp

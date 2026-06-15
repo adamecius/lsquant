@@ -12,6 +12,7 @@
 #include "quantum_states.hpp"
 #include "chebyshev_solver.hpp"
 #include "run_config.hpp"
+#include "compute.hpp"
 
 namespace kpmKubo
 {
@@ -50,48 +51,10 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 
-	const int numMoms= atoi(S_NUM_MOM.c_str());
-	chebyshev::Moments2D chebMoms(numMoms,numMoms); //load number of moments
-
-	SparseMatrixType OP[3];
-	OP[0].SetID("HAM");
-	OP[1].SetID(S_OPR);
-	OP[2].SetID(S_OPL);
-
-	// Build the operators from Files
-	SparseMatrixBuilder builder;
-	std::array<double,2> spectral_bounds;	
-	for (int i = 0; i < 3; i++)
-	{
-		std::string input = "operators/" + LABEL + "." + OP[i].ID() + ".CSR";
-		builder.setSparseMatrix(&OP[i]);
-		builder.BuildOPFromCSRFile(input);
-		
-		if( i == 0 ) //is hamiltonian
-		//Obtain automatically the energy bounds
-		 spectral_bounds = chebyshev::utility::SpectralBounds(OP[0], "operators/" + LABEL + ".HAM.desc");
-	};
-	//CONFIGURE THE CHEBYSHEV MOMENTS
-	chebMoms.SystemLabel(LABEL);
-	chebMoms.BandWidth ( (spectral_bounds[1]-spectral_bounds[0])*1.0);
-	chebMoms.BandCenter( (spectral_bounds[1]+spectral_bounds[0])*0.5);
-	chebMoms.SetAndRescaleHamiltonian(OP[0]);
-	chebMoms.Print();
-
-
-	//Define thes states youll use
-	//Factory state_factory ;
-
-	//Compute the chebyshev expansion table
-	qstates::generator gen;
-	if( have_state )
-		gen  = qstates::LoadStateFile(state_file);
-
-	chebyshev::CorrelationExpansionMoments( OP[1], OP[2], chebMoms, gen );
-
-	//Save the table in a file
-	std::string outputfilename="NonEqOp"+S_OPR+"-"+S_OPL+LABEL+"KPM_M"+S_NUM_MOM+"x"+S_NUM_MOM+"_state"+gen.StateLabel()+".chebmom2D";
-	chebMoms.saveIn(outputfilename);
+	// The orchestration lives in lsquant::compute_noneq (shared with the `lsquant compute`
+	// subcommand). This driver only parses inputs (argv or --config) and delegates.
+	const int numMoms = atoi(S_NUM_MOM.c_str());
+	lsquant::compute_noneq(LABEL, S_OPR, S_OPL, numMoms, have_state ? state_file : std::string());
 
 	std::cout<<"End of program"<<std::endl;
 	return 0;

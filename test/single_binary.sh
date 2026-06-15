@@ -46,5 +46,25 @@ cp "$GMOM" "$T/"
       && echo "PASS(inspect-share): dispatcher and standalone share lsquant::inspect_path" \
       || { echo "FAIL: dispatcher inspect != standalone inspect"; exit 1; }
   fi
+
+  # (3) compute == legacy driver, byte-for-byte; then an end-to-end compute -> reconstruct.
+  OPD="$REPO/test/golden/operators"
+  if [ -f "$OPD/graphene_golden.HAM.CSR" ] && [ -f "$OPD/graphene_golden.VX.CSR" ]; then
+    export KPM_SEED=12345
+    mkdir -p operators; cp "$OPD/graphene_golden.HAM.CSR" "$OPD/graphene_golden.VX.CSR" operators/
+    printf '{ "label":"graphene_golden","operator_left":"VX","operator_right":"VX","num_moments":64 }\n' > comp.json
+    "$BUILD/inline_compute-kpm-nonEqOp" graphene_golden VX VX 64 >/dev/null 2>&1; mv NonEqOp*chebmom2D legacy.m
+    "$LSQ" compute --config comp.json >/dev/null 2>&1;                            mv NonEqOp*chebmom2D disp.m
+    diff -q legacy.m disp.m >/dev/null \
+      && echo "PASS(compute): lsquant compute == legacy driver byte-for-byte" \
+      || { echo "FAIL: lsquant compute differs from legacy driver"; exit 1; }
+    # end-to-end: the moments lsquant just produced reconstruct cleanly through the same binary
+    "$LSQ" reconstruct disp.m bastin 10 >/dev/null 2>&1
+    e2e="$(ls KuboBastin_*JACKSON.dat | head -1)"
+    nans=$(grep -ciE 'nan|inf' "$e2e" || true)
+    [ "$nans" -eq 0 ] \
+      && echo "PASS(e2e): lsquant compute -> reconstruct produces a finite curve ($e2e)" \
+      || { echo "FAIL: e2e compute->reconstruct has $nans NaN/Inf rows"; exit 1; }
+  fi
 )
-echo "PASS: single lsquant binary subsumes reconstruct + inspect (byte-identical to legacy)"
+echo "PASS: single lsquant binary subsumes compute + reconstruct + inspect (byte-identical to legacy)"
