@@ -21,7 +21,8 @@ static int usage(const char* prog)
 	std::cerr << "usage: " << prog << " <command> [args...]\n\n"
 	          << "commands:\n"
 	          << "  compute --config <run.json>\n"
-	          << "        compute the 2D Kubo moments for a run; writes NonEqOp*.chebmom2D\n"
+	          << "        compute Chebyshev moments for a run (mode: noneq|spectral|msd);\n"
+	          << "        writes NonEqOp*.chebmom2D / SpectralOp*.chebmom1D / Correlation*.chebmomTD\n"
 	          << "  reconstruct <moments.chebmom2D> <bastin|greenwood> <broadening_meV>\n"
 	          << "        reconstruct sigma(E) via the unified Kubo routine; writes Kubo*JACKSON.dat\n"
 	          << "  inspect <run.json | operator.desc>\n"
@@ -36,7 +37,14 @@ static int cmd_compute(int argc, char** argv)
 	const lsquant::RunConfig c = lsquant::read_run_config(argv[3]);
 	if (!c.valid) { std::cerr << "config error: " << c.error << std::endl; return 1; }
 	const std::string state = (c.state != "default" && !c.state.empty()) ? c.state : std::string();
-	return lsquant::compute_noneq(c.label, c.operator_right, c.operator_left, c.num_moments, state);
+	if (c.mode == "noneq")
+		return lsquant::compute_noneq(c.label, c.operator_right, c.operator_left, c.num_moments, state);
+	if (c.mode == "spectral")
+		return lsquant::compute_spectral(c.label, c.op, c.num_moments, state);
+	if (c.mode == "msd")
+		return lsquant::compute_msd(c.label, c.op, c.num_moments, c.num_times, c.tmax, state);
+	std::cerr << "compute: unknown mode '" << c.mode << "' (noneq|spectral|msd)\n";
+	return 2;
 }
 
 static int cmd_reconstruct(int argc, char** argv)

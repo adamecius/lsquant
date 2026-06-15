@@ -13,6 +13,21 @@ namespace lsquant
 	// `lsquant compute` subcommand (Phase 7).
 	int compute_noneq(const std::string& label, const std::string& op_right,
 	                  const std::string& op_left, int num_moments, const std::string& state_file);
+
+	// Compute the 1D spectral (DOS / spectral-function) Chebyshev moments mu_m = <phi| OP T_m(H~)
+	// |phi> from operators/<label>.{HAM,OP}.CSR, and save the .chebmom1D. Same orchestration as the
+	// standalone inline_compute-kpm-spectralOp driver and the `lsquant compute --config` (mode
+	// "spectral"). state_file empty -> default random-phase state. Returns 0 on success.
+	int compute_spectral(const std::string& label, const std::string& op,
+	                     int num_moments, const std::string& state_file);
+
+	// Compute the time-dependent mean-square-displacement Chebyshev moments from
+	// operators/<label>.{HAM,VOP}.CSR and save the .chebmomTD. num_times/tmax set the time grid
+	// (TimeDiff = tmax/(num_times-1)). Shared by the standalone
+	// inline_compute-kpm-MeanSquareDisplacement driver and `lsquant compute --config` (mode "msd").
+	// state_file empty -> default random-phase state. Returns 0 on success.
+	int compute_msd(const std::string& label, const std::string& vop,
+	                int num_moments, int num_times, double tmax, const std::string& state_file);
 }
 
 #endif // LSQUANT_COMPUTE
