@@ -105,3 +105,61 @@ is `-SystemSize·ScaleFactor²`); `ShiftFactor()` remains, correctly, on the out
 **Bug 2 — Kubo-Bastin all-NaN (band-edge poisoning).** The reconstruction grid reached the
 `1/√(1-x²)` singularity at x=±1 and the cumulative integral propagated the NaN. **Fixed** by
 the `α` safeguard (§2): the grid never touches the edge.
+
+---
+
+## 5. Time evolution and spin dynamics — the physical-ℏ convention
+
+Unlike the static spectral quantities above (natural units, e = ħ = 1), LinQT's **time
+evolution runs in physical units**:
+
+    HBAR = 0.6582119624 eV·fs        # Planck constant, defined in chebyshev_moments.hpp
+    time t is in femtoseconds (fs)
+
+The time-evolution operator `Û(Δt) = e^{-iĤΔt/ħ}` is built by a Bessel–Chebyshev expansion
+(`MomentsTD::Evolve`), `Û = Σ_m (2-δ_{m0})(-i)^m J_m(ω₀Δt) T_m(H̃)`, with
+`ω₀ = ChebyshevFreq() = HalfWidth/CUTOFF/ħ`. This is exact and unitary (‖φ(t)‖ is conserved to
+machine precision). **Consequence:** any oscillation/relaxation frequency the code produces is
+in **rad/fs with the physical ħ** — *not* the ħ=1 convention of the static oracle. Forgetting
+this is the classic "wrong period" trap.
+
+### Spin precession (the magnetic chain)
+The magnetic chain is a constant Zeeman field `Ĥ = Ĥ_hop − J_ex σ_z` (J_ex = 0.1 eV). A spin
+prepared along +x precesses in the x–y plane (thesis spin-dynamics formalism):
+
+    |φ(0)⟩ = ½(𝟙 + x̂·ŝ)|φ_r⟩                                   # +x-projected state
+    S(E,t) = ½⟨φ(t)|ŝ δ(E−Ĥ)|φ(t)⟩ / ⟨φ(t)|δ(E−Ĥ)|φ(t)⟩ + h.c.   # DOS-normalised ratio
+
+    ⟨S_x(t)⟩ =  cos(ω t),  ⟨S_y(t)⟩ = −sin(ω t),  ⟨S_z(t)⟩ = 0,
+    ω = 2·J_ex/ħ = 0.2/0.6582119624 = 0.30385 rad/fs   (period 20.68 fs),  E_F-independent.
+
+Two practical points the `spin_precession` test relies on:
+- **Energy-integrated shortcut.** When the observable is E-independent (as here), no energy
+  reconstruction is needed: `∫dE` of the δ-reconstruction picks out `T₀`, so
+  `⟨φ(t)|ŝ|φ(t)⟩` is exactly the **m=0 Chebyshev moment** `μ_ŝ(0,n)`, and the (constant)
+  denominator `⟨φ(t)|φ(t)⟩ = μ_Sx(0,0)`.
+- **Projection flavor.** The **density** path (`TimeEvolvedProjectedOperator`, both bra and
+  ket carry the projector → `|φ(t)⟩⟨φ(t)|` with `|φ(0)⟩=P_x|φ_r⟩`) reproduces ⟨S(t)⟩ exactly.
+  The **WF** path (`…ProjectedOperatorWF`) projects one side only — a structurally different,
+  asymmetric correlator, *not* a drop-in for ⟨S(t)⟩.
+
+### Ballistic transport (VAC / MSD)
+The same expansion underlies the velocity-autocorrelation and mean-square-displacement routes.
+For the clean chain, MSD(E,t) ∝ t² and the energy-resolved coefficient tracks the conductivity
+slope `dσ/dt = (1/π)√(4−E²)` (the `msd_ballistic` test checks the √(4−E²) energy law by exact
+trace). Note `inline_compute-kpm-CorrOp`'s state-file/`numStates` argument handling is currently
+unreliable (`atoi("exact")=0`), so the VAC route is not yet a deterministic golden.
+
+---
+
+## 6. Where this is exercised (ctest)
+
+| test | guards |
+|---|---|
+| `chain1d_analytic`, `chain1d_dos` | moment identities (§1): KG matrix B.15, DOS `δ_{m,0}` |
+| `dos_reconstructed` | reconstructed DOS vs `1/(π√(4−E²))` on the α grid (§2) |
+| `reconstruction_nan_guard` | Kubo-Bastin reconstruction finite everywhere (§2, Bug 2) |
+| `hall_haldane` | quantized Hall plateau, Chern C=+1 (§3) |
+| `msd_ballistic` | ballistic MSD, σ-slope energy law √(4−E²) (§5) |
+| `spin_precession` | Larmor precession ω=2J_ex/ħ, S_z=0 (§5) |
+| `graphene_regression`, `chain1d_reproducible`, `spin_algebra` | regression / determinism / su(2) algebra |
