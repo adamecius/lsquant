@@ -30,11 +30,18 @@ namespace lsquant
 	extern const KuboObservable KUBO_GREENWOOD;
 	extern const KuboObservable KUBO_BASTIN;
 
-	// Reconstruct sigma(E) on the uniform [-alpha, alpha] grid (alpha = safety_factors().recon_cutoff)
-	// for the given observable. Returns (physical energy, value) pairs (num_div-1 of them, matching
-	// the legacy drivers). The moments must already be kernel-damped (ApplyJacksonKernel).
+	// Two grid backends under the SAME observable (the v2 plan's "FFT = its own integrand backend"):
+	//   GRID_UNIFORM   : 30*M points uniform on [-alpha, alpha]; energy axis E/ScaleFactor - ShiftFactor.
+	//   GRID_FFT_NODES : M Chebyshev nodes cos(pi(2i+1/2)/M) (rearranged to ascending for the Bastin
+	//                    integral); energy axis E*HalfWidth + BandCenter. Coarse (M, not 30*M) -- the
+	//                    legacy *_FFTgrid behaviour, kept byte-identical.
+	enum ReconGrid { GRID_UNIFORM = 0, GRID_FFT_NODES = 1 };
+
+	// Reconstruct sigma(E) for the given observable on the chosen grid backend. Returns (physical
+	// energy, value) pairs (num_div-1 of them, matching the legacy drivers). Moments must already
+	// be kernel-damped (ApplyJacksonKernel).
 	std::vector<std::pair<double,double> >
-	reconstruct_kubo(chebyshev::Moments2D& mu, const KuboObservable& obs);
+	reconstruct_kubo(chebyshev::Moments2D& mu, const KuboObservable& obs, ReconGrid grid = GRID_UNIFORM);
 
 	// 1-D KPM density reconstruction (DOS / spectral function): the shared inner sum
 	//   rho(x) = sum_m delta_chebF(x, m) * mu_real[m]
