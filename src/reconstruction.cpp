@@ -44,4 +44,25 @@ namespace lsquant
 		}
 		return result;
 	}
+
+	std::vector<std::pair<double,double> >
+	reconstruct_density_grid(const std::vector<double>& mu_real, double alpha, int num_div)
+	{
+		std::vector<double> energies(num_div, 0.0);
+		for (int i = 0; i < num_div; ++i)
+			energies[i] = -alpha + i * (2 * alpha) / (num_div - 1);
+
+		std::vector<std::pair<double,double> > out(num_div);
+		const int M = static_cast<int>(mu_real.size());
+		#pragma omp parallel for
+		for (int i = 0; i < num_div; ++i)
+		{
+			double s = 0.0;
+			const double energ = energies[i];
+			for (int m = 0; m < M; ++m)
+				s += delta_chebF(energ, m) * mu_real[m];
+			out[i] = std::make_pair(energ, s);
+		}
+		return out;
+	}
 }

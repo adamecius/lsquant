@@ -34,7 +34,7 @@
 #include <cmath>
 #include <string>
 #include <complex>
-#include "chebyshev_coefficients.hpp"   // production delta_chebF
+#include "observable.hpp"   // lsquant::reconstruct_density_grid (the PRODUCTION 1-D reconstruction)
 
 // Jackson damping factor g_m for an M-moment expansion -- identical closed form to
 // chebyshev::Moments1D::JacksonKernel (kept local so the oracle has no object/IO setup).
@@ -44,19 +44,19 @@ static double jackson(int m, int M) {
 }
 
 // rho(x) on a uniform grid over [-alpha, alpha] for a synthetic delta at E0, M moments, Jackson.
+// Phase 5: this drives the PRODUCTION primitive lsquant::reconstruct_density_grid (the exact
+// routine the DOS / spectral drivers use), so the oracle now guards production -- not a copy.
+// We fold the (2 - delta_{m0}) weighting and the Jackson kernel into mu, exactly as the stored,
+// kernel-damped moments carry them.
 static void reconstruct(double E0, int M, double alpha, int npts,
                         std::vector<double>& x, std::vector<double>& rho) {
-    x.assign(npts, 0.0); rho.assign(npts, 0.0);
     std::vector<double> mu(M);
     for (int m = 0; m < M; ++m)
         mu[m] = (2.0 - (m == 0 ? 1.0 : 0.0)) * std::cos(m * std::acos(E0)) * jackson(m, M);
-    for (int i = 0; i < npts; ++i) {
-        const double xi = -alpha + 2.0 * alpha * i / (npts - 1);
-        x[i] = xi;
-        double s = 0.0;
-        for (int m = 0; m < M; ++m) s += delta_chebF(xi, m) * mu[m];   // PRODUCTION kernel
-        rho[i] = s;
-    }
+    const std::vector<std::pair<double,double> > grid =
+        lsquant::reconstruct_density_grid(mu, alpha, npts);
+    x.assign(npts, 0.0); rho.assign(npts, 0.0);
+    for (int i = 0; i < npts; ++i) { x[i] = grid[i].first; rho[i] = grid[i].second; }
 }
 
 static double fwhm(const std::vector<double>& x, const std::vector<double>& rho) {

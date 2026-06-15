@@ -8,6 +8,7 @@
 
 #include "kpm_noneqop.hpp" //Message functions
 #include "chebyshev_moments.hpp"
+#include "observable.hpp"
 #include "sparse_matrix.hpp"
 #include "quantum_states.hpp"
 #include "chebyshev_solver.hpp"
@@ -121,22 +122,16 @@ void postProcess(chebyshev::Moments1D& mu ){
 	mu.ApplyJacksonKernel(broadening);
 
 	const int num_div = 30*mu.HighestMomentNumber();
-	
-	const double
-	xbound = chebyshev::safety_factors().recon_cutoff;
-		
-	std::vector< double >  energies(num_div,0);
-	for( int i=0; i < num_div; i++)
-		energies[i] = -xbound + i*(2*xbound)/(num_div-1) ;
 
-
+	// Phase 5: the inner DOS sum rho(x) = sum_m delta_chebF(x,m) mu_m is the unified primitive
+	// lsquant::reconstruct_density_grid; this driver applies the DOS prefactor (N/HalfWidth) and
+	// the physical-energy axis (x*HalfWidth + BandCenter). Byte-identical to the legacy loop.
+	std::vector<double> mu_real( mu.HighestMomentNumber() );
+	for( int m = 0 ; m < mu.HighestMomentNumber() ; m++ ) mu_real[m] = mu(m).real();
+	const std::vector<std::pair<double,double> > grid =
+		lsquant::reconstruct_density_grid( mu_real, chebyshev::safety_factors().recon_cutoff, num_div );
 
 	std::cout<<"Computing the Spectral function using "<<mu.HighestMomentNumber()<<" moments "<<std::endl;
-	std::cout<<"Over a grid normalized grid  ("<<-xbound<<","<<xbound<<") in steps of "<<energies[1] - energies[0]<< std::endl;
-	std::cout<<"The first 10 moments are"<<std::endl;
-	for(int m0 =0 ; m0< 1; m0++ )
-		std::cout<<mu(m0).real()<<" "<<mu(m0).imag()<<std::endl;
-	
 
 	std::string
 	outputName  ="mean"+mu.SystemLabel()+"JACKSON.dat";
@@ -145,19 +140,9 @@ void postProcess(chebyshev::Moments1D& mu ){
 	std::cout<<"PARAMETERS: "<< mu.SystemSize()<<" "<<mu.HalfWidth()<<std::endl;
 	std::ofstream outputfile( outputName.c_str() );
 
-	std::vector<double> output(num_div,0.0);
-	#pragma omp parallel for
-	for( int i=0; i < num_div; i++)
-	{
-		output[i] = 0;
-		const double energ = energies[i];
-		for( int m0 = 0 ; m0 < mu.HighestMomentNumber() ; m0++)
-			output[i] += delta_chebF(energ,m0)*mu(m0).real() ;
-		output[i] *= mu.SystemSize()/mu.HalfWidth();
-	}
-
-	for( int i=0; i < num_div; i++)
-		outputfile<<energies[i]*mu.HalfWidth() + mu.BandCenter() <<" "<< output[i] <<std::endl;
+	for( size_t i = 0; i < grid.size(); ++i )
+		outputfile<< grid[i].first*mu.HalfWidth() + mu.BandCenter()
+		          <<" "<< grid[i].second*( mu.SystemSize()/mu.HalfWidth() ) <<std::endl;
 
 	outputfile.close();
 

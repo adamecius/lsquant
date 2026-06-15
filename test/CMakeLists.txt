@@ -137,6 +137,7 @@ add_test(NAME spin_precession
 # alpha edge singularity -- isolating the reconstruction knobs from operators/recursion.
 add_executable(recon_kernel_oracle_test recon_kernel_oracle_test.cpp)
 target_include_directories(recon_kernel_oracle_test PRIVATE ${CMAKE_SOURCE_DIR}/include)
+target_link_libraries(recon_kernel_oracle_test PRIVATE kpm_lib)
 add_test(NAME recon_kernel_oracle COMMAND recon_kernel_oracle_test 0.10)
 
 # --- Kubo-Greenwood reconstruction regression (Bug 1, Phase 0) -------------------
