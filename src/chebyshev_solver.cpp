@@ -1,5 +1,7 @@
 // Used for OPENMP functions
 #include "chebyshev_solver.hpp"
+#include "units.hpp"
+#include "recon_grid.hpp"
 #include <eigen3/Eigen/Core>
 #include <boost/math/special_functions/bessel.hpp>
 
@@ -40,7 +42,7 @@ std::vector<cdouble> chebyshev::calculate_cn_bessel(double T, double ac, double 
     std::cout << "\nCalculating the Chebyshev expansion coefficients...\n";
 
 
-    const double hbar    =  0.6582119624;// eV·fs
+    const double hbar    =  chebyshev::HBAR;// eV*fs (units.hpp)
     const cdouble minus_i  = cdouble(0.0, -1.0);
     const cdouble phase     = std::exp(minus_i * (bc/ac) * T / hbar);   // exp(-i*ac*T)
     const double  bessel_arg =  T * ac / hbar;
@@ -476,7 +478,7 @@ std::array<double,2> utility::SpectralBounds( SparseMatrixType& HAM)
 	}
 	else
 	{
-		const double PAD = 0.10; // 10% safety margin on the Gershgorin enclosure
+		const double PAD = chebyshev::safety_factors().bounds_pad; // Gershgorin enclosure margin (recon_grid.hpp)
 		auto& mat = HAM.eigen_matrix();
 		double rho = 0.0;        // max absolute row sum = ||H||_inf >= spectral radius
 		for (int r = 0; r < mat.outerSize(); ++r)

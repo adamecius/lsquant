@@ -54,7 +54,7 @@ void Kubo_solver_FFT_postProcess::integration(const r_value_t E_points[], const 
   int M     = parent_solver_.num_vectors(),
       nump = parent_solver_.nump();
   
-  r_value_t edge = 1.0 - chebyshev::KPM_ALPHA;//parameters_.edge_;
+  r_value_t edge = 1.0 - chebyshev::safety_factors().recon_cutoff;//parameters_.edge_;
 
   //#pragma omp parallel for 
   for(int k=0; k<nump - int( M * edge / 4.0 ); k++ ){  //At the very edges of the energy plot the weight function diverges, hence integration should start a little after and a little before the edge.
