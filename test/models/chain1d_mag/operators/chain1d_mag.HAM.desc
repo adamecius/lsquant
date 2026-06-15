@@ -1,0 +1,9 @@
+observable: hamiltonian
+component: 
+units: eV
+provenance: manual tight-binding (magnetic chain -J_ex sigma_z); basis tags hand-authored
+spectral_min: -2.0998975970126095
+spectral_max: 2.0999553084687053
+basis_orbitals_per_cell: 2
+basis_orbital_spin: + -
+basis_num_cells: 64

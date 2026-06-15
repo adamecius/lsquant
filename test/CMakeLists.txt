@@ -171,3 +171,16 @@ add_test(NAME descriptor_conformance
 # committed chain1d.HAM.desc (Lanczos [-2,2]) and the DOS must match 1/(pi sqrt(4-E^2)).
 add_test(NAME descriptor_bounds
          COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/descriptor_bounds.sh ${CMAKE_BINARY_DIR})
+
+# --- manual tight-binding traceability via descriptor basis tags (Phase 3) ------
+# Builds SX/SY/SZ from the basis tags in chain1d_mag.HAM.desc and asserts they reproduce the
+# committed CSRs exactly -- the conformance gate for the manual-TB descriptor path.
+add_executable(tb_descriptor_test tb_descriptor_test.cpp
+               ${CMAKE_SOURCE_DIR}/src/operator_descriptor.cpp)
+target_include_directories(tb_descriptor_test PRIVATE ${CMAKE_SOURCE_DIR}/include)
+add_test(NAME tb_descriptor
+         COMMAND tb_descriptor_test
+                 ${SPINOPS_DIR}/chain1d_mag.HAM.desc
+                 ${SPINOPS_DIR}/chain1d_mag.SX.CSR
+                 ${SPINOPS_DIR}/chain1d_mag.SY.CSR
+                 ${SPINOPS_DIR}/chain1d_mag.SZ.CSR)
