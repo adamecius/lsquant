@@ -102,3 +102,11 @@ add_test(NAME graphene_regression
 # Kubo-Bastin reconstruction of the committed graphene moments is finite everywhere.
 add_test(NAME reconstruction_nan_guard
          COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/reconstruction_nan_guard.sh ${CMAKE_BINARY_DIR})
+
+# --- ballistic MSD transport on the clean chain (Phase 4 #4) ---------------------
+# Exact-trace mean-square displacement: assert MSD(E,t) ~ t^2 (ballistic) and that its
+# energy-resolved coefficient tracks the conductivity slope sqrt(4-E^2)/2 (oracle
+# dsigma/dt = (1/pi)sqrt(4-E^2); 0.6366 at E=0, 0.5513 at E=1). Deterministic.
+set(MSD_M 256)
+add_test(NAME msd_ballistic
+         COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/msd_ballistic.sh ${CMAKE_BINARY_DIR} ${MSD_M})
