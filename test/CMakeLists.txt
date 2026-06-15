@@ -225,3 +225,9 @@ add_test(NAME single_binary
 # mu_m = delta_{m,0} via the chain1d_dos comparator (M < N, no aliasing).
 add_test(NAME example_dos_smoke
          COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/example_dos_smoke.sh ${CMAKE_BINARY_DIR})
+
+# --- examples/02_localization_1d_chain pipeline smoke (matplotlib-free) ----------
+# Runs the tutorial MSD on a small strongly-disordered chain and a clean chain; asserts the
+# disordered MSD plateau is finite and far below the clean-chain ballistic value.
+add_test(NAME example_localization_smoke
+         COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/example_localization_smoke.sh ${CMAKE_BINARY_DIR})
