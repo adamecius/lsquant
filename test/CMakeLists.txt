@@ -110,3 +110,14 @@ add_test(NAME reconstruction_nan_guard
 set(MSD_M 256)
 add_test(NAME msd_ballistic
          COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/msd_ballistic.sh ${CMAKE_BINARY_DIR} ${MSD_M})
+
+# --- Hall conductivity / Chern number on Haldane (Phase 4 #5) --------------------
+# The Haldane Chern insulator (t1=-1,t2=0.15,phi=pi/2; 16x16) has a quantized Hall
+# plateau in the gap: sigma_xy = C*e^2/h with C=+1. Regenerates VX-VY moments by exact
+# trace from the committed operators, reconstructs Kubo-Bastin (NaN-free via alpha), and
+# asserts (plateau/A)*2pi = +1 within finite-size tolerance. This is LinQT's quantized
+# "conductance quantum" test. Reference = the topological invariant (oracle), not a run.
+set(HALL_M 128)         # 8s exact-trace; C=+1.017 at this M (1.7% finite-M error)
+set(HALL_TOL 0.05)
+add_test(NAME hall_haldane
+         COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/hall_haldane.sh ${CMAKE_BINARY_DIR} ${HALL_M} ${HALL_TOL})
