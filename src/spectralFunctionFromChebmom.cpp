@@ -7,9 +7,12 @@
 #include <complex>		/* for std::vector mostly class*/
 #include <omp.h>
 
-#include "chebyshev_solver.hpp"
-#include "chebyshev_coefficients.hpp"
 #include "chebyshev_moments.hpp"
+#include "observable.hpp"
+
+// Thin wrapper (Phase 5): the spectral-function DOS sum is the unified
+// lsquant::reconstruct_density_grid; this driver applies its prefactor (N*ScaleFactor) and
+// energy axis (x/ScaleFactor + ShiftFactor). Byte-identical to the legacy loop.
 
 void printHelpMessage();
 void printWelcomeMessage();
@@ -33,43 +36,23 @@ int main(int argc, char *argv[])
 	mu.ApplyJacksonKernel(broadening);
 
 	const int num_div = 30*mu.HighestMomentNumber();
-	
-	const double
-	xbound = chebyshev::safety_factors().recon_cutoff;
-		
-	std::vector< double >  energies(num_div,0);
-	for( int i=0; i < num_div; i++)
-		energies[i] = -xbound + i*(2*xbound)/(num_div-1) ;
 
-
-
-	std::cout<<"Computing the Spectral function using "<<mu.HighestMomentNumber()<<" moments "<<std::endl;
-	std::cout<<"Over a grid normalized grid  ("<<-xbound<<","<<xbound<<") in steps of "<<energies[1] - energies[0]<< std::endl;
-	std::cout<<"The first 10 moments are"<<std::endl;
-	for(int m0 =0 ; m0< 1; m0++ )
-		std::cout<<mu(m0).real()<<" "<<mu(m0).imag()<<std::endl;
-	
+	std::vector<double> mu_real( mu.HighestMomentNumber() );
+	for( int m = 0 ; m < mu.HighestMomentNumber() ; m++ ) mu_real[m] = mu(m).real();
+	const std::vector<std::pair<double,double> > grid =
+		lsquant::reconstruct_density_grid( mu_real, chebyshev::safety_factors().recon_cutoff, num_div );
 
 	std::string
 	outputName  ="mean"+mu.SystemLabel()+"JACKSON.dat";
 
+	std::cout<<"Computing the Spectral function using "<<mu.HighestMomentNumber()<<" moments "<<std::endl;
 	std::cout<<"Saving the data in "<<outputName<<std::endl;
 	std::cout<<"PARAMETERS: "<< mu.SystemSize()<<" "<<mu.HalfWidth()<<std::endl;
 	std::ofstream outputfile( outputName.c_str() );
 
-	std::vector<double> output(num_div,0.0);
-	#pragma omp parallel for
-	for( int i=0; i < num_div; i++)
-	{
-		output[i] = 0;
-		const double energ = energies[i];
-		for( int m0 = 0 ; m0 < mu.HighestMomentNumber() ; m0++)
-			output[i] += delta_chebF(energ,m0)*mu(m0).real() ;
-		output[i] *= mu.SystemSize()*mu.ScaleFactor();
-	}
-
-	for( int i=0; i < num_div; i++)
-		outputfile<<energies[i]/mu.ScaleFactor() + mu.ShiftFactor() <<" "<< output[i] <<std::endl;
+	for( size_t i = 0; i < grid.size(); ++i )
+		outputfile<< grid[i].first/mu.ScaleFactor() + mu.ShiftFactor()
+		          <<" "<< grid[i].second*( mu.SystemSize()*mu.ScaleFactor() ) <<std::endl;
 
 	outputfile.close();
 

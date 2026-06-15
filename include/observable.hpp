@@ -35,6 +35,16 @@ namespace lsquant
 	// the legacy drivers). The moments must already be kernel-damped (ApplyJacksonKernel).
 	std::vector<std::pair<double,double> >
 	reconstruct_kubo(chebyshev::Moments2D& mu, const KuboObservable& obs);
+
+	// 1-D KPM density reconstruction (DOS / spectral function): the shared inner sum
+	//   rho(x) = sum_m delta_chebF(x, m) * mu_real[m]
+	// on a uniform grid of `num_div` points over [-alpha, alpha]. Returns (x_rescaled, rho); the
+	// caller applies its own scalar prefactor and physical-energy axis (the only per-formula
+	// differences between DOS / spectral). `mu_real` must already be kernel-damped and carry the
+	// KPM (2 - delta_{m0}) weighting, as the stored moments do. This is the exact primitive the
+	// Phase-R oracle drives, so that oracle now guards the production reconstruction.
+	std::vector<std::pair<double,double> >
+	reconstruct_density_grid(const std::vector<double>& mu_real, double alpha, int num_div);
 }
 
 #endif // LSQUANT_OBSERVABLE
