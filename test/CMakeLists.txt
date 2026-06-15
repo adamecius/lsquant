@@ -121,3 +121,12 @@ set(HALL_M 128)         # 8s exact-trace; C=+1.017 at this M (1.7% finite-M erro
 set(HALL_TOL 0.05)
 add_test(NAME hall_haldane
          COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/hall_haldane.sh ${CMAKE_BINARY_DIR} ${HALL_M} ${HALL_TOL})
+
+# --- spin precession on the magnetic chain (Phase 4 #6) --------------------------
+# A +x-polarised spin in the Zeeman field H_hop - J_ex*sigma_z precesses:
+# <S(t)> = cos(wt)x - sin(wt)y, S_z=0, w = 2*J_ex/hbar (physical hbar=0.6582 eV*fs;
+# period 20.68 fs), E_F-independent. Density projection path, exact trace -> machine
+# precision. Validates LinQT's time-evolution + spin-projection machinery end-to-end.
+set(PREC_M 32)
+add_test(NAME spin_precession
+         COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/spin_precession.sh ${CMAKE_BINARY_DIR} ${PREC_M})
