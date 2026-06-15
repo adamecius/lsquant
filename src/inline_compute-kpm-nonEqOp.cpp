@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
 		
 		if( i == 0 ) //is hamiltonian
 		//Obtain automatically the energy bounds
-		 spectral_bounds = chebyshev::utility::SpectralBounds(OP[0]);
+		 spectral_bounds = chebyshev::utility::SpectralBounds(OP[0], "operators/" + LABEL + ".HAM.desc");
 	};
 	//CONFIGURE THE CHEBYSHEV MOMENTS
 	chebMoms.SystemLabel(LABEL);

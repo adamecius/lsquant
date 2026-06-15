@@ -2,6 +2,7 @@
 #include "chebyshev_solver.hpp"
 #include "units.hpp"
 #include "recon_grid.hpp"
+#include "operator_descriptor.hpp"
 #include <eigen3/Eigen/Core>
 #include <boost/math/special_functions/bessel.hpp>
 
@@ -457,24 +458,32 @@ void chebyshev::evolution(chebyshev::MomentsTD &         H,
 
 
 
-std::array<double,2> utility::SpectralBounds( SparseMatrixType& HAM)
+std::array<double,2> utility::SpectralBounds( SparseMatrixType& HAM, const std::string& descriptor_path)
 {
-	// DESIGN -- spectral-bounds safeguard.
-	// A BOUNDS file ("lo hi" in the run dir) gives tight, exact bounds and is REQUIRED
-	// for analytic work (loose bounds distort the moment matrix; thesis Fig. 4.2).
-	// When it is absent we must NOT fall back to an arbitrary window (the old -100..100
-	// silently rescaled every spectrum into a tiny sub-interval and corrupted results).
-	// Safeguard: estimate from the Hamiltonian itself via Gershgorin -- for a Hermitian
-	// H every eigenvalue satisfies |lambda| <= max_i sum_j |H_ij| (the inf-norm, a
-	// rigorous spectral-radius bound) -- then pad by 10% for safety. This guarantees the
-	// spectrum is enclosed; it is a SAFE default, not a tight one, so it is printed
-	// loudly and a BOUNDS file should still be supplied for accurate analytics.
+	// DESIGN -- spectral-bounds resolution, in priority order:
+	//   1. BOUNDS file ("lo hi" in the run dir) -- explicit per-run override; wins if present.
+	//   2. operator .desc sidecar (descriptor_path) -- the PRODUCER's authoritative (a,b) from
+	//      Lanczos (wannier2sparse --bounds). The Phase-2 path: bounds come from the descriptor,
+	//      not from a hack. Used when no BOUNDS file is supplied.
+	//   3. Gershgorin enclosure + bounds_pad -- safe (loose) fallback when neither is available.
+	// A BOUNDS file gives tight, exact bounds and is REQUIRED for analytic work (loose bounds
+	// distort the moment matrix; thesis Fig. 4.2). We must NOT fall back to an arbitrary window
+	// (the old -100..100 silently rescaled every spectrum into a tiny sub-interval).
 	double highest=0, lowest=0;
+	double desc_a=0, desc_b=0;
 	std::ifstream bounds_file( "BOUNDS" );
 	if( bounds_file.is_open() )
 	{
 		bounds_file>>lowest>>highest;
 		bounds_file.close();
+	}
+	else if( !descriptor_path.empty() && lsquant::descriptor_bounds(descriptor_path, desc_a, desc_b) )
+	{
+		lowest  = desc_a;
+		highest = desc_b;
+		std::cerr << "[SpectralBounds] bounds from descriptor " << descriptor_path
+		          << " -> [" << lowest << ", " << highest << "] (producer Lanczos estimate)."
+		          << std::endl;
 	}
 	else
 	{

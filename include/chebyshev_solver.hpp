@@ -46,7 +46,7 @@ namespace chebyshev
 	{
 		/// @brief Spectral rescaling window [lo,hi]: from a `BOUNDS` file if present,
 		///        else a Gershgorin enclosure of the Hamiltonian padded by 10% (safe default).
-		std::array<double,2> SpectralBounds( SparseMatrixType& HAM);
+		std::array<double,2> SpectralBounds( SparseMatrixType& HAM, const std::string& descriptor_path = "");
 	};
 
 
