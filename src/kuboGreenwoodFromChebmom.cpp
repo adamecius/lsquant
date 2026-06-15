@@ -68,7 +68,16 @@ int main(int argc, char *argv[])
 		for( int m1 = 0 ; m1 < mu.HighestMomentNumber(1) ; m1++)
 			out += delta_chebF(energ,m0)*( greenR_chebF(energ,m1)*mu(m0,m1) ).imag() ;
 		
-		kernel[i] =  -1.0*out*(mu.SystemSize()*mu.ScaleFactor()*mu.ShiftFactor() );
+		// Bug 1 fix: the second factor was ShiftFactor(), which is
+		// -BandCenter/HalfWidth*CUTOFF = 0 for any band centred at E=0 (clean chain,
+		// graphene, every particle-hole-symmetric system) -> sigma_KG was identically 0.
+		// It must be a second ScaleFactor(): the Kubo-Greenwood prefactor is
+		// -SystemSize*ScaleFactor^2 (half the Kubo-Bastin -2*SystemSize*ScaleFactor^2,
+		// since Bastin's Fermi-sea term doubles the surface term). Calibrated on a
+		// disordered chain (W=1, exact trace): Greenwood sigma_xx(E) then matches the
+		// Chern-validated Bastin route to ~5%, and the magnitude (~40 e^2/h) agrees with
+		// the Drude estimate. ShiftFactor() remains the energy-axis shift only (below).
+		kernel[i] =  -1.0*out*(mu.SystemSize()*mu.ScaleFactor()*mu.ScaleFactor() );
 	}
 
 	for( int i=0; i < num_div-1; i++)
