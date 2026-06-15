@@ -219,3 +219,9 @@ add_test(NAME phase6_scaffolding COMMAND phase6_scaffolding_test)
 # inline_kubo* drivers) and inspect (shared lsquant::inspect_path with the standalone binary).
 add_test(NAME single_binary
          COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/single_binary.sh ${CMAKE_BINARY_DIR})
+
+# --- examples/01_dos_1d_chain pipeline smoke test (matplotlib-free) -------------
+# Runs the tutorial's make_chain.py + spectralOp for a small clean chain and asserts
+# mu_m = delta_{m,0} via the chain1d_dos comparator (M < N, no aliasing).
+add_test(NAME example_dos_smoke
+         COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/example_dos_smoke.sh ${CMAKE_BINARY_DIR})
