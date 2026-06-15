@@ -17,6 +17,7 @@ set(KPM_LIB_SOURCES
     sparse_matrix.cpp
     operator_descriptor.cpp
     run_config.cpp
+    reconstruction.cpp
     special_functions.cpp
     Kubo_solver_FFT.cpp
     Kubo_solver_FFT_postProcess.cpp
