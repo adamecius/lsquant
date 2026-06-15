@@ -198,3 +198,10 @@ add_test(NAME config_equivalence
 # is honored (output tagged stateexact) and deterministic.
 add_test(NAME corrop_state_honored
          COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/corrop_state_honored.sh ${CMAKE_BINARY_DIR})
+
+# --- FFT-node reconstruction backend regression (Phase 5 slice 3) ---------------
+# Pins the FFT Chebyshev-node Kubo reconstruction (previously untested) by byte-comparing the
+# FFT-grid Bastin/Greenwood of the committed graphene moments to committed goldens. Safety net
+# for the GRID_FFT_NODES backend in reconstruct_kubo.
+add_test(NAME fft_grid_regression
+         COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/fft_grid_regression.sh ${CMAKE_BINARY_DIR})
