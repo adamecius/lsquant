@@ -14,15 +14,43 @@ moments**, then **reconstruct the spectrum**.
 
 ## What it computes
 
-- **Density of states and spectral functions** (1D Chebyshev moments).
+LinQT expands a spectral or transport quantity in Chebyshev polynomials of the
+rescaled Hamiltonian, so its cost scales linearly with system size (KPM [1]):
+
+- **Density of states and spectral functions**, from the 1D Chebyshev moments
+  $\mu_m = \mathrm{Tr}\,T_m(\tilde H)$ [1].
 - **Kubo–Greenwood and Kubo–Bastin conductivities** — longitudinal $\sigma_{xx}$
   and Hall $\sigma_{xy}$, charge and spin, with the Fermi-sea / Fermi-surface
-  split.
+  split [2].
 - **Time evolution and time-dependent correlations** — velocity autocorrelation
-  and mean-square displacement (ballistic transport, localization).
-- **Spin dynamics** — precession and relaxation; non-orthogonal bases.
+  and mean-square displacement, for ballistic transport and localization [2].
+- **Spin dynamics** — precession and relaxation; non-orthogonal bases [2].
 
-## Quickstart
+The methods and their derivations are reviewed in [2]; the KPM kernel itself in
+[1].
+
+#### References
+
+1. A. Weisse, G. Wellein, A. Alvermann, H. Fehske, *The kernel polynomial
+   method*, Rev. Mod. Phys. **78**, 275 (2006).
+2. Z. Fan, J. H. García, A. W. Cummings, J. E. Barrios-Vargas, M. Panhans,
+   A. Harju, F. Ortmann, S. Roche, *Linear Scaling Quantum Transport
+   Methodologies*, arXiv:1811.07387.
+
+## Installation
+
+Requirements: a C++11 compiler (e.g. g++ 13) and CMake ≥ 3.16, plus **Eigen3**
+(≥ 3.3), **FFTW3**, **GSL**, **Boost.Math** (header-only), **OpenMP**, and
+**pthreads**. Intel MKL is not used; Eigen is the single numeric backend.
+
+On Debian/Ubuntu:
+
+```bash
+sudo apt-get install g++ cmake pkg-config libeigen3-dev libfftw3-dev libgsl-dev libboost-dev
+```
+
+Dependencies resolve through `find_package` / `pkg-config` as imported targets,
+so no hand-passed toolchain file is needed:
 
 ```bash
 git clone https://github.com/adamecius/lsquant.git
@@ -32,9 +60,13 @@ cmake --build build -j        # executables land in build/
 ctest --test-dir build        # optional: 24 checks, all should pass
 ```
 
-Then walk the first worked example, which builds a chain, computes its moments,
-and reconstructs the density of states. The [tutorials](#tutorials) are the
-fastest way in.
+Build options:
+
+- `-DLINQT_BUILD_INPUT_TOOLS=ON|OFF` (default **ON**) — fetch and build the
+  pinned `wannier2sparse` used to generate the test fixtures; it clones at
+  configure time and degrades gracefully offline.
+- `-DLINQT_BUILD_UTILITIES=ON|OFF` (default **OFF**) — build the Python helper
+  utilities.
 
 ## The `lsquant` interface
 
@@ -45,8 +77,9 @@ than positional arguments:
 # 1. compute Chebyshev moments  (mode: spectral | noneq | msd)
 lsquant compute --config run.json
 
-# 2. reconstruct a Kubo conductivity from the 2D moments  (broadening in meV)
-lsquant reconstruct NonEqOpVX-VY*.chebmom2D bastin 10
+# 2. reconstruct a spectrum  (dos from a .chebmom1D; bastin/greenwood from a .chebmom2D)
+lsquant reconstruct SpectralOp*.chebmom1D     dos       120      # broadening in meV
+lsquant reconstruct NonEqOpVX-VY*.chebmom2D   bastin    10
 
 # inspect a run or an operator and its resolved numerical provenance
 lsquant inspect run.json
@@ -66,25 +99,24 @@ A Hall-conductivity run uses two velocity operators:
   "num_moments": 128, "state": "exact" }
 ```
 
-`compute` writes a `.chebmom*` moment table; `reconstruct` turns the 2D table
-into $\sigma(E)$. Every operator travels with a `.desc` sidecar (its identity,
-units, and spectral bounds), so a result stays traceable to the operator that
-produced it, and `inspect` reports that provenance.
-
-The legacy per-task drivers (`inline_compute-kpm-*`, `*FromChebmom`) remain in
-`build/` and give byte-identical results; the DOS reconstruction is still one of
-them, `inline_spectralFunctionFromChebmom`.
+`compute` writes a `.chebmom*` moment table; `reconstruct` turns it into a curve.
+Every operator travels with a `.desc` sidecar (its identity, units, and spectral
+bounds), so a result stays traceable to the operator that produced it, and
+`inspect` reports that provenance. The legacy per-task drivers
+(`inline_compute-kpm-*`, `*FromChebmom`) remain in `build/` and give
+byte-identical results.
 
 ## Tutorials
 
 Three self-contained physics stories under [`examples/`](examples/), each with a
-script that reproduces its figures:
+script that reproduces its figures, all driven through the `lsquant` interface:
 
 | | Tutorial | What it teaches |
 |---|---|---|
 | 1 | [Density of states of a 1D chain](examples/01_dos_1d_chain) | KPM moments, the resolution dial, the finite-size revival |
 | 2 | [Localization on a disordered chain](examples/02_localization_1d_chain) | the localization length from mean-square displacement |
 | 3 | [Quantized Hall plateau of the Haldane model](examples/03_haldane_hall) | Kubo–Bastin $\sigma_{xy}$ and the Fermi-sea topological plateau |
+| 4 | [Spin precession in a magnetic chain](examples/04_spin_precession_magnetic_chain) | Larmor precession from real-time spin dynamics |
 
 Start with Tutorial 1; each reuses the previous chain.
 
@@ -103,34 +135,6 @@ Internally the recursion speaks a single operator interface (`HamiltonianOp`),
 with the sparse matrix as the live implementation and the basis metric as a
 separate policy, so the hot loop pays one virtual call per matrix–vector product
 and the backend stays swappable.
-
-## Build
-
-Requirements: a C++11 compiler (e.g. g++ 13) and CMake ≥ 3.16, plus **Eigen3**
-(≥ 3.3), **FFTW3**, **GSL**, **Boost.Math** (header-only), **OpenMP**, and
-**pthreads**. Intel MKL is not used; Eigen is the single numeric backend.
-
-On Debian/Ubuntu:
-
-```bash
-sudo apt-get install g++ cmake pkg-config libeigen3-dev libfftw3-dev libgsl-dev libboost-dev
-```
-
-Dependencies resolve through `find_package` / `pkg-config` as imported targets,
-so no hand-passed toolchain file is needed:
-
-```bash
-cmake -S . -B build
-cmake --build build -j
-```
-
-Options:
-
-- `-DLINQT_BUILD_INPUT_TOOLS=ON|OFF` (default **ON**) — fetch and build the
-  pinned `wannier2sparse` used to generate the test fixtures; it clones at
-  configure time and degrades gracefully offline.
-- `-DLINQT_BUILD_UTILITIES=ON|OFF` (default **OFF**) — build the Python helper
-  utilities.
 
 ## Inputs
 
@@ -171,14 +175,7 @@ pinned). The specification is in [`test/TEST_PLAN.md`](test/TEST_PLAN.md).
 | `docs/` | physics pages and the Doxygen config |
 | `scripts/`, `cmake/` | golden regeneration; the `wannier2sparse` fetch module |
 
-## Citing
+## License and citation
 
-If LinQT contributes to your work, please cite the methodology:
-
-> Z. Fan, J. H. García, A. W. Cummings, J. E. Barrios-Vargas, M. Panhans,
-> A. Harju, F. Ortmann, S. Roche, *Linear Scaling Quantum Transport
-> Methodologies*, arXiv:1811.07387.
-
-## License
-
-See [LICENSE](LICENSE).
+See [LICENSE](LICENSE). If LinQT contributes to your work, please cite the
+methodology, reference [2] above (arXiv:1811.07387).
