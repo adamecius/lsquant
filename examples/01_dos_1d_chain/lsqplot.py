@@ -202,5 +202,20 @@ def demo():
                broadenings_meV=[80, 24, 10])
 
 
+def figure_levels(N=64):
+    """Opening figure: the discrete chain spectrum under the smooth bulk DOS."""
+    import matplotlib.pyplot as plt
+    Ek = 2 * np.cos(2 * np.pi * np.arange(N) / N)
+    E = np.linspace(-1.999, 1.999, 800); rho = 1 / (np.pi * np.sqrt(4 - E ** 2))
+    fig, ax = plt.subplots(figsize=(6.4, 3.7))
+    ax.vlines(Ek, 0, 0.6, color="0.6", lw=0.7, alpha=0.8, label="%d chain levels" % N)
+    ax.plot(E, rho, color="#1f77b4", lw=2, label=r"smooth bulk DOS $1/\pi\sqrt{4-E^2}$")
+    ax.set_xlabel("energy $E$ (eV)"); ax.set_ylabel("density of states (1/eV)")
+    ax.set_xlim(-2.2, 2.2); ax.set_ylim(0, 0.65); ax.legend(fontsize=9)
+    ax.set_title("A finite chain has a discrete spectrum; the bulk DOS is smooth")
+    fig.tight_layout(); fig.savefig("fig_levels.png", dpi=150); print("wrote fig_levels.png")
+
+
 if __name__ == "__main__":
+    figure_levels()
     demo()

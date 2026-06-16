@@ -48,6 +48,11 @@ $m = N$. The finiteness of the chain changes no low-order moment. It hides in on
 place only, a revival where $\mu_m$ jumps back to $1$ at $m = N$ and every multiple
 after, the spectrum reminding us it is discrete.
 
+The whole problem sits in one frame below: a finite comb of sharp levels under the
+smooth curve we wish we had.
+
+![A finite chain has a discrete spectrum of levels; the smooth bulk DOS is the target](fig_levels.png)
+
 ## Step 1: build the chain
 
 Build three sizes, chosen so the revival lands where we can see it.

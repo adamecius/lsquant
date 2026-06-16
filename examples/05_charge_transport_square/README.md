@@ -49,6 +49,11 @@ The single idea of this tutorial: as $W$ grows, $D_{\max}$ falls, so $\sigma$ an
 $\ell$ fall with it, and past a point the diffusion coefficient stops plateauing
 and instead peaks and decays, the fingerprint of (weak) localization.
 
+The clean starting point is a metal: the square-lattice band gives a Fermi contour
+of states that carry current freely, which disorder will scatter.
+
+![The square-lattice band and its E=2t Fermi contour, the clean metal that disorder will scatter into a diffusing then localized state](fig_fermi.png)
+
 ## Step 1: build a disordered square lattice
 
 The generator writes the Hamiltonian, the $x$-velocity operator, the disorder-widened
@@ -69,7 +74,11 @@ Run the KPM mean-square displacement and reconstruct $\Delta X^2$ at the working
 energy:
 
 ```bash
-inline_compute-kpm-MeanSquareDisplacement square_L200_W1 VX 256 160 150
+cat > run_msd.json <<'JSON'
+{ "mode": "msd", "label": "square_L200_W1", "operator": "VX",
+  "num_moments": 256, "num_times": 160, "tmax": 150 }
+JSON
+lsquant compute --config run_msd.json
 inline_timeCorrelationsFromChebmom Correlation*square_L200_W1*chebmomTD 80 2
 ```
 

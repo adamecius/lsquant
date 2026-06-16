@@ -84,9 +84,28 @@ def figure_phase_diagram(t2=0.15, phi=np.pi / 2):
     print("wrote fig_phase_diagram.png")
 
 
+def figure_bands(Ng=220):
+    """Opening figure: the Haldane density of states, showing the bulk gap."""
+    import matplotlib.pyplot as plt
+    b1 = 2 * np.pi * np.array([1 / 3, 1 / np.sqrt(3)])
+    b2 = 2 * np.pi * np.array([1 / 3, -1 / np.sqrt(3)])
+    Es = []
+    for i in range(Ng):
+        for j in range(Ng):
+            Es += list(np.linalg.eigvalsh(bloch((i + .5) / Ng * b1 + (j + .5) / Ng * b2)))
+    Es = np.array(Es)
+    fig, ax = plt.subplots(figsize=(6.4, 3.7))
+    ax.hist(Es, bins=140, color="#1f77b4", alpha=0.85)
+    ax.axvspan(Es[Es < 0].max(), Es[Es > 0].min(), color="0.85", label="gap (no states)")
+    ax.set_xlabel("energy $E$ (eV)"); ax.set_ylabel("density of states (a.u.)")
+    ax.legend(fontsize=9); ax.set_title(r"The Haldane model is a gapped insulator ($C=+1$)")
+    fig.tight_layout(); fig.savefig("fig_bands.png", dpi=150); print("wrote fig_bands.png")
+
+
 if __name__ == "__main__":
     print(f"Chern (t2=0.15, phi=pi/2, M=0):    {chern_lower():+.3f}  "
           f"(topological, |C| = 1)")
     print(f"Chern (phi=0, trivial):            {chern_lower(phi=0.0):+.3f}")
     print(f"gap at golden parameters:          {gap():.3f} eV")
+    figure_bands()
     figure_phase_diagram()
