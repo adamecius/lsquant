@@ -1,9 +1,12 @@
+// [LEGACY -- NOT BUILT] previous-working inline_compute-kpm-spacialresolution. Reference only.
+// Supported path: lsquant <cmd>  |  port + golden-gate before any reuse.
 // C & C++ libraries
 #include <iostream> /* for std::cout mostly */
 #include <string>   /* for std::string class */
 #include <fstream>  /* for std::ofstream and std::ifstream functions classes*/
 #include <stdlib.h>
 #include <chrono>
+#include <vector>
 
 #include "kpm_noneqop.hpp" //Message functions
 #include "chebyshev_moments.hpp"
@@ -17,10 +20,9 @@ namespace spectral
 	void printWelcomeMessage();
 };
 
-
 int main(int argc, char *argv[])
 {
-	if ( !(argc == 4 || argc == 5 ) )
+	if ( !( argc == 5 ) )
 	{
 		spectral::printHelpMessage();
 		return 0;
@@ -31,26 +33,24 @@ int main(int argc, char *argv[])
 	const std::string
 		LABEL  = argv[1],
 		S_OP   = argv[2],
-		S_NMOM = argv[3];
+		S_NMOM = argv[3],
+		ifile  = argv[4];
 
 	const int numMoms   = atoi(S_NMOM.c_str() );
-	chebyshev::Moments1D_nonOrth chebMoms( numMoms ); //load number of moments
+	chebyshev::Moments1D chebMoms( numMoms ); //load number of moments
 
-	const int NOPS = 4;
+	const int NOPS = 2;
 	SparseMatrixType OP[NOPS];
 	OP[0].SetID("HAM");
 	OP[1].SetID( S_OP );
-	OP[2].SetID( "S" );
-	OP[3].SetID( "orth_HAM" );
 	
 	// Build the operators from Files
 	SparseMatrixBuilder builder;
 	std::array<double,2> spectral_bounds;	
 	
 	for (int i = 0; i < NOPS; i++)
-	  if( OP[i].isIdentity() ){
+	if( OP[i].isIdentity() )
 			std::cout<<"The operator "<<OP[i].ID()<<" is treated as the identity"<<std::endl;
-	  }
 	else
 	{
 		std::string input = "operators/" + LABEL + "." + OP[i].ID() + ".CSR";
@@ -65,42 +65,36 @@ int main(int argc, char *argv[])
 	chebMoms.SystemLabel(LABEL);
 	chebMoms.BandWidth ( (spectral_bounds[1]-spectral_bounds[0])*1.0);
 	chebMoms.BandCenter( (spectral_bounds[1]+spectral_bounds[0])*0.5);
-
-
-
-        chebMoms.SetAndRescaleHamiltonian(OP[0]);
-
-	OP[0].Rescale( 1, -chebMoms.ShiftFactor() );
-
-	OP[3].Rescale( chebMoms.ScaleFactor(), chebMoms.ShiftFactor() );
+	chebMoms.SetAndRescaleHamiltonian(OP[0]);
 	chebMoms.Print();
 
 
 	//Compute the chebyshev expansion table
 	qstates::generator gen;
-	//if( argc == 6)
-	//   gen  = qstates::LoadStateFile(argv[5]);
+	int spinswap=chebMoms.SystemSize()/2;
+	std::ifstream filepos(ifile);
+	std::vector<int> positions;
+	if (filepos){
+		int value;
+		while(filepos>>value){
+			positions.push_back(value);
+		}
+	}
+	for (int i=0;i<positions.size();i++){
+		gen = qstates::CreateLocalSet({positions[i],positions[i]+spinswap});	
+		chebyshev::SpectralMoments(OP[1],chebMoms, gen);
 
+		auto prefix="SpectralOp"+OP[1].ID();
+		if( OP[1].isIdentity() )
+			prefix="SpectralOp"+OP[1].ID();
+		std::string outputfilename="./spaceresol/"+prefix+LABEL+"KPM_M"+S_NMOM+"_state"+"SpaceResol"+std::to_string(positions[i])+".chebmom1D";	
 
-	gen.NumberOfStates(std::stoi(argv[4]));
-	
-
-
-	chebMoms.set_S(OP[2]);
-	
-	chebyshev::SpectralMoments_nonOrth_test(OP[1], OP[3], chebMoms, gen);
-
-	auto prefix="SpectralOp-nonOrth-"+OP[1].ID();
-	if( OP[1].isIdentity() )
-		prefix="Spectral-nonOrth-OP"+OP[1].ID();
-	std::string outputfilename=prefix+LABEL+"KPM_M"+S_NMOM+"_state"+gen.StateLabel()+".chebmom1D-nonOrth";	
-
-	std::cout<<"Saving the moments in  "<<outputfilename<<std::endl;
-	chebMoms.saveIn(outputfilename);
+		std::cout<<"Saving the moments in  "<<outputfilename<<std::endl;
+		chebMoms.saveIn(outputfilename);
+	}
 	std::cout<<"End of program"<<std::endl;
 	return 0;
 };
-
 
 	void spectral::printHelpMessage()
 	{

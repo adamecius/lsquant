@@ -1,3 +1,5 @@
+// [LEGACY -- NOT BUILT] previous-working kuboBastinIFromChebmom. Reference only.
+// Supported path: lsquant <cmd>  |  port + golden-gate before any reuse.
 
 // C & C++ libraries
 #include <iostream>		/* for std::cout mostly */
@@ -54,7 +56,7 @@ int main(int argc, char *argv[])
 	
 
 	std::string
-	outputName  ="KuboBastinII_"+mu.SystemLabel()+"JACKSON.dat";
+	outputName  ="KuboBastinI_"+mu.SystemLabel()+"JACKSON.dat";
 
 	std::cout<<"Saving the data in "<<outputName<<std::endl;
 	std::cout<<"PARAMETERS: "<< mu.SystemSize()<<" "<<mu.HalfWidth()<<std::endl;
@@ -68,14 +70,9 @@ int main(int argc, char *argv[])
 		const double energ = energies[i];
 		for( int m0 = 0 ; m0 < mu.HighestMomentNumber(0) ; m0++)
 		for( int m1 = 0 ; m1 < mu.HighestMomentNumber(1) ; m1++)
-		{		
-			const auto GrL = greenR_chebF(energ,m0);
-			const auto GrR = greenR_chebF(energ,m1);
-			const auto DGrL= DgreenR_chebF(energ,m0);
-			const auto DGrR= DgreenR_chebF(energ,m1);
-			out +=-( (GrL*DGrR- DGrL*GrR)*mu(m0,m1) ).real() ;
-		}
-		kernel[i] =  out*mu.SystemSize()*mu.ScaleFactor()*mu.ScaleFactor() / 2 /M_PI;
+			out += delta_chebF(energ,m0)*( greenR_chebF(energ,m1)*mu(m0,m1) ).imag() ;
+		
+		kernel[i] = -1.0*out*(mu.SystemSize()*mu.ScaleFactor()*mu.ScaleFactor() );
 	}
 
 	double acc = 0;
@@ -83,7 +80,7 @@ int main(int argc, char *argv[])
 	{
 		const double energ  = energies[i];
 		const double denerg = energies[i+1]-energies[i];
-		acc +=(kernel[i]+kernel[i+1])*denerg;
+		acc = 0.5*(kernel[i]+kernel[i+1]);
 		outputfile<<energ/mu.ScaleFactor() - mu.ShiftFactor() <<" "<<acc <<std::endl;
 	}
 
