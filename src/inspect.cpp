@@ -7,6 +7,7 @@
 #include "operator_descriptor.hpp"
 #include "units.hpp"
 #include "recon_grid.hpp"
+#include "io/fingerprint.hpp"
 
 namespace
 {
@@ -52,6 +53,8 @@ namespace
 		          << "  bounds pad  : " << chebyshev::safety_factors().bounds_pad << "\n"
 		          << "  bounds from : " << bounds_src << "\n"
 		          << "  hbar (units): " << chebyshev::HBAR << " eV*fs\n";
+		const std::string fp = lsquant::io::fingerprint_system(c.label, "operators");
+		std::cout << "  fingerprint : " << fp.substr(0, 16) << "...  (merge identity for this system)\n";
 		if (file_exists(ham_desc)) { std::cout << "  -- Hamiltonian descriptor --\n"; inspect_desc(ham_desc); }
 		std::cout << "  output      : " << (c.output.empty() ? "(derived from run parameters)" : c.output) << "\n";
 	}

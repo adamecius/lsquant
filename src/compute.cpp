@@ -9,11 +9,13 @@
 #include "sparse_matrix.hpp"
 #include "quantum_states.hpp"
 #include "chebyshev_solver.hpp"
+#include "util/report.hpp"
 
 namespace lsquant
 {
 	int compute_noneq(const std::string& label, const std::string& op_right,
-	                  const std::string& op_left, int num_moments, const std::string& state_file)
+	                  const std::string& op_left, int num_moments, const std::string& state_file,
+	                  std::string* out_filename)
 	{
 		chebyshev::Moments2D chebMoms(num_moments, num_moments);
 
@@ -43,19 +45,24 @@ namespace lsquant
 		if (!state_file.empty())
 			gen = qstates::LoadStateFile(state_file);
 
-		chebyshev::CorrelationExpansionMoments(OP[1], OP[2], chebMoms, gen);
+		{
+			LSQ_SCOPED("compute_noneq/CorrelationExpansion");
+			chebyshev::CorrelationExpansionMoments(OP[1], OP[2], chebMoms, gen);
+		}
 
 		const std::string outputfilename =
 			"NonEqOp" + op_right + "-" + op_left + label + "KPM_M" +
 			std::to_string(num_moments) + "x" + std::to_string(num_moments) +
 			"_state" + gen.StateLabel() + ".chebmom2D";
 		chebMoms.saveIn(outputfilename);
-		std::cout << "Saved moments in " << outputfilename << std::endl;
+		if (out_filename) *out_filename = outputfilename;
+		LSQ_LOG_INFO("saved moments in " << outputfilename);
 		return 0;
 	}
 
 	int compute_spectral(const std::string& label, const std::string& op,
-	                     int num_moments, const std::string& state_file)
+	                     int num_moments, const std::string& state_file,
+	                     std::string* out_filename)
 	{
 		chebyshev::Moments1D chebMoms(num_moments);
 
@@ -88,19 +95,24 @@ namespace lsquant
 		if (!state_file.empty())
 			gen = qstates::LoadStateFile(state_file);
 
-		chebyshev::SpectralMoments(OP[1], chebMoms, gen);
+		{
+			LSQ_SCOPED("compute_spectral/SpectralMoments");
+			chebyshev::SpectralMoments(OP[1], chebMoms, gen);
+		}
 
 		const std::string prefix = "SpectralOp" + OP[1].ID();
 		const std::string outputfilename =
 			prefix + label + "KPM_M" + std::to_string(num_moments) +
 			"_state" + gen.StateLabel() + ".chebmom1D";
-		std::cout << "Saving the moments in  " << outputfilename << std::endl;
+		LSQ_LOG_INFO("saving the moments in " << outputfilename);
 		chebMoms.saveIn(outputfilename);
+		if (out_filename) *out_filename = outputfilename;
 		return 0;
 	}
 
 	int compute_msd(const std::string& label, const std::string& vop,
-	                int num_moments, int num_times, double tmax, const std::string& state_file)
+	                int num_moments, int num_times, double tmax, const std::string& state_file,
+	                std::string* out_filename)
 	{
 		chebyshev::MomentsTD chebMoms(num_moments, num_times);
 
@@ -134,7 +146,10 @@ namespace lsquant
 		if (!state_file.empty())
 			gen = qstates::LoadStateFile(state_file);
 
-		chebyshev::MeanSquareDisplacement(chebMoms, gen);
+		{
+			LSQ_SCOPED("compute_msd/MeanSquareDisplacement");
+			chebyshev::MeanSquareDisplacement(chebMoms, gen);
+		}
 
 		// Default-format tmax (20.0 -> "20", 0.5 -> "0.5") so the filename token matches the legacy
 		// argv string and the .chebmomTD name is preserved byte-for-byte.
@@ -145,8 +160,9 @@ namespace lsquant
 		const std::string outputfilename =
 			prefix + label + "KPM_M" + std::to_string(num_moments) +
 			"_state" + tmaxtok.str() + gen.StateLabel() + ".chebmomTD";
-		std::cout << "Saving convergence data in " << outputfilename << std::endl;
+		LSQ_LOG_INFO("saving convergence data in " << outputfilename);
 		chebMoms.saveIn(outputfilename);
+		if (out_filename) *out_filename = outputfilename;
 		return 0;
 	}
 }

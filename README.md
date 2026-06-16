@@ -85,6 +85,47 @@ lsquant reconstruct NonEqOpVX-VY*.chebmom2D   bastin    10
 lsquant inspect run.json
 ```
 
+### Unified runs: one system, many observables, one output
+
+For the common case — *the same system, several observables* — `lsquant run`
+takes a single config that lists a `system`, the `numerics`, and the
+`observables` to compute, and writes **one** machine- and human-readable
+`<label>.results.json` holding the thin-grid final spectra plus timing, peak
+memory, and any errors:
+
+```json
+{ "system":   { "label": "graphene", "operators_dir": "operators" },
+  "numerics": { "num_moments": 512, "broadening_meV": 10, "grid_points": 600 },
+  "observables": [ { "kind": "dos" },
+                   { "kind": "conductivity", "component": "xx" },
+                   { "kind": "conductivity", "component": "xy" } ],
+  "output": { "results": "graphene.results.json" } }
+```
+
+```bash
+lsquant run --config run.json          # DOS + sigma_xx + sigma_xy -> graphene.results.json
+```
+
+The config is validated with **physics-aware hints** — ask for `sigma_xy` without
+a `VY` operator and it tells you exactly what is missing instead of failing
+opaquely. Each system carries a **fingerprint** (a SHA-256 of its operator
+files); two runs on the *same* system can be combined, and the merge refuses a
+mismatch:
+
+```bash
+lsquant fingerprint graphene operators        # the system's merge identity
+lsquant merge a.results.json b.results.json -o graphene.results.json
+```
+
+Present a results file as a table + plots + a self-contained HTML dashboard with
+[`utilities/python/lsquant_report.py`](utilities/python/lsquant_report.py).
+
+Every run is instrumented by the reporting layer (see
+[`reporting_system.md`](reporting_system.md)): `-v`/`--log-file` and
+`LSQUANT_LOG_LEVEL` control levelled logging, and each run prints a peak-RSS /
+CPU / wall summary. Generated artifacts (`*.CSR`, `*.chebmom*`, `*.results.json`,
+log files) are a regenerable cache and are never committed.
+
 A density-of-states run is the spectral function of the identity operator:
 
 ```json
@@ -108,8 +149,12 @@ byte-identical results.
 
 ## Tutorials
 
-Three self-contained physics stories under [`examples/`](examples/), each with a
-script that reproduces its figures, all driven through the `lsquant` interface:
+Six self-contained physics stories under [`examples/`](examples/), each with a
+script that reproduces its figures, all driven through the `lsquant` interface.
+The figures follow a shared publication (APS/PRL) style — see
+[`examples/prl_style.py`](examples/prl_style.py): fixed column widths, math
+labels, no titles (the message goes in the caption), and colour + linestyle +
+marker encoding that stays readable in greyscale and for colour-blind readers.
 
 | | Tutorial | What it teaches |
 |---|---|---|

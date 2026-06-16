@@ -16,6 +16,7 @@ trace -> deterministic. The binaries are found on PATH or under $LSQUANT_BIN.
 Toy-scale and illustrative, not converged production numbers.
 """
 import os
+import sys
 import glob
 import subprocess
 from shutil import which
@@ -27,6 +28,10 @@ import matplotlib.pyplot as plt
 
 import make_ey
 import make_rashba
+
+# Shared publication (APS/PRL) plot style: examples/prl_style.py.
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import prl_style as prl
 
 E = 2.0
 HBAR = 0.6582119624
@@ -85,23 +90,25 @@ def part_A():
         rates.append(1.0 / T1)
         print("EY  Dsf=%.2f  T1=%.1f fs  1/T1=%.4f" % (D, T1, 1.0 / T1))
 
-    fig, (a, b) = plt.subplots(1, 2, figsize=(9.2, 4.0))
+    prl.use("web", aspect=0.46)
+    fig, (a, b) = plt.subplots(1, 2)
     t, s = curves[0.10]
     T1 = fit_rate(t, s)
-    a.plot(t, s, "o", ms=3, color="#1f77b4", label=r"$S_z(E{=}2t,\,t)$")
-    a.plot(t, np.exp(-t / T1), "-", color="#1f77b4", alpha=0.6,
-           label=r"exponential, $T_1\approx%.0f$ fs" % T1)
-    a.axhline(0, color="0.85", lw=0.8)
-    a.set_xlabel("time $t$ (fs)"); a.set_ylabel(r"$S_z(E,t)$"); a.legend(fontsize=9)
-    a.set_title(r"Elliott-Yafet: $S_z$ decays exponentially ($\Delta_{\rm sf}=0.1$)")
+    a.plot(t, s, "o", ms=4, color=prl.COLORS[1], label=r"$S_z(E{=}2t,\,t)$")
+    a.plot(t, np.exp(-t / T1), "-", color=prl.COLORS[1], alpha=0.55,
+           label=r"$e^{-t/T_1},\ T_1\approx%.0f$ fs" % T1)
+    a.axhline(0, color="0.7", lw=0.6, zorder=0)
+    a.set_xlabel(r"time $t$ (fs)"); a.set_ylabel(r"$S_z(E,t)$"); a.legend(loc="upper right")
+    prl.panel(a, "(a)")
+    # ordered spin-flip family -> sequential viridis (greyscale-monotonic) + legend
     cols = plt.cm.viridis(np.linspace(0.15, 0.8, len(Ds)))
     for D, c in zip(Ds, cols):
         tt, ss = curves[D]
         b.plot(tt, ss, color=c, lw=1.6, label=r"$\Delta_{\rm sf}=%.2f$" % D)
-    b.axhline(0, color="0.85", lw=0.8)
-    b.set_xlabel("time $t$ (fs)"); b.set_ylabel(r"$S_z(E,t)$"); b.legend(fontsize=9)
-    b.set_title(r"stronger spin-flip $\Rightarrow$ faster relaxation")
-    fig.tight_layout(); fig.savefig("fig_ey.png", dpi=150); print("wrote fig_ey.png")
+    b.axhline(0, color="0.7", lw=0.6, zorder=0)
+    b.set_xlabel(r"time $t$ (fs)"); b.set_ylabel(r"$S_z(E,t)$"); b.legend(loc="upper right")
+    prl.panel(b, "(b)")
+    prl.save(fig, "fig_ey")
 
 
 def part_B():
@@ -115,18 +122,19 @@ def part_B():
     tx, sx = spin_vs_time(labW, 2 * L * L, "SX", "PX", M, NT, TM)
     print("DP  W=0 (precession) and W=6 (relaxation) + in/out-of-plane computed")
 
-    fig, (a, b) = plt.subplots(1, 2, figsize=(9.2, 4.0))
-    a.plot(*curves[0.0], color="#9467bd", lw=1.5, label=r"$W=0$ (precession)")
-    a.plot(*curves[6.0], color="#2ca02c", lw=1.6, label=r"$W=6$ (relaxes)")
-    a.axhline(0, color="0.85", lw=0.8); a.set_ylim(-1.25, 1.25)
-    a.set_xlabel("time $t$ (fs)"); a.set_ylabel(r"$S_z(E,t)$"); a.legend(fontsize=9)
-    a.set_title("Dyakonov-Perel: clean precesses, disorder relaxes")
-    b.plot(*curves[6.0], color="#2ca02c", lw=1.6, label=r"$S_z$ (out of plane)")
-    b.plot(tx, sx, color="#d62728", lw=1.6, label=r"$S_x$ (in plane)")
-    b.axhline(0, color="0.85", lw=0.8)
-    b.set_xlabel("time $t$ (fs)"); b.set_ylabel(r"$S(E,t)$"); b.legend(fontsize=9)
-    b.set_title("in-plane spin outlives out-of-plane")
-    fig.tight_layout(); fig.savefig("fig_dp.png", dpi=150); print("wrote fig_dp.png")
+    prl.use("web", aspect=0.46)
+    fig, (a, b) = plt.subplots(1, 2)
+    a.plot(*curves[0.0], color=prl.COLORS[4], ls="-", lw=1.6, label=r"$W=0$ (precession)")
+    a.plot(*curves[6.0], color=prl.COLORS[3], ls="--", lw=1.6, label=r"$W=6$ (relaxes)")
+    a.axhline(0, color="0.7", lw=0.6, zorder=0); a.set_ylim(-1.25, 1.25)
+    a.set_xlabel(r"time $t$ (fs)"); a.set_ylabel(r"$S_z(E,t)$"); a.legend(loc="upper right")
+    prl.panel(a, "(a)")
+    b.plot(*curves[6.0], color=prl.COLORS[3], ls="-", lw=1.6, label=r"$S_z$ (out of plane)")
+    b.plot(tx, sx, color=prl.COLORS[2], ls="--", lw=1.6, label=r"$S_x$ (in plane)")
+    b.axhline(0, color="0.7", lw=0.6, zorder=0)
+    b.set_xlabel(r"time $t$ (fs)"); b.set_ylabel(r"$S(E,t)$"); b.legend(loc="upper right")
+    prl.panel(b, "(b)")
+    prl.save(fig, "fig_dp")
 
 
 if __name__ == "__main__":

@@ -14,7 +14,14 @@ quantized number as a Hall conductivity plateau in the gap.
     python haldane_kspace.py
 """
 
+import os
+import sys
+
 import numpy as np
+
+# Shared publication (APS/PRL) plot style: examples/prl_style.py.
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import prl_style as prl
 
 
 def bloch(k, t1=-1.0, t2=0.15, phi=np.pi / 2, mass=0.0):
@@ -71,17 +78,15 @@ def figure_phase_diagram(t2=0.15, phi=np.pi / 2):
     masses = np.linspace(0.0, 1.6, 17)
     Cs = [round(chern_lower(mass=m, t2=t2, phi=phi)) for m in masses]
     Mc = 3 * np.sqrt(3) * t2 * abs(np.sin(phi))      # gap-closing mass
-    fig, ax = plt.subplots(figsize=(7, 3.2))
-    ax.plot(masses, Cs, "o-", lw=1.0)
-    ax.axvline(Mc, color="grey", ls=":", lw=1.0,
-               label=f"gap closes at M = {Mc:.3f}")
-    ax.set_xlabel("sublattice mass  M  (eV)")
-    ax.set_ylabel("Chern number  C")
-    ax.set_title(f"Haldane phase diagram  (t2 = {t2:g}, phi = pi/2)")
-    ax.legend(frameon=False)
-    fig.tight_layout()
-    fig.savefig("fig_phase_diagram.png", dpi=150)
-    print("wrote fig_phase_diagram.png")
+    prl.use("web", aspect=0.42)
+    fig, ax = plt.subplots()
+    ax.plot(masses, Cs, lw=1.2, **prl.trace(0, marker=True))
+    ax.axvline(Mc, color="0.5", ls=":", lw=1.0,
+               label=r"gap closes, $M_c=%.3f$" % Mc)
+    ax.set_xlabel(r"sublattice mass $M$ (eV)")
+    ax.set_ylabel(r"Chern number $C$")
+    ax.legend(loc="upper right")
+    prl.save(fig, "fig_phase_diagram")
 
 
 def figure_bands(Ng=220):
@@ -94,12 +99,13 @@ def figure_bands(Ng=220):
         for j in range(Ng):
             Es += list(np.linalg.eigvalsh(bloch((i + .5) / Ng * b1 + (j + .5) / Ng * b2)))
     Es = np.array(Es)
-    fig, ax = plt.subplots(figsize=(6.4, 3.7))
-    ax.hist(Es, bins=140, color="#1f77b4", alpha=0.85)
-    ax.axvspan(Es[Es < 0].max(), Es[Es > 0].min(), color="0.85", label="gap (no states)")
-    ax.set_xlabel("energy $E$ (eV)"); ax.set_ylabel("density of states (a.u.)")
-    ax.legend(fontsize=9); ax.set_title(r"The Haldane model is a gapped insulator ($C=+1$)")
-    fig.tight_layout(); fig.savefig("fig_bands.png", dpi=150); print("wrote fig_bands.png")
+    prl.use("web", aspect=0.45)
+    fig, ax = plt.subplots()
+    ax.hist(Es, bins=140, color=prl.COLORS[1], alpha=0.85)
+    ax.axvspan(Es[Es < 0].max(), Es[Es > 0].min(), color="0.82", label="gap (no states)")
+    ax.set_xlabel(r"energy $E$ (eV)"); ax.set_ylabel(r"density of states (a.u.)")
+    ax.legend(loc="upper right")
+    prl.save(fig, "fig_bands")
 
 
 if __name__ == "__main__":

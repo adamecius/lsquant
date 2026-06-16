@@ -222,6 +222,16 @@ add_test(NAME phase6_wired COMMAND phase6_wired_test)
 add_test(NAME single_binary
          COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/single_binary.sh ${CMAKE_BINARY_DIR})
 
+# --- reporting layer (reporting_system.md): numerics-transparent + level-controlled --
+# Asserts logging/timing/resource sampling never change the computed moments, and that
+# the run summary obeys the log level.
+add_test(NAME reporting_smoke
+         COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/reporting_smoke.sh ${CMAKE_BINARY_DIR})
+
+# --- unified I/O (unified_io.md): fingerprint, validated multi-observable run, merge --
+add_test(NAME unified_io_smoke
+         COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/unified_io_smoke.sh ${CMAKE_BINARY_DIR})
+
 # --- examples/01_dos_1d_chain pipeline smoke test (matplotlib-free) -------------
 # Runs the tutorial's make_chain.py + spectralOp for a small clean chain and asserts
 # mu_m = delta_{m,0} via the chain1d_dos comparator (M < N, no aliasing).
