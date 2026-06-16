@@ -44,6 +44,12 @@ empty, so $\sigma^{\mathrm{surface}}$ vanishes and the entire quantized plateau 
 carried by the Fermi sea. That is why a topological insulator can pass a Hall
 current while passing no longitudinal current at all.
 
+The starting point is the spectrum itself: the Haldane model is an insulator with a
+clean gap at the neutrality point, and that gap is what carries the quantized Hall
+current.
+
+![The Haldane density of states has a gap at the neutrality point, an insulator that still carries a Hall current](fig_bands.png)
+
 ## Step 1: stage the operators
 
 The committed Haldane operators are the verified $C = +1$ model. Stage them into

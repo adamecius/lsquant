@@ -38,6 +38,12 @@ $2\pi/\omega = 20.7\ \mathrm{fs}$. LinQT obtains this by evolving the spin opera
 in time with a Chebyshev expansion of $U(t) = e^{-iHt/\hbar}$, never diagonalizing
 $H$.
 
+The whole effect starts from the band structure: the exchange field splits the two
+spin channels, and a spin built from both of them precesses at the splitting
+frequency.
+
+![The exchange field splits the up and down spin bands by 2 J_ex, the splitting that sets the precession frequency](fig_zeeman.png)
+
 ## Step 1: stage the operators
 
 The operators are produced by [wannier2sparse](https://github.com/adamecius/wannier2sparse)

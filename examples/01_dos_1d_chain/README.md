@@ -45,8 +45,13 @@ $$ \mu_m = \frac{1}{N}\sum_{k=0}^{N-1}\cos\!\Big(\frac{2\pi m k}{N}\Big) = \delt
 The bulk density of states is exactly the Chebyshev weight, so its expansion
 terminates at the very first term: $\mu_0 = 1$ and nothing else, all the way up to
 $m = N$. The finiteness of the chain changes no low-order moment. It hides in one
-place only, a revival where $\mu_m$ jumps back to $1$ at $m = N$ and every multiple
+place only, a revival where $\mu_m$ spikes again at $m = N$ and every multiple
 after, the spectrum reminding us it is discrete.
+
+The whole problem sits in one frame below: a finite comb of sharp levels under the
+smooth curve we wish we had.
+
+![A finite chain has a discrete spectrum of levels; the smooth bulk DOS is the target](fig_levels.png)
 
 ## Step 1: build the chain
 
@@ -92,7 +97,7 @@ Repeat for `chain1d_N1024` and `chain1d_N4096`.
 Read the moments back and overlay the three sizes:
 
 ```bash
-python -c "import lsqplot; lsqplot.figure_moments([256, 1024, 4096], M=256)"
+python -c "import lsqplot; lsqplot.figure_moments([256, 1024, 4096], M=512)"
 ```
 
 ![All three chain sizes overlap at the m=0 moment; finiteness shows only as a revival at m=N](fig_moments.png)
@@ -101,9 +106,11 @@ The three curves are indistinguishable below their revivals: every one sits at
 $\mu_m = \delta_{m,0}$. The density of states is a per-site property, so its
 moments do not care how long the chain is. That is what intensive means here, and
 it is why one expansion can describe a chain of 256 atoms or 256 million. The
-curves part company only at the revival: the $N = 256$ moments spike back to $1$
-at $m = 256$, the $N = 1024$ moments at $m = 1024$, and never before. A chain
-announces its finite size at exactly $m = N$.
+curves part company only at the revival: the $N = 256$ moments spike back up at
+$m = 256$ (to $2$, since the plotted Chebyshev moments carry the conventional
+factor of $2$ for $m>0$), while the $N = 1024$ and $N = 4096$ chains revive only
+at $m = 1024$ and $m = 4096$, beyond this window. A chain announces its finite
+size at exactly $m = N$, and never before.
 
 ## Step 4: reconstruct the DOS
 

@@ -74,5 +74,19 @@ def main():
     print("wrote fig_precession.png")
 
 
+def figure_zeeman(J=0.1):
+    """Opening figure: the exchange-split spin bands."""
+    k = np.linspace(-np.pi, np.pi, 500)
+    fig, ax = plt.subplots(figsize=(6.4, 3.7))
+    ax.plot(k, -2 * np.cos(k) - J, color="#1f77b4", lw=1.8, label=r"spin $\uparrow$")
+    ax.plot(k, -2 * np.cos(k) + J, color="#d62728", lw=1.8, label=r"spin $\downarrow$")
+    ax.annotate(r"$2J_{\rm ex}$", xy=(0, -2), xytext=(0.8, -1.6),
+                arrowprops=dict(arrowstyle="<->"), fontsize=11)
+    ax.set_xlabel("$k$"); ax.set_ylabel("energy (eV)"); ax.legend(fontsize=9)
+    ax.set_title(r"The exchange field splits $\uparrow$ and $\downarrow$ by $2J_{\rm ex}$")
+    fig.tight_layout(); fig.savefig("fig_zeeman.png", dpi=150); print("wrote fig_zeeman.png")
+
+
 if __name__ == "__main__":
+    figure_zeeman()
     main()

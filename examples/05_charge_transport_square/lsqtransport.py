@@ -49,9 +49,11 @@ def _run(argv):
 
 
 def diffusion(label):
-    """Run the MSD, reconstruct DeltaX^2(E,t), return (t, D(E,t))."""
-    _run([_bin("inline_compute-kpm-MeanSquareDisplacement"), label, "VX",
-          str(M), str(NTIME), str(TMAX)])
+    """Run the MSD (via `lsquant compute`, mode msd), reconstruct DeltaX^2(E,t)."""
+    with open("msd.json", "w") as f:
+        json.dump({"mode": "msd", "label": label, "operator": "VX",
+                   "num_moments": M, "num_times": NTIME, "tmax": TMAX}, f)
+    _run([_bin("lsquant"), "compute", "--config", "msd.json"])
     mom = sorted(glob.glob("Correlation*%s*chebmomTD" % label))[-1]
     _run([_bin("inline_timeCorrelationsFromChebmom"), mom, str(ETA_MEV), str(E)])
     dat = sorted(glob.glob("mean*%s*EF%f*dat" % (label, E)))[-1]
@@ -131,5 +133,19 @@ def main():
     print("wrote fig_transport.png")
 
 
+def figure_fermi():
+    """Opening figure: the square-lattice band and the E=2t Fermi contour."""
+    k = np.linspace(-np.pi, np.pi, 400); KX, KY = np.meshgrid(k, k)
+    Ek = -2.0 * (np.cos(KX) + np.cos(KY))
+    fig, ax = plt.subplots(figsize=(5.4, 4.4), constrained_layout=True)
+    cf = ax.contourf(KX, KY, Ek, levels=20, cmap="coolwarm", alpha=0.85)
+    ax.contour(KX, KY, Ek, levels=[E], colors="k", linewidths=2.2)
+    ax.set_xlabel("$k_x$"); ax.set_ylabel("$k_y$"); ax.set_aspect("equal")
+    fig.colorbar(cf, ax=ax, label="$E_k$ (eV)")
+    ax.set_title(r"Square-lattice band; black $=E{=}2t$ contour")
+    fig.savefig("fig_fermi.png", dpi=150); print("wrote fig_fermi.png")
+
+
 if __name__ == "__main__":
+    figure_fermi()
     main()

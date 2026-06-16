@@ -42,6 +42,11 @@ plateau whose height is set by $\xi(E)$, so $\sqrt{\mathrm{MSD}_{\mathrm{plateau
 tracks the localization length. The moments of that spreading come from the same
 Chebyshev recursion that gave the density of states.
 
+The effect is already visible in a single eigenstate: a band-centre state fills the
+whole clean chain, but a little disorder pins it to a handful of sites.
+
+![A band-centre state is extended in the clean chain but exponentially localized once disorder is added](fig_anderson.png)
+
 ## Step 1: build a disordered chain
 
 Onsite disorder sits on the diagonal, so the velocity operator stays the clean

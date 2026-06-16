@@ -167,5 +167,24 @@ def demo():
                         M=256, num_times=128, tmax=600, broad=10)
 
 
+def figure_anderson(N=500):
+    """Opening figure: a band-centre eigenstate, extended (clean) vs localized (W=4)."""
+    import matplotlib.pyplot as plt
+
+    def state(W, seed):
+        rng = np.random.default_rng(seed)
+        H = np.diag(rng.uniform(-W / 2, W / 2, N)).astype(float)
+        idx = np.arange(N); H[idx, (idx + 1) % N] = -1; H[(idx + 1) % N, idx] = -1
+        w, v = np.linalg.eigh(H); return np.abs(v[:, np.argmin(np.abs(w))]) ** 2
+    fig, ax = plt.subplots(figsize=(6.4, 3.7))
+    ax.plot(state(0.0, 3), color="#1f77b4", lw=1.0, label=r"clean: extended ($|\psi|^2\sim1/N$)")
+    ax.plot(state(4.0, 3), color="#d62728", lw=1.0, label=r"$W=4$: localized")
+    ax.set_xlabel("site $i$"); ax.set_ylabel(r"$|\psi_i|^2$ (band-centre state)")
+    ax.legend(fontsize=9)
+    ax.set_title("Disorder traps a state that would otherwise fill the chain")
+    fig.tight_layout(); fig.savefig("fig_anderson.png", dpi=150); print("wrote fig_anderson.png")
+
+
 if __name__ == "__main__":
+    figure_anderson()
     demo()
