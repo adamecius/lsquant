@@ -6,3 +6,21 @@ build/
 .cache/
 .venv/
 __pycache__/
+
+# build artifacts
+a.out
+*.a
+*.so
+*.bin
+CMakeCache.txt
+CMakeFiles/
+
+# generated transport data -- NEVER commit (regenerable cache)
+*.CSR
+*.chebmom
+*.chebmom1D
+*.chebmom2D
+*.chebmomTD
+# but keep the committed test fixtures (goldens + model operators)
+!test/golden/**
+!test/models/**

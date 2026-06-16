@@ -1,5 +1,0 @@
-/home/ICN2/jgarcia/.local/anaconda3/envs/kwant_intel/lib/python3.6/__pycache__/sciplots.cpython-36.pyc
-/home/ICN2/jgarcia/.local/anaconda3/envs/kwant_intel/lib/python3.6/sciplots.py
-/data/jgarcia/codes/linqt/utilities/python/test/bin//substract_chebmom2D.py
-/data/jgarcia/codes/linqt/utilities/python/test/bin//average_chebmom2D.py
-/data/jgarcia/codes/linqt/utilities/python/test/bin//add_chebmom2D.py

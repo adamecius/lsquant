@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# Data-ban size gate: reject staged files larger than 200 KB, except the committed
+# test fixtures under test/golden/ and test/models/. Generated transport data
+# (.CSR, .chebmom*) is a regenerable cache and must never be committed.
+#
+# Enable once per clone:   git config core.hooksPath .githooks
+set -u
+limit=204800
+fail=0
+while IFS= read -r f; do
+  case "$f" in
+    test/golden/*|test/models/*) continue ;;
+  esac
+  [ -f "$f" ] || continue
+  sz=$(wc -c < "$f")
+  if [ "$sz" -gt "$limit" ]; then
+    echo "pre-commit: '$f' is $((sz / 1024)) KB (> 200 KB) and is outside test/golden|test/models." >&2
+    echo "            Generated data (.CSR/.chebmom*) is a regenerable cache; do not commit it." >&2
+    fail=1
+  fi
+done < <(git diff --cached --name-only --diff-filter=ACM)
+exit $fail
