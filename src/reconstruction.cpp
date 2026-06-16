@@ -64,6 +64,34 @@ namespace lsquant
 			return values;
 		}
 
+		// Cumulative trapezoid integral (Sea Fermi-sea): values aligned to energies[0..N-2].
+		std::vector<double> accumulate_trapezoid(const std::vector<double>& kernel,
+		                                         const std::vector<double>& energies)
+		{
+			const int num_div = (int)kernel.size();
+			std::vector<double> values;
+			values.reserve(num_div > 0 ? num_div - 1 : 0);
+			double acc = 0.0;
+			for (int i = 0; i < num_div - 1; ++i)
+			{
+				const double denerg = energies[i+1] - energies[i];
+				acc += 0.5 * (kernel[i] + kernel[i+1]) * denerg;
+				values.push_back(acc);
+			}
+			return values;
+		}
+
+		// Pointwise midpoint average (Surf): value[i] = (k[i+1]+k[i])/2.
+		std::vector<double> accumulate_midpoint(const std::vector<double>& kernel)
+		{
+			const int num_div = (int)kernel.size();
+			std::vector<double> values;
+			values.reserve(num_div > 0 ? num_div - 1 : 0);
+			for (int i = 0; i < num_div - 1; ++i)
+				values.push_back( (kernel[i+1] + kernel[i]) / 2.0 );
+			return values;
+		}
+
 		// Zip each value with its physical energy (the per-grid axis transform is the caller's).
 		template <class ToPhys>
 		std::vector<std::pair<double,double> >
@@ -140,5 +168,59 @@ namespace lsquant
 			values[i] = s;
 		}
 		return write_pairs(values, energies, [](double e){ return e; });
+	}
+
+	// --- Kubo-Bastin Sea: Green-difference form, cumulative Fermi-sea integral ----------------
+	std::vector<std::pair<double,double> >
+	reconstruct_kubo_bastin_sea(chebyshev::Moments2D& mu)
+	{
+		const int    num_div = 30 * mu.HighestMomentNumber();
+		const double xbound  = chebyshev::safety_factors().recon_cutoff;
+		const std::vector<double> energies = make_uniform_grid(num_div, xbound);
+
+		std::vector<double> kernel(num_div, 0.0);
+		#pragma omp parallel for
+		for (int i = 0; i < num_div; ++i)
+		{
+			const double energ = energies[i];
+			for (int m0 = 0; m0 < mu.HighestMomentNumber(0); ++m0)
+			for (int m1 = 0; m1 < mu.HighestMomentNumber(1); ++m1)
+			{
+				const auto Gr  = greenR_chebF(energ, m0);
+				const auto Ga  = std::conj( greenR_chebF(energ, m0) );
+				const auto DGr = DgreenR_chebF(energ, m1).real();
+				const auto DGa = std::conj( DGr );
+				kernel[i] += -( (Gr - Ga) * ( DGr + DGa ) * mu(m0, m1) ).real();
+			}
+			kernel[i] *= mu.SystemSize() * mu.ScaleFactor() * mu.ScaleFactor() / 2 / M_PI;
+		}
+
+		const std::vector<double> values = accumulate_trapezoid(kernel, energies);
+		const double sf = mu.ScaleFactor(), shf = mu.ShiftFactor();
+		return write_pairs(values, energies, [sf, shf](double e){ return e / sf - shf; });
+	}
+
+	// --- Kubo-Bastin Surf: double-delta form, pointwise (midpoint) ----------------------------
+	std::vector<std::pair<double,double> >
+	reconstruct_kubo_bastin_surf(chebyshev::Moments2D& mu)
+	{
+		const int    num_div = 30 * mu.HighestMomentNumber();
+		const double xbound  = chebyshev::safety_factors().recon_cutoff;
+		const std::vector<double> energies = make_uniform_grid(num_div, xbound);
+
+		std::vector<double> kernel(num_div, 0.0);
+		#pragma omp parallel for
+		for (int i = 0; i < num_div; ++i)
+		{
+			const double energ = energies[i];
+			for (int m0 = 0; m0 < mu.HighestMomentNumber(0); ++m0)
+			for (int m1 = 0; m1 < mu.HighestMomentNumber(1); ++m1)
+				kernel[i] += delta_chebF(energ, m0) * delta_chebF(energ, m1) * mu(m0, m1).real();
+			kernel[i] *= M_PI * mu.SystemSize() * mu.ScaleFactor() * mu.ScaleFactor();
+		}
+
+		const std::vector<double> values = accumulate_midpoint(kernel);
+		const double sf = mu.ScaleFactor(), shf = mu.ShiftFactor();
+		return write_pairs(values, energies, [sf, shf](double e){ return e / sf - shf; });
 	}
 }

@@ -52,6 +52,19 @@ namespace lsquant
 	// Phase-R oracle drives, so that oracle now guards the production reconstruction.
 	std::vector<std::pair<double,double> >
 	reconstruct_density_grid(const std::vector<double>& mu_real, double alpha, int num_div);
+
+	// Kubo-Bastin Sea/Surf: DIFFERENT algebraic decompositions of Kubo-Bastin, not the unified
+	// delta*Im[green*mu] kernel above -- so they keep their own inner loop but share the uniform
+	// grid, the physical-energy axis, and the accumulation rules. Both use the 30*M uniform grid
+	// on [-alpha, alpha] and the E/ScaleFactor - ShiftFactor axis, matching the legacy drivers.
+	//   Sea : -Re[(Gr - Ga)(DGr + DGa) mu], cumulative-trapezoid Fermi-sea integral.
+	//   Surf: delta(E,m0) delta(E,m1) Re[mu], pointwise midpoint accumulation.
+	// Moments must already be kernel-damped (ApplyJacksonKernel).
+	std::vector<std::pair<double,double> >
+	reconstruct_kubo_bastin_sea(chebyshev::Moments2D& mu);
+
+	std::vector<std::pair<double,double> >
+	reconstruct_kubo_bastin_surf(chebyshev::Moments2D& mu);
 }
 
 #endif // LSQUANT_OBSERVABLE

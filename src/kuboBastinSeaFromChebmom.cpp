@@ -10,12 +10,13 @@
 #include "chebyshev_solver.hpp"
 #include "chebyshev_coefficients.hpp"
 #include "chebyshev_moments.hpp"
+#include "observable.hpp"   // lsquant::reconstruct_kubo_bastin_sea (shared grid/integral/write)
 
 void printHelpMessage();
 void printWelcomeMessage();
 
 int main(int argc, char *argv[])
-{	
+{
 	if (argc != 3)
 	{
 		printHelpMessage();
@@ -28,30 +29,11 @@ int main(int argc, char *argv[])
 
 
 	//Read the chebyshev moments from the file
- 	chebyshev::Moments2D mu(argv[1]); 
+ 	chebyshev::Moments2D mu(argv[1]);
 	//and apply the appropiated kernel
 	mu.ApplyJacksonKernel(broadening,broadening);
 
-	const int num_div = 30*mu.HighestMomentNumber();
-	
-	const double
-	xbound = chebyshev::safety_factors().recon_cutoff;
-		
-	std::vector< double >  energies(num_div,0);
-	for( int i=0; i < num_div; i++)
-		energies[i] = -xbound + i*(2*xbound)/(num_div-1) ;
-	
-	
-
-
-
-	std::cout<<"Computing the KuboBastin kernel using "<<mu.HighestMomentNumber(0)<<" x "<<mu.HighestMomentNumber(1)<<" moments "<<std::endl;
-	std::cout<<"Integrated over a grid normalized grid  ("<<-xbound<<","<<xbound<<") in steps of "<<energies[1] - energies[0]<< std::endl;
-	std::cout<<"The first 10 moments are"<<std::endl;
-	for(int m0 =0 ; m0< 1; m0++ )
-	for(int m1 =0 ; m1< 10; m1++ )
-		std::cout<<mu(m0,m1).real()<<" "<<mu(m0,m1).imag()<<std::endl;
-	
+	std::cout<<"Computing the KuboBastin (Sea) kernel using "<<mu.HighestMomentNumber(0)<<" x "<<mu.HighestMomentNumber(1)<<" moments "<<std::endl;
 
 	std::string
 	outputName  ="KuboBastinSea_"+mu.SystemLabel()+"JACKSON.dat";
@@ -60,39 +42,17 @@ int main(int argc, char *argv[])
 	std::cout<<"PARAMETERS: "<< mu.SystemSize()<<" "<<mu.HalfWidth()<<std::endl;
 	std::ofstream outputfile( outputName.c_str() );
 
-	std::vector<double> kernel(num_div,0.0);
-	#pragma omp parallel for
-	for( int i=0; i < num_div; i++)
-	{
-		const double energ = energies[i];
-		for( int m0 = 0 ; m0 < mu.HighestMomentNumber(0) ; m0++)
-		for( int m1 = 0 ; m1 < mu.HighestMomentNumber(1) ; m1++)
-		{
-			const auto Gr = greenR_chebF(energ,m0);
-			const auto Ga = std::conj( greenR_chebF(energ,m0) );
-			const auto DGr = DgreenR_chebF(energ,m1).real();
-			const auto DGa = std::conj( DGr );
-			kernel[i] +=-( (Gr-Ga)*( DGr +DGa)*mu(m0,m1) ).real() ;
-//			kernel[i] +=-4*Gr.imag()*DGr.real()*mu(m0,m1).imag() ;
-		}
-		kernel[i] *=  mu.SystemSize()*mu.ScaleFactor()*mu.ScaleFactor() / 2 /M_PI;
-	}
-
-	double acc = 0;
-	for( int i=0; i < num_div-1; i++)
-	{
-		const double energ  = energies[i];
-		const double denerg = energies[i+1]-energies[i];
-		acc +=0.5*(kernel[i]+kernel[i+1])*denerg;
-		outputfile<<energ/mu.ScaleFactor() - mu.ShiftFactor() <<" "<<acc <<std::endl;
-	}
+	// Green-difference, cumulative Fermi-sea integral -- the shared reconstruction routine.
+	const auto data = lsquant::reconstruct_kubo_bastin_sea(mu);
+	for( const auto& point : data )
+		outputfile<<point.first<<" "<<point.second<<std::endl;
 
 	outputfile.close();
 
 	std::cout<<"The program finished succesfully."<<std::endl;
 return 0;
 }
-	
+
 
 void printHelpMessage()
 {
