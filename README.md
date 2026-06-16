@@ -118,6 +118,7 @@ script that reproduces its figures, all driven through the `lsquant` interface:
 | 3 | [Quantized Hall plateau of the Haldane model](examples/03_haldane_hall) | Kubo–Bastin $\sigma_{xy}$ and the Fermi-sea topological plateau |
 | 4 | [Spin precession in a magnetic chain](examples/04_spin_precession_magnetic_chain) | Larmor precession from real-time spin dynamics |
 | 5 | [Charge transport on a disordered square lattice](examples/05_charge_transport_square) | diffusion, conductivity, mean free path; the ballistic→diffusive→localized crossover |
+| 6 | [Spin relaxation on a disordered lattice](examples/06_spin_relaxation_square) | Elliott-Yafet vs Dyakonov-Perel mechanisms (illustrative) |
 
 Start with Tutorial 1; each reuses the previous chain.
 
