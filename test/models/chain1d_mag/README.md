@@ -31,4 +31,4 @@ The earlier blockers are resolved: `S_z` is a proper sigma_z (collinear + SOC), 
 `S_x/S_y` now have onsite up↔down support (w2s builds spin operators from the spin
 doubling). Remaining for G2 #6 (not here): the time-evolution driver (`MomentsTD`, exists),
 preparing the x-polarized initial state, and resolving the state-vs-density mapping
-(`FLAVOR_INVENTORY.md`) against the thesis before asserting `⟨σ_x(t)⟩ = cos(2 J_ex t/ħ)`.
+against the thesis before asserting `⟨σ_x(t)⟩ = cos(2 J_ex t/ħ)`.

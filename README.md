@@ -158,7 +158,7 @@ ctest --test-dir build --output-on-failure
 
 Golden masters live in `test/golden/`; regenerate them deliberately, and only
 when behavior changes on purpose, with `scripts/regenerate_goldens.sh` (seed
-pinned). The specification is in [`test/TEST_PLAN.md`](test/TEST_PLAN.md).
+pinned).
 
 ## Documentation
 
@@ -172,7 +172,7 @@ pinned). The specification is in [`test/TEST_PLAN.md`](test/TEST_PLAN.md).
 |---|---|
 | `include/`, `src/` | KPM core library, the `lsquant` binary, and the legacy drivers |
 | `examples/` | the three worked tutorials and their figure scripts |
-| `test/` | analytic-oracle and regression tests, golden masters, `TEST_PLAN.md` |
+| `test/` | analytic-oracle and regression tests, golden masters |
 | `docs/` | physics pages and the Doxygen config |
 | `scripts/`, `cmake/` | golden regeneration; the `wannier2sparse` fetch module |
 
