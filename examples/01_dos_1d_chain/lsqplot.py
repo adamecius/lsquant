@@ -190,7 +190,7 @@ def figure_dos(sizes, smallest, M, fixed_broadening_meV, broadenings_meV):
 def demo():
     sizes = [256, 1024, 4096]
     M = 512
-    figure_moments(sizes, M=256)
+    figure_moments(sizes, M=512)   # reach m=256 so the smallest chain's revival is in view
     # Exact-trace moments encode a finite chain only through the aliasing revival at m = N,
     # so the discrete spectrum of the small chain becomes visible once the kernel keeps
     # M_eff >= N moments. With N_small = 256 that needs a broadening below ~24 meV
