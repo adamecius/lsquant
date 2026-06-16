@@ -265,11 +265,63 @@ void SparseMatrixType::Rescale(const complex<double> a, const complex<double> b)
 
 
 
+// SparseMatrixType::BatchMultiply -- block SpMM  Y = a*M*X + b*Y  for R = batchSize
+// right-hand sides at once. Previously a std::terminate() stub (the Eigen backend never
+// had an SpMM); implemented here so multi-vector callers (block/stochastic-trace KPM)
+// can amortise the matrix read across R vectors.
+//
+// PROBLEM. Running R independent SpMVs re-streams the whole matrix R times. When the
+// recursion is bandwidth-bound (it is -- see Phase A), reading M once and applying it
+// to all R vectors trades that redundant matrix traffic for arithmetic, lifting the
+// arithmetic intensity (measured ~1.6x moment throughput, saturating by R~8).
+//
+// LAYOUT. Column-major dense blocks, leading dimension numCols() (the MKL convention the
+// old stub referenced): right-hand-side r is the contiguous N-vector x + r*N, and output
+// r is y + r*N. So Y[:,r] = a*M*X[:,r] + b*Y[:,r] for r in [0,R).
+//
+// APPROACH. One OpenMP parallel-for over rows; each thread owns whole rows. For row i it
+// reads the row's nonzeros ONCE and accumulates into R running sums (one per RHS), then
+// writes a*acc[r] + b*y[r*N+i]. Bit-identical to R separate Multiply() calls: the per
+// (row,RHS) arithmetic and stored summation order are exactly those of the single-vector
+// kernel, so column r of BatchMultiply == Multiply on column r, term-for-term. The gate
+// `spmm_batchmultiply_equiv` asserts this for R in {1,8}.
+//
+// Pitfall: this is NOT used on any byte-exact golden path today (no caller); R=1 MUST stay
+//   bit-identical to Multiply so that if a future caller adopts it the goldens cannot move.
+// Complexity: O(R*nnz) work, O(rows) parallel tasks; same memory-bound character as the
+//   SpMV but with R-fold reuse of each streamed matrix element.
 void SparseMatrixType::BatchMultiply(const int batchSize, const complex<double> a, const complex<double> *x, const complex<double> b, complex<double> *y)
 {
-  	std::cout<<"ERROR: SparseMatrixType:BatchMultiply function not implemented in eigen yet."<<std::endl;
-	std::terminate();
-	//auto status = mkl_sparse_z_mm(SPARSE_OPERATION_NON_TRANSPOSE,a,Matrix, descr,SPARSE_LAYOUT_COLUMN_MAJOR,x, batchSize, numCols(), b, y, numCols() );
-  //assert( status == SPARSE_STATUS_SUCCESS);
+	LSQ_SCOPED("spmm");
+
+	if (batchSize <= 0) return;
+	if (!matrix_.isCompressed())
+		matrix_.makeCompressed();
+
+	const indexType        n   = static_cast<indexType>( numRows() );
+	const indexType        R   = static_cast<indexType>( batchSize );
+	const indexType        ld  = static_cast<indexType>( numCols() );   // column leading dim
+	const indexType* const rp  = matrix_.outerIndexPtr();
+	const indexType* const cl  = matrix_.innerIndexPtr();
+	const complex<double>* const vl = matrix_.valuePtr();
+
+	#pragma omp parallel
+	{
+		std::vector<complex<double> > acc(R);   // per-thread R accumulators
+		#pragma omp for schedule(static)
+		for (indexType i = 0; i < n; ++i)
+		{
+			for (indexType r = 0; r < R; ++r) acc[r] = complex<double>(0.0, 0.0);
+			for (indexType p = rp[i]; p < rp[i + 1]; ++p)
+			{
+				const complex<double> v = vl[p];
+				const indexType       j = cl[p];
+				for (indexType r = 0; r < R; ++r)
+					acc[r] += v * x[r * ld + j];     // same stored-order sum as Multiply, per RHS
+			}
+			for (indexType r = 0; r < R; ++r)
+				y[r * ld + i] = a * acc[r] + b * y[r * ld + i];
+		}
+	}
 }
 
