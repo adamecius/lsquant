@@ -1,21 +1,5 @@
 #include "chebyshev_moments.hpp"
 
-void chebyshev::Moments1D::Print()
-{
-	std::cout<<"\n\nCHEBYSHEV 1D MOMENTS INFO"<<std::endl;
-	std::cout<<"\tSYSTEM:\t\t\t"<<this->SystemLabel()<<std::endl;
-	if( this-> SystemSize() > 0 )
-		std::cout<<"\tSIZE:\t\t\t"<<this-> SystemSize()<<std::endl;
-
-	std::cout<<"\tMOMENTS SIZE:\t\t"<<this->HighestMomentNumber()<<std::endl;
-	std::cout<<"\tSCALE FACTOR:\t\t"<<this->ScaleFactor()<<std::endl;
-	std::cout<<"\tSHIFT FACTOR:\t\t"<<this->ShiftFactor()<<std::endl;
-	std::cout<<"\tENERGY SPECTRUM:\t("
-			 <<-this->HalfWidth()+this->BandCenter()<<" , "
-			 << this->HalfWidth()+this->BandCenter()<<")"<<std::endl<<std::endl;
-
-};
-
 chebyshev::Moments1D::Moments1D( std::string momfilename )
 {
 	//Check if the input_momfile have the right extension 
@@ -76,14 +60,8 @@ void chebyshev::Moments1D::ApplyJacksonKernel( const double broad )
   std::cout << "Kernel reduced the number of moments to " << maxMom <<" for a broadening of "<<M_PI/maxMom << std::endl;
   this->MomentNumber(maxMom);
 
-  const double phi_J = M_PI/(double)(maxMom+1.0);
-  double g_D_m;
-
   for( size_t m = 0 ; m < maxMom ; m++)
-  {
-	  g_D_m = ( (maxMom - m + 1) * cos(phi_J * m) + sin(phi_J * m) /tan(phi_J) ) * phi_J/M_PI;
-	  this->operator()(m) *= g_D_m;
-	}
+	  this->operator()(m) *= JacksonKernel(m, maxMom);
 }
 
 void chebyshev::Moments1D::ApplyLorentzKernel( const double broad, const double lambda )
@@ -119,8 +97,7 @@ void chebyshev::Moments1D::saveIn(std::string filename)
   //Print the number of moments for all directions in a line
   outputfile << this->HighestMomentNumber() << std::endl;
 
-  for ( auto mom : this->MomentVector() )
-    outputfile << mom.real() << " " << mom.imag() << std::endl;
+  this->writeMomentData(outputfile);
   outputfile.close();
 };
 

@@ -62,26 +62,8 @@ void chebyshev::Moments2D::saveIn(std::string filename)
         outputfile << x << " ";
     outputfile << std::endl;
 
-    for ( auto mom : this->MomentVector() )
-        outputfile << mom.real() << " " << mom.imag() << std::endl;
+    this->writeMomentData(outputfile);
     outputfile.close();
-};
-
-
-void chebyshev::Moments2D::Print()
-{
-	std::cout<<"\n\nCHEBYSHEV 2D MOMENTS INFO"<<std::endl;
-	std::cout<<"\tSYSTEM:\t\t\t"<<this->SystemLabel()<<std::endl;
-	if( this-> SystemSize() > 0 )
-		std::cout<<"\tSIZE:\t\t\t"<<this-> SystemSize()<<std::endl;
-
-	std::cout<<"\tMOMENTS SIZE:\t\t"<<"("<<this->HighestMomentNumber(0)<<" x " <<this->HighestMomentNumber(1)<<")"<<std::endl;
-	std::cout<<"\tSCALE FACTOR:\t\t"<<this->ScaleFactor()<<std::endl;
-	std::cout<<"\tSHIFT FACTOR:\t\t"<<this->ShiftFactor()<<std::endl;
-	std::cout<<"\tENERGY SPECTRUM:\t("
-			 <<-this->HalfWidth()+this->BandCenter()<<" , "
-			 << this->HalfWidth()+this->BandCenter()<<")"<<std::endl<<std::endl;
-
 };
 
 void chebyshev::Moments2D::ApplyJacksonKernel( const double b0, const double b1 )
@@ -98,21 +80,11 @@ void chebyshev::Moments2D::ApplyJacksonKernel( const double b0, const double b1 
 	std::cout<<"Kernel reduced the number of moments to "<<maxMom0<<" "<<maxMom1<<std::endl;
 	this->MomentNumber( maxMom0,maxMom1 ) ;
 
-
-
-	const double
-	phi_J0 = M_PI/(double)(numMoms[0]+1.0),
-	phi_J1 = M_PI/(double)(numMoms[1]+1.0);
-		
-	double g_D_m0,g_D_m1;
 	for( int m0 = 0 ; m0 < numMoms[0] ; m0++)
 	{
-		g_D_m0=( (numMoms[0]-m0+1)*cos( phi_J0*m0 )+ sin(phi_J0*m0)/tan(phi_J0) )*phi_J0/M_PI;
+		const double g_D_m0 = JacksonKernel(m0, numMoms[0]);
 		for( int m1 = 0 ; m1 < numMoms[1] ; m1++)
-		{
-			g_D_m1=( (numMoms[1]-m1+1)*cos( phi_J1*m1 )+ sin(phi_J1*m1)/tan(phi_J1) )*phi_J1/M_PI;
-			this->operator()(m0,m1) *= g_D_m0*g_D_m1;
-		}
+			this->operator()(m0,m1) *= g_D_m0 * JacksonKernel(m1, numMoms[1]);
 	}
 }
 

@@ -223,28 +223,8 @@ void chebyshev::MomentsTD::saveIn(std::string filename)
   //Print the number of moments for all directions in a line
   outputfile << this->HighestMomentNumber() << " " << this->MaxTimeStep() << " " << std::endl;
 
-  for ( auto mom : this->MomentVector() )
-    outputfile << mom.real() << " " << mom.imag() << std::endl;
+  this->writeMomentData(outputfile);
   outputfile.close();
-};
-
-void chebyshev::MomentsTD::Print()
-{
-  std::cout<<"\n\nCHEBYSHEV TD MOMENTS INFO"<<std::endl;
-  std::cout<<"\tSYSTEM:\t\t\t"<<this->SystemLabel()<<std::endl;
-  if( this-> SystemSize() > 0 )
-    std::cout<<"\tSIZE:\t\t\t"<<this-> SystemSize()<<std::endl;
-
-  std::cout<<"\tMOMENTS SIZE:\t\t"<<"("
-	   <<this->HighestMomentNumber()<< " x " <<this->MaxTimeStep()<<")"<<std::endl;
-  std::cout<<"\tSCALE FACTOR:\t\t"<<this->ScaleFactor()<<std::endl;
-  std::cout<<"\tSHIFT FACTOR:\t\t"<<this->ShiftFactor()<<std::endl;
-  std::cout<<"\tENERGY SPECTRUM:\t("
-	   <<-this->HalfWidth()+this->BandCenter()<<" , "
-	   << this->HalfWidth()+this->BandCenter()<<")"<<std::endl<<std::endl;
-  std::cout<<"\tTIME STEP:\t\t"<<this->MaxTimeStep()<<std::endl;
-  std::cout<<"\tTIME DIFF:\t"<<this->TimeDiff()<<std::endl;
-  
 };
 
 void chebyshev::MomentsTD::MomentNumber(const size_t numMoms )
@@ -273,12 +253,9 @@ void chebyshev::MomentsTD::ApplyJacksonKernel( const double broad )
   std::cout << "Kernel reduced the number of moments to " << maxMom <<" for a broadening of "<<M_PI/maxMom << std::endl;
   this->MomentNumber(maxMom);
 
-  const double phi_J = M_PI/(double)(maxMom+1.0);
-  double g_D_m;
-
   for( size_t m = 0 ; m < maxMom ; m++)
   {
-	  g_D_m = ( (maxMom - m + 1) * cos(phi_J * m) + sin(phi_J * m) /tan(phi_J) ) * phi_J/M_PI;
+	  const double g_D_m = JacksonKernel(m, maxMom);
 	  for( size_t n = 0 ; n < this->MaxTimeStep() ; n++) this->operator()(m, n) *= g_D_m;
   }
 }
