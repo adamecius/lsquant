@@ -1,4 +1,31 @@
 #include "chebyshev_moments.hpp"
+#include <iostream>   // std::cout for the shared Print
+
+// Shared moment-table report, lifted from the identical Moments{1D,2D,TD,Local}::Print bodies.
+// Header + scale/shift/spectrum block live here; the type label, the moments-size value, and any
+// trailing lines come from the virtual hooks each derived class overrides.
+void chebyshev::Moments::Print()
+{
+	std::cout<<"\n\nCHEBYSHEV "<<this->momentsKindLabel()<<" MOMENTS INFO"<<std::endl;
+	std::cout<<"\tSYSTEM:\t\t\t"<<this->SystemLabel()<<std::endl;
+	if( this->SystemSize() > 0 )
+		std::cout<<"\tSIZE:\t\t\t"<<this->SystemSize()<<std::endl;
+
+	std::cout<<"\tMOMENTS SIZE:\t\t"; this->printMomentsSize(std::cout); std::cout<<std::endl;
+	std::cout<<"\tSCALE FACTOR:\t\t"<<this->ScaleFactor()<<std::endl;
+	std::cout<<"\tSHIFT FACTOR:\t\t"<<this->ShiftFactor()<<std::endl;
+	std::cout<<"\tENERGY SPECTRUM:\t("
+			 <<-this->HalfWidth()+this->BandCenter()<<" , "
+			 << this->HalfWidth()+this->BandCenter()<<")"<<std::endl<<std::endl;
+	this->printExtraInfo(std::cout);
+}
+
+// The moment-data tail shared verbatim by every saveIn: "re im\n" per stored moment.
+void chebyshev::Moments::writeMomentData(std::ostream& os)
+{
+	for ( auto mom : this->MomentVector() )
+		os << mom.real() << " " << mom.imag() << std::endl;
+}
 
 
 

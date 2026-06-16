@@ -154,8 +154,7 @@ void chebyshev::MomentsLocal::saveIn(std::string filename)
   //Print the number of moments for all directions in a line
   outputfile << this->HighestMomentNumber() << " " << this->NumberOfOrbitals() << " ";
 
-  for ( auto mom : this->MomentVector() )
-    outputfile << mom.real() << " " << mom.imag() << std::endl;
+  this->writeMomentData(outputfile);
   outputfile.close();
 };
 
@@ -187,23 +186,6 @@ void chebyshev::MomentsLocal::saveInBin(std::string filename)
 
 
 
-void chebyshev::MomentsLocal::Print()
-{
-  std::cout<<"\n\nCHEBYSHEV Local MOMENTS INFO"<<std::endl;
-  std::cout<<"\tSYSTEM:\t\t\t"<<this->SystemLabel()<<std::endl;
-  if( this-> SystemSize() > 0 )
-    std::cout<<"\tSIZE:\t\t\t"<<this-> SystemSize()<<std::endl;
-
-  std::cout<<"\tMOMENTS SIZE:\t\t"<<"("
-	   <<this->HighestMomentNumber()<< " x " <<this->NumberOfOrbitals()<<")"<<std::endl;
-  std::cout<<"\tSCALE FACTOR:\t\t"<<this->ScaleFactor()<<std::endl;
-  std::cout<<"\tSHIFT FACTOR:\t\t"<<this->ShiftFactor()<<std::endl;
-  std::cout<<"\tENERGY SPECTRUM:\t("
-	   <<-this->HalfWidth()+this->BandCenter()<<" , "
-	   << this->HalfWidth()+this->BandCenter()<<")"<<std::endl<<std::endl;
-  std::cout<<"\tNUMBER OF LOCAL ORBITALS:\t\t"<<this->NumberOfOrbitals()<<std::endl;
-  
-};
 
 void chebyshev::MomentsLocal::MomentNumber(const size_t numMoms )
 { 

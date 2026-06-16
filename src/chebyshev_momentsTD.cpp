@@ -223,28 +223,8 @@ void chebyshev::MomentsTD::saveIn(std::string filename)
   //Print the number of moments for all directions in a line
   outputfile << this->HighestMomentNumber() << " " << this->MaxTimeStep() << " " << std::endl;
 
-  for ( auto mom : this->MomentVector() )
-    outputfile << mom.real() << " " << mom.imag() << std::endl;
+  this->writeMomentData(outputfile);
   outputfile.close();
-};
-
-void chebyshev::MomentsTD::Print()
-{
-  std::cout<<"\n\nCHEBYSHEV TD MOMENTS INFO"<<std::endl;
-  std::cout<<"\tSYSTEM:\t\t\t"<<this->SystemLabel()<<std::endl;
-  if( this-> SystemSize() > 0 )
-    std::cout<<"\tSIZE:\t\t\t"<<this-> SystemSize()<<std::endl;
-
-  std::cout<<"\tMOMENTS SIZE:\t\t"<<"("
-	   <<this->HighestMomentNumber()<< " x " <<this->MaxTimeStep()<<")"<<std::endl;
-  std::cout<<"\tSCALE FACTOR:\t\t"<<this->ScaleFactor()<<std::endl;
-  std::cout<<"\tSHIFT FACTOR:\t\t"<<this->ShiftFactor()<<std::endl;
-  std::cout<<"\tENERGY SPECTRUM:\t("
-	   <<-this->HalfWidth()+this->BandCenter()<<" , "
-	   << this->HalfWidth()+this->BandCenter()<<")"<<std::endl<<std::endl;
-  std::cout<<"\tTIME STEP:\t\t"<<this->MaxTimeStep()<<std::endl;
-  std::cout<<"\tTIME DIFF:\t"<<this->TimeDiff()<<std::endl;
-  
 };
 
 void chebyshev::MomentsTD::MomentNumber(const size_t numMoms )

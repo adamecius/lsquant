@@ -180,6 +180,20 @@ class Moments
 	// Pure formula (no instance state), so it is static and unit-testable without a Moments object.
     static double JacksonKernel(const double m,  const double Mom );
 
+	// Shared moment-table report (lifted from the identical Moments{1D,2D,TD,Local}::Print
+	// skeletons). The dimension-specific bits are the virtual hooks below; the common header,
+	// scale/shift/spectrum block is sourced here once.
+	void Print();
+
+	protected:
+	// Per-dimension Print hooks (defaults keep Vectors/MomentsAC concrete -- they had no Print).
+	virtual const char* momentsKindLabel() const { return ""; }            // "1D" | "2D" | "TD" | "Local"
+	virtual void printMomentsSize(std::ostream& os) const {}               // value after "MOMENTS SIZE:"
+	virtual void printExtraInfo(std::ostream& os) const {}                 // trailing dimension-specific lines
+
+	// The moment-data tail shared verbatim by every saveIn: "re im\n" per stored moment.
+	void writeMomentData(std::ostream& os);
+
 
 	private:
 	SparseMatrixType* _pNHAM;
@@ -230,8 +244,10 @@ class Moments1D: public Moments
 	//Transformation
         void ApplyLorentzKernel( const double broad, const double lambda );
   
-	// Input/Output
-	void Print();
+	// Input/Output -- Print is the shared Moments::Print; only the per-dimension hooks differ.
+	protected:
+	const char* momentsKindLabel() const override { return "1D"; }
+	void printMomentsSize(std::ostream& os) const override { os << this->HighestMomentNumber(); }
 
 	private:
 	size_t _numMoms;
@@ -329,7 +345,10 @@ class Moments2D: public Moments
 	
 	
 
-	void Print();
+	// Print is the shared Moments::Print; only the per-dimension hooks differ.
+	const char* momentsKindLabel() const override { return "2D"; }
+	void printMomentsSize(std::ostream& os) const override
+	{ os << "(" << this->HighestMomentNumber(0) << " x " << this->HighestMomentNumber(1) << ")"; }
 
 	protected:
 	array<int, 2> numMoms;
@@ -497,7 +516,15 @@ class Moments2D: public Moments
 	  //COSTFUL FUNCTIONS
 	  void saveIn(std::string filename);
 	  
-	  void Print();
+	  // Print is the shared Moments::Print; only the per-dimension hooks differ.
+	  const char* momentsKindLabel() const override { return "TD"; }
+	  void printMomentsSize(std::ostream& os) const override
+	  { os << "(" << this->HighestMomentNumber() << " x " << this->MaxTimeStep() << ")"; }
+	  void printExtraInfo(std::ostream& os) const override
+	  {
+	    os<<"\tTIME STEP:\t\t"<<this->MaxTimeStep()<<std::endl;
+	    os<<"\tTIME DIFF:\t"<<this->TimeDiff()<<std::endl;
+	  }
 
   private:
     int currentTm;
@@ -824,7 +851,12 @@ class Vectors_sliced_nonOrthogonal : public Vectors_sliced
 	  void saveInBin(std::string filename);
 
 
-	  void Print();
+	  // Print is the shared Moments::Print; only the per-dimension hooks differ.
+	  const char* momentsKindLabel() const override { return "Local"; }
+	  void printMomentsSize(std::ostream& os) const override
+	  { os << "(" << this->HighestMomentNumber() << " x " << this->NumberOfOrbitals() << ")"; }
+	  void printExtraInfo(std::ostream& os) const override
+	  { os<<"\tNUMBER OF LOCAL ORBITALS:\t\t"<<this->NumberOfOrbitals()<<std::endl; }
 
   private:
     int currentTm;

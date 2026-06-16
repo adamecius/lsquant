@@ -1,21 +1,5 @@
 #include "chebyshev_moments.hpp"
 
-void chebyshev::Moments1D::Print()
-{
-	std::cout<<"\n\nCHEBYSHEV 1D MOMENTS INFO"<<std::endl;
-	std::cout<<"\tSYSTEM:\t\t\t"<<this->SystemLabel()<<std::endl;
-	if( this-> SystemSize() > 0 )
-		std::cout<<"\tSIZE:\t\t\t"<<this-> SystemSize()<<std::endl;
-
-	std::cout<<"\tMOMENTS SIZE:\t\t"<<this->HighestMomentNumber()<<std::endl;
-	std::cout<<"\tSCALE FACTOR:\t\t"<<this->ScaleFactor()<<std::endl;
-	std::cout<<"\tSHIFT FACTOR:\t\t"<<this->ShiftFactor()<<std::endl;
-	std::cout<<"\tENERGY SPECTRUM:\t("
-			 <<-this->HalfWidth()+this->BandCenter()<<" , "
-			 << this->HalfWidth()+this->BandCenter()<<")"<<std::endl<<std::endl;
-
-};
-
 chebyshev::Moments1D::Moments1D( std::string momfilename )
 {
 	//Check if the input_momfile have the right extension 
@@ -113,8 +97,7 @@ void chebyshev::Moments1D::saveIn(std::string filename)
   //Print the number of moments for all directions in a line
   outputfile << this->HighestMomentNumber() << std::endl;
 
-  for ( auto mom : this->MomentVector() )
-    outputfile << mom.real() << " " << mom.imag() << std::endl;
+  this->writeMomentData(outputfile);
   outputfile.close();
 };
 
