@@ -94,6 +94,25 @@ lsquant compute --config run_long.json
 Each call runs the two-operator Chebyshev recursion with $128$ moments per
 direction and writes a `NonEqOp...chebmom2D` moment file.
 
+> **Unified alternative.** Because both responses live on the *same system*, one
+> `lsquant run` config computes them together and writes a single
+> `haldane.results.json` (thin-grid $\sigma_{xy}$ and $\sigma_{xx}$ plus timing,
+> peak memory, and the system fingerprint):
+>
+> ```json
+> { "system":   { "label": "haldane", "operators_dir": "operators" },
+>   "numerics": { "num_moments": 128, "broadening_meV": 10, "state": "exact" },
+>   "observables": [ { "kind": "conductivity", "component": "xy" },
+>                    { "kind": "conductivity", "component": "xx" } ] }
+> ```
+> ```bash
+> lsquant run --config run.json
+> python ../../utilities/python/lsquant_report.py haldane.results.json   # table + HTML
+> ```
+>
+> The step-by-step `compute`/`reconstruct` path below is kept because it also
+> splits the Fermi-sea and Fermi-surface parts, which is the point of this tutorial.
+
 ## Step 3: the plateau belongs to the Fermi sea
 
 Reconstruct the total Hall conductivity, then the same response split into its

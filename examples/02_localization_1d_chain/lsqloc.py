@@ -24,6 +24,7 @@ Run from inside the example folder, after LinQT is built and installed
 """
 
 import os
+import sys
 import glob
 import shutil
 import tempfile
@@ -32,6 +33,10 @@ import subprocess
 import numpy as np
 
 import make_disordered_chain as gen
+
+# Shared publication (APS/PRL) plot style: examples/prl_style.py.
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import prl_style as prl
 
 
 # ----------------------------------------------------------------------
@@ -125,34 +130,33 @@ def figure_localization(sizes, W, energies, realisations, **kw):
     Nref, Eref = max(sizes), 1.0
     cal = xi_born(Eref, W) / xi[Nref][Eref]
 
-    fig, (top, bot) = plt.subplots(2, 1, figsize=(7, 6.6))
+    prl.use("web", height=5.8)
+    fig, (top, bot) = plt.subplots(2, 1)
 
-    # top: xi(E) across the band, three sizes, with the Born curve
+    # (a) xi(E) across the band, three sizes, with the Born curve
     egrid = np.linspace(-1.95, 1.95, 200)
-    top.plot(egrid, xi_born(egrid, W), "k--", lw=1.0, label="Born theory")
-    for N in sizes:
+    top.plot(egrid, xi_born(egrid, W), color="0.2", ls="--", lw=1.2, label="Born theory")
+    for i, N in enumerate(sizes):
         E = sorted(energies)
-        top.plot(E, [cal * xi[N][e] for e in E], marker="o", lw=0.8,
-                 label=f"N = {N}")
-    top.set_xlabel("energy  (eV)")
-    top.set_ylabel(r"$\xi(E)$  (sites)")
-    top.set_title(f"localization length across the band  (W = {W:g} eV)")
-    top.legend(frameon=False)
+        top.plot(E, [cal * xi[N][e] for e in E], lw=1.0,
+                 label=r"$N=%d$" % N, **prl.trace(i + 1, marker=True))
+    top.set_xlabel(r"energy $E$ (eV)")
+    top.set_ylabel(r"$\xi(E)$ (sites)")
+    prl.panel(top, "(a)")
+    top.legend(loc="upper right", title=r"$W=%g$ eV" % W)
 
-    # bottom: scaling with size at each marked energy
-    for E in sorted(energies):
-        bot.plot(sizes, [cal * xi[N][E] for N in sizes], marker="o", lw=0.8,
-                 label=f"E = {E:+.1f} eV")
-        bot.axhline(xi_born(E, W), color="grey", lw=0.5, ls=":")
+    # (b) scaling with size at each marked energy
+    for i, E in enumerate(sorted(energies)):
+        bot.plot(sizes, [cal * xi[N][E] for N in sizes], lw=1.0,
+                 label=r"$E=%+.1f$ eV" % E, **prl.trace(i, marker=True))
+        bot.axhline(xi_born(E, W), color="0.6", lw=0.6, ls=":")
     bot.set_xscale("log", base=2)
-    bot.set_xlabel("system size  N  (sites)")
-    bot.set_ylabel(r"$\xi$  (sites)")
-    bot.set_title("size scaling: xi rises with N, then plateaus once N >> xi")
-    bot.legend(frameon=False)
+    bot.set_xlabel(r"system size $N$ (sites)")
+    bot.set_ylabel(r"$\xi$ (sites)")
+    prl.panel(bot, "(b)", loc="lower left")
+    bot.legend(loc="upper center", ncol=2)
 
-    fig.tight_layout()
-    fig.savefig("fig_localization.png", dpi=150)
-    print("wrote fig_localization.png")
+    prl.save(fig, "fig_localization")
 
 
 def demo():
@@ -176,13 +180,14 @@ def figure_anderson(N=500):
         H = np.diag(rng.uniform(-W / 2, W / 2, N)).astype(float)
         idx = np.arange(N); H[idx, (idx + 1) % N] = -1; H[(idx + 1) % N, idx] = -1
         w, v = np.linalg.eigh(H); return np.abs(v[:, np.argmin(np.abs(w))]) ** 2
-    fig, ax = plt.subplots(figsize=(6.4, 3.7))
-    ax.plot(state(0.0, 3), color="#1f77b4", lw=1.0, label=r"clean: extended ($|\psi|^2\sim1/N$)")
-    ax.plot(state(4.0, 3), color="#d62728", lw=1.0, label=r"$W=4$: localized")
-    ax.set_xlabel("site $i$"); ax.set_ylabel(r"$|\psi_i|^2$ (band-centre state)")
-    ax.legend(fontsize=9)
-    ax.set_title("Disorder traps a state that would otherwise fill the chain")
-    fig.tight_layout(); fig.savefig("fig_anderson.png", dpi=150); print("wrote fig_anderson.png")
+    prl.use("web", aspect=0.45)
+    fig, ax = plt.subplots()
+    ax.plot(state(0.0, 3), color=prl.COLORS[1], lw=1.2, ls="-",
+            label=r"clean: extended ($|\psi|^2\sim 1/N$)")
+    ax.plot(state(4.0, 3), color=prl.COLORS[2], lw=1.2, ls="--", label=r"$W=4$: localized")
+    ax.set_xlabel(r"site $i$"); ax.set_ylabel(r"$|\psi_i|^2$ (band-centre state)")
+    ax.legend(loc="upper right")
+    prl.save(fig, "fig_anderson")
 
 
 if __name__ == "__main__":

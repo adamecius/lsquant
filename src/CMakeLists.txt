@@ -29,7 +29,27 @@ set(KPM_LIB_SOURCES
     Device/Graphene_KaneMele.cpp
     eigen_sparse_matrix.cpp
     eigen_linear_algebra.cpp
+    # --- reporting layer (reporting_system.md): logging, timing, errors,
+    #     resource accounting. Additive; folded into kpm_lib so the lsquant
+    #     driver and the active oracle drivers inherit it with no per-target wiring.
+    util/log.cpp
+    util/timer.cpp
+    util/resource.cpp
+    util/report.cpp
+    # --- unified I/O layer (unified_io.md): in-house JSON, system fingerprint,
+    #     results container + merge. Offline-safe, dependency-free.
+    io/json.cpp
+    io/fingerprint.cpp
+    io/results.cpp
+    io/config.cpp
 )
+
+# Resource backend is platform-selected; the interface is identical either way.
+if(UNIX AND NOT APPLE)
+    list(APPEND KPM_LIB_SOURCES util/resource_linux.cpp)
+else()
+    list(APPEND KPM_LIB_SOURCES util/resource_stub.cpp)
+endif()
 
 add_library(kpm_lib STATIC ${KPM_LIB_SOURCES})
 

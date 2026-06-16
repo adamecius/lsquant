@@ -28,6 +28,10 @@ import subprocess
 
 import numpy as np
 
+# Shared publication (APS/PRL) plot style: examples/prl_style.py.
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import prl_style as prl
+
 
 # ----------------------------------------------------------------------
 # locate and call the compiled kernels
@@ -137,54 +141,50 @@ def m_eff(broadening_meV, band_width_eV):
 def figure_moments(sizes, M):
     """Overlay the moments of three sizes. They sit on delta_{m,0}."""
     import matplotlib.pyplot as plt
-    fig, ax = plt.subplots(figsize=(7, 3.2))
-    for N in sizes:
+    prl.use("web", aspect=0.42)
+    fig, ax = plt.subplots()
+    for i, N in enumerate(sizes):
         moments = compute_moments(f"chain1d_N{N}", M, f"exact_chain1d_N{N}")
         d = read_moments(moments)
-        ax.plot(np.arange(d["M"]), d["mu"].real, marker=".", lw=0.8,
-                label=f"N = {N}")
-    ax.set_xlabel("moment index  m")
+        ax.plot(np.arange(d["M"]), d["mu"].real, lw=1.0, markersize=3,
+                label=r"$N=%d$" % N, **prl.trace(i, marker=True))
+    ax.set_xlabel(r"moment index $m$")
     ax.set_ylabel(r"$\mu_m$")
-    ax.set_title("DOS moments are intensive: the three sizes overlap")
-    ax.legend(frameon=False)
-    fig.tight_layout()
-    fig.savefig("fig_moments.png", dpi=150)
-    print("wrote fig_moments.png")
+    ax.legend(loc="upper right")
+    prl.save(fig, "fig_moments")
 
 
 def figure_dos(sizes, smallest, M, fixed_broadening_meV, broadenings_meV):
     """Top: DOS vs system size at fixed broadening.
        Bottom: DOS vs broadening at the smallest size."""
     import matplotlib.pyplot as plt
-    fig, (top, bot) = plt.subplots(2, 1, figsize=(7, 6.4), sharex=True)
+    prl.use("web", height=5.8)
+    fig, (top, bot) = plt.subplots(2, 1, sharex=True)
 
-    # top: vary system size, broadening fixed
-    for N in sizes:
+    # (a) vary system size, broadening fixed
+    for i, N in enumerate(sizes):
         moments = compute_moments(f"chain1d_N{N}", M, f"exact_chain1d_N{N}")
         E, dos = reconstruct_dos(moments, fixed_broadening_meV)
-        top.plot(E, dos, lw=1.0, label=f"N = {N}")
-    top.set_ylabel("DOS  (1/eV)")
-    top.set_title(f"system size at fixed broadening "
-                  f"({fixed_broadening_meV} meV)")
-    top.legend(frameon=False)
+        top.plot(E, dos, label=r"$N=%d$" % N, **prl.trace(i))
+    top.set_ylabel(r"$\rho(E)\;(1/\mathrm{eV})$")
+    prl.panel(top, "(a)")
+    top.legend(loc="upper center", ncol=3, title=r"$\eta=%d\,$meV fixed" % fixed_broadening_meV)
 
-    # bottom: vary broadening, smallest size
+    # (b) vary broadening, smallest size
     moments = compute_moments(f"chain1d_N{smallest}", M,
                               f"exact_chain1d_N{smallest}")
     d = read_moments(moments)
-    for eta in broadenings_meV:
+    for i, eta in enumerate(broadenings_meV):
         E, dos = reconstruct_dos(moments, eta)
-        bot.plot(E, dos, lw=1.0,
-                 label=f"{eta} meV  ->  M = {m_eff(eta, d['band_width'])}")
-    bot.set_xlabel("energy  (eV)")
-    bot.set_ylabel("DOS  (1/eV)")
-    bot.set_title(f"broadening at fixed size (N = {smallest}): "
-                  f"resolution follows the moment count")
-    bot.legend(frameon=False)
+        bot.plot(E, dos, label=r"$\eta=%d\,$meV $\to M=%d$" % (eta, m_eff(eta, d['band_width'])),
+                 **prl.trace(i))
+    bot.set_xlabel(r"energy $E$ (eV)")
+    bot.set_ylabel(r"$\rho(E)\;(1/\mathrm{eV})$")
+    prl.panel(bot, "(b)")
+    bot.legend(loc="upper center", title=r"$N=%d$ fixed" % smallest)
 
-    fig.tight_layout()
-    fig.savefig("fig_dos.png", dpi=150)
-    print("wrote fig_dos.png")
+    # dense oscillatory curves -> cap dpi so the committed PNG stays < 200 KB
+    prl.save(fig, "fig_dos", dpi=110)
 
 
 def demo():
@@ -205,15 +205,16 @@ def demo():
 def figure_levels(N=64):
     """Opening figure: the discrete chain spectrum under the smooth bulk DOS."""
     import matplotlib.pyplot as plt
+    prl.use("web", aspect=0.45)
     Ek = 2 * np.cos(2 * np.pi * np.arange(N) / N)
     E = np.linspace(-1.999, 1.999, 800); rho = 1 / (np.pi * np.sqrt(4 - E ** 2))
-    fig, ax = plt.subplots(figsize=(6.4, 3.7))
-    ax.vlines(Ek, 0, 0.6, color="0.6", lw=0.7, alpha=0.8, label="%d chain levels" % N)
-    ax.plot(E, rho, color="#1f77b4", lw=2, label=r"smooth bulk DOS $1/\pi\sqrt{4-E^2}$")
-    ax.set_xlabel("energy $E$ (eV)"); ax.set_ylabel("density of states (1/eV)")
-    ax.set_xlim(-2.2, 2.2); ax.set_ylim(0, 0.65); ax.legend(fontsize=9)
-    ax.set_title("A finite chain has a discrete spectrum; the bulk DOS is smooth")
-    fig.tight_layout(); fig.savefig("fig_levels.png", dpi=150); print("wrote fig_levels.png")
+    fig, ax = plt.subplots()
+    ax.vlines(Ek, 0, 0.6, color="0.55", lw=0.8, label=r"$%d$ chain levels" % N)
+    ax.plot(E, rho, color=prl.COLORS[1], lw=1.8,
+            label=r"bulk DOS $\;1/\pi\sqrt{4-E^2}$")
+    ax.set_xlabel(r"energy $E$ (eV)"); ax.set_ylabel(r"$\rho(E)\;(1/\mathrm{eV})$")
+    ax.set_xlim(-2.2, 2.2); ax.set_ylim(0, 0.65); ax.legend(loc="upper center")
+    prl.save(fig, "fig_levels")
 
 
 if __name__ == "__main__":

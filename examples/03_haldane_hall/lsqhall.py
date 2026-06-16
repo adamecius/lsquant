@@ -24,6 +24,7 @@ Run from inside the example folder, after LinQT is built and installed
 """
 
 import os
+import sys
 import json
 import glob
 import shutil
@@ -31,6 +32,10 @@ import tempfile
 import subprocess
 
 import numpy as np
+
+# Shared publication (APS/PRL) plot style: examples/prl_style.py.
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import prl_style as prl
 
 A_CELL = 3 * np.sqrt(3) / 2          # honeycomb unit-cell area
 E2_OVER_H = 1.0 / (2 * np.pi)        # conductance quantum in e = hbar = 1 units
@@ -137,27 +142,26 @@ def figure(opdir, label="haldane", M=128):
     Exy, sxy = c["sigma_xy"]
     C = chern_from_plateau(dim, Exy, sxy)
 
-    fig, (top, bot) = plt.subplots(2, 1, figsize=(7, 6.6), sharex=True)
+    prl.use("web", height=5.8)
+    fig, (top, bot) = plt.subplots(2, 1, sharex=True)
 
-    for key, lab in [("sigma_xy", "Bastin (total)"), ("sea", "Fermi sea"),
-                     ("surf", "Fermi surface")]:
+    for i, (key, lab) in enumerate([("sigma_xy", "Bastin (total)"), ("sea", "Fermi sea"),
+                                    ("surf", "Fermi surface")]):
         E, s = c[key]
-        top.plot(E, s / norm, lw=1.0 if key != "sigma_xy" else 1.2, label=lab)
-    top.axhline(1.0, color="grey", ls=":", lw=0.8)
-    top.set_ylabel(r"$\sigma_{xy}$  ($e^2/h$)")
-    top.set_title(f"Hall conductivity: the gap plateau gives C = {C:+.3f}")
-    top.legend(frameon=False)
+        top.plot(E, s / norm, label=lab, **prl.trace(i))
+    top.axhline(1.0, color="0.6", ls=":", lw=0.8)
+    top.set_ylabel(r"$\sigma_{xy}$ ($e^2/h$)")
+    prl.panel(top, "(a)", loc="upper right")
+    top.legend(loc="upper left", title=r"$C=%+.3f$ (gap plateau)" % C)
 
     Exx, sxx = c["sigma_xx"]
-    bot.plot(Exx, sxx / norm, lw=1.2, color="C3")
-    bot.set_xlabel("energy  (eV)")
-    bot.set_ylabel(r"$\sigma_{xx}$  ($e^2/h$)")
-    bot.set_title("longitudinal conductivity: zero in the gap, finite in the bands")
+    bot.plot(Exx, sxx / norm, **prl.trace(3))
+    bot.set_xlabel(r"energy $E$ (eV)")
+    bot.set_ylabel(r"$\sigma_{xx}$ ($e^2/h$)")
+    prl.panel(bot, "(b)")
 
-    fig.tight_layout()
-    fig.savefig("fig_haldane_hall.png", dpi=150)
+    prl.save(fig, "fig_haldane_hall")
     print(f"Chern from gap plateau: C = {C:+.3f}")
-    print("wrote fig_haldane_hall.png")
 
 
 def demo():

@@ -8,6 +8,7 @@ and plots the precession against the analytic Larmor solution. Writes
 fig_precession.png. The driver is found on PATH or under $LSQUANT_BIN.
 """
 import os
+import sys
 import glob
 import subprocess
 from shutil import which
@@ -16,6 +17,10 @@ import numpy as np
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+
+# Shared publication (APS/PRL) plot style: examples/prl_style.py.
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import prl_style as prl
 
 LABEL = "chain1d_mag"
 M, NTIME, TMAX = 32, 96, 95.0     # moments, time steps, max time (fs)
@@ -56,35 +61,35 @@ def main():
 
     w = 2 * J_EX / HBAR
     tt = np.linspace(0.0, t[-1], 400)
-    fig, ax = plt.subplots(figsize=(6.6, 4.0))
-    ax.plot(tt, np.cos(w * tt), "-", color="#1f77b4", lw=1.0, alpha=0.5)
-    ax.plot(tt, -np.sin(w * tt), "-", color="#d62728", lw=1.0, alpha=0.5)
-    ax.plot(t, sx, "o", ms=3.5, color="#1f77b4", label=r"$\langle S_x\rangle$ (KPM)")
-    ax.plot(t, sy, "s", ms=3.5, color="#d62728", label=r"$\langle S_y\rangle$ (KPM)")
-    ax.plot(t, sz, "^", ms=3.5, color="#2ca02c", label=r"$\langle S_z\rangle$ (KPM)")
-    ax.axhline(0.0, color="0.85", lw=0.8)
-    ax.set_xlabel("time $t$ (fs)")
-    ax.set_ylabel("normalised spin expectation")
-    ax.set_title(r"Larmor precession, magnetic chain ($\omega=2J_{\rm ex}/\hbar=%.3f$ rad/fs, period %.1f fs)"
-                 % (w, 2 * np.pi / w))
-    ax.legend(loc="upper right", ncol=3, fontsize=8.5)
-    ax.set_ylim(-1.25, 1.55)
-    fig.tight_layout()
-    fig.savefig("fig_precession.png", dpi=150)
-    print("wrote fig_precession.png")
+    cx, cy, cz = prl.COLORS[1], prl.COLORS[2], prl.COLORS[3]
+    prl.use("web", aspect=0.5)
+    fig, ax = plt.subplots()
+    # analytic Larmor solution (thin reference lines)
+    ax.plot(tt, np.cos(w * tt), "-", color=cx, lw=1.0, alpha=0.45)
+    ax.plot(tt, -np.sin(w * tt), "--", color=cy, lw=1.0, alpha=0.45)
+    # KPM points (redundant: distinct colour AND marker)
+    ax.plot(t, sx, "o", ms=4, color=cx, label=r"$\langle S_x\rangle$ (KPM)")
+    ax.plot(t, sy, "s", ms=4, color=cy, label=r"$\langle S_y\rangle$ (KPM)")
+    ax.plot(t, sz, "^", ms=4, color=cz, label=r"$\langle S_z\rangle$ (KPM)")
+    ax.axhline(0.0, color="0.7", lw=0.6, zorder=0)
+    ax.set_xlabel(r"time $t$ (fs)")
+    ax.set_ylabel(r"normalised spin $\langle S_\alpha(t)\rangle/\langle S_x(0)\rangle$")
+    ax.legend(loc="upper right", ncol=3)
+    ax.set_ylim(-1.25, 1.6)
+    prl.save(fig, "fig_precession")
 
 
 def figure_zeeman(J=0.1):
     """Opening figure: the exchange-split spin bands."""
     k = np.linspace(-np.pi, np.pi, 500)
-    fig, ax = plt.subplots(figsize=(6.4, 3.7))
-    ax.plot(k, -2 * np.cos(k) - J, color="#1f77b4", lw=1.8, label=r"spin $\uparrow$")
-    ax.plot(k, -2 * np.cos(k) + J, color="#d62728", lw=1.8, label=r"spin $\downarrow$")
+    prl.use("web", aspect=0.45)
+    fig, ax = plt.subplots()
+    ax.plot(k, -2 * np.cos(k) - J, color=prl.COLORS[1], ls="-", lw=1.8, label=r"spin $\uparrow$")
+    ax.plot(k, -2 * np.cos(k) + J, color=prl.COLORS[2], ls="--", lw=1.8, label=r"spin $\downarrow$")
     ax.annotate(r"$2J_{\rm ex}$", xy=(0, -2), xytext=(0.8, -1.6),
-                arrowprops=dict(arrowstyle="<->"), fontsize=11)
-    ax.set_xlabel("$k$"); ax.set_ylabel("energy (eV)"); ax.legend(fontsize=9)
-    ax.set_title(r"The exchange field splits $\uparrow$ and $\downarrow$ by $2J_{\rm ex}$")
-    fig.tight_layout(); fig.savefig("fig_zeeman.png", dpi=150); print("wrote fig_zeeman.png")
+                arrowprops=dict(arrowstyle="<->"))
+    ax.set_xlabel(r"$k$"); ax.set_ylabel(r"energy (eV)"); ax.legend(loc="upper center")
+    prl.save(fig, "fig_zeeman")
 
 
 if __name__ == "__main__":
