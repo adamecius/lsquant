@@ -4,6 +4,15 @@
 
 const int MKL_SPMVMUL = 1000;
 
+// Below this many nonzeros the SpMV/SpMM run SERIALLY: the OpenMP fork/join cost of a
+// parallel region dwarfs the work on a tiny matrix, and small matrices are called in
+// tight inner loops (e.g. the exact-trace spin tutorials -> tens of thousands of SpMVs).
+// Measured pathology before this guard: a tiny N=128 exact-trace run took 339 s on 256
+// threads vs 2.0 s on 1 thread (a 170x regression). Serial and parallel give bit-identical
+// results (each row is an independent reduction), so the threshold never changes output.
+// Tunable; ~3e4 nnz is well above the per-region overhead and below any DRAM-bound case.
+static const long LSQ_SPMV_MIN_PARALLEL_NNZ = 30000;
+
 void SparseMatrixType::ConvertFromCOO(vector<indexType> &rows, vector<indexType> &cols, vector<complex<double> > &vals)
 {
 	rows_ = vector<indexType>(rows);
@@ -227,7 +236,8 @@ void SparseMatrixType::Multiply(const complex<double> a, const complex<double> *
 	const indexType* const cl  = matrix_.innerIndexPtr();   // column indices    [nnz]
 	const complex<double>* const vl = matrix_.valuePtr();   // nonzero values    [nnz]
 
-	#pragma omp parallel for schedule(static)
+	// if(): serial on small matrices (no fork/join), parallel once the work is worth it.
+	#pragma omp parallel for schedule(static) if(rp[n] > LSQ_SPMV_MIN_PARALLEL_NNZ)
 	for (indexType i = 0; i < n; ++i)
 	{
 		complex<double> acc(0.0, 0.0);
@@ -305,7 +315,8 @@ void SparseMatrixType::BatchMultiply(const int batchSize, const complex<double> 
 	const indexType* const cl  = matrix_.innerIndexPtr();
 	const complex<double>* const vl = matrix_.valuePtr();
 
-	#pragma omp parallel
+	// if(): serial on small blocks (no fork/join); R-fold work so scale the nnz threshold by R.
+	#pragma omp parallel if(rp[n] * R > LSQ_SPMV_MIN_PARALLEL_NNZ)
 	{
 		std::vector<complex<double> > acc(R);   // per-thread R accumulators
 		#pragma omp for schedule(static)
