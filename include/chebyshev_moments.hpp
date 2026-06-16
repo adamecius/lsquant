@@ -174,9 +174,11 @@ class Moments
 
 	//light functions
     int JacksonKernelMomCutOff( const double broad );
-	
-	//light functions
-    double JacksonKernel(const double m,  const double Mom );
+
+	// The Jackson damping coefficient g_D(m, Mom) -- the SINGLE source for the kernel used by
+	// every Moments{1D,2D,TD,Local}::ApplyJacksonKernel and the inline broadening in the solver.
+	// Pure formula (no instance state), so it is static and unit-testable without a Moments object.
+    static double JacksonKernel(const double m,  const double Mom );
 
 
 	private:

@@ -76,14 +76,8 @@ void chebyshev::Moments1D::ApplyJacksonKernel( const double broad )
   std::cout << "Kernel reduced the number of moments to " << maxMom <<" for a broadening of "<<M_PI/maxMom << std::endl;
   this->MomentNumber(maxMom);
 
-  const double phi_J = M_PI/(double)(maxMom+1.0);
-  double g_D_m;
-
   for( size_t m = 0 ; m < maxMom ; m++)
-  {
-	  g_D_m = ( (maxMom - m + 1) * cos(phi_J * m) + sin(phi_J * m) /tan(phi_J) ) * phi_J/M_PI;
-	  this->operator()(m) *= g_D_m;
-	}
+	  this->operator()(m) *= JacksonKernel(m, maxMom);
 }
 
 void chebyshev::Moments1D::ApplyLorentzKernel( const double broad, const double lambda )

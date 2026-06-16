@@ -98,21 +98,11 @@ void chebyshev::Moments2D::ApplyJacksonKernel( const double b0, const double b1 
 	std::cout<<"Kernel reduced the number of moments to "<<maxMom0<<" "<<maxMom1<<std::endl;
 	this->MomentNumber( maxMom0,maxMom1 ) ;
 
-
-
-	const double
-	phi_J0 = M_PI/(double)(numMoms[0]+1.0),
-	phi_J1 = M_PI/(double)(numMoms[1]+1.0);
-		
-	double g_D_m0,g_D_m1;
 	for( int m0 = 0 ; m0 < numMoms[0] ; m0++)
 	{
-		g_D_m0=( (numMoms[0]-m0+1)*cos( phi_J0*m0 )+ sin(phi_J0*m0)/tan(phi_J0) )*phi_J0/M_PI;
+		const double g_D_m0 = JacksonKernel(m0, numMoms[0]);
 		for( int m1 = 0 ; m1 < numMoms[1] ; m1++)
-		{
-			g_D_m1=( (numMoms[1]-m1+1)*cos( phi_J1*m1 )+ sin(phi_J1*m1)/tan(phi_J1) )*phi_J1/M_PI;
-			this->operator()(m0,m1) *= g_D_m0*g_D_m1;
-		}
+			this->operator()(m0,m1) *= g_D_m0 * JacksonKernel(m1, numMoms[1]);
 	}
 }
 

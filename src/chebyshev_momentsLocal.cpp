@@ -231,12 +231,9 @@ void chebyshev::MomentsLocal::ApplyJacksonKernel( const double broad )
   std::cout << "Kernel reduced the number of moments to " << maxMom <<" for a broadening of "<<M_PI/maxMom*this->BandWidth() << "eV" << std::endl;
   this->MomentNumber(maxMom);
 
-  const double phi_J = M_PI/(double)(maxMom+1.0);
-  double g_D_m;
-
   for( size_t m = 0 ; m < maxMom ; m++)
   {
-	  g_D_m = ( (maxMom - m + 1) * cos(phi_J * m) + sin(phi_J * m) /tan(phi_J) ) * phi_J/M_PI;
+	  const double g_D_m = JacksonKernel(m, maxMom);
 	  for( size_t n = 0 ; n < this->NumberOfOrbitals() ; n++) this->operator()(m, n) *= g_D_m;
   }
 }

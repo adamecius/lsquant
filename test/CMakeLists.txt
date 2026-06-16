@@ -224,6 +224,15 @@ target_include_directories(jackson_kernel_test PRIVATE ${CMAKE_SOURCE_DIR}/inclu
 target_link_libraries(jackson_kernel_test PRIVATE kpm_lib)
 add_test(NAME jackson_kernel COMMAND jackson_kernel_test 1e-12)
 
+# --- single-sourced Jackson coefficient scalar unit test (plan Step B1) ----------
+# Moments::JacksonKernel(m,M) is the ONE home of the damping formula (1D/2D/TD/Local
+# ApplyJacksonKernel + solver all call it). Tested in isolation -- pure static formula,
+# no Moments object -- against independent analytic references and the g_D(0,M)=1 invariant.
+add_executable(jackson_g_test jackson_g_test.cpp)
+target_include_directories(jackson_g_test PRIVATE ${CMAKE_SOURCE_DIR}/include)
+target_link_libraries(jackson_g_test PRIVATE kpm_lib)
+add_test(NAME jackson_g_scalar COMMAND jackson_g_test 1e-13)
+
 # --- Phase 6A wired contract ----------------------------------------------------
 # The core now routes through HamiltonianOp/MetricPolicy (no longer dormant scaffolding):
 # Moments::op() returns HamiltonianOp& and SparseHamiltonianOp is the live adapter (compile-time
