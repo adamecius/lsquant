@@ -1,4 +1,5 @@
 #include "sparse_matrix.hpp"
+#include "util/timer.hpp"   // LSQ_SCOPED -- time the SpMV hot loop (CLAUDE.md reporting)
 
 
 const int MKL_SPMVMUL = 1000;
@@ -180,21 +181,61 @@ void SparseMatrixType::ConvertFromCSR(vector<indexType> &cols, vector<indexType>
 }
 
 
+// SparseMatrixType::Multiply -- the leaf SpMV  y = a*M*x + b*y  (raw-pointer form).
+//
+// PROBLEM. This is the single O(nnz) hot loop of the whole KPM machinery: the
+// Chebyshev moment recursion reaches it once per moment through op().multiply()
+// (HamiltonianOp -> here), so on large systems essentially all wall time is spent
+// here. The stock body was `eig_y = a*matrix_*eig_x + b*eig_y`, an Eigen sparse x
+// dense product that runs on ONE thread (Eigen does not parallelise sparse*vector),
+// leaving 255 of 256 EPYC cores idle on the recursion. Measured: the production
+// recursion was flat past ~4 threads; a row-parallel kernel reaches ~92% of the
+// per-socket read-bandwidth roofline and ~30x the production driver (see
+// docs/perf/PERF_ANALYSIS.md).
+//
+// APPROACH. Apply the matrix one CSR row at a time with an OpenMP parallel-for over
+// rows. For RowMajor compressed storage, row i owns the contiguous nonzero range
+// [outerIndexPtr[i], outerIndexPtr[i+1]); each y[i] is the sum over that range,
+// accumulated by a single thread in stored column order, then scaled: a*acc + b*y[i].
+//
+// WHY THIS IS BIT-IDENTICAL TO THE STOCK EIGEN PRODUCT (golden safety). Each output
+// y[i] is an independent reduction over its own row, summed in the SAME stored order
+// Eigen uses, with the SAME scalar complex<double> arithmetic. Distinct rows are
+// independent writes, so partitioning rows across threads cannot change any single
+// sum -> the result is independent of the thread count and equals the old expression
+// term-for-term. The exact-match moment goldens stay byte-identical; the gate
+// `spmv_threaded_bitexact` asserts this at 1/2/4/8 threads.
+//
+// COMPLEXITY. O(nnz) work, O(rows) parallel tasks; memory-bandwidth bound (the
+// matrix stream dominates; x is cache-resident for banded/local operators).
+//
+// Pitfall: this is bit-exact ONLY because each row is reduced by a single thread.
+//   Do NOT parallelise a cross-vector reduction (the moment dot-product, vdot) on
+//   the golden path -- that changes summation order and moves the byte-exact goldens.
+// Warning: assumes COMPRESSED RowMajor storage (outer/inner/value pointers). The
+//   isCompressed() guard below makes it robust if an upstream op left gaps; it is a
+//   no-op on the already-compressed matrices the producers hand us.
 void SparseMatrixType::Multiply(const complex<double> a, const complex<double> *x, const complex<double> b, complex<double> *y)
 {
-        Eigen::Map<const Eigen::Vector<std::complex<double>, -1>>
-	  eig_x(x, numRows());
+	LSQ_SCOPED("spmv");
 
-	Eigen::Map<Eigen::Vector<std::complex<double>, -1>>
-	  eig_y(y, numRows());
+	if (!matrix_.isCompressed())
+		matrix_.makeCompressed();
 
+	const indexType        n   = static_cast<indexType>( numRows() );
+	const indexType* const rp  = matrix_.outerIndexPtr();   // row start offsets [n+1]
+	const indexType* const cl  = matrix_.innerIndexPtr();   // column indices    [nnz]
+	const complex<double>* const vl = matrix_.valuePtr();   // nonzero values    [nnz]
 
+	#pragma omp parallel for schedule(static)
+	for (indexType i = 0; i < n; ++i)
+	{
+		complex<double> acc(0.0, 0.0);
+		for (indexType p = rp[i]; p < rp[i + 1]; ++p)
+			acc += vl[p] * x[cl[p]];          // stored-order sum == Eigen's order
+		y[i] = a * acc + b * y[i];                // reads old y[i]; rows independent
+	}
 
-
-	eig_y = a * matrix_ * eig_x + b * eig_y; 
-
-
-	  
 	return ;
 };
 
