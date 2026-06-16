@@ -47,6 +47,31 @@ JSON
       echo "FAIL(equivalence): run.json moments differ from the argv path"; exit 1
   fi
 
+  # (1b) DOS (spectral): inline argv vs `lsquant compute --config` (mode spectral), byte-identical
+  LSQ="$BUILD/lsquant"
+  "$BUILD/inline_compute-kpm-spectralOp" graphene_golden VX 64 >/dev/null 2>&1
+  mv SpectralOpVXgraphene_golden*.chebmom1D dos_argv.chebmom1D
+  printf '{ "mode":"spectral", "label":"graphene_golden", "operator":"VX", "num_moments":64 }\n' > dos.json
+  "$LSQ" compute --config dos.json >/dev/null 2>&1
+  mv SpectralOpVXgraphene_golden*.chebmom1D dos_config.chebmom1D
+  if diff -q dos_argv.chebmom1D dos_config.chebmom1D >/dev/null; then
+      echo "PASS(equivalence/DOS): spectral run.json moments byte-identical to the argv path"
+  else
+      echo "FAIL(equivalence/DOS): spectral run.json moments differ from the argv path"; exit 1
+  fi
+
+  # (1c) MSD: inline argv vs `lsquant compute --config` (mode msd), byte-identical
+  "$BUILD/inline_compute-kpm-MeanSquareDisplacement" graphene_golden VX 64 8 10 >/dev/null 2>&1
+  mv Correlation*graphene_golden*.chebmomTD msd_argv.chebmomTD
+  printf '{ "mode":"msd", "label":"graphene_golden", "operator":"VX", "num_moments":64, "num_times":8, "tmax":10 }\n' > msd.json
+  "$LSQ" compute --config msd.json >/dev/null 2>&1
+  mv Correlation*graphene_golden*.chebmomTD msd_config.chebmomTD
+  if diff -q msd_argv.chebmomTD msd_config.chebmomTD >/dev/null; then
+      echo "PASS(equivalence/MSD): msd run.json moments byte-identical to the argv path"
+  else
+      echo "FAIL(equivalence/MSD): msd run.json moments differ from the argv path"; exit 1
+  fi
+
   # (2) inspect prints the run + numerical provenance
   rep="$("$INSPECT" run.json)"
   echo "$rep" | sed 's/^/    /'

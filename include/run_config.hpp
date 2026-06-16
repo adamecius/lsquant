@@ -34,9 +34,13 @@ namespace lsquant
 	struct RunConfig
 	{
 		std::string label;
-		std::string operator_left;     // OPL
-		std::string operator_right;    // OPR
+		std::string mode = "noneq";    // noneq | spectral | msd  (which compute_* to dispatch)
+		std::string operator_left;     // OPL (noneq)
+		std::string operator_right;    // OPR (noneq)
+		std::string op;                // single operator: OP (spectral) / velocity (msd)
 		int         num_moments = 0;
+		int         num_times   = 0;   // msd time grid size
+		double      tmax        = 0.0; // msd max time
 		std::string kernel = "jackson";
 		double      lambda  = 0.0;
 		std::string state   = "default";
