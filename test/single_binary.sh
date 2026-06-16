@@ -73,6 +73,13 @@ cp "$GMOM" "$T/"
     diff -q legacy_m.m disp_m.m >/dev/null \
       && echo "PASS(compute/msd): lsquant compute == legacy msd driver byte-for-byte" \
       || { echo "FAIL: lsquant compute msd differs from legacy driver"; exit 1; }
+
+    # dos reconstruction through the dispatcher == legacy spectral-function driver, byte-for-byte
+    "$BUILD/inline_spectralFunctionFromChebmom" disp_s.m 120 >/dev/null 2>&1; mv mean*JACKSON.dat legacy_dos.dat
+    "$LSQ" reconstruct disp_s.m dos 120 >/dev/null 2>&1;                      mv mean*JACKSON.dat disp_dos.dat
+    diff -q legacy_dos.dat disp_dos.dat >/dev/null \
+      && echo "PASS(reconstruct/dos): lsquant == legacy spectral-function driver byte-for-byte" \
+      || { echo "FAIL: lsquant reconstruct dos differs from legacy driver"; exit 1; }
     # end-to-end: the moments lsquant just produced reconstruct cleanly through the same binary
     "$LSQ" reconstruct disp.m bastin 10 >/dev/null 2>&1
     e2e="$(ls KuboBastin_*JACKSON.dat | head -1)"

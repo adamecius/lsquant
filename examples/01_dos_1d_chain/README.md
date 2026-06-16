@@ -116,7 +116,7 @@ suppress the ringing of a truncated series. Run it once at a $120\ \mathrm{meV}$
 broadening:
 
 ```bash
-inline_spectralFunctionFromChebmom SpectralOp1chain1d_N256KPM_M512_state*.chebmom1D 120
+lsquant reconstruct SpectralOp1chain1d_N256KPM_M512_state*.chebmom1D dos 120
 ```
 
 This writes a two-column file of energy against the extensive DOS $N\rho(E)$;
