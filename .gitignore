@@ -24,3 +24,10 @@ CMakeFiles/
 # but keep the committed test fixtures (goldens + model operators)
 !test/golden/**
 !test/models/**
+
+# Phase-F benchmark generated artifacts (regenerable; data ban)
+bench/gr/
+bench/*.csv
+bench/run.log
+bench/fig_*.png
+bench/fig_*.pdf
