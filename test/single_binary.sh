@@ -56,8 +56,30 @@ cp "$GMOM" "$T/"
     "$BUILD/inline_compute-kpm-nonEqOp" graphene_golden VX VX 64 >/dev/null 2>&1; mv NonEqOp*chebmom2D legacy.m
     "$LSQ" compute --config comp.json >/dev/null 2>&1;                            mv NonEqOp*chebmom2D disp.m
     diff -q legacy.m disp.m >/dev/null \
-      && echo "PASS(compute): lsquant compute == legacy driver byte-for-byte" \
+      && echo "PASS(compute/noneq): lsquant compute == legacy driver byte-for-byte" \
       || { echo "FAIL: lsquant compute differs from legacy driver"; exit 1; }
+
+    # all three compute modes go through the one dispatcher, each == its legacy inline driver
+    "$BUILD/inline_compute-kpm-spectralOp" graphene_golden VX 64 >/dev/null 2>&1; mv SpectralOp*chebmom1D legacy_s.m
+    printf '{ "mode":"spectral","label":"graphene_golden","operator":"VX","num_moments":64 }\n' > spec.json
+    "$LSQ" compute --config spec.json >/dev/null 2>&1;                            mv SpectralOp*chebmom1D disp_s.m
+    diff -q legacy_s.m disp_s.m >/dev/null \
+      && echo "PASS(compute/spectral): lsquant compute == legacy spectral driver byte-for-byte" \
+      || { echo "FAIL: lsquant compute spectral differs from legacy driver"; exit 1; }
+
+    "$BUILD/inline_compute-kpm-MeanSquareDisplacement" graphene_golden VX 64 8 10 >/dev/null 2>&1; mv Correlation*chebmomTD legacy_m.m
+    printf '{ "mode":"msd","label":"graphene_golden","operator":"VX","num_moments":64,"num_times":8,"tmax":10 }\n' > msd.json
+    "$LSQ" compute --config msd.json >/dev/null 2>&1;                             mv Correlation*chebmomTD disp_m.m
+    diff -q legacy_m.m disp_m.m >/dev/null \
+      && echo "PASS(compute/msd): lsquant compute == legacy msd driver byte-for-byte" \
+      || { echo "FAIL: lsquant compute msd differs from legacy driver"; exit 1; }
+
+    # dos reconstruction through the dispatcher == legacy spectral-function driver, byte-for-byte
+    "$BUILD/inline_spectralFunctionFromChebmom" disp_s.m 120 >/dev/null 2>&1; mv mean*JACKSON.dat legacy_dos.dat
+    "$LSQ" reconstruct disp_s.m dos 120 >/dev/null 2>&1;                      mv mean*JACKSON.dat disp_dos.dat
+    diff -q legacy_dos.dat disp_dos.dat >/dev/null \
+      && echo "PASS(reconstruct/dos): lsquant == legacy spectral-function driver byte-for-byte" \
+      || { echo "FAIL: lsquant reconstruct dos differs from legacy driver"; exit 1; }
     # end-to-end: the moments lsquant just produced reconstruct cleanly through the same binary
     "$LSQ" reconstruct disp.m bastin 10 >/dev/null 2>&1
     e2e="$(ls KuboBastin_*JACKSON.dat | head -1)"

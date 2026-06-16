@@ -36,7 +36,7 @@ int chebyshev::MomentsTD::Deltaiter(double E)
 		return 0;
 	}
 	else{
-		this->Hamiltonian().Multiply(2.0,  Chebyshev1(), -1.0,  Chebyshev0() );
+		this->op().multiply(2.0,  Chebyshev1(), -1.0,  Chebyshev0() );
 		Chebyshev0().swap(Chebyshev1());
 		linalg::axpy( TE*delta_chebF(E,currentTm)*g_D_m , Chebyshev1(), DeltaPhi());
 		currentTm++;
@@ -62,7 +62,7 @@ int chebyshev::MomentsTD::Evolve( vector_t& Phi)
 	
 		//Initial block
 	linalg::copy(Phi , Chebyshev0() );
-	this->Hamiltonian().Multiply(Chebyshev0(), Chebyshev1());
+	this->op().multiply(Chebyshev0(), Chebyshev1());
 	
 
 	int n = 0;
@@ -76,7 +76,7 @@ int chebyshev::MomentsTD::Evolve( vector_t& Phi)
 		linalg::axpy( nIp*value_t(2)*Jn , Chebyshev0(), Phi);
 
 		// Evolve n to n+1
-		this->Hamiltonian().Multiply(2.0,  Chebyshev1(), -1.0,  Chebyshev0() );
+		this->op().multiply(2.0,  Chebyshev1(), -1.0,  Chebyshev0() );
 		Chebyshev0().swap(Chebyshev1());
 
 		nIp*=-I ;
@@ -142,7 +142,7 @@ int chebyshev::MomentsTD::Conv_Evolve( vector_t& Phi)
 	std::cout<<std::endl<<std::endl<<"aquí"<<std::endl<<std::endl;	
 	linalg::copy(Phi , Chebyshevx0() );
 	linalg::scal(0.0,Chebyshevx0());
-	this->Hamiltonian().Multiply(Chebyshev0(), Chebyshev1());
+	this->op().multiply(Chebyshev0(), Chebyshev1());
 	this->Conmuter().Multiply(Chebyshev0(), Chebyshevx1());
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -156,8 +156,8 @@ int chebyshev::MomentsTD::Conv_Evolve( vector_t& Phi)
 		linalg::axpy( nIp*value_t(2)*Jn , Chebyshevx0(), Phi);
 
 		// Evolve n to n+1
-		this->Hamiltonian().Multiply(2.0,  Chebyshev1(), -1.0,  Chebyshev0() );
-		this->Hamiltonian().Multiply(2.0,  Chebyshevx1(),-1.0,  Chebyshevx0() );
+		this->op().multiply(2.0,  Chebyshev1(), -1.0,  Chebyshev0() );
+		this->op().multiply(2.0,  Chebyshevx1(),-1.0,  Chebyshevx0() );
 		this->Conmuter().Multiply(2.0,  Chebyshev1() ,+1.0,  Chebyshevx0() );
 		
 		Chebyshev0().swap(Chebyshev1());

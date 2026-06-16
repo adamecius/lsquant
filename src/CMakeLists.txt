@@ -27,15 +27,6 @@ set(KPM_LIB_SOURCES
     Bastin_FFTs.cpp
     Device/Device.cpp
     Device/Graphene_KaneMele.cpp
-    chebyshev_solver_Device.cpp
-    chebyshev_solver_Graphene_NNN.cpp
-    chebyshev_vectors_Device.cpp
-    chebyshev_moments_Graphene_NNN.cpp
-    chebyshev_moments_Device.cpp
-    chebyshev_moments1D_Graphene_NNN.cpp
-    chebyshev_vectors_Graphene_NNN.cpp
-    chebyshev_momentsTD_Device.cpp
-    chebyshev_momentsTD_Graphene_NNN.cpp
     eigen_sparse_matrix.cpp
     eigen_linear_algebra.cpp
 )
@@ -84,18 +75,13 @@ set(LINQT_APPS
     "inline_spectralFunctionFromChebmom_Lorentz|spectralFunctionFromChebmom_Lorentz.cpp"
     "inline_kuboGreenwoodFromChebmom_FFTgrid|kuboGreenwoodFromChebmom_FFTgrid.cpp"
     "inline_compute-kpm-MeanSquareDisplacement|inline_compute-kpm-MeanSquareDisplacement.cpp"
-    "inline_compute-kpm-MeanSquareDisplacement_DeviceSim|inline_compute-kpm-MeanSquareDisplacement_DeviceSim.cpp"
-    "inline_compute-kpm-MeanSquareDisplacement_Graphene_NNN_2|inline_compute-kpm-MeanSquareDisplacement_Graphene_NNN_2.cpp"
     "inline_kuboBastinFromChebmom_FFTgrid|kuboBastinFromChebmom_FFTgrid.cpp"
     "inline_compute-kpm-TimeEvProjetedOp|inline_compute-kpm-TimeEvProjetedOp.cpp"
     "inline_compute-kpm-spectralOp-nonOrth|inline_compute-kpm-spectralOp-nonOrth.cpp"
     "inline_compute-kpm-TimeEvOp|inline_compute-kpm-TimeEvOp.cpp"
-    "inline_compute-kpm-TimeEvOp_Device|inline_compute-kpm-TimeEvOp_Device.cpp"
     "kpm-nonOrth-precision-test|kpm-nonOrth-precision-test.cpp"
     "inline_kpm-DOS-standalone|inline_kpm-DOS-standalone.cpp"
-    "inline_kpm-DOS-standalone_Graphene_NNN|inline_kpm-DOS-standalone_Graphene_NNN.cpp"
     "device-postProcess|device-postProcess.cpp"
-    "device-postProcess_Graphene_NNN|device-postProcess_Graphene_NNN.cpp"
     "inline_compute-Kubo-kpm-FFT-nonOrth|inline_compute-Kubo-kpm-FFT-nonOrth.cpp"
     "inline_compute-kpm-TimeEvOpwithWF|inline_compute-kpm-TimeEvOpwithWF.cpp"
     "lsquant_inspect|lsquant_inspect.cpp"

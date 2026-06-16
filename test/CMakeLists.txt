@@ -206,13 +206,15 @@ add_test(NAME corrop_state_honored
 add_test(NAME fft_grid_regression
          COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/fft_grid_regression.sh ${CMAKE_BINARY_DIR})
 
-# --- Phase 6 scaffolding contract (interfaces only) -----------------------------
-# HamiltonianOp / MetricPolicy are placeholders for the deferred Phase 6 (the core is not
-# migrated onto them yet). This pins the contract: OrthogonalMetric is the identity; the
-# matrix-free and non-orthogonal placeholders THROW (never a silent no-op).
-add_executable(phase6_scaffolding_test phase6_scaffolding_test.cpp)
-target_include_directories(phase6_scaffolding_test PRIVATE ${CMAKE_SOURCE_DIR}/include)
-add_test(NAME phase6_scaffolding COMMAND phase6_scaffolding_test)
+# --- Phase 6A wired contract ----------------------------------------------------
+# The core now routes through HamiltonianOp/MetricPolicy (no longer dormant scaffolding):
+# Moments::op() returns HamiltonianOp& and SparseHamiltonianOp is the live adapter (compile-time
+# asserts). OrthogonalMetric is the identity; the matrix-free and non-orthogonal placeholders
+# THROW (never a silent no-op).
+add_executable(phase6_wired_test phase6_wired_test.cpp)
+target_include_directories(phase6_wired_test PRIVATE ${CMAKE_SOURCE_DIR}/include)
+target_link_libraries(phase6_wired_test PRIVATE kpm_lib)
+add_test(NAME phase6_wired COMMAND phase6_wired_test)
 
 # --- single lsquant dispatcher binary (Phase 7) ---------------------------------
 # `lsquant <command>` subsumes the library-ized tasks: reconstruct (byte-identical to the legacy

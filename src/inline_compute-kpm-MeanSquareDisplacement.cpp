@@ -7,10 +7,7 @@
 
 
 #include "kpm_noneqop.hpp" //Message functions
-#include "chebyshev_moments.hpp"
-#include "sparse_matrix.hpp"
-#include "quantum_states.hpp"
-#include "chebyshev_solver.hpp"
+#include "compute.hpp"
 
 
 namespace time_evolution
@@ -29,7 +26,7 @@ int main(int argc, char *argv[])
 	}
 	else
 		time_evolution::printWelcomeMessage();
-	
+
 	const std::string
 		LABEL  = argv[1],
 		S_OP   = argv[2],
@@ -41,58 +38,14 @@ int main(int argc, char *argv[])
 	const int numTimes= atoi(S_NTIME.c_str() );
 	const double tmax = stod(S_TMAX );
 
-	chebyshev::MomentsTD chebMoms(numMoms, numTimes); //load number of moments
+	// The orchestration lives in lsquant::compute_msd (shared with `lsquant compute --config` mode
+	// "msd"). This driver only parses argv and delegates.
+	std::string state_file;
+	if ( argc == 7 ) state_file = argv[6];
 
-	
-	SparseMatrixType OP[2];
-	OP[0].SetID("HAM");
-	OP[1].SetID(S_OP);
-	
-	// Build the operators from Files
-	SparseMatrixBuilder builder;
-	std::array<double,2> spectral_bounds;	
-	for (int i = 0; i < 2; i++)
-	if( OP[i].isIdentity() )
-			std::cout<<"The operator "<<OP[i].ID()<<" is treated as the identity"<<std::endl;
-	else
-	{
-			std::string input = "operators/" + LABEL + "." + OP[i].ID() + ".CSR";
-			builder.setSparseMatrix(&OP[i]);
-			builder.BuildOPFromCSRFile(input);
-	
-			if( i == 0 ) //is hamiltonian
-			//Obtain automatically the energy bounds
-		 	spectral_bounds = chebyshev::utility::SpectralBounds(OP[0]);
-	};
-	//CONFIGURE THE CHEBYSHEV MOMENTS
-	chebMoms.SystemLabel(LABEL);
-	chebMoms.BandWidth ( (spectral_bounds[1]-spectral_bounds[0])*1.0);
-	chebMoms.BandCenter( (spectral_bounds[1]+spectral_bounds[0])*0.5);
-	chebMoms.TimeDiff( tmax/(numTimes-1) );
-	chebMoms.SetAndRescaleHamiltonian(OP[0]);
-	chebMoms.SetAndRescaleConmuter(OP[1]);
-	//Rescale the velocity
-	//OP[1].Rescale(chebMoms.ScaleFactor(),0.0);
-	chebMoms.Print();
+	lsquant::compute_msd(LABEL, S_OP, numMoms, numTimes, tmax, state_file);
 
-	//Compute the chebyshev expansion table
-	qstates::generator gen;
-	if( argc == 7)
-		gen  = qstates::LoadStateFile(argv[6]);
-
-	chebyshev::MeanSquareDisplacement(chebMoms, gen);
-
-
-
-
-
-	auto prefix="Correlation"+OP[1].ID();
-	if( OP[1].isIdentity() )
-		prefix="Correlations"+OP[1].ID();
-	std::string outputfilename=prefix+LABEL+"KPM_M"+S_NMOM+"_state"+S_TMAX+gen.StateLabel()+".chebmomTD";	
-	std::cout<<"Saving convergence data in "<<outputfilename<<std::endl;
-	chebMoms.saveIn(outputfilename);
-	std::cout<<"End of program"<<std::endl;
+	std::cout << "End of program" << std::endl;
 	return 0;
 }
 
@@ -107,7 +60,6 @@ void time_evolution::printHelpMessage()
 		std::cout << "TimeMax  will be set the maximum time where the correlation will be evaluted " << std::endl;
 	};
 
-	inline
 void time_evolution::printWelcomeMessage()
 	{
 		std::cout << "WELCOME: This program will compute a table needed for expanding the correlation function in Chebyshev polynomialms" << std::endl;

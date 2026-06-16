@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <array>
+#include <sstream>
 
 #include "chebyshev_moments.hpp"
 #include "sparse_matrix.hpp"
@@ -50,6 +51,102 @@ namespace lsquant
 			"_state" + gen.StateLabel() + ".chebmom2D";
 		chebMoms.saveIn(outputfilename);
 		std::cout << "Saved moments in " << outputfilename << std::endl;
+		return 0;
+	}
+
+	int compute_spectral(const std::string& label, const std::string& op,
+	                     int num_moments, const std::string& state_file)
+	{
+		chebyshev::Moments1D chebMoms(num_moments);
+
+		const int NOPS = 2;
+		SparseMatrixType OP[NOPS];
+		OP[0].SetID("HAM");
+		OP[1].SetID(op);
+
+		SparseMatrixBuilder builder;
+		std::array<double,2> spectral_bounds;
+		for (int i = 0; i < NOPS; i++)
+			if (OP[i].isIdentity())
+				std::cout << "The operator " << OP[i].ID() << " is treated as the identity" << std::endl;
+			else
+			{
+				const std::string input = "operators/" + label + "." + OP[i].ID() + ".CSR";
+				builder.setSparseMatrix(&OP[i]);
+				builder.BuildOPFromCSRFile(input);
+				if (i == 0) // Hamiltonian: obtain the energy bounds automatically
+					spectral_bounds = chebyshev::utility::SpectralBounds(OP[0]);
+			}
+
+		chebMoms.SystemLabel(label);
+		chebMoms.BandWidth ( (spectral_bounds[1] - spectral_bounds[0]) * 1.0);
+		chebMoms.BandCenter( (spectral_bounds[1] + spectral_bounds[0]) * 0.5);
+		chebMoms.SetAndRescaleHamiltonian(OP[0]);
+		chebMoms.Print();
+
+		qstates::generator gen;
+		if (!state_file.empty())
+			gen = qstates::LoadStateFile(state_file);
+
+		chebyshev::SpectralMoments(OP[1], chebMoms, gen);
+
+		const std::string prefix = "SpectralOp" + OP[1].ID();
+		const std::string outputfilename =
+			prefix + label + "KPM_M" + std::to_string(num_moments) +
+			"_state" + gen.StateLabel() + ".chebmom1D";
+		std::cout << "Saving the moments in  " << outputfilename << std::endl;
+		chebMoms.saveIn(outputfilename);
+		return 0;
+	}
+
+	int compute_msd(const std::string& label, const std::string& vop,
+	                int num_moments, int num_times, double tmax, const std::string& state_file)
+	{
+		chebyshev::MomentsTD chebMoms(num_moments, num_times);
+
+		SparseMatrixType OP[2];
+		OP[0].SetID("HAM");
+		OP[1].SetID(vop);
+
+		SparseMatrixBuilder builder;
+		std::array<double,2> spectral_bounds;
+		for (int i = 0; i < 2; i++)
+			if (OP[i].isIdentity())
+				std::cout << "The operator " << OP[i].ID() << " is treated as the identity" << std::endl;
+			else
+			{
+				const std::string input = "operators/" + label + "." + OP[i].ID() + ".CSR";
+				builder.setSparseMatrix(&OP[i]);
+				builder.BuildOPFromCSRFile(input);
+				if (i == 0) // Hamiltonian: obtain the energy bounds automatically
+					spectral_bounds = chebyshev::utility::SpectralBounds(OP[0]);
+			}
+
+		chebMoms.SystemLabel(label);
+		chebMoms.BandWidth ( (spectral_bounds[1] - spectral_bounds[0]) * 1.0);
+		chebMoms.BandCenter( (spectral_bounds[1] + spectral_bounds[0]) * 0.5);
+		chebMoms.TimeDiff( tmax / (num_times - 1) );
+		chebMoms.SetAndRescaleHamiltonian(OP[0]);
+		chebMoms.SetAndRescaleConmuter(OP[1]);
+		chebMoms.Print();
+
+		qstates::generator gen;
+		if (!state_file.empty())
+			gen = qstates::LoadStateFile(state_file);
+
+		chebyshev::MeanSquareDisplacement(chebMoms, gen);
+
+		// Default-format tmax (20.0 -> "20", 0.5 -> "0.5") so the filename token matches the legacy
+		// argv string and the .chebmomTD name is preserved byte-for-byte.
+		std::ostringstream tmaxtok; tmaxtok << tmax;
+		std::string prefix = "Correlation" + OP[1].ID();
+		if (OP[1].isIdentity())
+			prefix = "Correlations" + OP[1].ID();
+		const std::string outputfilename =
+			prefix + label + "KPM_M" + std::to_string(num_moments) +
+			"_state" + tmaxtok.str() + gen.StateLabel() + ".chebmomTD";
+		std::cout << "Saving convergence data in " << outputfilename << std::endl;
+		chebMoms.saveIn(outputfilename);
 		return 0;
 	}
 }
