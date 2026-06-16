@@ -62,7 +62,11 @@ Run the time-dependent recursion to get the spreading moments, then reconstruct
 $\mathrm{MSD}(E,t)$ at a Fermi energy:
 
 ```bash
-inline_compute-kpm-MeanSquareDisplacement chain1d_dis_N512_W1 VX 256 128 600
+cat > run_msd.json <<'JSON'
+{ "mode": "msd", "label": "chain1d_dis_N512_W1", "operator": "VX",
+  "num_moments": 256, "num_times": 128, "tmax": 600 }
+JSON
+lsquant compute --config run_msd.json
 inline_timeCorrelationsFromChebmom Correlation*chain1d_dis_N512_W1*chebmomTD 10 0.0
 ```
 
