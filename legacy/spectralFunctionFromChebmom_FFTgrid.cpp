@@ -1,4 +1,6 @@
-
+// [LEGACY -- NOT BUILT] previous-working spectralFunctionFromChebmom_FFTgrid. Reference only.
+// Supported path: lsquant <cmd>  |  port + golden-gate before any reuse.
+		
 // C & C++ libraries
 #include <iostream>		/* for std::cout mostly */
 #include <string>		/* for std::string class */
@@ -28,59 +30,49 @@ int main(int argc, char *argv[])
 
 
 	//Read the chebyshev moments from the file
- 	chebyshev::Moments2D mu(argv[1]); 
+ 	chebyshev::Moments1D mu(argv[1]); 
 	//and apply the appropiated kernel
-	mu.ApplyJacksonKernel(broadening,broadening);
+		mu.ApplyJacksonKernel(broadening);
 
-	const int num_div = 30*mu.HighestMomentNumber();
+	const int num_div = mu.HighestMomentNumber();
 	
 	const double
 	xbound = chebyshev::safety_factors().recon_cutoff;
 		
 	std::vector< double >  energies(num_div,0);
-	for( int i=0; i < num_div; i++)
-		energies[i] = -xbound + i*(2*xbound)/(num_div-1) ;
-	
-	
+	for( int i=0; i < num_div; i++){
+	  energies[i] = cos( M_PI * ( i + 0.5 ) / num_div );// -xbound + i*(2*xbound)/(num_div-1) ; //
+	}
 
 
-
-	std::cout<<"Computing the KuboBastin kernel using "<<mu.HighestMomentNumber(0)<<" x "<<mu.HighestMomentNumber(1)<<" moments "<<std::endl;
-	std::cout<<"Integrated over a grid normalized grid  ("<<-xbound<<","<<xbound<<") in steps of "<<energies[1] - energies[0]<< std::endl;
+	std::cout<<"Computing the Spectral function using "<<mu.HighestMomentNumber()<<" moments "<<std::endl;
+	std::cout<<"Over a grid normalized grid  ("<<-xbound<<","<<xbound<<") in steps of "<<energies[1] - energies[0]<< std::endl;
 	std::cout<<"The first 10 moments are"<<std::endl;
-	for(int m0 =0 ; m0< 1; m0++ )
-	for(int m1 =0 ; m1< 10; m1++ )
-		std::cout<<mu(m0,m1).real()<<" "<<mu(m0,m1).imag()<<std::endl;
+	for(int m0 =0 ; m0< 10; m0++ )
+		std::cout<<mu(m0).real()<<" "<<mu(m0).imag()<<std::endl;
 	
 
 	std::string
-	outputName  ="KuboBastinI_"+mu.SystemLabel()+"JACKSON.dat";
+	outputName  ="mean"+mu.SystemLabel()+"JACKSON_FFTgrid.dat";
 
 	std::cout<<"Saving the data in "<<outputName<<std::endl;
 	std::cout<<"PARAMETERS: "<< mu.SystemSize()<<" "<<mu.HalfWidth()<<std::endl;
 	std::ofstream outputfile( outputName.c_str() );
 
-	std::vector<double> kernel(num_div,0.0);
+	std::vector<double> output(num_div,0.0);
 	#pragma omp parallel for
 	for( int i=0; i < num_div; i++)
 	{
-		double out = 0.0;
+		output[i] = 0;
 		const double energ = energies[i];
-		for( int m0 = 0 ; m0 < mu.HighestMomentNumber(0) ; m0++)
-		for( int m1 = 0 ; m1 < mu.HighestMomentNumber(1) ; m1++)
-			out += delta_chebF(energ,m0)*( greenR_chebF(energ,m1)*mu(m0,m1) ).imag() ;
-		
-		kernel[i] = -1.0*out*(mu.SystemSize()*mu.ScaleFactor()*mu.ScaleFactor() );
+		const double energ2 = energies[num_div-i-1];
+		for( int m0 = 0 ; m0 < mu.HighestMomentNumber() ; m0++)
+		  output[i] += delta_chebF(energ,m0)*mu(m0).real();//+delta_chebF(energ2,m0)*mu(m0).real())/2.0;
+		output[i] *= mu.SystemSize()/mu.HalfWidth();
 	}
 
-	double acc = 0;
-	for( int i=0; i < num_div-1; i++)
-	{
-		const double energ  = energies[i];
-		const double denerg = energies[i+1]-energies[i];
-		acc = 0.5*(kernel[i]+kernel[i+1]);
-		outputfile<<energ/mu.ScaleFactor() - mu.ShiftFactor() <<" "<<acc <<std::endl;
-	}
+	for( int i=0; i < num_div; i++)
+	  outputfile<<energies[i]*mu.HalfWidth() + mu.BandCenter() <<" "<< abs(output[i]) <<std::endl;
 
 	outputfile.close();
 
@@ -93,11 +85,11 @@ void printHelpMessage()
 {
 	std::cout << "The program should be called with the following options: moments_filename broadening(meV)" << std::endl
 			  << std::endl;
-	std::cout << "moments_filename will be used to look for .chebmom2D file" << std::endl;
+	std::cout << "moments_filename will be used to look for .chebmom1D file" << std::endl;
 	std::cout << "broadening in (meV) will define the broadening of the delta functions" << std::endl;
 };
 
 void printWelcomeMessage()
 {
-	std::cout << "WELCOME: This program will compute the chebyshev sum of the kubo-bastin formula for non equlibrium properties" << std::endl;
+	std::cout << "WELCOME: This program will compute the chebyshev sum of the spectral function" << std::endl;
 };

@@ -1,3 +1,5 @@
+// [LEGACY -- NOT BUILT] previous-working device-postProcess. Reference only.
+// Supported path: lsquant <cmd>  |  port + golden-gate before any reuse.
 #include <iostream>
 #include <fstream>
 #include <sstream>

@@ -1,3 +1,5 @@
+// [LEGACY -- NOT BUILT] previous-working inline_compute-kpm-GetDeltaPhi. Reference only.
+// Supported path: lsquant <cmd>  |  port + golden-gate before any reuse.
 // C & C++ libraries
 #include <iostream> /* for std::cout mostly */
 #include <string>   /* for std::string class */

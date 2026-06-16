@@ -1,3 +1,5 @@
+// [LEGACY -- NOT BUILT] previous-working kpm-nonOrth-precision-test. Reference only.
+// Supported path: lsquant <cmd>  |  port + golden-gate before any reuse.
 // C & C++ libraries
 #include <iostream> /* for std::cout mostly */
 #include <string>   /* for std::string class */
@@ -36,11 +38,12 @@ int main(int argc, char *argv[])
 	const int numMoms   = atoi(S_NMOM.c_str() );
 	chebyshev::Moments1D_nonOrth chebMoms( numMoms ); //load number of moments
 
-	const int NOPS = 3;
+	const int NOPS = 4;
 	SparseMatrixType OP[NOPS];
 	OP[0].SetID("HAM");
 	OP[1].SetID( S_OP );
 	OP[2].SetID( "S" );
+	OP[3].SetID( "orth_HAM" );
 	
 	// Build the operators from Files
 	SparseMatrixBuilder builder;
@@ -64,14 +67,21 @@ int main(int argc, char *argv[])
 	chebMoms.SystemLabel(LABEL);
 	chebMoms.BandWidth ( (spectral_bounds[1]-spectral_bounds[0])*1.0);
 	chebMoms.BandCenter( (spectral_bounds[1]+spectral_bounds[0])*0.5);
-	chebMoms.SetAndRescaleHamiltonian(OP[0]);
+
+
+
+        chebMoms.SetAndRescaleHamiltonian(OP[0]);
+
+	OP[0].Rescale( 1, -chebMoms.ShiftFactor() );
+
+	OP[3].Rescale( chebMoms.ScaleFactor(), chebMoms.ShiftFactor() );
 	chebMoms.Print();
 
 
 	//Compute the chebyshev expansion table
 	qstates::generator gen;
-	if( argc == 5)
-		gen  = qstates::LoadStateFile(argv[4]);
+	//if( argc == 6)
+	//   gen  = qstates::LoadStateFile(argv[5]);
 
 
 	gen.NumberOfStates(std::stoi(argv[4]));
@@ -79,9 +89,8 @@ int main(int argc, char *argv[])
 
 
 	chebMoms.set_S(OP[2]);
-	chebMoms.set_Preconditioner();
 	
-	chebyshev::SpectralMoments_nonOrth(OP[1],chebMoms, gen);
+	chebyshev::SpectralMoments_nonOrth_test(OP[1], OP[3], chebMoms, gen);
 
 	auto prefix="SpectralOp-nonOrth-"+OP[1].ID();
 	if( OP[1].isIdentity() )
