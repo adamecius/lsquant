@@ -206,6 +206,24 @@ add_test(NAME corrop_state_honored
 add_test(NAME fft_grid_regression
          COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/fft_grid_regression.sh ${CMAKE_BINARY_DIR})
 
+# --- Kubo-Bastin Sea/Surf reconstruction golden-gate (plan Step 0.5b) ------------
+# The Sea (Green-difference, cumulative) and Surf (double-delta, pointwise) drivers carry
+# INLINE reconstruction logic that is a different algebraic decomposition of Kubo-Bastin than
+# reconstruct_kubo -- so the unified-kernel goldens do not guard them. This pins both drivers by
+# byte-reproduction BEFORE the A2 migration folds them onto the shared A1 grid/integral/write
+# helpers (the kernels are deterministic across thread counts, so a byte diff is the gate).
+add_test(NAME sea_surf_regression
+         COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/sea_surf_regression.sh ${CMAKE_BINARY_DIR})
+
+# --- Jackson-kernel application golden-gate (plan Step 0.5c) ---------------------
+# Freezes Moments1D/2D::ApplyJacksonKernel output on a fixed all-ones moment table (no
+# reduction at this broadening) against independent literal golden coefficients. Guards B1
+# (single-source jackson_g) and B2 (base retype) against any damping-coefficient drift.
+add_executable(jackson_kernel_test jackson_kernel_test.cpp)
+target_include_directories(jackson_kernel_test PRIVATE ${CMAKE_SOURCE_DIR}/include)
+target_link_libraries(jackson_kernel_test PRIVATE kpm_lib)
+add_test(NAME jackson_kernel COMMAND jackson_kernel_test 1e-12)
+
 # --- Phase 6A wired contract ----------------------------------------------------
 # The core now routes through HamiltonianOp/MetricPolicy (no longer dormant scaffolding):
 # Moments::op() returns HamiltonianOp& and SparseHamiltonianOp is the live adapter (compile-time
