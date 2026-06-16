@@ -116,6 +116,7 @@ script that reproduces its figures, all driven through the `lsquant` interface:
 | 1 | [Density of states of a 1D chain](examples/01_dos_1d_chain) | KPM moments, the resolution dial, the finite-size revival |
 | 2 | [Localization on a disordered chain](examples/02_localization_1d_chain) | the localization length from mean-square displacement |
 | 3 | [Quantized Hall plateau of the Haldane model](examples/03_haldane_hall) | Kubo–Bastin $\sigma_{xy}$ and the Fermi-sea topological plateau |
+| 4 | [Spin precession in a magnetic chain](examples/04_spin_precession_magnetic_chain) | Larmor precession from real-time spin dynamics |
 
 Start with Tutorial 1; each reuses the previous chain.
 
