@@ -23,8 +23,10 @@ static int usage(const char* prog)
 	          << "  compute --config <run.json>\n"
 	          << "        compute Chebyshev moments for a run (mode: noneq|spectral|msd);\n"
 	          << "        writes NonEqOp*.chebmom2D / SpectralOp*.chebmom1D / Correlation*.chebmomTD\n"
-	          << "  reconstruct <moments.chebmom2D> <bastin|greenwood> <broadening_meV>\n"
-	          << "        reconstruct sigma(E) via the unified Kubo routine; writes Kubo*JACKSON.dat\n"
+	          << "  reconstruct <moments> <dos|bastin|greenwood> <broadening_meV>\n"
+	          << "        reconstruct a spectrum via the unified routine: dos reads a .chebmom1D\n"
+	          << "        and writes mean*JACKSON.dat; bastin/greenwood read a .chebmom2D and write\n"
+	          << "        Kubo*JACKSON.dat\n"
 	          << "  inspect <run.json | operator.desc>\n"
 	          << "        print a run / operator and its resolved numerical provenance\n";
 	return 2;
@@ -50,16 +52,38 @@ static int cmd_compute(int argc, char** argv)
 static int cmd_reconstruct(int argc, char** argv)
 {
 	if (argc != 5) { std::cerr << "usage: " << argv[0]
-		<< " reconstruct <moments.chebmom2D> <bastin|greenwood> <broadening_meV>\n"; return 2; }
+		<< " reconstruct <moments> <dos|bastin|greenwood> <broadening_meV>\n"; return 2; }
 	const std::string momfile = argv[2];
 	const std::string which   = argv[3];
 	const double broadening   = std::stod(argv[4]);
+
+	// DOS / spectral function: the 1-D density-grid route (mirrors the
+	// inline_spectralFunctionFromChebmom driver, byte-identical: same kernel, grid, prefactor
+	// N*ScaleFactor, and energy axis x/ScaleFactor + ShiftFactor).
+	if (which == "dos")
+	{
+		chebyshev::Moments1D mu(momfile.c_str());
+		mu.ApplyJacksonKernel(broadening);
+		const int num_div = 30 * mu.HighestMomentNumber();
+		std::vector<double> mu_real(mu.HighestMomentNumber());
+		for (int m = 0; m < mu.HighestMomentNumber(); ++m) mu_real[m] = mu(m).real();
+		const std::vector<std::pair<double,double> > grid =
+			lsquant::reconstruct_density_grid(mu_real, chebyshev::safety_factors().recon_cutoff, num_div);
+
+		const std::string outputName = "mean" + mu.SystemLabel() + "JACKSON.dat";
+		std::cout << "Saving the data in " << outputName << std::endl;
+		std::ofstream f(outputName.c_str());
+		for (size_t i = 0; i < grid.size(); ++i)
+			f << grid[i].first/mu.ScaleFactor() + mu.ShiftFactor()
+			  << " " << grid[i].second*( mu.SystemSize()*mu.ScaleFactor() ) << std::endl;
+		return 0;
+	}
 
 	const lsquant::KuboObservable* obs = 0;
 	std::string tag;
 	if      (which == "bastin")    { obs = &lsquant::KUBO_BASTIN;    tag = "KuboBastin_"; }
 	else if (which == "greenwood") { obs = &lsquant::KUBO_GREENWOOD; tag = "KuboGreenWood_"; }
-	else { std::cerr << "reconstruct: formula must be 'bastin' or 'greenwood'\n"; return 2; }
+	else { std::cerr << "reconstruct: formula must be 'dos', 'bastin' or 'greenwood'\n"; return 2; }
 
 	chebyshev::Moments2D mu(momfile.c_str());
 	mu.ApplyJacksonKernel(broadening, broadening);
