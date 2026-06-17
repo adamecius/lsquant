@@ -1,0 +1,24 @@
+# LSQUANT documentation toolchain (host-agnostic).
+#
+# The site is Doxygen-only today, so the real dependencies are SYSTEM packages,
+# not Python wheels. Both Read the Docs (.readthedocs.yaml) and the GitHub Pages
+# workflow (.github/workflows/docs.yml) install these the same way, so this file
+# stays the single, shared description of what the build needs:
+#
+#   System packages (apt):   doxygen  graphviz
+#       doxygen   >= 1.9   generates HTML + XML from the in-code Doxygen blocks
+#       graphviz  (dot)     renders the class / collaboration / include graphs
+#
+# No Python packages are required for the current Doxygen-only build, which is
+# why the list below is empty. When the planned Sphinx + Breathe + MyST + myst-nb
+# layer lands (it consumes the GENERATE_XML output this build already produces),
+# pin those wheels here, for example:
+#
+#   sphinx
+#   breathe
+#   myst-parser
+#   myst-nb
+#   furo            # or another Sphinx HTML theme
+#
+# To-do: add the Sphinx pins above only when that layer is actually introduced;
+# leaving them out keeps the Doxygen-only build reproducible and offline-safe.

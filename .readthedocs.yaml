@@ -1,0 +1,38 @@
+# Read the Docs build for the LSQUANT Doxygen site — PRIMARY host.
+#
+# RTD natively expects a Sphinx project; LSQUANT ships a Doxygen-only site today,
+# so we take full control with `build.commands`: configure the project with
+# -DBUILD_DOCS=ON, build the `docs` target (which only runs Doxygen — no source
+# is compiled), then copy the generated HTML into the directory RTD serves.
+#
+# Pitfall: the top-level CMakeLists always find_package()s Eigen/GSL/FFTW/OpenMP,
+# so those -dev packages must be installed for the configure step to succeed even
+# though we never build the numeric sources here.
+#
+# Warning: the served site must end up under "$READTHEDOCS_OUTPUT/html" or RTD
+# publishes nothing. The CMake docs target writes to build/docs/html; we copy it.
+#
+# To-do: when the planned Sphinx + Breathe + MyST layer lands (it consumes the
+# Doxygen XML this build already emits), switch this to the native `sphinx:` key
+# and move the doxygen step into Sphinx's pre-build, dropping the manual copy.
+version: 2
+
+build:
+  os: ubuntu-24.04
+  tools:
+    # Required to define the build environment; also ready for the future Sphinx layer.
+    python: "3.12"
+  apt_packages:
+    - cmake
+    - g++
+    - pkg-config
+    - doxygen
+    - graphviz
+    - libeigen3-dev
+    - libgsl-dev
+    - libfftw3-dev
+  commands:
+    - cmake -S . -B build -DBUILD_DOCS=ON -DLSQUANT_BUILD_INPUT_TOOLS=OFF -DBUILD_TESTING=OFF
+    - cmake --build build --target docs
+    - mkdir -p "$READTHEDOCS_OUTPUT/html"
+    - cp -a build/docs/html/. "$READTHEDOCS_OUTPUT/html/"
