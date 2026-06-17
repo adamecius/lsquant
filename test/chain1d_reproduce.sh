@@ -4,7 +4,7 @@
 #
 # The goldens are now computed by EXACT TRACE: a local-state set over the full basis
 # e_0..e_{D-1} makes SpectralMoments evaluate Sum_i <e_i|T_m|e_i>/D = Tr[T_m]/D exactly,
-# through LinQT's own Chebyshev kernel, with no random vector. So:
+# through LSQUANT's own Chebyshev kernel, with no random vector. So:
 #   (1) two runs are byte-identical (deterministic by construction), and
 #   (2) the fresh moments satisfy the analytic reference at MACHINE precision (TOL ~ 1e-9),
 #       checked by the C++ comparators (no Python). No byte-diff against the committed

@@ -77,10 +77,10 @@ ctest --test-dir build        # optional: 24 checks, all should pass
 
 Build options:
 
-- `-DLINQT_BUILD_INPUT_TOOLS=ON|OFF` (default **ON**) — fetch and build the
+- `-DLSQUANT_BUILD_INPUT_TOOLS=ON|OFF` (default **ON**) — fetch and build the
   pinned `wannier2sparse` used to generate the test fixtures; it clones at
   configure time and degrades gracefully offline.
-- `-DLINQT_BUILD_UTILITIES=ON|OFF` (default **OFF**) — build the Python helper
+- `-DLSQUANT_BUILD_UTILITIES=ON|OFF` (default **OFF**) — build the Python helper
   utilities.
 
 ## The `lsquant` interface

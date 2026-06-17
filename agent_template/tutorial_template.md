@@ -1,5 +1,5 @@
 <!--
-  LinQT tutorial template.
+  LSQUANT tutorial template.
   Copy this file to examples/NN_short_name/README.md and fill the [[ ... ]] slots.
   The <!-- ... --> comments are guidance for the author. They are HTML comments,
   so they stay invisible when the page renders on GitHub. Delete them or leave
@@ -114,7 +114,7 @@ subtlety the reader would otherwise get wrong, name it plainly here.]]
 
 ## References and links
 
-- LinQT source and documentation: https://github.com/adamecius/lsquant
+- LSQUANT source and documentation: https://github.com/adamecius/lsquant
 - Methodology: Z. Fan, J. H. García, A. W. Cummings et al., *Linear Scaling
   Quantum Transport Methodologies*, arXiv:1811.07387.
 - Installation: see the main README of the repository.

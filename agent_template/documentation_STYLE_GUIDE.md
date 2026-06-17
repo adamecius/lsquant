@@ -1,4 +1,4 @@
-# How to document LinQT code
+# How to document LSQUANT code
 
 This guide explains how to turn `DOCSTRING_TEMPLATE.md` into finished in-code
 documentation, and it is opinionated about voice on purpose, in the same spirit

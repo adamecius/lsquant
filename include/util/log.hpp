@@ -6,7 +6,7 @@
 // A thin, levelled, thread-safe logger. Call sites use the LSQ_LOG_* macros and
 // never include a backend header, so the implementation (currently an in-house,
 // zero-dependency, offline-safe sink set) can be swapped for spdlog later behind
-// LINQT_WITH_SPDLOG without touching a single call site.
+// LSQUANT_WITH_SPDLOG without touching a single call site.
 //
 //   LSQ_LOG_INFO("saved " << n << " moments to " << name);
 //   LSQ_LOG_WARN("non-Hermitian input, symmetrising");

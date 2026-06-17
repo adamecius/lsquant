@@ -66,7 +66,7 @@ so the row-parallel SpMV is bit-for-bit the serial result).
 - [ ] **Optional dependency accelerators.** The JSON reader and logger are
       in-house (offline-safe, hook-compliant). If desired, add
       `find_package(nlohmann_json)` / `find_package(spdlog)` as *optional*
-      accelerators behind the existing `LSQ_WITH_JSON` / `LINQT_WITH_SPDLOG`
+      accelerators behind the existing `LSQ_WITH_JSON` / `LSQUANT_WITH_SPDLOG`
       gates, keeping the in-house fallback (see `reporting_system.md` §5,
       `unified_io.md` §5).
 - [ ] **Plan-doc decision points.** Confirm the open D1–D5 / E1–E6 choices in

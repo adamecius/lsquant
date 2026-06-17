@@ -3,7 +3,7 @@
 #
 # The Haldane model (t1=-1, t2=0.15, phi=pi/2) is a Chern insulator: with the Fermi level
 # in the gap the Hall conductivity is quantized at sigma_xy = C*e^2/h with Chern C = +1.
-# This is LinQT's finite, quantized "conductance quantum" test and the end-to-end exercise
+# This is LSQUANT's finite, quantized "conductance quantum" test and the end-to-end exercise
 # of the Kubo-Bastin route (which is NaN-free only with the alpha safeguard, see
 # docs/spectral_scales.md).
 #
