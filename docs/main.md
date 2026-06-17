@@ -1,6 +1,6 @@
 # LSQUANT: A tool for linear quantum transport
 
-LSQUANT is a tools which allows performing quantum transport calculations in tight-binding models. LSQUANT possess interfaces with other tight-binding modelling packages such as **Wannier90,** or **KWANT** and Tbmodel. Its core is written in C++ and uses openMP and MPI for optimized calculations.
+LSQUANT is a tool for quantum transport calculations in tight-binding models. It provides interfaces with other tight-binding modelling packages such as **Wannier90**, **KWANT**, and **TBModels**. Its core is written in C++ and uses OpenMP for optimized calculations.
 
 LSQUANT allows for the following kind of calculations:
 

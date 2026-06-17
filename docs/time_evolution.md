@@ -11,7 +11,7 @@ where \f$H\f$ the hamiltonian of the system, \f$\hbar\f$ the Planck's constant, 
 |\Psi(t)\rangle = U(t)|\Psi\rangle
 \f]
 
-where \f$U(t)\equiv{\rm e}^{-i H t}\f$ an unitary operator known as time-evolution operator. Typically, the calculation of the exponential of an operator is not a trivial task. In LSQUANT we circumvent this problem by expanding it in terms of Chebyshev polynomials. Following the approach in [1], we first express the evolution operator in terms of the normalized hamiltonian \f$\tilde{H}\f$
+where \f$U(t)\equiv{\rm e}^{-i H t}\f$ a unitary operator known as time-evolution operator. Typically, the calculation of the exponential of an operator is not a trivial task. In LSQUANT we circumvent this problem by expanding it in terms of Chebyshev polynomials. Following the approach in [1], we first express the evolution operator in terms of the normalized hamiltonian \f$\tilde{H}\f$
 \f[
 U(t)={\rm e}^{-i \omega_c t} {\rm e}^{-i \omega \tilde{H}}\
 \f]
