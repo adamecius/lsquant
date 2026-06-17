@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""lsqloc - localization study on the 1D Anderson chain, over compiled LinQT.
+"""lsqloc - localization study on the 1D Anderson chain, over compiled LSQUANT.
 
 The heavy work stays in C++:
 
@@ -19,7 +19,7 @@ length xi(E). The relative size sqrt(MSD_plateau) follows the localization
 length, so its energy profile and its 1/W^2 scaling can be read directly; the
 overall prefactor is fixed once against the clean ballistic reference.
 
-Run from inside the example folder, after LinQT is built and installed
+Run from inside the example folder, after LSQUANT is built and installed
 (executables on PATH, or LSQUANT_BIN set to the build directory).
 """
 
@@ -50,7 +50,7 @@ def _bin(name):
     if found:
         return found
     raise FileNotFoundError(
-        f"could not find '{name}'. Build and install LinQT, or set LSQUANT_BIN.")
+        f"could not find '{name}'. Build and install LSQUANT, or set LSQUANT_BIN.")
 
 
 def msd_curve(N, W, energies, seed, M=256, num_times=128, tmax=600, broad=10):

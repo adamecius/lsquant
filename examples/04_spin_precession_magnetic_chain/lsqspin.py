@@ -24,7 +24,7 @@ import prl_style as prl
 
 LABEL = "chain1d_mag"
 M, NTIME, TMAX = 32, 96, 95.0     # moments, time steps, max time (fs)
-HBAR = 0.6582119624               # eV*fs (LinQT physical units)
+HBAR = 0.6582119624               # eV*fs (LSQUANT physical units)
 J_EX = 0.1                        # eV  (on-site exchange; Zeeman splitting 2*J_ex)
 
 

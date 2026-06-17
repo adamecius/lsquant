@@ -31,7 +31,7 @@ PHI = 1.5707963267948966                    # pi / 2
 
 def _write_desc(path):
     with open(path, "w") as f:
-        f.write("# LinQT operator descriptor (physical sidecar)\n")
+        f.write("# LSQUANT operator descriptor (physical sidecar)\n")
         f.write("schema: operator_descriptor/v1\n")
         f.write("observable: hamiltonian\n")
         f.write("component: scalar\n")

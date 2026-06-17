@@ -83,7 +83,7 @@ def _write_desc(path, label, N, W, seed, t=-1.0, csr_path=None):
         with open(csr_path, "rb") as fh:
             csr_hash = hashlib.sha256(fh.read()).hexdigest()[:16]
     with open(path, "w") as f:
-        f.write("# LinQT operator descriptor (physical sidecar)\n")
+        f.write("# LSQUANT operator descriptor (physical sidecar)\n")
         f.write("schema: operator_descriptor/v1\n")
         f.write("observable: hamiltonian\n")
         f.write("units: eV\n")

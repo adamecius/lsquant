@@ -110,7 +110,7 @@ the `α` safeguard (§2): the grid never touches the edge.
 
 ## 5. Time evolution and spin dynamics — the physical-ℏ convention
 
-Unlike the static spectral quantities above (natural units, e = ħ = 1), LinQT's **time
+Unlike the static spectral quantities above (natural units, e = ħ = 1), LSQUANT's **time
 evolution runs in physical units**:
 
     HBAR = 0.6582119624 eV·fs        # Planck constant, defined in chebyshev_moments.hpp

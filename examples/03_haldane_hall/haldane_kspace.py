@@ -8,7 +8,7 @@ gauge-invariant sum). It then sweeps the sublattice mass to show the topological
 transition: the Chern number jumps from a quantized value to zero when the gap
 closes at M = 3*sqrt(3)*t2*sin(phi).
 
-The real-space LinQT calculation (see lsqhall.py / README) reproduces the same
+The real-space LSQUANT calculation (see lsqhall.py / README) reproduces the same
 quantized number as a Hall conductivity plateau in the gap.
 
     python haldane_kspace.py

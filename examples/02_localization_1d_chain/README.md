@@ -144,7 +144,7 @@ topological band, where the same Chebyshev moments give a quantized Hall plateau
 
 ## References and links
 
-- LinQT source and documentation: https://github.com/adamecius/lsquant
+- LSQUANT source and documentation: https://github.com/adamecius/lsquant
 - Methodology: Z. Fan, J. H. García, A. W. Cummings et al., *Linear Scaling
   Quantum Transport Methodologies*, arXiv:1811.07387.
 - Installation: see the main README of the repository.

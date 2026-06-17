@@ -15,9 +15,9 @@ so the row-parallel SpMV is bit-for-bit the serial result).
 - [x] **Phase B** (`43055f5`) — implement `BatchMultiply` (block SpMM); new gate
       `spmm_batchmultiply_equiv` (R=1 bit-identical to `Multiply`).
 - [x] **Phase C** (NUMA) — `schedule(static)` + autonuma converge to NUMA-local; numactl
-      guidance in `docs/perf/PERF_ANALYSIS.md` (no first-touch refactor: Eigen/std::vector
+      guidance in `docs/performance/README.md` (no first-touch refactor: Eigen/std::vector
       own storage; autonuma covers steady state).
-- [x] **Phase F** (`b7f5945`) — graphene scaling benchmark (`bench/`), `docs/perf/PERF_ANALYSIS.md`,
+- [x] **Phase F** (`b7f5945`) — graphene scaling benchmark (`bench/`), `docs/performance/README.md`,
       README front-page "Performance & scaling" section. SpMV reaches ~65% of the 1-socket
       STREAM read roofline; cost linear in N.
 - [ ] **Optional W5** — threaded moment reductions (`vdot`) behind a default-OFF flag
