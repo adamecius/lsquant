@@ -223,16 +223,18 @@ pinned).
 
 ## Documentation
 
-- Physics notes under [`docs/`](docs/) (`main.md`, `time_evolution.md`,
-  `spinrelaxation.md`).
-- API reference via Doxygen: `cd docs && doxygen linqt.dox` writes `docs/html/`.
+- **Website:** [lsquant.org](https://lsquant.org).
+- **Full documentation** is hosted on Read the Docs (in progress); the sources are the
+  physics notes under [`docs/`](docs/) (`main.md`, `time_evolution.md`,
+  `spinrelaxation.md`, …) and the [performance study](docs/performance/README.md).
+- API reference via Doxygen: `cd docs && doxygen lsquant.dox` writes `docs/html/`.
 
 ## Repository layout
 
 | Path | Contents |
 |---|---|
 | `include/`, `src/` | KPM core library, the `lsquant` binary, and the legacy drivers |
-| `examples/` | the three worked tutorials and their figure scripts |
+| `examples/` | the six worked tutorials and their figure scripts |
 | `test/` | analytic-oracle and regression tests, golden masters |
 | `docs/` | physics pages and the Doxygen config |
 | `scripts/`, `cmake/` | golden regeneration; the `wannier2sparse` fetch module |

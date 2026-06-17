@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-siesta2linqt.py
+siesta2lsquant.py
 
 Reads a SIESTA .fdf file, builds a k-point grid of size kx × ky × 1,
 performs Löwdin orthogonalisation at each k-point, assembles the full
-supercell (block-diagonal) operators, and writes them as linqt .CSR files:
+supercell (block-diagonal) operators, and writes them as lsquant .CSR files:
 
     <prefix>.HAM   – Löwdin-orthogonalised Hamiltonian  H_ortho
     <prefix>.VX    – velocity operator V_x
@@ -26,7 +26,7 @@ This is numerically more stable than sqrtm(inv(S)).
 
 Usage
 -----
-    python siesta2linqt.py <fdf_file> <kx> <ky> [--prefix NAME]
+    python siesta2lsquant.py <fdf_file> <kx> <ky> [--prefix NAME]
                            [--kz KZ] [--no-vy] [--gauge GAUGE]
 
     fdf_file   path to SIESTA RUN.fdf (or equivalent)
@@ -52,12 +52,12 @@ from scipy.sparse import csr_matrix, coo_matrix, block_diag
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# CSR writer  (linqt format)
+# CSR writer  (lsquant format)
 # ─────────────────────────────────────────────────────────────────────────────
 
-def write_linqt_csr(mat, path: str):
+def write_lsquant_csr(mat, path: str):
     """
-    Write a scipy sparse matrix to a linqt .CSR text file.
+    Write a scipy sparse matrix to a lsquant .CSR text file.
 
     Format (4 lines):
         Ndim  nnz
@@ -217,7 +217,7 @@ def build_operators(H_source, kx: int, ky: int, kz: int, gauge: str):
 def main():
     parser = argparse.ArgumentParser(
         description="Löwdin-orthogonalise a SIESTA Hamiltonian and write "
-                    "H, Vx, Vy as linqt .CSR files."
+                    "H, Vx, Vy as lsquant .CSR files."
     )
     parser.add_argument("fdf_file",        help="Path to SIESTA .fdf file")
     parser.add_argument("kx",  type=int,   help="k-points along a1")
@@ -257,9 +257,9 @@ def main():
 
     # ── Write outputs ─────────────────────────────────────────────────────────
     print("\nWriting CSR files ...")
-    write_linqt_csr(H_blk,  f"{prefix}.HAM.CSR")
-    write_linqt_csr(Vx_blk, f"{prefix}.VX.CSR")
-    write_linqt_csr(Vy_blk, f"{prefix}.VY.CSR")
+    write_lsquant_csr(H_blk,  f"{prefix}.HAM.CSR")
+    write_lsquant_csr(Vx_blk, f"{prefix}.VX.CSR")
+    write_lsquant_csr(Vy_blk, f"{prefix}.VY.CSR")
 
     print("\nAll done.")
 

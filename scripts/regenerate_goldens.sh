@@ -70,7 +70,7 @@ bash "$REPO/test/dos_reconstructed.sh" "$BUILD"
 
 cd "$REPO"
 {
-  echo "graphene: KPM_SEED=$KPM_SEED w2s_sha=26cab4a linqt_head=$(git rev-parse HEAD) Nx=$NX Ny=$NY Nz=$NZ M=$M ops=VX,VX"
-  echo "chain1d:  KPM_SEED=$KPM_SEED w2s_sha=26cab4a linqt_head=$(git rev-parse HEAD) Nx=$CHAIN_NX Ny=1 Nz=1 M=$M bounds=[-2,2] KG=$CMOM(ops=VX,VX) DOS=$DMOM(op=1) ref=oracle:lsquant_chain_reference.py"
+  echo "graphene: KPM_SEED=$KPM_SEED w2s_sha=26cab4a lsquant_head=$(git rev-parse HEAD) Nx=$NX Ny=$NY Nz=$NZ M=$M ops=VX,VX"
+  echo "chain1d:  KPM_SEED=$KPM_SEED w2s_sha=26cab4a lsquant_head=$(git rev-parse HEAD) Nx=$CHAIN_NX Ny=1 Nz=1 M=$M bounds=[-2,2] KG=$CMOM(ops=VX,VX) DOS=$DMOM(op=1) ref=oracle:lsquant_chain_reference.py"
 } > GOLDEN_PROVENANCE.txt
 echo "Goldens regenerated: graphene ($MOM, KuboBastin), chain1d KG ($CMOM) + DOS ($DMOM) vs oracle."

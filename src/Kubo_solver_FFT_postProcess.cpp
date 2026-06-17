@@ -33,7 +33,7 @@ void Kubo_solver_FFT_postProcess::eta_CAP_correct(r_value_t E_points[], r_value_
 }
 
 
-void Kubo_solver_FFT_postProcess::integration_linqt(const r_value_t E_points[], const r_value_t integrand[], r_value_t data[]){
+void Kubo_solver_FFT_postProcess::integration_lsquant(const r_value_t E_points[], const r_value_t integrand[], r_value_t data[]){
 
   int nump = parent_solver_.nump();
 
@@ -206,8 +206,8 @@ void Kubo_solver_FFT_postProcess::Bastin_postProcess(const value_t final_data[],
 
   time_station time_integration;
       
-  integration_linqt(rearranged_E_points, rvec_integrand, rvec_partial_result);  
-  integration_linqt(rearranged_E_points, integrand, partial_result);    
+  integration_lsquant(rearranged_E_points, rvec_integrand, rvec_partial_result);  
+  integration_lsquant(rearranged_E_points, integrand, partial_result);    
 
   time_integration.stop("       Integration time:           ");
 
