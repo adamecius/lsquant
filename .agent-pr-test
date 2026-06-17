@@ -1,0 +1,5 @@
+# Agent PR capability test
+
+This file exists only to verify that the coding agent can push a branch and open a pull request.
+
+Safe to delete after confirming the workflow works.
