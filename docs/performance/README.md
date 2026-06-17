@@ -17,6 +17,10 @@ the `BatchMultiply` SpMM block kernel. The moment dot-products / AXPY are left
 **serial on purpose** (threading a cross-vector reduction changes summation order and
 would move the byte-exact goldens).
 
+![SpMV and full-DOS-recursion time vs thread count for a 2M-site complex graphene Hamiltonian; the SpMV scales ~31x to 256 threads, the full recursion ~10x (the serial moment reductions are the Amdahl floor)](fig_scaling_threads.png)
+
+![SpMV matrix-stream bandwidth vs thread count against the measured 1- and 2-socket STREAM read rooflines; the kernel reaches ~65% of the single-socket roofline](fig_roofline.png)
+
 ## System
 
 Graphene (honeycomb, 2-atom basis), nearest-neighbour `t1 = −2.7 eV` plus a complex
@@ -64,7 +68,8 @@ SpMV without matrix reordering.
 (large N). Mid-size points (N ≈ 0.5–0.8 M) report >100 % of the DRAM roofline because
 the ~150–250 MB matrix is partly **L3-cache-served** there (served faster than DRAM) —
 the same cache-vs-DRAM crossover the in-cache control showed in `perf/`. Beyond L3 the
-curve is firmly linear and DRAM-bound. See `fig_scaling_size`.
+curve is firmly linear and DRAM-bound (regenerate the size-scaling figure with
+`bench/run_graphene_scaling.sh` + `bench/plot_graphene_scaling.py`).
 
 ## NUMA policy (Phase C)
 

@@ -1,4 +1,4 @@
-"""prl_style - APS/PRL publication style for LinQT matplotlib figures.
+"""prl_style - APS/PRL publication style for LSQUANT matplotlib figures.
 
 Publication figures, not slides. The rules below are split into HARD specs (APS
 "Information for Contributors", invariant across PRL/PRB/PRA/PRE) and the one

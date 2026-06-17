@@ -13,7 +13,7 @@ S( t) = {\rm Tr}\left[ \rho\frac{s(t)}{\Omega} \right],
 \f]
 where $\f\rho\f$ the density matrix, \f$s(t)=U^\dagger(t) s U(t)\f$ the time evolved spin operator, with \f$s\f$ its static representation in the Schrodinger picture and \f$U(t)\f$ the time-evolution operator. 
 
-In LinQT we deal with tight-binding models of solids described by a time-independent Hamiltonian. Therefore, the evolution operator can be written simply as \f$U(t) = {\rm e}^{-i H t/\hbar}\f$, and the density matrix depends on the Fermi energy \f$\varepsilon_{\rm F}\f$. To compute the evolution of the spin density, we follow the approach done by [Cummings et. al][1], in which the density matrix takes the following form
+In LSQUANT we deal with tight-binding models of solids described by a time-independent Hamiltonian. Therefore, the evolution operator can be written simply as \f$U(t) = {\rm e}^{-i H t/\hbar}\f$, and the density matrix depends on the Fermi energy \f$\varepsilon_{\rm F}\f$. To compute the evolution of the spin density, we follow the approach done by [Cummings et. al][1], in which the density matrix takes the following form
 
 \f[
 \rho(\varepsilon_{\rm F}) = \frac{ P \delta(H-\varepsilon_{\rm F}) P }{ {\rm Tr}[\delta(H-\varepsilon_{\rm F})] }

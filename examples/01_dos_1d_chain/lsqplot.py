@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""lsqplot - a thin Python layer over the compiled LinQT kernels.
+"""lsqplot - a thin Python layer over the compiled LSQUANT kernels.
 
 The heavy work stays in C++. Python orchestrates runs, reads the light moment
 files, and plots. It drives the modern unified `lsquant` entry points:
@@ -42,7 +42,7 @@ import prl_style as prl
 # locate and call the compiled kernels
 # ----------------------------------------------------------------------
 def _bin(name):
-    """Resolve a LinQT executable from LSQUANT_BIN or the PATH.
+    """Resolve a LSQUANT executable from LSQUANT_BIN or the PATH.
 
     The build-dir target names carry an 'inline_' prefix for the *FromChebmom drivers
     (e.g. inline_spectralFunctionFromChebmom); an install may expose them without it. Try the
@@ -61,7 +61,7 @@ def _bin(name):
         if found:
             return found
     raise FileNotFoundError(
-        f"could not find '{name}' (tried {candidates}). Build LinQT and set LSQUANT_BIN "
+        f"could not find '{name}' (tried {candidates}). Build LSQUANT and set LSQUANT_BIN "
         f"to the directory that holds the executables."
     )
 

@@ -7,7 +7,7 @@ draw its density of states as a smooth curve, as if energy came in a continuum.
 Where does the smooth curve come from, and what did we throw away to get it?
 
 That gap between a finite spectrum and a smooth density is the finite-size
-problem, and it sits underneath every large-scale calculation LinQT does. Here we
+problem, and it sits underneath every large-scale calculation LSQUANT does. Here we
 watch it appear on the 1D chain and watch the kernel polynomial method (KPM) tame
 it with a single dial: the number of Chebyshev moments we keep. The lesson here is
 the one that returns in every later tutorial, that the moment count is the
@@ -180,7 +180,7 @@ length.
 
 ## References and links
 
-- LinQT source and documentation: https://github.com/adamecius/lsquant
+- LSQUANT source and documentation: https://github.com/adamecius/lsquant
 - Methodology: Z. Fan, J. H. García, A. W. Cummings et al., *Linear Scaling
   Quantum Transport Methodologies*, arXiv:1811.07387.
 - Installation: see the main README of the repository.
