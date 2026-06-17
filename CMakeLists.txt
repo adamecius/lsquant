@@ -26,6 +26,8 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 # --- Options -----------------------------------------------------------------
 option(LSQUANT_BUILD_UTILITIES   "Build the Python helper utilities" OFF)
 option(LSQUANT_BUILD_INPUT_TOOLS "Fetch + build the external wannier2sparse for tests" ON)
+# OFF by default: normal builds and the test suite never touch Doxygen/Graphviz.
+option(BUILD_DOCS                "Build the Doxygen documentation (needs doxygen + graphviz)" OFF)
 
 # --- Dependencies ------------------------------------------------------------
 # Eigen3: prefer a real config-package (Eigen3::Eigen); fall back to a header dir.
@@ -79,4 +81,9 @@ endif()
 include(CTest)
 if(BUILD_TESTING AND EXISTS "${PROJECT_SOURCE_DIR}/test/CMakeLists.txt")
     add_subdirectory(test)
+endif()
+
+# Documentation (opt-in; OFF by default so it never affects normal builds/tests).
+if(BUILD_DOCS)
+    add_subdirectory(docs)
 endif()

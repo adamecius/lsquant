@@ -5,6 +5,7 @@ build/
 .projectile
 .cache/
 .venv/
+.venv-docs/
 __pycache__/
 
 # build artifacts

@@ -1,0 +1,64 @@
+# GitHub Pages build for the LSQUANT Doxygen site — BACKUP host.
+#
+# Read the Docs (.readthedocs.yaml) is the primary host; this workflow is the
+# fallback so the documentation stays reproducible from CI alone. It mirrors the
+# RTD recipe: install the toolchain, configure with -DBUILD_DOCS=ON, build the
+# `docs` target (Doxygen only — no source is compiled), and publish the HTML via
+# the Pages artifact actions.
+#
+# Pitfall: the configure step needs Eigen/GSL/FFTW/-dev packages because the
+# top-level CMakeLists find_package()s them, even though we never build src here.
+#
+# Warning: enabling this requires "Pages > Build and deployment > Source =
+# GitHub Actions" in the repository settings; otherwise deploy-pages fails.
+name: docs
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One in-flight Pages deployment at a time.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Doxygen toolchain and configure dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            cmake g++ pkg-config doxygen graphviz \
+            libeigen3-dev libgsl-dev libfftw3-dev
+
+      - name: Build documentation (HTML + XML)
+        run: |
+          cmake -S . -B build -DBUILD_DOCS=ON \
+            -DLSQUANT_BUILD_INPUT_TOOLS=OFF -DBUILD_TESTING=OFF
+          cmake --build build --target docs
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/docs/html
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

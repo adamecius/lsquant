@@ -1,0 +1,133 @@
+# Doxyfile.in — LSQUANT API + narrative documentation (CMake-configured).
+#
+# This is a curated Doxyfile, not the 100+ KB dump a fresh `doxygen -g` emits:
+# only the tags whose values matter for LSQUANT are set here, and Doxygen fills
+# every omitted tag with its built-in default. The @VARIABLE@ slots are resolved
+# by configure_file() in docs/CMakeLists.txt, so the single source of truth for
+# the project name and version is the top-level CMake project(), never a literal
+# pinned in this file (that literal was the historic drift: Doxyfile said 1.0
+# while CMake said 2.0.0).
+#
+# Pitfall: INPUT and USE_MDFILE_AS_MAINPAGE are configured as ABSOLUTE paths so
+# the build works regardless of the directory Doxygen is invoked from (the CMake
+# target runs it from the build tree, not from docs/). Do not reintroduce the
+# relative `../include ../src` form.
+#
+# Warning: nothing here writes into the source tree. OUTPUT_DIRECTORY is the
+# CMake binary dir; HTML, XML and the warning log all land under build/docs.
+#
+# To-do: a future Sphinx + Breathe + MyST layer consumes GENERATE_XML output;
+# keep XML on so that remains an increment, not a rewrite.
+
+#---------------------------------------------------------------------------
+# Project
+#---------------------------------------------------------------------------
+DOXYFILE_ENCODING      = UTF-8
+PROJECT_NAME           = "@DOXYGEN_PROJECT_NAME@"
+PROJECT_NUMBER         = "@DOXYGEN_PROJECT_NUMBER@"
+PROJECT_BRIEF          = "A package for linear quantum transport"
+PROJECT_LOGO           =
+OUTPUT_DIRECTORY       = @DOXYGEN_OUTPUT_DIR@
+CREATE_SUBDIRS         = NO
+ALLOW_UNICODE_NAMES    = NO
+OUTPUT_LANGUAGE        = English
+BRIEF_MEMBER_DESC      = YES
+REPEAT_BRIEF           = YES
+FULL_PATH_NAMES        = YES
+STRIP_FROM_PATH        = @DOXYGEN_STRIP_FROM_PATH@
+TAB_SIZE               = 4
+MARKDOWN_SUPPORT       = YES
+AUTOLINK_SUPPORT       = YES
+
+# First-class @pitfall alias so the in-code convention (documentation_incode.md)
+# renders as its own labelled block, matching @warning / @todo.
+ALIASES                = "pitfall=@par Pitfall:\n"
+
+#---------------------------------------------------------------------------
+# Build / extraction
+#---------------------------------------------------------------------------
+# EXTRACT_ALL keeps the API reference complete while in-code Doxygen coverage is
+# still being filled in (that drift is reported, not fixed, by the docs task).
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = NO
+EXTRACT_STATIC         = YES
+EXTRACT_LOCAL_CLASSES  = YES
+HIDE_UNDOC_MEMBERS     = NO
+CASE_SENSE_NAMES       = YES
+SORT_MEMBER_DOCS       = YES
+GENERATE_TODOLIST      = YES
+GENERATE_BUGLIST       = YES
+
+#---------------------------------------------------------------------------
+# Warnings — surfaced, counted, not fatal
+#---------------------------------------------------------------------------
+QUIET                  = YES
+WARNINGS               = YES
+WARN_IF_UNDOCUMENTED   = YES
+WARN_IF_DOC_ERROR      = YES
+WARN_NO_PARAMDOC       = NO
+# Not fatal: the docs build must not fail on pre-existing in-code doc gaps.
+WARN_AS_ERROR          = NO
+WARN_LOGFILE           = @DOXYGEN_WARN_LOGFILE@
+
+#---------------------------------------------------------------------------
+# Input
+#---------------------------------------------------------------------------
+INPUT                  = @DOXYGEN_INPUT@
+INPUT_ENCODING         = UTF-8
+FILE_PATTERNS          = *.c *.cc *.cpp *.cxx *.h *.hh *.hpp *.hxx *.md
+RECURSIVE              = YES
+EXCLUDE_SYMLINKS       = NO
+EXAMPLE_PATH           = @DOXYGEN_EXAMPLE_PATH@
+EXAMPLE_RECURSIVE      = YES
+IMAGE_PATH             = @DOXYGEN_IMAGE_PATH@
+USE_MDFILE_AS_MAINPAGE = @DOXYGEN_MAINPAGE@
+
+#---------------------------------------------------------------------------
+# HTML output
+#---------------------------------------------------------------------------
+GENERATE_HTML          = YES
+HTML_OUTPUT            = html
+HTML_FILE_EXTENSION    = .html
+GENERATE_TREEVIEW      = YES
+DISABLE_INDEX          = NO
+SEARCHENGINE           = YES
+
+#---------------------------------------------------------------------------
+# XML output — kept ON for a future Sphinx/Breathe layer
+#---------------------------------------------------------------------------
+GENERATE_XML           = YES
+XML_OUTPUT             = xml
+XML_PROGRAMLISTING     = YES
+
+#---------------------------------------------------------------------------
+# Outputs we do not want
+#---------------------------------------------------------------------------
+GENERATE_LATEX         = NO
+GENERATE_RTF           = NO
+GENERATE_MAN           = NO
+GENERATE_DOCBOOK       = NO
+
+#---------------------------------------------------------------------------
+# Preprocessor
+#---------------------------------------------------------------------------
+ENABLE_PREPROCESSING   = YES
+MACRO_EXPANSION        = NO
+SEARCH_INCLUDES        = YES
+
+#---------------------------------------------------------------------------
+# Dot / Graphviz — call/collaboration graphs (requires graphviz at build time)
+#---------------------------------------------------------------------------
+HAVE_DOT               = @DOXYGEN_HAVE_DOT@
+DOT_PATH               = @DOXYGEN_DOT_PATH@
+DOT_NUM_THREADS        = 0
+CLASS_GRAPH            = YES
+COLLABORATION_GRAPH    = YES
+INCLUDE_GRAPH          = YES
+INCLUDED_BY_GRAPH      = YES
+CALL_GRAPH             = NO
+CALLER_GRAPH           = NO
+DOT_IMAGE_FORMAT       = svg
+INTERACTIVE_SVG        = YES
+DOT_GRAPH_MAX_NODES    = 50
+DOT_CLEANUP            = YES
