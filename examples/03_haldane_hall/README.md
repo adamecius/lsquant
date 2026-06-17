@@ -120,11 +120,16 @@ Fermi-sea and Fermi-surface parts, and the longitudinal conductivity:
 
 ```bash
 lsquant reconstruct NonEqOpVX-VYhaldane*.chebmom2D bastin 10        # sigma_xy total
-inline_kuboBastinSeaFromChebmom  NonEqOpVX-VYhaldane*.chebmom2D 10  # Fermi sea
-inline_kuboBastinSurfFromChebmom NonEqOpVX-VYhaldane*.chebmom2D 10  # Fermi surface
+inline_kuboBastinSeaFromChebmom  NonEqOpVX-VYhaldane*.chebmom2D 10  # Fermi sea   (soon: reconstruct … bastin-sea)
+inline_kuboBastinSurfFromChebmom NonEqOpVX-VYhaldane*.chebmom2D 10  # Fermi surface (soon: reconstruct … bastin-surf)
 lsquant reconstruct NonEqOpVX-VXhaldane*.chebmom2D greenwood 10     # sigma_xx
 python lsqhall.py
 ```
+
+> **Entry points.** The total $\sigma_{xy}$ and $\sigma_{xx}$ use the modern
+> `lsquant reconstruct … bastin|greenwood`. The Fermi-sea/Fermi-surface *split*
+> still uses the `inline_kuboBastinSea/SurfFromChebmom` drivers; a unified
+> `lsquant reconstruct` sea/surface option is planned.
 
 ![The Hall conductivity is a flat plateau at one e^2/h through the gap carried entirely by the Fermi sea, while the longitudinal conductivity is zero in the gap and finite in the bands](fig_haldane_hall.png)
 
