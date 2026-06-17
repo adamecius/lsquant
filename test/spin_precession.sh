@@ -3,7 +3,7 @@
 #
 # The magnetic chain is a constant Zeeman field H = H_hop - J_ex*sigma_z (J_ex=0.1). A spin
 # prepared along +x precesses in the x-y plane at the Larmor frequency set by the Zeeman
-# splitting 2*J_ex. In LinQT's PHYSICAL units (hbar = 0.6582119624 eV*fs, time in fs):
+# splitting 2*J_ex. In LSQUANT's PHYSICAL units (hbar = 0.6582119624 eV*fs, time in fs):
 #
 #     <S_x(t)> =  cos(omega t),  <S_y(t)> = -sin(omega t),  <S_z(t)> = 0,
 #     omega = 2*J_ex/hbar = 0.2/0.6582119624 = 0.30385 rad/fs   (period 20.68 fs),

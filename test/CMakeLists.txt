@@ -1,4 +1,4 @@
-# Golden-master harness for LinQT.
+# Golden-master harness for LSQUANT.
 #
 # Goldens (committed under test/golden/) are produced by the reference pipeline
 # external wannier2sparse -> inline_compute-kpm-nonEqOp -> inline_kuboBastinFromChebmom,
@@ -18,10 +18,10 @@ add_dependencies(regenerate-goldens
     inline_compute-kpm-nonEqOp inline_kuboBastinFromChebmom)
 
 # First-build bootstrap: generate goldens as part of ALL when they are absent
-# (or forced via -DLINQT_REGEN_GOLDENS=ON) AND the external input tool is enabled.
+# (or forced via -DLSQUANT_REGEN_GOLDENS=ON) AND the external input tool is enabled.
 # The EXISTS check is evaluated at configure time, so committed goldens make this
 # a no-op on subsequent configures (idempotent).
-if(LINQT_BUILD_INPUT_TOOLS AND (LINQT_REGEN_GOLDENS OR NOT EXISTS ${GOLDEN_STAMP}))
+if(LSQUANT_BUILD_INPUT_TOOLS AND (LSQUANT_REGEN_GOLDENS OR NOT EXISTS ${GOLDEN_STAMP}))
     add_custom_target(bootstrap-goldens ALL
         COMMAND bash ${REGEN_SCRIPT} ${CMAKE_BINARY_DIR}
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
@@ -115,7 +115,7 @@ add_test(NAME msd_ballistic
 # The Haldane Chern insulator (t1=-1,t2=0.15,phi=pi/2; 16x16) has a quantized Hall
 # plateau in the gap: sigma_xy = C*e^2/h with C=+1. Regenerates VX-VY moments by exact
 # trace from the committed operators, reconstructs Kubo-Bastin (NaN-free via alpha), and
-# asserts (plateau/A)*2pi = +1 within finite-size tolerance. This is LinQT's quantized
+# asserts (plateau/A)*2pi = +1 within finite-size tolerance. This is LSQUANT's quantized
 # "conductance quantum" test. Reference = the topological invariant (oracle), not a run.
 set(HALL_M 128)         # 8s exact-trace; C=+1.017 at this M (1.7% finite-M error)
 set(HALL_TOL 0.05)
@@ -126,7 +126,7 @@ add_test(NAME hall_haldane
 # A +x-polarised spin in the Zeeman field H_hop - J_ex*sigma_z precesses:
 # <S(t)> = cos(wt)x - sin(wt)y, S_z=0, w = 2*J_ex/hbar (physical hbar=0.6582 eV*fs;
 # period 20.68 fs), E_F-independent. Density projection path, exact trace -> machine
-# precision. Validates LinQT's time-evolution + spin-projection machinery end-to-end.
+# precision. Validates LSQUANT's time-evolution + spin-projection machinery end-to-end.
 set(PREC_M 32)
 add_test(NAME spin_precession
          COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/spin_precession.sh ${CMAKE_BINARY_DIR} ${PREC_M})

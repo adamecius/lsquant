@@ -1,4 +1,4 @@
-# How to write a LinQT tutorial
+# How to write a LSQUANT tutorial
 
 This guide explains how to turn `TEMPLATE.md` into a finished tutorial, and it
 is opinionated about voice on purpose. Tutorial 1 (`examples/01_dos_1d_chain`)
@@ -108,7 +108,7 @@ Every tutorial ends with the same footer, nothing more by default:
 ```markdown
 ## References and links
 
-- LinQT source and documentation: https://github.com/adamecius/lsquant
+- LSQUANT source and documentation: https://github.com/adamecius/lsquant
 - Methodology: Z. Fan, J. H. García, A. W. Cummings et al., *Linear Scaling
   Quantum Transport Methodologies*, arXiv:1811.07387.
 - Installation: see the main README of the repository.

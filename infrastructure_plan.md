@@ -84,14 +84,14 @@ pinned `FetchContent` (offline-graceful, like `cmake/FetchWannier2Sparse.cmake`)
 
 | Need | Pick | Mode | CMake gate |
 |---|---|---|---|
-| Logging | **spdlog** (`libspdlog-dev`) | find → fetch → in-house fallback | `LINQT_WITH_SPDLOG` (ON) |
+| Logging | **spdlog** (`libspdlog-dev`) | find → fetch → in-house fallback | `LSQUANT_WITH_SPDLOG` (ON) |
 | Error vocab | **tl::expected** (C++11 backport of `std::expected`) | vendored header | — |
 | JSON parse/emit | **nlohmann/json** (`nlohmann-json3-dev`) | find → fetch → vendored header | `LSQ_WITH_JSON` |
-| Schema validation | **pboettch/json-schema-validator** | find → fetch → semantic-only fallback | `LINQT_WITH_JSON_SCHEMA` (ON) |
+| Schema validation | **pboettch/json-schema-validator** | find → fetch → semantic-only fallback | `LSQUANT_WITH_JSON_SCHEMA` (ON) |
 | Fingerprint hash | **picosha2** (SHA-256) | vendored header | — |
-| Deep profiling (later) | **Tracy** | opt-in | `LINQT_WITH_TRACY` (OFF) |
-| HW counters (later) | **PAPI** / `perf_event_open` | opt-in | `LINQT_WITH_PAPI` (OFF) |
-| Plots/HTML (Python) | **Plotly** + numpy | `requirements.txt` | `LINQT_BUILD_UTILITIES` |
+| Deep profiling (later) | **Tracy** | opt-in | `LSQUANT_WITH_TRACY` (OFF) |
+| HW counters (later) | **PAPI** / `perf_event_open` | opt-in | `LSQUANT_WITH_PAPI` (OFF) |
+| Plots/HTML (Python) | **Plotly** + numpy | `requirements.txt` | `LSQUANT_BUILD_UTILITIES` |
 
 In-house (no good tiny cross-platform dep exists): the resource probe interface +
 Linux backend, the scoped timers, and the domain-specific **physics merge**

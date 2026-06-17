@@ -71,7 +71,7 @@ target_link_libraries(kpm_lib PUBLIC
 # *FromChebmom drivers are still built individually here; collapsing them into a
 # single parametrised driver is a separate source-level refactor (Plan 2), not a
 # build-file change.
-set(LINQT_APPS
+set(LSQUANT_APPS
     "inline_compute-kpm-nonEqOp|inline_compute-kpm-nonEqOp.cpp"
     "inline_compute-kpm-CorrOp|inline_compute-kpm-CorrOp.cpp"
     "inline_compute-kpm-spectralOp|inline_compute-kpm-spectralOp.cpp"
@@ -108,7 +108,7 @@ set(LINQT_APPS
     "lsquant|lsquant.cpp"
 )
 
-foreach(entry IN LISTS LINQT_APPS)
+foreach(entry IN LISTS LSQUANT_APPS)
     string(REPLACE "|" ";" parts "${entry}")
     list(GET parts 0 app_name)
     list(GET parts 1 app_src)
