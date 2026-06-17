@@ -66,9 +66,13 @@ each spin component over a 95 fs window, about four and a half precession period
 
 ```bash
 for OP in SX SY SZ; do
-  inline_compute-kpm-TimeEvProjetedOp chain1d_mag $OP PX 32 96 95 exact
+  inline_compute-kpm-TimeEvProjetedOp chain1d_mag $OP PX 32 96 95 exact   # (soon: a unified `lsquant compute` time-evolution mode)
 done
 ```
+
+> **Entry points.** Projected real-time evolution has no `lsquant compute` mode
+> yet, so this tutorial uses the `inline_compute-kpm-TimeEvProjetedOp` driver; a
+> unified time-evolution verb is planned and will replace it.
 
 This realises $|\phi(t)\rangle = U(t)\,P_x|\phi_r\rangle$ and records
 $\langle\phi(t)|S_\alpha|\phi(t)\rangle$ over 96 time steps with 32 Chebyshev

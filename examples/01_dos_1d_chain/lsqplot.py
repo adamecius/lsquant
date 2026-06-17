@@ -2,12 +2,16 @@
 """lsqplot - a thin Python layer over the compiled LinQT kernels.
 
 The heavy work stays in C++. Python orchestrates runs, reads the light moment
-files, and plots. Two compiled programs are wrapped:
+files, and plots. It drives the modern unified `lsquant` entry points:
 
-    inline_compute-kpm-spectralOp   computes the Chebyshev moments mu_m (the
-                                    expensive Hamiltonian recursion, threaded)
-    spectralFunctionFromChebmom     performs the reconstruction sum
-                                    rho(E) = sum_m g_m mu_m T_m(E) (threaded)
+    lsquant compute --config <json>   computes the Chebyshev moments mu_m (mode
+                                      spectral; the threaded Hamiltonian recursion)
+    lsquant reconstruct <m> dos <eta> performs the reconstruction sum
+                                      rho(E) = sum_m g_m mu_m T_m(E)
+
+(Both are byte-identical to the older inline_compute-kpm-spectralOp /
+spectralFunctionFromChebmom drivers -- guarded by the config_equivalence test --
+but the `lsquant compute|reconstruct` verbs are the supported surface.)
 
 The reconstruction sum runs over a fine energy grid and every moment, so it is
 left in C++. Python reads its small text output and draws the figure. Reading
@@ -25,6 +29,7 @@ import glob
 import shutil
 import tempfile
 import subprocess
+import json
 
 import numpy as np
 
@@ -80,12 +85,16 @@ def compute_moments(label, M, statefile):
     Operator label 1 selects the identity, so the spectral function is the
     density of states.
     """
-    state_abs = os.path.abspath(statefile)
     with tempfile.TemporaryDirectory() as wd:
         _stage(wd, label)
         shutil.copy(statefile, os.path.join(wd, os.path.basename(statefile)))
-        _run_in(wd, [_bin("inline_compute-kpm-spectralOp"),
-                     label, "1", str(M), os.path.basename(statefile)])
+        # Modern entry point: `lsquant compute` (mode spectral, operator 1 = identity).
+        # Byte-identical to the legacy `inline_compute-kpm-spectralOp` (guarded by the
+        # config_equivalence test); the "state" field is the trace state-vector file.
+        with open(os.path.join(wd, "run_dos.json"), "w") as cfg:
+            json.dump({"mode": "spectral", "label": label, "operator": "1",
+                       "num_moments": M, "state": os.path.basename(statefile)}, cfg)
+        _run_in(wd, [_bin("lsquant"), "compute", "--config", "run_dos.json"])
         produced = sorted(glob.glob(os.path.join(wd, "SpectralOp1*.chebmom1D")))
         if not produced:
             raise RuntimeError(f"no moments produced for {label}")
@@ -121,8 +130,10 @@ def reconstruct_dos(chebmom_path, broadening_meV):
     size = read_moments(chebmom_path)["size"]
     with tempfile.TemporaryDirectory() as wd:
         shutil.copy(cheb_abs, os.path.join(wd, os.path.basename(cheb_abs)))
-        _run_in(wd, [_bin("spectralFunctionFromChebmom"),
-                     os.path.basename(cheb_abs), str(broadening_meV)])
+        # Modern entry point: `lsquant reconstruct <moments> dos <broadening>`.
+        # Byte-identical to the legacy `spectralFunctionFromChebmom` (same kernel).
+        _run_in(wd, [_bin("lsquant"), "reconstruct",
+                     os.path.basename(cheb_abs), "dos", str(broadening_meV)])
         produced = sorted(glob.glob(os.path.join(wd, "mean*JACKSON.dat")))
         if not produced:
             raise RuntimeError("reconstruction produced no output")

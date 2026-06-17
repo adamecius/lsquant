@@ -72,8 +72,12 @@ cat > run_msd.json <<'JSON'
   "num_moments": 256, "num_times": 128, "tmax": 600 }
 JSON
 lsquant compute --config run_msd.json
-inline_timeCorrelationsFromChebmom Correlation*chain1d_dis_N512_W1*chebmomTD 10 0.0
+inline_timeCorrelationsFromChebmom Correlation*chain1d_dis_N512_W1*chebmomTD 10 0.0   # (soon: a unified `lsquant reconstruct … msd` verb)
 ```
+
+> **Entry points.** The moments use the modern `lsquant compute`. The time-domain
+> reconstruction still uses `inline_timeCorrelationsFromChebmom`; a unified
+> `lsquant reconstruct … ` time-domain verb is planned and will replace it.
 
 This evaluates the velocity-velocity correlation over $128$ time steps out to
 $t = 600$ and writes a time-dependent moment file, then a two-column curve of
