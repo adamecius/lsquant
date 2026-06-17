@@ -130,6 +130,43 @@ Spin precession, transport, and relaxation all come from the same real-time
 Chebyshev evolution, which scales to the disordered, spin-orbit-coupled materials
 where these lifetimes actually matter.
 
+## Scaling up: a random-phase trace, checked against theory
+
+The steps above use the **exact trace** — they loop over *every* basis state, so the
+cost grows with system size and the lattice stays small. With the SpMV now threaded,
+the cheaper route is a **random-phase stochastic trace**: replace the full trace by an
+average over $N_r$ random-phase vectors, $\mathrm{Tr}\,A \approx (N/N_r)\sum_r\langle
+r|A|r\rangle$. The error falls as $\sim 1/\sqrt{N_r N}$, so a *larger* lattice needs
+*fewer* vectors. Here $N_r=20$ vectors (each one driver run with `KPM_SEED=1…20`, no
+state file, averaged in `rp_spin.py`) replace the $N$-state loop.
+
+```bash
+LSQUANT_BIN=../../build OMP_NUM_THREADS=64 python3 rp_validate.py   # rate law + exact check
+LSQUANT_BIN=../../build python3 plot_ratelaw.py                      # writes fig_ey_ratelaw
+```
+
+**Faithful to the exact trace.** At $L=20$ ($N=800$) the random-phase $T_1$ matches the
+exact trace to **1–3 %** ($\Delta_{\rm sf}=0.05,0.08$: $T_1=51,35$ fs exact vs $50,34$
+fs random-phase), while costing 20 vectors instead of 800 states. The exact run of that
+single check took ~25 min; the random-phase sweep over five disorders at the larger
+$L=50$ ($N=5000$) takes ~4 min (≈46 s per disorder, `OMP_NUM_THREADS=32`).
+
+![Elliott-Yafet rate law from the random-phase trace: 1/T1 vs spin-flip disorder, with the golden-rule slope-2 reference](fig_ey_ratelaw.png)
+
+**Against theory.** The Elliott-Yafet golden rule predicts $1/T_1\propto\Delta_{\rm
+sf}^2$. Over $\Delta_{\rm sf}\in[0.04,0.14]\,t$ the random-phase data give a fitted
+slope $\approx 1.3$ — it *trends* toward the $\Delta_{\rm sf}^2$ law but does not reach
+it: this disorder range is not yet deep in the weak-scattering (Born) regime, and the
+single-shot rate extraction degrades once the decay is fast (at $\Delta_{\rm sf}=0.12$
+both the exact and random-phase fits return the same spurious slow tail — a fitting
+artifact, identical in both, not a stochastic-trace error). Recovering the clean
+exponent needs weaker disorder with finer time/energy resolution — now affordable
+because the trace is no longer $O(N)$.
+
+> **Entry point.** Projected real-time evolution has no `lsquant compute` mode yet, so
+> this uses the `inline_compute-kpm-TimeEvProjetedOp` driver via `rp_spin.py`; a unified
+> time-evolution verb is planned (soon) and will replace it.
+
 ## References and links
 
 - LinQT source and documentation: https://github.com/adamecius/lsquant
