@@ -77,7 +77,7 @@ def _write_bounds(path, W):
 def _write_desc(path, label, L, W, seed):
     edge = 4.0 + 0.5 * W
     with open(path, "w") as f:
-        f.write("# LinQT operator descriptor (physical sidecar)\n")
+        f.write("# LSQUANT operator descriptor (physical sidecar)\n")
         f.write("schema: operator_descriptor/v1\n")
         f.write("observable: hamiltonian\n")
         f.write("units: eV\n")

@@ -151,7 +151,7 @@ class Kubo_solver_FFT_postProcess{//will interpret data_set of points k=0,...,nu
         void Bastin_postProcess (const value_t*, const value_t*, int  );
 
         void integration ( const r_value_t*, const r_value_t*, r_value_t* );
-        void integration_linqt ( const r_value_t*, const r_value_t*, r_value_t* );
+        void integration_lsquant ( const r_value_t*, const r_value_t*, r_value_t* );
         void partial_integration ( const r_value_t*, const r_value_t*, r_value_t* );
 
         void rearrange_crescent_order( r_value_t* );

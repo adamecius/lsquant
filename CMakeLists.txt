@@ -1,4 +1,4 @@
-# LinQT — Linear Quantum Transport (KPM core)
+# LSQUANT — Linear Quantum Transport (KPM core)
 #
 # Reflects the build as it actually is: a single Eigen numeric backend plus
 # FFTW3, GSL and OpenMP. The former INTEL_MKL / EIGEN / BLAS_LIB switches and the
@@ -7,7 +7,7 @@
 # is required:  cmake -B build && cmake --build build -j
 cmake_minimum_required(VERSION 3.16)
 
-project(LinQT VERSION 2.0.0 LANGUAGES CXX)
+project(LSQUANT VERSION 2.0.0 LANGUAGES CXX)
 
 # --- Language / build type ---------------------------------------------------
 set(CMAKE_CXX_STANDARD 11)
@@ -24,8 +24,8 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 
 # --- Options -----------------------------------------------------------------
-option(LINQT_BUILD_UTILITIES   "Build the Python helper utilities" OFF)
-option(LINQT_BUILD_INPUT_TOOLS "Fetch + build the external wannier2sparse for tests" ON)
+option(LSQUANT_BUILD_UTILITIES   "Build the Python helper utilities" OFF)
+option(LSQUANT_BUILD_INPUT_TOOLS "Fetch + build the external wannier2sparse for tests" ON)
 
 # --- Dependencies ------------------------------------------------------------
 # Eigen3: prefer a real config-package (Eigen3::Eigen); fall back to a header dir.
@@ -64,7 +64,7 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 # --- Targets -----------------------------------------------------------------
 add_subdirectory(src)
 
-if(LINQT_BUILD_UTILITIES)
+if(LSQUANT_BUILD_UTILITIES)
     add_subdirectory(utilities)
 endif()
 
@@ -72,7 +72,7 @@ endif()
 # vendored or distributed. It is fetched + built only on demand for tests.
 # (cmake/FetchWannier2Sparse.cmake wraps scripts/fetch_wannier2sparse.sh, pinned
 #  to a commit of github.com/adamecius/wannier2sparse.)
-if(LINQT_BUILD_INPUT_TOOLS)
+if(LSQUANT_BUILD_INPUT_TOOLS)
     include(cmake/FetchWannier2Sparse.cmake OPTIONAL)
 endif()
 

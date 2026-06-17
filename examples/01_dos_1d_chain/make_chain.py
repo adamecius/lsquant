@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build a 1D nearest-neighbour tight-binding chain for LinQT.
+"""Build a 1D nearest-neighbour tight-binding chain for LSQUANT.
 
 The chain has N sites, one orbital per site, periodic boundaries, and a single
 hopping t. The Hamiltonian is
@@ -11,7 +11,7 @@ with eigenvalues E_k = 2 t cos(2 pi k / N). The spectrum fills the band
 
 For each size this script writes, inside the current example folder:
 
-    operators/<label>.HAM.CSR   the sparse Hamiltonian (LinQT complex-CSR text)
+    operators/<label>.HAM.CSR   the sparse Hamiltonian (LSQUANT complex-CSR text)
     operators/<label>.HAM.desc  the physical sidecar (provenance + identity + bounds)
     BOUNDS                      the (a b) line read by the compute driver
     exact_<label>               the exact-trace state set (one local state per basis vector)
@@ -38,7 +38,7 @@ import hashlib
 
 
 def write_csr(path, N, t=-1.0):
-    """Write the chain Hamiltonian in LinQT complex-CSR text format.
+    """Write the chain Hamiltonian in LSQUANT complex-CSR text format.
 
     Format (four lines):
         line 1: DIM NNZ
@@ -65,7 +65,7 @@ def write_csr(path, N, t=-1.0):
 def write_desc(path, label, N, t=-1.0, csr_path=None):
     """Write the human-authored physical sidecar for a manually built model.
 
-    The fields match LinQT's OperatorDescriptor: observable identity, component,
+    The fields match LSQUANT's OperatorDescriptor: observable identity, component,
     units, spectral bounds (a, b), basis/orbital tags, and provenance. The
     bounds here are exact for the analytic chain; for a generic model they come
     from the producer (wannier2sparse via Lanczos).
@@ -78,7 +78,7 @@ def write_desc(path, label, N, t=-1.0, csr_path=None):
             csr_hash = hashlib.sha256(fh.read()).hexdigest()[:16]
 
     with open(path, "w") as f:
-        f.write("# LinQT operator descriptor (physical sidecar)\n")
+        f.write("# LSQUANT operator descriptor (physical sidecar)\n")
         f.write("schema: operator_descriptor/v1\n")
         f.write("observable: hamiltonian\n")
         f.write("component: scalar\n")
@@ -108,7 +108,7 @@ def write_bounds(path, t=-1.0):
 def write_state(path, N):
     """Exact-trace state set: the local states e_0..e_{N-1} over the full basis.
 
-    LinQT evaluates sum_i <e_i|T_m|e_i>/N = Tr[T_m]/N exactly, so the moments are
+    LSQUANT evaluates sum_i <e_i|T_m|e_i>/N = Tr[T_m]/N exactly, so the moments are
     deterministic and equal to the analytic trace, with no random vector.
     """
     with open(path, "w") as f:

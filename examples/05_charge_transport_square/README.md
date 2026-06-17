@@ -79,8 +79,12 @@ cat > run_msd.json <<'JSON'
   "num_moments": 256, "num_times": 160, "tmax": 150 }
 JSON
 lsquant compute --config run_msd.json
-inline_timeCorrelationsFromChebmom Correlation*square_L200_W1*chebmomTD 80 2
+inline_timeCorrelationsFromChebmom Correlation*square_L200_W1*chebmomTD 80 2   # (soon: a unified `lsquant reconstruct … msd` verb)
 ```
+
+> **Entry points.** Moments via the modern `lsquant compute`; the time-domain
+> reconstruction still uses `inline_timeCorrelationsFromChebmom`, which a unified
+> `lsquant reconstruct … ` time-domain verb is planned to replace.
 
 This evolves a wavepacket for 150 fs and writes $\Delta X^2(E=2,t)$. Forming
 $D(E,t) = \Delta X^2/2t$, the early-time rise (where $\Delta X^2\sim t^2$) is the
@@ -155,7 +159,7 @@ the electron a spin, and asks how disorder relaxes it.
 
 ## References and links
 
-- LinQT source and documentation: https://github.com/adamecius/lsquant
+- LSQUANT source and documentation: https://github.com/adamecius/lsquant
 - Methodology: Z. Fan, J. H. García, A. W. Cummings et al., *Linear Scaling
   Quantum Transport Methodologies*, arXiv:1811.07387.
 - Installation: see the main README of the repository.

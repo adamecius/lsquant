@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-siesta2linqt_realspace.py
+siesta2lsquant_realspace.py
 
 Reads a SIESTA .fdf file, builds a real-space supercell Hamiltonian of
-size Nx×Ny unit cells, Löwdin-orthogonalises it, and writes linqt .CSR files:
+size Nx×Ny unit cells, Löwdin-orthogonalises it, and writes lsquant .CSR files:
 
     <prefix>.HAM   – Löwdin H_ortho  =  S^{-1/2} H S^{-1/2}
     <prefix>.VX    – velocity Vx = i [H_ortho, X_ortho]
@@ -43,7 +43,7 @@ sisl does not expose ⟨μ|r̂|ν⟩ matrix elements directly.  A stub is provid
 
 Usage
 -----
-    python siesta2linqt_realspace.py <fdf_file> <Nx> <Ny>
+    python siesta2lsquant_realspace.py <fdf_file> <Nx> <Ny>
         [--prefix NAME] [--no-vy] [--no-vel] [--eps EPS]
 
 Dependencies: sisl scipy numpy
@@ -59,12 +59,12 @@ import scipy.sparse as sp
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# linqt .CSR writer
+# lsquant .CSR writer
 # ─────────────────────────────────────────────────────────────────────────────
 
-def write_linqt_csr(mat, path: str):
+def write_lsquant_csr(mat, path: str):
     """
-    Write a sparse or dense matrix as a linqt .CSR text file.
+    Write a sparse or dense matrix as a lsquant .CSR text file.
 
     Format (4 lines):
         Ndim  nnz
@@ -245,7 +245,7 @@ def build_realspace_operators(H_source, Nx: int, Ny: int,
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Real-space Löwdin orthogonalisation from SIESTA → linqt .CSR"
+        description="Real-space Löwdin orthogonalisation from SIESTA → lsquant .CSR"
     )
     parser.add_argument("fdf_file",     help="SIESTA .fdf file")
     parser.add_argument("Nx", type=int, help="Supercell tiling along a1")
@@ -282,11 +282,11 @@ def main():
     )
 
     print("\nWriting CSR files ...")
-    write_linqt_csr(H_ortho, f"{prefix}.HAM.CSR")
+    write_lsquant_csr(H_ortho, f"{prefix}.HAM.CSR")
     if Vx is not None:
-        write_linqt_csr(Vx, f"{prefix}.VX.CSR")
+        write_lsquant_csr(Vx, f"{prefix}.VX.CSR")
     if Vy is not None and not args.no_vy:
-        write_linqt_csr(Vy, f"{prefix}.VY.CSR")
+        write_lsquant_csr(Vy, f"{prefix}.VY.CSR")
 
     print("\nAll done.")
 

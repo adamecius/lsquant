@@ -1,5 +1,5 @@
 <!--
-  LinQT in-code documentation template.
+  LSQUANT in-code documentation template.
   Copy the skeleton for your language into your source file and fill the
   [[ ... ]] slots. The <!-- ... --> comments are guidance for the author; they
   never reach the reader, so delete them or leave them in this file.

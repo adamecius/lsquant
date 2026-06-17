@@ -1,6 +1,6 @@
-# LinQT — Linear-scaling Quantum Transport
+# LSQUANT — Linear-scaling Quantum Transport
 
-**LinQT** (repository `lsquant`) is a C++ library for **large-scale quantum
+**LSQUANT** (repository `lsquant`) is a C++ library for **large-scale quantum
 transport** in tight-binding models. It computes spectral and transport
 properties — density of states, conductivities, time evolution, spin dynamics —
 by expanding them in **Chebyshev moments of the Hamiltonian** (the Kernel
@@ -8,13 +8,13 @@ Polynomial Method, KPM). The cost grows *linearly* with system size and nothing
 is ever diagonalized. The numerics run on a single Eigen backend, matrix-free and
 OpenMP-parallel.
 
-If you have a tight-binding model as sparse operators in CSR format, LinQT turns
+If you have a tight-binding model as sparse operators in CSR format, LSQUANT turns
 it into a density of states or a Kubo conductivity in two steps: **compute the
 moments**, then **reconstruct the spectrum**.
 
 ## What it computes
 
-LinQT expands a spectral or transport quantity in Chebyshev polynomials of the
+LSQUANT expands a spectral or transport quantity in Chebyshev polynomials of the
 rescaled Hamiltonian, so its cost scales linearly with system size (KPM [1]):
 
 - **Density of states and spectral functions**, from the 1D Chebyshev moments
@@ -37,26 +37,20 @@ The methods and their derivations are reviewed in [2]; the KPM kernel itself in
    A. Harju, F. Ortmann, S. Roche, *Linear Scaling Quantum Transport
    Methodologies*, arXiv:1811.07387.
 
-## Performance & scaling
+## Performance
 
-The KPM recursion is dominated by one sparse matrix–vector product (SpMV) per
-moment; it is **multithreaded and memory-bandwidth bound**. On a dual AMD EPYC
-9754 (2×128 cores) the SpMV on a **2-million-site complex graphene** Hamiltonian
-speeds up **≈20× on one socket and ≈31× across two** (33 → 1.1 ms per product),
-reaching ~65% of the measured single-socket STREAM read roofline; the full DOS
-recursion is ~10× faster, the remainder being the (intentionally serial) moment
-reductions. Cost is **linear in system size**, as KPM requires.
+LSQUANT is built for **large** systems. Two things make that practical:
 
-![SpMV and DOS-recursion time vs thread count for 2M-site graphene; the SpMV scales ~31×, the full recursion ~10× (serial reductions are the Amdahl floor)](docs/perf/fig_scaling_threads.png)
+- **Linear in system size.** Doubling the number of sites roughly doubles the cost —
+  no diagonalization, no cubic blow-up.
+- **Uses all your cores.** The inner kernel (one sparse matrix–vector product per
+  Chebyshev moment) is multithreaded, so a multi-million-site model runs **tens of
+  times faster** on a many-core machine — and the answer is **bit-for-bit identical**
+  to a single-thread run, so your results never change.
 
-![SpMV matrix-stream bandwidth vs threads against the measured 1- and 2-socket STREAM read rooflines](docs/perf/fig_roofline.png)
-
-Threading is **byte-exact**: every Chebyshev moment is bit-for-bit identical to the
-serial result (the recursion uses only exact scalars, so the row-parallel reduction
-cannot drift), and the full golden suite stays unchanged. Hardware, method, and
-reproduction commands are in
-[`docs/perf/PERF_ANALYSIS.md`](docs/perf/PERF_ANALYSIS.md); for large two-socket
-runs prefer `numactl --interleave=all` or pin to one socket.
+In short: bigger systems and more cores both just work. For the full study —
+benchmarks, bandwidth rooflines, NUMA tips, and how to reproduce it — see
+**[docs/performance/](docs/performance/README.md)**.
 
 ## Installation
 
@@ -83,10 +77,10 @@ ctest --test-dir build        # optional: 24 checks, all should pass
 
 Build options:
 
-- `-DLINQT_BUILD_INPUT_TOOLS=ON|OFF` (default **ON**) — fetch and build the
+- `-DLSQUANT_BUILD_INPUT_TOOLS=ON|OFF` (default **ON**) — fetch and build the
   pinned `wannier2sparse` used to generate the test fixtures; it clones at
   configure time and degrades gracefully offline.
-- `-DLINQT_BUILD_UTILITIES=ON|OFF` (default **OFF**) — build the Python helper
+- `-DLSQUANT_BUILD_UTILITIES=ON|OFF` (default **OFF**) — build the Python helper
   utilities.
 
 ## The `lsquant` interface
@@ -206,7 +200,7 @@ and the backend stays swappable.
 
 ## Inputs
 
-LinQT consumes tight-binding models as sparse operators in **CSR text format**,
+LSQUANT consumes tight-binding models as sparse operators in **CSR text format**,
 one file per operator (`operators/<label>.<OP>.CSR`), produced by external tools
 such as **wannier2sparse**, **Wannier90**, or **KWANT**. Each operator carries a
 `.desc` sidecar describing what it physically is (observable, units, spectral
@@ -215,7 +209,7 @@ format end to end.
 
 ## Tests
 
-The suite validates LinQT against a symbolically-proven analytic oracle for the
+The suite validates LSQUANT against a symbolically-proven analytic oracle for the
 clean 1D chain, plus regression goldens for graphene, the Haldane model,
 localization, and the FFT reconstruction path:
 
@@ -229,21 +223,23 @@ pinned).
 
 ## Documentation
 
-- Physics notes under [`docs/`](docs/) (`main.md`, `time_evolution.md`,
-  `spinrelaxation.md`).
-- API reference via Doxygen: `cd docs && doxygen linqt.dox` writes `docs/html/`.
+- **Website:** [lsquant.org](https://lsquant.org).
+- **Full documentation** is hosted on Read the Docs (in progress); the sources are the
+  physics notes under [`docs/`](docs/) (`main.md`, `time_evolution.md`,
+  `spinrelaxation.md`, …) and the [performance study](docs/performance/README.md).
+- API reference via Doxygen: `cd docs && doxygen lsquant.dox` writes `docs/html/`.
 
 ## Repository layout
 
 | Path | Contents |
 |---|---|
 | `include/`, `src/` | KPM core library, the `lsquant` binary, and the legacy drivers |
-| `examples/` | the three worked tutorials and their figure scripts |
+| `examples/` | the six worked tutorials and their figure scripts |
 | `test/` | analytic-oracle and regression tests, golden masters |
 | `docs/` | physics pages and the Doxygen config |
 | `scripts/`, `cmake/` | golden regeneration; the `wannier2sparse` fetch module |
 
 ## License and citation
 
-See [LICENSE](LICENSE). If LinQT contributes to your work, please cite the
+See [LICENSE](LICENSE). If LSQUANT contributes to your work, please cite the
 methodology, reference [2] above (arXiv:1811.07387).

@@ -273,13 +273,13 @@ vendored header — so the project stays offline-safe.
 
 - `nlohmann/json`: `find_package(nlohmann_json)` (Ubuntu `nlohmann-json3-dev`) →
   fetch → vendored single header. Define `LSQ_WITH_JSON`.
-- `json-schema-validator`: find → fetch → vendor; gated `LINQT_WITH_JSON_SCHEMA`
+- `json-schema-validator`: find → fetch → vendor; gated `LSQUANT_WITH_JSON_SCHEMA`
   (default ON; if absent, fall back to the semantic-only validator in 4.2).
 - `picosha2`: vendored single header (no option needed).
 - New sources under `src/io/` (`config.cpp`, `validate.cpp`, `fingerprint.cpp`,
   `results.cpp`, `merge.cpp`) folded into `KPM_LIB_SOURCES` so every driver gets
   them; new public headers under `include/io/`.
-- Python presenter: optional `LINQT_BUILD_UTILITIES` already exists — hook
+- Python presenter: optional `LSQUANT_BUILD_UTILITIES` already exists — hook
   `lsquant_report.py` there; add a `requirements.txt` (numpy, plotly).
 
 ## 6. Rollout (additive, auditable)

@@ -32,9 +32,9 @@ $\hbar$ and nothing else,
 
 $$ \langle S_x(t)\rangle = \cos\omega t, \quad \langle S_y(t)\rangle = -\sin\omega t, \quad \langle S_z(t)\rangle = 0, \qquad \omega = \frac{2J_{\rm ex}}{\hbar}, $$
 
-independent of the Fermi energy. In LinQT's physical units, $\hbar = 0.658\ \mathrm{eV\,fs}$
+independent of the Fermi energy. In LSQUANT's physical units, $\hbar = 0.658\ \mathrm{eV\,fs}$
 and time is in fs, so $\omega = 0.304\ \mathrm{rad/fs}$ and the period is
-$2\pi/\omega = 20.7\ \mathrm{fs}$. LinQT obtains this by evolving the spin operator
+$2\pi/\omega = 20.7\ \mathrm{fs}$. LSQUANT obtains this by evolving the spin operator
 in time with a Chebyshev expansion of $U(t) = e^{-iHt/\hbar}$, never diagonalizing
 $H$.
 
@@ -66,9 +66,13 @@ each spin component over a 95 fs window, about four and a half precession period
 
 ```bash
 for OP in SX SY SZ; do
-  inline_compute-kpm-TimeEvProjetedOp chain1d_mag $OP PX 32 96 95 exact
+  inline_compute-kpm-TimeEvProjetedOp chain1d_mag $OP PX 32 96 95 exact   # (soon: a unified `lsquant compute` time-evolution mode)
 done
 ```
+
+> **Entry points.** Projected real-time evolution has no `lsquant compute` mode
+> yet, so this tutorial uses the `inline_compute-kpm-TimeEvProjetedOp` driver; a
+> unified time-evolution verb is planned and will replace it.
 
 This realises $|\phi(t)\rangle = U(t)\,P_x|\phi_r\rangle$ and records
 $\langle\phi(t)|S_\alpha|\phi(t)\rangle$ over 96 time steps with 32 Chebyshev
@@ -111,7 +115,7 @@ same whatever the electron's energy.
   decays, so the spin keeps perfect time.
 - The frequency is energy-independent, so the energy-integrated spin (the $m=0$
   moment) already carries the full precession, with no reconstruction step.
-- LinQT evolves the spin operator through a Chebyshev expansion of $e^{-iHt/\hbar}$,
+- LSQUANT evolves the spin operator through a Chebyshev expansion of $e^{-iHt/\hbar}$,
   so the clock runs without ever diagonalizing $H$.
 
 The next tutorial keeps this magnetic chain but adds disorder, which dephases the
@@ -120,7 +124,7 @@ relaxation over a time $\tau_s$.
 
 ## References and links
 
-- LinQT source and documentation: https://github.com/adamecius/lsquant
+- LSQUANT source and documentation: https://github.com/adamecius/lsquant
 - Methodology: Z. Fan, J. H. García, A. W. Cummings et al., *Linear Scaling
   Quantum Transport Methodologies*, arXiv:1811.07387.
 - Installation: see the main README of the repository.

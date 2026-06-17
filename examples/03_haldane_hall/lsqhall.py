@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""lsqhall - Hall and longitudinal conductivity of the Haldane model, over LinQT.
+"""lsqhall - Hall and longitudinal conductivity of the Haldane model, over LSQUANT.
 
 The heavy work stays in C++, driven through the single `lsquant` binary:
 
@@ -19,7 +19,7 @@ C = +1. The committed operators in test/golden/haldane are the verified model;
 copy them into ./operators (see README). Units follow the golden: e = hbar = 1,
 so e^2/h = 1/(2 pi).
 
-Run from inside the example folder, after LinQT is built and installed
+Run from inside the example folder, after LSQUANT is built and installed
 (executables on PATH, or LSQUANT_BIN set to the build directory).
 """
 
@@ -49,7 +49,7 @@ def _bin(name):
     if found:
         return found
     raise FileNotFoundError(
-        f"could not find '{name}'. Build and install LinQT, or set LSQUANT_BIN.")
+        f"could not find '{name}'. Build and install LSQUANT, or set LSQUANT_BIN.")
 
 
 def _stage(wd, opdir, label, ops):

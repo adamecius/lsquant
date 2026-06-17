@@ -29,7 +29,7 @@ gap the Hall conductivity is quantized,
 
 $$ \sigma_{xy} = C\,\frac{e^2}{h}, $$
 
-a bulk topological response that LinQT reads from the velocity-velocity Chebyshev
+a bulk topological response that LSQUANT reads from the velocity-velocity Chebyshev
 moments through the Kubo-Bastin route.
 
 The Kubo-Bastin conductivity splits into a Fermi-surface part, built from states
@@ -120,11 +120,16 @@ Fermi-sea and Fermi-surface parts, and the longitudinal conductivity:
 
 ```bash
 lsquant reconstruct NonEqOpVX-VYhaldane*.chebmom2D bastin 10        # sigma_xy total
-inline_kuboBastinSeaFromChebmom  NonEqOpVX-VYhaldane*.chebmom2D 10  # Fermi sea
-inline_kuboBastinSurfFromChebmom NonEqOpVX-VYhaldane*.chebmom2D 10  # Fermi surface
+inline_kuboBastinSeaFromChebmom  NonEqOpVX-VYhaldane*.chebmom2D 10  # Fermi sea   (soon: reconstruct … bastin-sea)
+inline_kuboBastinSurfFromChebmom NonEqOpVX-VYhaldane*.chebmom2D 10  # Fermi surface (soon: reconstruct … bastin-surf)
 lsquant reconstruct NonEqOpVX-VXhaldane*.chebmom2D greenwood 10     # sigma_xx
 python lsqhall.py
 ```
+
+> **Entry points.** The total $\sigma_{xy}$ and $\sigma_{xx}$ use the modern
+> `lsquant reconstruct … bastin|greenwood`. The Fermi-sea/Fermi-surface *split*
+> still uses the `inline_kuboBastinSea/SurfFromChebmom` drivers; a unified
+> `lsquant reconstruct` sea/surface option is planned.
 
 ![The Hall conductivity is a flat plateau at one e^2/h through the gap carried entirely by the Fermi sea, while the longitudinal conductivity is zero in the gap and finite in the bands](fig_haldane_hall.png)
 
@@ -178,7 +183,7 @@ is the only handle left.
 
 ## References and links
 
-- LinQT source and documentation: https://github.com/adamecius/lsquant
+- LSQUANT source and documentation: https://github.com/adamecius/lsquant
 - Methodology: Z. Fan, J. H. García, A. W. Cummings et al., *Linear Scaling
   Quantum Transport Methodologies*, arXiv:1811.07387.
 - Installation: see the main README of the repository.

@@ -4,6 +4,25 @@ Tracks the open items from the reporting-layer + unified-I/O + PRL-figure work.
 Everything below is **additive** and the build was green at the last C++ change;
 these are finish-and-verify items, not known breakage.
 
+## Threaded-SpMV effort (landed, branch `feat/threaded-spmv-phaseA`)
+
+Stacked on base HEAD `86d6946`. Full suite **31/31 green at KPM_SEED=12345**, all 29
+goldens **byte-identical** (the recursion uses only exact scalars a∈{1,2}, b∈{0,−1},
+so the row-parallel SpMV is bit-for-bit the serial result).
+
+- [x] **Phase A** (`79e1a7e`) — thread `SparseMatrixType::Multiply` (row-parallel fused
+      OpenMP). New gate `spmv_threaded_bitexact`. Measured ~16–20× SpMV speedup/socket.
+- [x] **Phase B** (`43055f5`) — implement `BatchMultiply` (block SpMM); new gate
+      `spmm_batchmultiply_equiv` (R=1 bit-identical to `Multiply`).
+- [x] **Phase C** (NUMA) — `schedule(static)` + autonuma converge to NUMA-local; numactl
+      guidance in `docs/performance/README.md` (no first-touch refactor: Eigen/std::vector
+      own storage; autonuma covers steady state).
+- [x] **Phase F** (`b7f5945`) — graphene scaling benchmark (`bench/`), `docs/performance/README.md`,
+      README front-page "Performance & scaling" section. SpMV reaches ~65% of the 1-socket
+      STREAM read roofline; cost linear in N.
+- [ ] **Optional W5** — threaded moment reductions (`vdot`) behind a default-OFF flag
+      (`LSQ_THREADED_REDUCTION`); MUST stay off the byte-exact golden path.
+
 ## Must do before opening the PR
 
 - [ ] **Run the full suite green.** `cmake --build build -j && ctest --test-dir build`.
@@ -47,7 +66,7 @@ these are finish-and-verify items, not known breakage.
 - [ ] **Optional dependency accelerators.** The JSON reader and logger are
       in-house (offline-safe, hook-compliant). If desired, add
       `find_package(nlohmann_json)` / `find_package(spdlog)` as *optional*
-      accelerators behind the existing `LSQ_WITH_JSON` / `LINQT_WITH_SPDLOG`
+      accelerators behind the existing `LSQ_WITH_JSON` / `LSQUANT_WITH_SPDLOG`
       gates, keeping the in-house fallback (see `reporting_system.md` §5,
       `unified_io.md` §5).
 - [ ] **Plan-doc decision points.** Confirm the open D1–D5 / E1–E6 choices in

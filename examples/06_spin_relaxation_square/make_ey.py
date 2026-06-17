@@ -103,7 +103,7 @@ def _write_bounds(path, Dsf):
 def _write_desc(path, label, L, Dsf, seed):
     edge = 4.0 + abs(Dsf) + 0.2
     with open(path, "w") as f:
-        f.write("# LinQT operator descriptor (physical sidecar)\n")
+        f.write("# LSQUANT operator descriptor (physical sidecar)\n")
         f.write("observable: hamiltonian\nunits: eV\n")
         f.write(f"system_label: {label}\nsystem_size: {2 * L * L}\n")
         f.write("dimensions: 2\nperiodic: true\nspin: spinful\n")

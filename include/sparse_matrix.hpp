@@ -1,6 +1,6 @@
 /**
  * @file sparse_matrix.hpp
- * @brief Sparse operator type used throughout LinQT.
+ * @brief Sparse operator type used throughout LSQUANT.
  *
  * Defines @ref SparseMatrixType, the matrix-free complex sparse operator (CSR, Eigen
  * RowMajor backend) on which all KPM recursions act, and @ref SparseMatrixBuilder, which

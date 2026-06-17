@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Regenerate LinQT golden masters, deterministically.
+# Regenerate LSQUANT golden masters, deterministically.
 #
 # Pipeline (mirrors the reference flow, corrected to the real tool/driver CLIs):
 #   external wannier2sparse  ->  inline_compute-kpm-nonEqOp  ->  inline_kuboBastinFromChebmom
@@ -21,7 +21,7 @@ REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO"
 
 W2S="$(bash scripts/fetch_wannier2sparse.sh)"   # cache-aware; offline-safe on cache hit
-BUILD="$(cd "${1:-build}" && pwd)"              # absolute path to the LinQT build dir
+BUILD="$(cd "${1:-build}" && pwd)"              # absolute path to the LSQUANT build dir
 
 SEED=graphene_golden
 OUT="$REPO/test/golden"
@@ -54,7 +54,7 @@ COUT="$OUT/chain1d"
   printf -- "-2 2\n" > BOUNDS                       # EXACT band
   # EXACT TRACE: a local-state set over the full basis e_0..e_{D-1} makes
   # SpectralMoments compute Sum_i <e_i|T_m|e_i>/D = Tr[T_m]/D exactly (no random
-  # vector, deterministic, machine precision). Uses LinQT's own kernel; no source change.
+  # vector, deterministic, machine precision). Uses LSQUANT's own kernel; no source change.
   DIM=$(head -1 operators/chain1d.HAM.CSR | awk '{print $1}')
   { echo local; echo "$DIM"; seq 0 $((DIM-1)); } > exact
   "$BUILD/inline_compute-kpm-nonEqOp"  chain1d VX VX "$M" exact   # #3 KG moments (exact) -> .chebmom2D
@@ -70,7 +70,7 @@ bash "$REPO/test/dos_reconstructed.sh" "$BUILD"
 
 cd "$REPO"
 {
-  echo "graphene: KPM_SEED=$KPM_SEED w2s_sha=26cab4a linqt_head=$(git rev-parse HEAD) Nx=$NX Ny=$NY Nz=$NZ M=$M ops=VX,VX"
-  echo "chain1d:  KPM_SEED=$KPM_SEED w2s_sha=26cab4a linqt_head=$(git rev-parse HEAD) Nx=$CHAIN_NX Ny=1 Nz=1 M=$M bounds=[-2,2] KG=$CMOM(ops=VX,VX) DOS=$DMOM(op=1) ref=oracle:lsquant_chain_reference.py"
+  echo "graphene: KPM_SEED=$KPM_SEED w2s_sha=26cab4a lsquant_head=$(git rev-parse HEAD) Nx=$NX Ny=$NY Nz=$NZ M=$M ops=VX,VX"
+  echo "chain1d:  KPM_SEED=$KPM_SEED w2s_sha=26cab4a lsquant_head=$(git rev-parse HEAD) Nx=$CHAIN_NX Ny=1 Nz=1 M=$M bounds=[-2,2] KG=$CMOM(ops=VX,VX) DOS=$DMOM(op=1) ref=oracle:lsquant_chain_reference.py"
 } > GOLDEN_PROVENANCE.txt
 echo "Goldens regenerated: graphene ($MOM, KuboBastin), chain1d KG ($CMOM) + DOS ($DMOM) vs oracle."

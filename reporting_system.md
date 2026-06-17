@@ -133,7 +133,7 @@ levels (`trace…critical`), multiple sinks (stdout-color, basic/rotating file),
   `include/util/log.hpp`) — `LSQ_LOG_INFO(...)`, `_WARN`, `_ERROR`, `_DEBUG`,
   `_TRACE`. Internals call spdlog. This means call sites never include
   `<spdlog/...>` directly, so spdlog can be swapped or compiled out behind a
-  macro (`LINQT_WITH_SPDLOG`) without touching numerics.
+  macro (`LSQUANT_WITH_SPDLOG`) without touching numerics.
 - **Default sinks:** colored stderr (human) at `info`; optional rotating file
   `lsquant.log` when `--log-file` / `LSQUANT_LOG_FILE` is set. Level controlled by
   `LSQUANT_LOG_LEVEL` env + a `--verbose/-v` CLI flag wired in `lsquant.cpp`.
@@ -172,7 +172,7 @@ Modernize and unify into `include/util/timer.hpp`:
   current users keep compiling. Migrate call sites opportunistically, not in a
   big bang — keeps this change additive and auditable.
 
-Optional deep-profiling backend (future, behind `LINQT_WITH_TRACY`): **Tracy**
+Optional deep-profiling backend (future, behind `LSQUANT_WITH_TRACY`): **Tracy**
 frame profiler for flame-graph analysis of the hot loops. Out of scope for v1;
 the `Timer` API is designed so a Tracy zone can be emitted alongside.
 
@@ -253,7 +253,7 @@ ResourceSnapshot sample();             // convenience
   (`mach/task.h`), Windows `GetProcessMemoryInfo` (PSAPI). HPC extensions —
   **PAPI** or Linux `perf_event_open` for hardware counters, jemalloc/tcmalloc
   `mallctl` stats for allocator-level detail — slot in as additional `ResourceProbe`
-  implementations behind `LINQT_WITH_PAPI` etc.
+  implementations behind `LSQUANT_WITH_PAPI` etc.
 - **Usage pattern:** a `ScopedResourceReport` RAII (sibling of `ScopedTimer`)
   logs `ΔRSS` and CPU at the end of a major phase (moment computation,
   reconstruction). The `lsquant` driver prints a final one-line summary:
@@ -271,10 +271,10 @@ ResourceSnapshot sample();             // convenience
 Follow the existing imported-target + pinned-fetch + graceful-offline pattern.
 
 - New options (default the heavy/optional bits **OFF** or auto):
-  - `LINQT_WITH_SPDLOG` (default **ON**, auto-off if neither system pkg nor fetch
+  - `LSQUANT_WITH_SPDLOG` (default **ON**, auto-off if neither system pkg nor fetch
     available → falls back to in-house logger).
-  - `LINQT_WITH_TRACY` (default **OFF**).
-  - `LINQT_WITH_PAPI` (default **OFF**).
+  - `LSQUANT_WITH_TRACY` (default **OFF**).
+  - `LSQUANT_WITH_PAPI` (default **OFF**).
 - **spdlog resolution order**, mirroring Eigen's fallback ladder
   (`CMakeLists.txt:32-46`):
   1. `find_package(spdlog QUIET)` → `spdlog::spdlog` (Ubuntu `libspdlog-dev`).

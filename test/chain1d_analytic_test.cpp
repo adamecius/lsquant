@@ -1,4 +1,4 @@
-// Analytic golden test (#3): LinQT Kubo-Greenwood Chebyshev moment matrix for the
+// Analytic golden test (#3): LSQUANT Kubo-Greenwood Chebyshev moment matrix for the
 // monoatomic 1D chain vs the closed form (thesis Eq. 4.9, B.15 normalized).
 //
 // Usage: chain1d_analytic_test <chebmom2D file> <TOL>
