@@ -1,7 +1,7 @@
 \page spinrelaxation The spin relaxation times
 
 **Introduction**                                                                                                                                                                                                                 
-Systems described by a spin-dependent Hamiltonians, endows spins with dynamics.  Typically, crystalline systems will posses spin-dependent fields which will make the spins to precess coherently. This is the case of external magnetic fields and spin-orbit coupling fields. However, in the presence of randomness, the spin-coherence is lost due to the irreversibility, making it relax over some relevant time scale \f$\tau_{\rm s}\f$ know as spin relaxation time. 
+Systems described by spin-dependent Hamiltonians endow spins with dynamics. Typically, crystalline systems possess spin-dependent fields which make the spins precess coherently. This is the case of external magnetic fields and spin-orbit coupling fields. However, in the presence of randomness, the spin coherence is lost due to the irreversibility, making it relax over some relevant time scale \f$\tau_{\rm s}\f$ known as the spin relaxation time.
 
 To obtain the spin relaxation time it is sufficient to solve the Schrodinger equation:
 \f[
@@ -11,22 +11,22 @@ where \f$H\f$ the hamiltonian of the system, \f$\hbar\f$ the Planck's constant, 
 \f[
 S( t) = {\rm Tr}\left[ \rho\frac{s(t)}{\Omega} \right],
 \f]
-where $\f\rho\f$ the density matrix, \f$s(t)=U^\dagger(t) s U(t)\f$ the time evolved spin operator, with \f$s\f$ its static representation in the Schrodinger picture and \f$U(t)\f$ the time-evolution operator. 
+where \f$\rho\f$ is the density matrix, \f$s(t)=U^\dagger(t) s U(t)\f$ the time evolved spin operator, with \f$s\f$ its static representation in the Schrodinger picture and \f$U(t)\f$ the time-evolution operator.
 
-In LSQUANT we deal with tight-binding models of solids described by a time-independent Hamiltonian. Therefore, the evolution operator can be written simply as \f$U(t) = {\rm e}^{-i H t/\hbar}\f$, and the density matrix depends on the Fermi energy \f$\varepsilon_{\rm F}\f$. To compute the evolution of the spin density, we follow the approach done by [Cummings et. al][1], in which the density matrix takes the following form
+In LSQUANT we deal with tight-binding models of solids described by a time-independent Hamiltonian. Therefore, the evolution operator can be written simply as \f$U(t) = {\rm e}^{-i H t/\hbar}\f$, and the density matrix depends on the Fermi energy \f$\varepsilon_{\rm F}\f$. To compute the evolution of the spin density, we follow the approach done by [Cummings et al.][1], in which the density matrix takes the following form
 
 \f[
 \rho(\varepsilon_{\rm F}) = \frac{ P \delta(H-\varepsilon_{\rm F}) P }{ {\rm Tr}[\delta(H-\varepsilon_{\rm F})] }
 \f]
 
-with \f$ P \f$ a projector operator.  In [1], the projector operator is choosen such that spin density acts on spin polarizes in a given spatial dimension. If such spatial direction is described by an altitude angle \f$\theta\f$ and a azimutal angle \f$\phi\f$, then the spinorial component of the projector operator takes the form of:
+with \f$ P \f$ a projector operator.  In [1], the projector operator is chosen such that the spin density is polarized along a given spatial direction. If such spatial direction is described by a polar angle \f$\theta\f$ and an azimuthal angle \f$\phi\f$, then the spinorial component of the projector operator takes the form of:
 \f[
 P_{\pm}(\theta,\phi) =\frac{1}{2} \left(\begin{array}{cc}
 1\pm \cos(\theta) & {\rm e}^{-i\phi}\sin\theta \\
 {\rm e}^{i\phi}\sin\theta &1\mp \cos(\theta)
 \end{array} \right)
 \f]
-but an arbitrary operator can be choose.  
+but an arbitrary operator can be chosen.
 
 **The Chebyshev approach**
 
@@ -39,7 +39,7 @@ where we had defined \f$Z={\rm Tr}\left[  P\delta(H-\varepsilon_{\rm F})\right]\
 \f]
 where \f$ |\chi_{\rm L}(n) \rangle =  U(t_n)P|\chi\rangle \f$ and \f$ |\chi_{\rm R}(m,n) \rangle =  U(t_n)PT_m(H)|\chi\rangle \f$
 
-Finally, the \subpage time_evolution  is computed in terms of the expansion moments as:
+Finally, the \subpage time_evolution is computed in terms of the expansion moments as:
 \f[
 S(t_n)= \sum_{m}\mu_{m,n} T_m(\varepsilon_{\rm F})
 \f]
