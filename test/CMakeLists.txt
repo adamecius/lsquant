@@ -140,6 +140,25 @@ target_include_directories(recon_kernel_oracle_test PRIVATE ${CMAKE_SOURCE_DIR}/
 target_link_libraries(recon_kernel_oracle_test PRIVATE kpm_lib)
 add_test(NAME recon_kernel_oracle COMMAND recon_kernel_oracle_test 0.10)
 
+# --- threaded-SpMV bit-exactness gate (Phase A, W1) ------------------------------
+# The row-parallel OpenMP SpMV must be BIT-IDENTICAL to the stock Eigen product at
+# every thread count, otherwise the byte-exact moment goldens would drift. Asserts
+# Multiply(a,M,x,b,y) == a*M*x+b*y at 1/2/4/8 threads on a complex Hermitian operator.
+# Must be green on the pre-change tree (Eigen==Eigen) and after W1 (kernel==Eigen).
+add_executable(spmv_threaded_bitexact_test spmv_threaded_bitexact_test.cpp)
+target_include_directories(spmv_threaded_bitexact_test PRIVATE ${CMAKE_SOURCE_DIR}/include)
+target_link_libraries(spmv_threaded_bitexact_test PRIVATE kpm_lib OpenMP::OpenMP_CXX)
+add_test(NAME spmv_threaded_bitexact COMMAND spmv_threaded_bitexact_test)
+
+# --- SpMM block-kernel equivalence gate (Phase B, W2) ---------------------------
+# BatchMultiply (Y=a*M*X+b*Y over R RHS) must be BIT-IDENTICAL to R independent
+# Multiply calls (R=1 == Multiply), so a future multi-vector caller cannot move the
+# byte-exact goldens. Asserts == for R in {1,8} at 1/4/8 threads.
+add_executable(spmm_batchmultiply_equiv_test spmm_batchmultiply_equiv_test.cpp)
+target_include_directories(spmm_batchmultiply_equiv_test PRIVATE ${CMAKE_SOURCE_DIR}/include)
+target_link_libraries(spmm_batchmultiply_equiv_test PRIVATE kpm_lib OpenMP::OpenMP_CXX)
+add_test(NAME spmm_batchmultiply_equiv COMMAND spmm_batchmultiply_equiv_test)
+
 # --- Kubo-Greenwood reconstruction regression (Bug 1, Phase 0) -------------------
 # Pins PR #19: kuboGreenwoodFromChebmom multiplied by ShiftFactor() (==0 for centred bands)
 # so sigma_KG was identically 0. chain1d_analytic/graphene_regression guard MOMENTS, not the

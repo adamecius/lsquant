@@ -1,7 +1,17 @@
 #include "sparse_matrix.hpp"
+#include "util/timer.hpp"   // LSQ_SCOPED -- time the SpMV hot loop (CLAUDE.md reporting)
 
 
 const int MKL_SPMVMUL = 1000;
+
+// Below this many nonzeros the SpMV/SpMM run SERIALLY: the OpenMP fork/join cost of a
+// parallel region dwarfs the work on a tiny matrix, and small matrices are called in
+// tight inner loops (e.g. the exact-trace spin tutorials -> tens of thousands of SpMVs).
+// Measured pathology before this guard: a tiny N=128 exact-trace run took 339 s on 256
+// threads vs 2.0 s on 1 thread (a 170x regression). Serial and parallel give bit-identical
+// results (each row is an independent reduction), so the threshold never changes output.
+// Tunable; ~3e4 nnz is well above the per-region overhead and below any DRAM-bound case.
+static const long LSQ_SPMV_MIN_PARALLEL_NNZ = 30000;
 
 void SparseMatrixType::ConvertFromCOO(vector<indexType> &rows, vector<indexType> &cols, vector<complex<double> > &vals)
 {
@@ -180,21 +190,62 @@ void SparseMatrixType::ConvertFromCSR(vector<indexType> &cols, vector<indexType>
 }
 
 
+// SparseMatrixType::Multiply -- the leaf SpMV  y = a*M*x + b*y  (raw-pointer form).
+//
+// PROBLEM. This is the single O(nnz) hot loop of the whole KPM machinery: the
+// Chebyshev moment recursion reaches it once per moment through op().multiply()
+// (HamiltonianOp -> here), so on large systems essentially all wall time is spent
+// here. The stock body was `eig_y = a*matrix_*eig_x + b*eig_y`, an Eigen sparse x
+// dense product that runs on ONE thread (Eigen does not parallelise sparse*vector),
+// leaving 255 of 256 EPYC cores idle on the recursion. Measured: the production
+// recursion was flat past ~4 threads; a row-parallel kernel reaches ~92% of the
+// per-socket read-bandwidth roofline and ~30x the production driver (see
+// docs/perf/PERF_ANALYSIS.md).
+//
+// APPROACH. Apply the matrix one CSR row at a time with an OpenMP parallel-for over
+// rows. For RowMajor compressed storage, row i owns the contiguous nonzero range
+// [outerIndexPtr[i], outerIndexPtr[i+1]); each y[i] is the sum over that range,
+// accumulated by a single thread in stored column order, then scaled: a*acc + b*y[i].
+//
+// WHY THIS IS BIT-IDENTICAL TO THE STOCK EIGEN PRODUCT (golden safety). Each output
+// y[i] is an independent reduction over its own row, summed in the SAME stored order
+// Eigen uses, with the SAME scalar complex<double> arithmetic. Distinct rows are
+// independent writes, so partitioning rows across threads cannot change any single
+// sum -> the result is independent of the thread count and equals the old expression
+// term-for-term. The exact-match moment goldens stay byte-identical; the gate
+// `spmv_threaded_bitexact` asserts this at 1/2/4/8 threads.
+//
+// COMPLEXITY. O(nnz) work, O(rows) parallel tasks; memory-bandwidth bound (the
+// matrix stream dominates; x is cache-resident for banded/local operators).
+//
+// Pitfall: this is bit-exact ONLY because each row is reduced by a single thread.
+//   Do NOT parallelise a cross-vector reduction (the moment dot-product, vdot) on
+//   the golden path -- that changes summation order and moves the byte-exact goldens.
+// Warning: assumes COMPRESSED RowMajor storage (outer/inner/value pointers). The
+//   isCompressed() guard below makes it robust if an upstream op left gaps; it is a
+//   no-op on the already-compressed matrices the producers hand us.
 void SparseMatrixType::Multiply(const complex<double> a, const complex<double> *x, const complex<double> b, complex<double> *y)
 {
-        Eigen::Map<const Eigen::Vector<std::complex<double>, -1>>
-	  eig_x(x, numRows());
+	LSQ_SCOPED("spmv");
 
-	Eigen::Map<Eigen::Vector<std::complex<double>, -1>>
-	  eig_y(y, numRows());
+	if (!matrix_.isCompressed())
+		matrix_.makeCompressed();
 
+	const indexType        n   = static_cast<indexType>( numRows() );
+	const indexType* const rp  = matrix_.outerIndexPtr();   // row start offsets [n+1]
+	const indexType* const cl  = matrix_.innerIndexPtr();   // column indices    [nnz]
+	const complex<double>* const vl = matrix_.valuePtr();   // nonzero values    [nnz]
 
+	// if(): serial on small matrices (no fork/join), parallel once the work is worth it.
+	#pragma omp parallel for schedule(static) if(rp[n] > LSQ_SPMV_MIN_PARALLEL_NNZ)
+	for (indexType i = 0; i < n; ++i)
+	{
+		complex<double> acc(0.0, 0.0);
+		for (indexType p = rp[i]; p < rp[i + 1]; ++p)
+			acc += vl[p] * x[cl[p]];          // stored-order sum == Eigen's order
+		y[i] = a * acc + b * y[i];                // reads old y[i]; rows independent
+	}
 
-
-	eig_y = a * matrix_ * eig_x + b * eig_y; 
-
-
-	  
 	return ;
 };
 
@@ -224,11 +275,64 @@ void SparseMatrixType::Rescale(const complex<double> a, const complex<double> b)
 
 
 
+// SparseMatrixType::BatchMultiply -- block SpMM  Y = a*M*X + b*Y  for R = batchSize
+// right-hand sides at once. Previously a std::terminate() stub (the Eigen backend never
+// had an SpMM); implemented here so multi-vector callers (block/stochastic-trace KPM)
+// can amortise the matrix read across R vectors.
+//
+// PROBLEM. Running R independent SpMVs re-streams the whole matrix R times. When the
+// recursion is bandwidth-bound (it is -- see Phase A), reading M once and applying it
+// to all R vectors trades that redundant matrix traffic for arithmetic, lifting the
+// arithmetic intensity (measured ~1.6x moment throughput, saturating by R~8).
+//
+// LAYOUT. Column-major dense blocks, leading dimension numCols() (the MKL convention the
+// old stub referenced): right-hand-side r is the contiguous N-vector x + r*N, and output
+// r is y + r*N. So Y[:,r] = a*M*X[:,r] + b*Y[:,r] for r in [0,R).
+//
+// APPROACH. One OpenMP parallel-for over rows; each thread owns whole rows. For row i it
+// reads the row's nonzeros ONCE and accumulates into R running sums (one per RHS), then
+// writes a*acc[r] + b*y[r*N+i]. Bit-identical to R separate Multiply() calls: the per
+// (row,RHS) arithmetic and stored summation order are exactly those of the single-vector
+// kernel, so column r of BatchMultiply == Multiply on column r, term-for-term. The gate
+// `spmm_batchmultiply_equiv` asserts this for R in {1,8}.
+//
+// Pitfall: this is NOT used on any byte-exact golden path today (no caller); R=1 MUST stay
+//   bit-identical to Multiply so that if a future caller adopts it the goldens cannot move.
+// Complexity: O(R*nnz) work, O(rows) parallel tasks; same memory-bound character as the
+//   SpMV but with R-fold reuse of each streamed matrix element.
 void SparseMatrixType::BatchMultiply(const int batchSize, const complex<double> a, const complex<double> *x, const complex<double> b, complex<double> *y)
 {
-  	std::cout<<"ERROR: SparseMatrixType:BatchMultiply function not implemented in eigen yet."<<std::endl;
-	std::terminate();
-	//auto status = mkl_sparse_z_mm(SPARSE_OPERATION_NON_TRANSPOSE,a,Matrix, descr,SPARSE_LAYOUT_COLUMN_MAJOR,x, batchSize, numCols(), b, y, numCols() );
-  //assert( status == SPARSE_STATUS_SUCCESS);
+	LSQ_SCOPED("spmm");
+
+	if (batchSize <= 0) return;
+	if (!matrix_.isCompressed())
+		matrix_.makeCompressed();
+
+	const indexType        n   = static_cast<indexType>( numRows() );
+	const indexType        R   = static_cast<indexType>( batchSize );
+	const indexType        ld  = static_cast<indexType>( numCols() );   // column leading dim
+	const indexType* const rp  = matrix_.outerIndexPtr();
+	const indexType* const cl  = matrix_.innerIndexPtr();
+	const complex<double>* const vl = matrix_.valuePtr();
+
+	// if(): serial on small blocks (no fork/join); R-fold work so scale the nnz threshold by R.
+	#pragma omp parallel if(rp[n] * R > LSQ_SPMV_MIN_PARALLEL_NNZ)
+	{
+		std::vector<complex<double> > acc(R);   // per-thread R accumulators
+		#pragma omp for schedule(static)
+		for (indexType i = 0; i < n; ++i)
+		{
+			for (indexType r = 0; r < R; ++r) acc[r] = complex<double>(0.0, 0.0);
+			for (indexType p = rp[i]; p < rp[i + 1]; ++p)
+			{
+				const complex<double> v = vl[p];
+				const indexType       j = cl[p];
+				for (indexType r = 0; r < R; ++r)
+					acc[r] += v * x[r * ld + j];     // same stored-order sum as Multiply, per RHS
+			}
+			for (indexType r = 0; r < R; ++r)
+				y[r * ld + i] = a * acc[r] + b * y[r * ld + i];
+		}
+	}
 }
 

@@ -37,6 +37,27 @@ The methods and their derivations are reviewed in [2]; the KPM kernel itself in
    A. Harju, F. Ortmann, S. Roche, *Linear Scaling Quantum Transport
    Methodologies*, arXiv:1811.07387.
 
+## Performance & scaling
+
+The KPM recursion is dominated by one sparse matrix–vector product (SpMV) per
+moment; it is **multithreaded and memory-bandwidth bound**. On a dual AMD EPYC
+9754 (2×128 cores) the SpMV on a **2-million-site complex graphene** Hamiltonian
+speeds up **≈20× on one socket and ≈31× across two** (33 → 1.1 ms per product),
+reaching ~65% of the measured single-socket STREAM read roofline; the full DOS
+recursion is ~10× faster, the remainder being the (intentionally serial) moment
+reductions. Cost is **linear in system size**, as KPM requires.
+
+![SpMV and DOS-recursion time vs thread count for 2M-site graphene; the SpMV scales ~31×, the full recursion ~10× (serial reductions are the Amdahl floor)](docs/perf/fig_scaling_threads.png)
+
+![SpMV matrix-stream bandwidth vs threads against the measured 1- and 2-socket STREAM read rooflines](docs/perf/fig_roofline.png)
+
+Threading is **byte-exact**: every Chebyshev moment is bit-for-bit identical to the
+serial result (the recursion uses only exact scalars, so the row-parallel reduction
+cannot drift), and the full golden suite stays unchanged. Hardware, method, and
+reproduction commands are in
+[`docs/perf/PERF_ANALYSIS.md`](docs/perf/PERF_ANALYSIS.md); for large two-socket
+runs prefer `numactl --interleave=all` or pin to one socket.
+
 ## Installation
 
 Requirements: a C++11 compiler (e.g. g++ 13) and CMake ≥ 3.16, plus **Eigen3**
