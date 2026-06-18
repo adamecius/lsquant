@@ -3,28 +3,23 @@
 # GitHub Pages (.github/workflows/docs.yml) is the main host; this file keeps a
 # second, independent copy of the same site building on readthedocs.org.
 #
-# RTD natively expects a Sphinx project, so we take full control with
-# `build.commands`: configure with -DBUILD_DOCS=ON, build the `docs` target
-# (Doxygen only, no source compiled), then copy the HTML into the directory RTD
-# serves.
-#
-# Why the earlier RTD build failed (and why this works): the failure was simply
-# that .readthedocs.yaml was not yet on the branch RTD builds (the default
-# branch / `latest`), so RTD reported "config file not found". It was NOT an apt
-# problem: `build.apt_packages` is installed by Read the Docs itself with root
-# privileges, before `build.commands` run, and applies even when build.commands
-# is used. The packages below therefore are available to the configure step.
+# Why build.jobs and not build.commands: Read the Docs only installs
+# `build.apt_packages` when the build uses `build.jobs` (or the default Sphinx
+# flow). With `build.commands` the apt step is silently skipped, so cmake,
+# doxygen and the -dev libraries were never installed and the configure step had
+# no toolchain. `build.jobs.build.html` keeps apt_packages working (Read the Docs
+# installs them with root, before the job runs) while still letting us drive the
+# CMake `docs` target ourselves and emit HTML where RTD serves it.
 #
 # Pitfall: the configure step needs the Eigen/GSL/FFTW -dev packages because the
 # top-level CMakeLists find_package()s them, even though the docs target compiles
 # no source.
 #
-# Warning: the served site must land under "$READTHEDOCS_OUTPUT/html" or RTD
-# publishes nothing. The CMake docs target writes build/docs/html; we copy it.
+# Warning: HTML must be written under "$READTHEDOCS_OUTPUT/html" or RTD publishes
+# nothing. The CMake docs target writes build/docs/html; the last job copies it.
 #
 # To-do: when the planned Sphinx + Breathe + MyST layer lands (it consumes the
-# Doxygen XML this build already emits), switch to the native `sphinx:` key and
-# drop the manual copy.
+# Doxygen XML this build already emits), switch to the native `sphinx:` key.
 version: 2
 
 build:
@@ -41,8 +36,10 @@ build:
     - libeigen3-dev
     - libgsl-dev
     - libfftw3-dev
-  commands:
-    - cmake -S . -B build -DBUILD_DOCS=ON -DLSQUANT_BUILD_INPUT_TOOLS=OFF -DBUILD_TESTING=OFF
-    - cmake --build build --target docs
-    - mkdir -p "$READTHEDOCS_OUTPUT/html"
-    - cp -a build/docs/html/. "$READTHEDOCS_OUTPUT/html/"
+  jobs:
+    build:
+      html:
+        - cmake -S . -B build -DBUILD_DOCS=ON -DLSQUANT_BUILD_INPUT_TOOLS=OFF -DBUILD_TESTING=OFF
+        - cmake --build build --target docs
+        - mkdir -p "$READTHEDOCS_OUTPUT/html"
+        - cp -a build/docs/html/. "$READTHEDOCS_OUTPUT/html/"
