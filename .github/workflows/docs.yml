@@ -1,12 +1,13 @@
-# GitHub Pages build for the LSQUANT Doxygen site — the sole host.
+# GitHub Pages build for the LSQUANT Doxygen site — the MAIN host.
 #
-# Read the Docs has been retired: its build container has no root, so the
-# apt_packages it needs (cmake, doxygen, Eigen, ...) were silently dropped the
-# moment .readthedocs.yaml used build.commands, and the configure step died with
-# no toolchain. GitHub Actions runners have root and ship cmake/g++/pkg-config,
-# so `apt-get install doxygen graphviz` works — the right host for a
-# CMake/Doxygen artifact. The CMake flags below are unchanged from the docs
-# target, so only the host moves; the target itself is untouched.
+# Two hosts build the same site independently: GitHub Pages here (main), and
+# Read the Docs (.readthedocs.yaml) as a secondary mirror. GitHub Actions runners
+# have root and ship cmake/g++/pkg-config, so `apt-get install ...` works; this is
+# the natural home for a CMake/Doxygen artifact. The CMake flags below match the
+# `docs` target exactly, so only the host wiring lives here; the target itself is
+# untouched. (RTD installs its apt_packages with root too, so it builds the same
+# way; the earlier RTD failure was only that .readthedocs.yaml had not yet reached
+# the default branch.)
 #
 # Pitfall: the configure step still needs the Eigen/GSL/FFTW -dev packages
 # because the top-level CMakeLists find_package()s them, even though the docs
