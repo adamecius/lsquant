@@ -1,0 +1,48 @@
+# Read the Docs build for the LSQUANT Doxygen site — SECONDARY mirror.
+#
+# GitHub Pages (.github/workflows/docs.yml) is the main host; this file keeps a
+# second, independent copy of the same site building on readthedocs.org.
+#
+# RTD natively expects a Sphinx project, so we take full control with
+# `build.commands`: configure with -DBUILD_DOCS=ON, build the `docs` target
+# (Doxygen only, no source compiled), then copy the HTML into the directory RTD
+# serves.
+#
+# Why the earlier RTD build failed (and why this works): the failure was simply
+# that .readthedocs.yaml was not yet on the branch RTD builds (the default
+# branch / `latest`), so RTD reported "config file not found". It was NOT an apt
+# problem: `build.apt_packages` is installed by Read the Docs itself with root
+# privileges, before `build.commands` run, and applies even when build.commands
+# is used. The packages below therefore are available to the configure step.
+#
+# Pitfall: the configure step needs the Eigen/GSL/FFTW -dev packages because the
+# top-level CMakeLists find_package()s them, even though the docs target compiles
+# no source.
+#
+# Warning: the served site must land under "$READTHEDOCS_OUTPUT/html" or RTD
+# publishes nothing. The CMake docs target writes build/docs/html; we copy it.
+#
+# To-do: when the planned Sphinx + Breathe + MyST layer lands (it consumes the
+# Doxygen XML this build already emits), switch to the native `sphinx:` key and
+# drop the manual copy.
+version: 2
+
+build:
+  os: ubuntu-24.04
+  tools:
+    # Required to define the build environment; also ready for the future Sphinx layer.
+    python: "3.12"
+  apt_packages:
+    - cmake
+    - g++
+    - pkg-config
+    - doxygen
+    - graphviz
+    - libeigen3-dev
+    - libgsl-dev
+    - libfftw3-dev
+  commands:
+    - cmake -S . -B build -DBUILD_DOCS=ON -DLSQUANT_BUILD_INPUT_TOOLS=OFF -DBUILD_TESTING=OFF
+    - cmake --build build --target docs
+    - mkdir -p "$READTHEDOCS_OUTPUT/html"
+    - cp -a build/docs/html/. "$READTHEDOCS_OUTPUT/html/"
