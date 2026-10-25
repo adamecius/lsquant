@@ -1,243 +1,246 @@
-# LSQUANT — Linear-scaling Quantum Transport
+# LSQUANT — Linear-Scaling Quantum Transport
 
-**LSQUANT** (repository `lsquant`) is a C++ library for **large-scale quantum
-transport** in tight-binding models. It computes spectral and transport
-properties — density of states, conductivities, time evolution, spin dynamics —
-by expanding them in **Chebyshev moments of the Hamiltonian** (the Kernel
-Polynomial Method, KPM). The cost grows *linearly* with system size and nothing
-is ever diagonalized. The numerics run on a single Eigen backend, matrix-free and
-OpenMP-parallel.
+**LSQUANT** is a C++17 and Python/SymPy library for **large-scale spectral and
+quantum transport calculations** in tight-binding and first-principles local-orbital
+models using the **Kernel Polynomial Method (KPM)** [1, 2]. It evaluates densities
+of states, longitudinal and Hall conductivities (Kubo–Greenwood, Kubo–Bastin, and
+intrinsic/extrinsic spin Hall), real-time wave-packet and spin dynamics, and
+mean-square displacement at a cost **linear in system size** without diagonalising
+the Hamiltonian. One observable word grammar runs across real-space sparse
+supercells, Bloch $k$-space Hamiltonians with FFT-sandwiched real-space disorder,
+non-orthogonal SIESTA and Wannier bases (Löwdin and generalised metric routes),
+spectral window projections, and an exact per-$k$ eigenbasis oracle.
 
-If you have a tight-binding model as sparse operators in CSR format, LSQUANT turns
-it into a density of states or a Kubo conductivity in two steps: **compute the
-moments**, then **reconstruct the spectrum**.
+## The unifying idea
 
-## What it computes
+Every spectral or transport observable in LSQUANT is written as the trace of an
+ordered word of static operators $A_i$ and spectral functions $f_i(H)$:
 
-LSQUANT expands a spectral or transport quantity in Chebyshev polynomials of the
-rescaled Hamiltonian, so its cost scales linearly with system size (KPM [1]):
+$$
+C = \mathrm{Tr}\!\left[\,A_0\,f_1(H)\,A_1\,f_2(H)\,A_2\,\cdots\,f_p(H)\,A_p\,\right]
+$$
 
-- **Density of states and spectral functions**, from the 1D Chebyshev moments
-  $\mu_m = \mathrm{Tr}\,T_m(\tilde H)$ [1].
-- **Kubo–Greenwood and Kubo–Bastin conductivities** — longitudinal $\sigma_{xx}$
-  and Hall $\sigma_{xy}$, charge and spin, with the Fermi-sea / Fermi-surface
-  split [2].
-- **Time evolution and time-dependent correlations** — velocity autocorrelation
-  and mean-square displacement, for ballistic transport and localization [2].
-- **Spin dynamics** — precession and relaxation; non-orthogonal bases [2].
+1. **Python/SymPy parses the word** and classifies each slot as a static operator
+   (`1`, `VX`, `VY`, `VZ`, `SX`, `SY`, `SZ`, `JX_SZ`, projectors `(1+SX)/2`, or
+   commutators `[X, U(t)]`) or a spectral function of $H$ (`delta(E-H)`, `G+(E)`,
+   `G-(E)`, `dG+(E)/dE`, `dG-(E)/dE`, `U(t)`).
+2. **The compiler lowers the word into a five-instruction bytecode `Plan`**:
+   `ApplyOperator`, `Expand` (opens a Chebyshev moment axis via the three-term
+   recursion), `ApplySeries` (contracts a Clenshaw Chebyshev series on the fly,
+   such as the Bessel series for $U(t)$), `MirrorToBra`, and `Trace`.
+3. **The C++ `MomentEngine` executes the `Plan`** on any `LinearOperator` and
+   `StateGenerator`, returning the rank-$r$ `ChebyshevMoments` tensor
+   $\mu_{m_1 \dots m_r}$. The engine has no notion of basis or observable names.
+4. **Python contracts $\mu$ with damped Chebyshev coefficient tables** (GEMV for
+   rank 1, GEMM or 2D FFT for rank 2, symbolic Fermi-sea integrals for
+   Kubo–Bastin and spin Hall) to reconstruct the physical curve.
 
-The methods and their derivations are reviewed in [2]; the KPM kernel itself in
-[1].
+## Quickstart
 
-#### References
+```bash
+# 1. Configure and build the host-tuned C++ core and Python extension
+cmake --preset native
+cmake --build --preset native
+export PYTHONPATH="$PWD/build/native/lsquant_core:$PWD/python"
 
-1. A. Weisse, G. Wellein, A. Alvermann, H. Fehske, *The kernel polynomial
-   method*, Rev. Mod. Phys. **78**, 275 (2006).
-2. Z. Fan, J. H. García, A. W. Cummings, J. E. Barrios-Vargas, M. Panhans,
-   A. Harju, F. Ortmann, S. Roche, *Linear Scaling Quantum Transport
-   Methodologies*, arXiv:1811.07387.
+# 2. Run Tutorial 03: quantized Hall plateau of the Haldane model
+python3 -m lsquant run examples/03_haldane_hall/run_haldane.json --out /tmp/haldane
 
-## Performance
-
-LSQUANT is built for **large** systems. Two things make that practical:
-
-- **Linear in system size.** Doubling the number of sites roughly doubles the cost —
-  no diagonalization, no cubic blow-up.
-- **Uses all your cores.** The inner kernel (one sparse matrix–vector product per
-  Chebyshev moment) is multithreaded, so a multi-million-site model runs **tens of
-  times faster** on a many-core machine — and the answer is **bit-for-bit identical**
-  to a single-thread run, so your results never change.
-
-In short: bigger systems and more cores both just work. For the full study —
-benchmarks, bandwidth rooflines, NUMA tips, and how to reproduce it — see
-**[docs/performance/](docs/performance/README.md)**.
+# 3. Inspect the output and generate the publication figure
+python3 -m lsquant inspect /tmp/haldane
+python3 examples/03_haldane_hall/plot.py /tmp/haldane
+```
 
 ## Installation
 
-Requirements: a C++11 compiler (e.g. g++ 13) and CMake ≥ 3.16, plus **Eigen3**
-(≥ 3.3), **FFTW3**, **GSL**, **Boost.Math** (header-only), **OpenMP**, and
-**pthreads**. Intel MKL is not used; Eigen is the single numeric backend.
+### Prerequisites
+
+- **C++17 compiler** (`g++ >= 11` or `clang++ >= 14`) and **CMake** (`>= 3.21` for
+  `CMakePresets.json`, or `>= 3.16` when invoking `cmake -S . -B build` directly)
+- **Eigen3** (`>= 3.3`), **FFTW3** (double precision, plus `libfftw3_omp` when
+  available), **OpenMP**, and **GSL**
+- **Python** (`>= 3.10`) with `numpy`, `scipy`, `sympy`, `pybind11`, and
+  `matplotlib` (plus `sisl` for SIESTA `.fdf`/`.TSHS`/`.HSX` models and `mcp` for
+  the optional MCP server)
 
 On Debian/Ubuntu:
 
 ```bash
-sudo apt-get install g++ cmake pkg-config libeigen3-dev libfftw3-dev libgsl-dev libboost-dev
+sudo apt-get install g++ cmake pkg-config libeigen3-dev libfftw3-dev libgsl-dev python3-dev
+pip install numpy scipy sympy pybind11 matplotlib sisl
 ```
 
-Dependencies resolve through `find_package` / `pkg-config` as imported targets,
-so no hand-passed toolchain file is needed:
+### Build presets and install
+
+[`CMakePresets.json`](CMakePresets.json) provides two build profiles:
+
+- **`native`** (`cmake --preset native && cmake --build --preset native`): enables
+  `-O3 -march=native -mtune=native -fno-math-errno` and `LSQUANT_NATIVE_BUILD=1`
+  (SIMD-aligned scratch buffers, NUMA-aware first-touch allocation, and
+  cache-blocked `BlockDiagonalOperator` evaluation). Recommended for all runs.
+- **`golden`** (`cmake --preset golden && cmake --build --preset golden`): portable
+  IEEE-754 build without machine-specific flags, used for byte-for-byte golden
+  verification.
+
+To install a self-contained tree (`lib/`, `include/lsquant/`, `bin/`, and
+`python/lsquant/`):
 
 ```bash
-git clone https://github.com/adamecius/lsquant.git
-cd lsquant
-cmake -S . -B build
-cmake --build build -j        # executables land in build/
-ctest --test-dir build        # optional: 24 checks, all should pass
+cmake --install build/native --prefix ~/.local/lsquant
+export PYTHONPATH="$HOME/.local/lsquant/python"
+python3 -c "import lsquant, lsquant._core"
 ```
 
-Build options:
+## What LSQUANT computes
 
-- `-DLSQUANT_BUILD_INPUT_TOOLS=ON|OFF` (default **ON**) — fetch and build the
-  pinned `wannier2sparse` used to generate the test fixtures; it clones at
-  configure time and degrades gracefully offline.
-- `-DLSQUANT_BUILD_UTILITIES=ON|OFF` (default **OFF**) — build the Python helper
-  utilities.
+### Observable word catalogue
 
-## The `lsquant` interface
+| Shape ID | Word syntax | Rank | Physical observable |
+|---|---|---:|---|
+| `dos` | `Tr[delta(E-H)]` | 1 | Density of states $\rho(E)$ |
+| `spectral_1d` | `Tr[A delta(E-H)]` | 1 | Operator spectral density $A(E)$ |
+| `local_dos` | `<i\| delta(E-H) \|i>` | 0 / 1 | Local density of states on site/orbital $i$ |
+| `kubo_greenwood` | `Tr[VX delta(E-H) VX delta(E-H)]` | 2 | Longitudinal Kubo–Greenwood conductivity $\sigma_{\alpha\alpha}(E)$ |
+| `kubo_bastin` | `Tr[VX delta(E-H) VY dG-(E)/dE]` | 2 | Kubo–Bastin Hall $\sigma_{\alpha\beta}(E)$ (total, Fermi-sea, Fermi-surface) and spin Hall $\sigma^{\gamma}_{\alpha\beta}(E)$ (`JX_SZ` velocity) |
+| `time_correlation` | `Tr[A delta(E-H) U(t)+ B U(t)]` | 1 | Energy-resolved real-time correlator $C_{AB}(E, t)$ |
+| `msd` | `Tr[[X, U(t)]+ delta(E-H) [X, U(t)]]` | 1 | Mean-square displacement $\Delta X^2(E, t)$ and diffusivity $D(E, t)$ |
+| `projected_evolution` | `Tr[P U(t)+ S_a U(t) delta(E-H) P]` | 1 | Spin precession and relaxation $\langle S_\alpha(E, t) \rangle$ from initial state projector $P$ |
 
-One binary drives the pipeline. A run is described by a small JSON file rather
-than positional arguments:
+### Representations, metrics, and spectral projection
 
-```bash
-# 1. compute Chebyshev moments  (mode: spectral | noneq | msd)
-lsquant compute --config run.json
-
-# 2. reconstruct a spectrum  (dos from a .chebmom1D; bastin/greenwood from a .chebmom2D)
-lsquant reconstruct SpectralOp*.chebmom1D     dos       120      # broadening in meV
-lsquant reconstruct NonEqOpVX-VY*.chebmom2D   bastin    10
-
-# inspect a run or an operator and its resolved numerical provenance
-lsquant inspect run.json
-```
-
-### Unified runs: one system, many observables, one output
-
-For the common case — *the same system, several observables* — `lsquant run`
-takes a single config that lists a `system`, the `numerics`, and the
-`observables` to compute, and writes **one** machine- and human-readable
-`<label>.results.json` holding the thin-grid final spectra plus timing, peak
-memory, and any errors:
-
-```json
-{ "system":   { "label": "graphene", "operators_dir": "operators" },
-  "numerics": { "num_moments": 512, "broadening_meV": 10, "grid_points": 600 },
-  "observables": [ { "kind": "dos" },
-                   { "kind": "conductivity", "component": "xx" },
-                   { "kind": "conductivity", "component": "xy" } ],
-  "output": { "results": "graphene.results.json" } }
-```
-
-```bash
-lsquant run --config run.json          # DOS + sigma_xx + sigma_xy -> graphene.results.json
-```
-
-The config is validated with **physics-aware hints** — ask for `sigma_xy` without
-a `VY` operator and it tells you exactly what is missing instead of failing
-opaquely. Each system carries a **fingerprint** (a SHA-256 of its operator
-files); two runs on the *same* system can be combined, and the merge refuses a
-mismatch:
-
-```bash
-lsquant fingerprint graphene operators        # the system's merge identity
-lsquant merge a.results.json b.results.json -o graphene.results.json
-```
-
-Present a results file as a table + plots + a self-contained HTML dashboard with
-[`utilities/python/lsquant_report.py`](utilities/python/lsquant_report.py).
-
-Every run is instrumented by the reporting layer (see
-[`reporting_system.md`](reporting_system.md)): `-v`/`--log-file` and
-`LSQUANT_LOG_LEVEL` control levelled logging, and each run prints a peak-RSS /
-CPU / wall summary. Generated artifacts (`*.CSR`, `*.chebmom*`, `*.results.json`,
-log files) are a regenerable cache and are never committed.
-
-A density-of-states run is the spectral function of the identity operator:
-
-```json
-{ "mode": "spectral", "label": "chain1d_N256", "operator": "1",
-  "num_moments": 512, "state": "exact_chain1d_N256" }
-```
-
-A Hall-conductivity run uses two velocity operators:
-
-```json
-{ "label": "haldane", "operator_right": "VX", "operator_left": "VY",
-  "num_moments": 128, "state": "exact" }
-```
-
-`compute` writes a `.chebmom*` moment table; `reconstruct` turns it into a curve.
-Every operator travels with a `.desc` sidecar (its identity, units, and spectral
-bounds), so a result stays traceable to the operator that produced it, and
-`inspect` reports that provenance.
-
-## Tutorials
-
-Six self-contained physics stories under [`examples/`](examples/), each with a
-script that reproduces its figures, all driven through the `lsquant` interface.
-The figures follow a shared publication (APS/PRL) style — see
-[`examples/prl_style.py`](examples/prl_style.py): fixed column widths, math
-labels, no titles (the message goes in the caption), and colour + linestyle +
-marker encoding that stays readable in greyscale and for colour-blind readers.
-
-| | Tutorial | What it teaches |
+| Capability | Options | Description |
 |---|---|---|
-| 1 | [Density of states of a 1D chain](examples/01_dos_1d_chain) | KPM moments, the resolution dial, the finite-size revival |
-| 2 | [Localization on a disordered chain](examples/02_localization_1d_chain) | the localization length from mean-square displacement |
-| 3 | [Quantized Hall plateau of the Haldane model](examples/03_haldane_hall) | Kubo–Bastin $\sigma_{xy}$ and the Fermi-sea topological plateau |
-| 4 | [Spin precession in a magnetic chain](examples/04_spin_precession_magnetic_chain) | Larmor precession from real-time spin dynamics |
-| 5 | [Charge transport on a disordered square lattice](examples/05_charge_transport_square) | diffusion, conductivity, mean free path; the ballistic→diffusive→localized crossover |
-| 6 | [Spin relaxation on a disordered lattice](examples/06_spin_relaxation_square) | Elliott-Yafet vs Dyakonov-Perel mechanisms (illustrative) |
+| **Bases** | `real`, `bloch`, `eigen` | Real-space CSR supercells (`RealBasis`); Bloch $k$-space `BlockDiagonalOperator` with optional FFT-sandwiched real-space disorder $H_k + B^\dagger V B$ (`BlochBasis`); exact per-$k$ eigenbasis oracle (`EigenBasis`). |
+| **Non-orthogonal metrics** | `orthogonal`, `nonorthogonal` (`lowdin` or `generalised`) | Overlap matrix $S$ handled via `BlochMetricBasis` / `EigenMetricBasis` or real-space appliers (`exact` block LLT/eigh, `chebyshev` polynomial expansion of $S^{-1}$ and $S^{-1/2}$, or `ischo` incomplete-Cholesky PCG), with `covariant` (dipole-corrected), `reduced`, or `truncated` velocity gauges. |
+| **Spectral projection** | `shift`, `truncate`, `orthogonal` | Energy-window projection ($P_W H P_W + \sigma Q_W$, hard rank truncation, or isolated-manifold SCDM polar downfolding to an orthogonal effective model). |
 
-Start with Tutorial 1; each reuses the previous chain.
+## Interfaces
 
-## How it works
-
-KPM expands a spectral quantity in Chebyshev polynomials of the rescaled
-Hamiltonian $\tilde H = (H - b)/a$, which maps the band onto $[-1, 1]$. The
-coefficients are the moments $\mu_m = \mathrm{Tr}\,[\,O\,T_m(\tilde H)\,]$,
-estimated by a stochastic (or exact) trace and a three-term recursion whose only
-contact with $H$ is a sparse matrix–vector product. That recursion is the
-expensive, linear-scaling step; reconstruction is a cheap sum over moments with a
-Jackson kernel that sets the broadening $\eta = \pi W_{1/2}/M$, so the moment
-count is the resolution dial.
-
-Internally the recursion speaks a single operator interface (`HamiltonianOp`),
-with the sparse matrix as the live implementation and the basis metric as a
-separate policy, so the hot loop pays one virtual call per matrix–vector product
-and the backend stays swappable.
-
-## Inputs
-
-LSQUANT consumes tight-binding models as sparse operators in **CSR text format**,
-one file per operator (`operators/<label>.<OP>.CSR`), produced by external tools
-such as **wannier2sparse**, **Wannier90**, or **KWANT**. Each operator carries a
-`.desc` sidecar describing what it physically is (observable, units, spectral
-bounds, provenance). The `examples/` generators (`make_chain.py`, …) show the
-format end to end.
-
-## Tests
-
-The suite validates LSQUANT against a symbolically-proven analytic oracle for the
-clean 1D chain, plus regression goldens for graphene, the Haldane model,
-localization, and the FFT reconstruction path:
+### 1. Command-line interface (`python -m lsquant`)
 
 ```bash
-ctest --test-dir build --output-on-failure
+# List all catalogued observable word shapes
+python3 -m lsquant words
+
+# Parse a word and inspect its AST, bytecode Plan, and allowed reconstruction formulas
+python3 -m lsquant words describe "Tr[JX_SZ delta(E-H) VY dG-(E)/dE]"
+
+# Validate and execute a JSON run file
+python3 -m lsquant run examples/01_dos_1d_chain/run_dos.json --out /tmp/chain_dos
+
+# Reconstruct a curve from saved moments with a different broadening or formula
+python3 -m lsquant reconstruct /tmp/chain_dos --formula dos --broadening-meV 15
+
+# Inspect a run file, moment file (.chebmom*), or output directory
+python3 -m lsquant inspect /tmp/chain_dos
 ```
 
-Golden masters live in `test/golden/`; regenerate them deliberately, and only
-when behavior changes on purpose, with `scripts/regenerate_goldens.sh` (seed
-pinned).
+### 2. Python API
 
-## Documentation
+```python
+import numpy as np
+import lsquant as lsq
 
-- **Website:** [lsquant.org](https://lsquant.org).
-- **Full documentation** is hosted on Read the Docs (in progress); the sources are the
-  physics notes under [`docs/`](docs/) (`main.md`, `time_evolution.md`,
-  `spinrelaxation.md`, …) and the [performance study](docs/performance/README.md).
-- API reference via Doxygen: `cd docs && doxygen lsquant.dox` writes `docs/html/`.
+basis = lsq.RealBasis("examples/03_haldane_hall/operators", "haldane",
+                      operators=["VX", "VY"])
+compiled = lsq.words.compile("Tr[VX delta(E-H) VY dG-(E)/dE]",
+                             num_moments=128, known_operators=["VX", "VY"])
+moments = lsq.run_plan(compiled.plan, basis.hamiltonian(),
+                       [basis.operator(op) for op in compiled.operator_names],
+                       basis.states("exact"), basis.window())
+energies, sigma_xy = lsq.kubo_bastin(moments, np.linspace(-3.0, 3.0, 601), eta=0.1)
+```
 
-## Repository layout
+### 3. JSON run file
+
+Every calculation is reproducible from a single strictly validated JSON run file
+(unknown keys are rejected before any operator is loaded). Example
+(`examples/03_haldane_hall/run_haldane.json`):
+
+```json
+{
+  "model": {
+    "kind": "csr",
+    "dir": "examples/03_haldane_hall/operators",
+    "label": "haldane",
+    "operators": ["VX", "VY"]
+  },
+  "basis": { "name": "real" },
+  "word": "Tr[VX delta(E-H) VY dG-(E)/dE]",
+  "expansion": { "moments": 128, "window": "gershgorin", "trace": "exact" },
+  "reconstruction": {
+    "kernel": "jackson",
+    "broadening_meV": 100.0,
+    "formulas": ["bastin", "sea", "surf", "greenwood"]
+  }
+}
+```
+
+See [`python/lsquant/README.md`](python/lsquant/README.md) for the complete
+run-file schema and Python API reference.
+
+### 4. MCP server (`python -m lsquant.mcp_server`)
+
+LSQUANT includes a Model Context Protocol (MCP) server over `stdio` exposing
+`words_describe`, `run`, `status`, `reconstruct`, and `inspect` for AI coding and
+research agents:
+
+```bash
+PYTHONPATH="build/native/lsquant_core:python" python3 -m lsquant.mcp_server --root "$PWD"
+```
+
+## Tutorials and examples
+
+Eight self-contained examples under [`examples/`](examples/) cover 1D chains, 2D
+topological insulators, diffusive/localised lattices, spin relaxation, and
+first-principles SIESTA spin-Hall calculations. Every example uses the shared
+publication figure stylesheet [`examples/prl_style.py`](examples/prl_style.py).
+
+| # | Example | Physics & observable | Basis & metric | Word | Typical runtime |
+|---:|---|---|---|---|---|
+| 01 | [`01_dos_1d_chain`](examples/01_dos_1d_chain) | 1D chain DOS, Jackson broadening dial, finite-size revival | `real` (orthogonal) | `Tr[delta(E-H)]` | ~2 s |
+| 02 | [`02_localization_1d_chain`](examples/02_localization_1d_chain) | Anderson localisation length $\xi(E)$ from saturated MSD | `real` (orthogonal) | `Tr[[X, U(t)]+ delta(E-H) [X, U(t)]]` | ~15 s |
+| 03 | [`03_haldane_hall`](examples/03_haldane_hall) | Quantised Chern plateau $\sigma_{xy} = e^2/h$ and Sea/Surf split | `real` (orthogonal) | `Tr[VX delta(E-H) VY dG-(E)/dE]` | ~3 s |
+| 04 | [`04_spin_precession_magnetic_chain`](examples/04_spin_precession_magnetic_chain) | Larmor spin precession in an exchange field | `real` (orthogonal) | `Tr[(1+SX)/2 U(t)+ S_a U(t) delta(E-H) (1+SX)/2]` | ~1 s |
+| 05 | [`05_charge_transport_square`](examples/05_charge_transport_square) | Ballistic $\to$ diffusive $\to$ localised transport on a 2D square lattice | `real` (orthogonal) | `Tr[delta(E-H)]` + `Tr[[X, U(t)]+ delta(E-H) [X, U(t)]]` | ~10 s |
+| 06 | [`06_spin_relaxation_square`](examples/06_spin_relaxation_square) | Elliott–Yafet vs. Dyakonov–Perel spin relaxation in 2D | `real` (orthogonal) | `Tr[(1+S_a)/2 U(t)+ S_a U(t) delta(E-H) (1+S_a)/2]` | ~25 s |
+| 07 | [`07_spin_hall_bi_bilayer`](examples/07_spin_hall_bi_bilayer) | Intrinsic spin Hall conductivity $\sigma^z_{xy}(E)$ of 2D $\mathrm{Bi}(111)$ bilayer from SIESTA SOC | `bloch` + `eigen` (non-orthogonal, Löwdin + generalised, covariant dipoles) | `Tr[JX_SZ delta(E-H) VY dG-(E)/dE]` | ~8 s (`quick`) / ~2 min (`production`) |
+| 08 | [`08_spin_hall_pdse2_monolayer`](examples/08_spin_hall_pdse2_monolayer) | Intrinsic spin Hall conductivity $\sigma^z_{xy}(E)$ of pentagonal $\mathrm{PdSe_2}$ monolayer from SIESTA SOC | `bloch` + `eigen` (non-orthogonal, Löwdin + generalised, covariant dipoles) | `Tr[JX_SZ delta(E-H) VY dG-(E)/dE]` | ~15 s (`quick`) / ~4 min (`production`) |
+
+## Project layout
 
 | Path | Contents |
 |---|---|
-| `include/`, `src/` | KPM core library, the `lsquant` binary, and the legacy drivers |
-| `examples/` | the six worked tutorials and their figure scripts |
-| `test/` | analytic-oracle and regression tests, golden masters |
-| `docs/` | physics pages and the Doxygen config |
-| `scripts/`, `cmake/` | golden regeneration; the `wannier2sparse` fetch module |
+| [`lsquant/core/algebra/`](lsquant/core/algebra) | `LinearOperator`, `SparseMatrix`, `BlockDiagonalOperator`, `BlochTransform` (batched FFTW), `MetricPolicy`, `OverlapAppliers` (`exact`, `chebyshev`, `ischo`), `StateGenerator`, `SpectralBounds`, `FftMomentContraction` |
+| [`lsquant/core/chebyshev/`](lsquant/core/chebyshev) | `SpectralWindow`, `RescaledOperator`, `ChebyshevRecursion`, `ChebyshevVectors`, `ChebyshevMoments`, `Plan`, `MomentEngine`, `Contraction` |
+| [`lsquant/io/`](lsquant/io) | CSR text reader, `.chebmom` and legacy `.chebmom1D/2D/TD` readers/writers, curve text writer |
+| [`lsquant/api/`](lsquant/api), [`lsquant/compat/`](lsquant/compat) | `pybind11` module `lsquant._core` and legacy GSL Bessel / text round-trip helpers |
+| [`python/lsquant/`](python/lsquant) | Python library: `words/` parser & compiler, SymPy `spectral_functions`, `kernels`, `reconstruct`, `bases`, `disorder_bases`, `metric_forms`, `models/` (`wannier`, `siesta`, `nonorthogonal`, `disorder`), `projection/`, `oracle/`, `runfile`, `cli`, `mcp_server` |
+| [`examples/`](examples) | Worked tutorials `01`–`06` and first-principles SIESTA spin-Hall examples `07`–`08` |
+| [`runs/goldens/`](runs/goldens), [`goldens/`](goldens) | Committed golden-master inputs, reference outputs, and JSON run files (`G1`–`G10`, tutorials `01`–`06`, SIESTA/disorder/projection gates) |
+| [`figures/`](figures) | Stage verification figure scripts (`stage_1.py` … `stage_9_local_projection.py`) |
+| [`docs/`](docs), [`bench/`](bench) | Physics notes, executable SymPy derivations ([`docs/derivations/`](docs/derivations)), performance study ([`docs/performance/`](docs/performance/README.md)), and kernel benchmarks (`bench/kernel_bench.cpp`, `bench/block_domains/`) |
 
-## License and citation
+## Verification and performance
 
-See [LICENSE](LICENSE). If LSQUANT contributes to your work, please cite the
-methodology, reference [2] above (arXiv:1811.07387).
+Every stage of LSQUANT is gated against committed golden masters and analytic or
+exact-diagonalisation oracles by [`scripts/check_goldens.sh`](scripts/check_goldens.sh),
+and developer self-checks live under [`tests/dev/`](tests/dev/). OpenMP reductions
+use a fixed per-state accumulation order so that multi-threaded runs are
+**bit-for-bit identical** between `OMP_NUM_THREADS=1` and `OMP_NUM_THREADS=16`.
+In the `native` build profile, SIMD-aligned scratch buffers, NUMA first-touch
+allocation, cache-blocked `BlockDiagonalOperator` evaluation, and 2D FFT Kubo–Bastin
+contractions accelerate large k-space and real-space runs; see
+[`docs/performance/README.md`](docs/performance/README.md) for the full benchmark
+report and roofline analysis.
+
+## References, citation, and licence
+
+1. A. Weiße, G. Wellein, A. Alvermann, and H. Fehske, *The kernel polynomial
+   method*, Rev. Mod. Phys. **78**, 275 (2006).
+2. Z. Fan, J. H. García, A. W. Cummings, J. E. Barrios-Vargas, M. Panhans,
+   A. Harju, F. Ortmann, and S. Roche, *Linear scaling quantum transport
+   methodologies*, Phys. Rep. **893**, 1–123 (2021) ([arXiv:1811.07387](https://arxiv.org/abs/1811.07387)).
+
+See [`LICENSE`](LICENSE) for licence terms. If LSQUANT contributes to your work,
+please cite Reference [2] above.
