@@ -1,0 +1,82 @@
+{
+  "material": "pdse2",
+  "source_tree": "bf70c9b8c8b8ec66df329265d6c170a1cb315e0e",
+  "model_sha256": "588c6364cb34282d9bb7e1343895c02743bb88651dd7533336a2eb8f71d82d27",
+  "material_model": "SIESTA; covariant velocity; exact Lowdin metric; W=0",
+  "mesh": [
+    24,
+    24,
+    1
+  ],
+  "projection": {
+    "kind": "shift",
+    "window_eV": [
+      -5,
+      5
+    ],
+    "radius": null
+  },
+  "reference_mu_eV": 1.052,
+  "stored_fermi_level_eV": 0.0,
+  "energy_reference": "Reference chemical potential relative to stored SIESTA Fermi zero",
+  "gaussian_DOS_KG_eta_eV": 0.05,
+  "gaussian_SHC_occupation_eta_eV": 0.01,
+  "charge_units": "e^2/h",
+  "spin_units": "Pauli",
+  "shc_units": "e^2/h, Pauli spin current",
+  "longitudinal_formula": "2*pi^2/(Nk*A) sum_knm |C_n^+ VX C_m|^2 delta_eta(E-e_n) delta_eta(E-e_m)",
+  "longitudinal_scope": "Finite Gaussian width and k mesh; clean broadened diagnostic, not converged DC transport",
+  "projected_DOS": "Selected physical identity only; shifted complement spikes excluded",
+  "valence_band_index_zero_based": 103,
+  "gap_eV": [
+    1.0135250903481312,
+    1.090172752323652
+  ],
+  "valence_multiplicity": [
+    1,
+    2
+  ],
+  "spin_texture": "Upper valence band; if energy-degenerate, unique maximal sigma_z eigenstate within that multiplet. Original versus explicitly projected state.",
+  "min_abs_projected_spin_eigenvalue": 0.005051722930912703,
+  "max_multiplet_average_spin": 0.9966522354037173,
+  "spin_projection_max_error": 3.9973182279182075e-15,
+  "band_path_labels": [
+    "$\\Gamma$",
+    "$X$",
+    "$S$",
+    "$Y$",
+    "$\\Gamma$"
+  ],
+  "path_MAE_meV": 2.554985969076044e-12,
+  "path_max_band_error_meV": 3.108624468950438e-11,
+  "projected_path_eigenvalue_max_error_eV": 1.894484569220367e-12,
+  "shc_at_reference": {
+    "full": 1.9790988211815814,
+    "projected": 1.986502925820712,
+    "saved_KPM_M1024_R16": 2.520384253866164
+  },
+  "max_SHC_multiplet_tolerance_eV": 1e-06,
+  "saved_KPM_file": "/home/jgarcia/lsquant-verify-20261023-1100/reduced-validation/materials/pdse2-covariant-k24-shift5/M1024.dat",
+  "saved_KPM_sha256": "3daf8cb0832960c3c74925661177b0423c226be667ac2e4f38c67a2ef2957672",
+  "note": "Review figure; does not close any material gate.",
+  "figure_style": {
+    "width_inches": 7.0,
+    "height_inches": 5.8,
+    "export_pixels": [
+      4200,
+      3480
+    ],
+    "dpi": 600,
+    "renderer": "mathtext-cm",
+    "tick_font_points": 8.5,
+    "minimum_line_points": 0.5,
+    "redundant_curves": "gray solid / blue dashed / orange dotted",
+    "caption": true,
+    "no_titles": true,
+    "scientific_scope": "diagnostic; no transport convergence claim"
+  },
+  "spin_texture_max_difference": 8.659739592076221e-15,
+  "unresolved_spin_points": 0,
+  "figure_script_sha256": "c9f1b82ffd44ab716e55114a35559a907f5afd66e205b2b7eb5e23d494b20bcb",
+  "numerical_script_sha256": "a676a8330e7a85a8057e12e56f1e19d6e3406b835818127e54f465ebe60c7ed6"
+}

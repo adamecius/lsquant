@@ -1,0 +1,8 @@
+{"material": "bi", "phase": "load frozen SIESTA reference", "wall_seconds": 0.26398250088095665}
+{"material": "bi", "phase": "clean mesh prepared", "wall_seconds": 3.1372106559574604}
+{"material": "bi", "phase": "DOS complete; spin Hall oracle starting", "wall_seconds": 6.648867305368185}
+{"material": "bi", "phase": "spin Hall oracle complete; charge conductivity starting", "wall_seconds": 10.58131043985486}
+{"material": "bi", "phase": "charge conductivity complete; valence spin sectors starting", "wall_seconds": 11.439211912453175}
+{"material": "bi", "phase": "valence spin sectors complete; band path starting", "wall_seconds": 11.6920722797513}
+{"material": "bi", "phase": "numerical data saved", "wall_seconds": 12.083390064537525}
+{"material": "bi", "phase": "figure exported", "wall_seconds": 15.074967473745346}

@@ -1,0 +1,11 @@
+{
+  "comparisons": 16,
+  "runfile_replays": 8,
+  "passed": true,
+  "replay_words": [
+    "selected DOS",
+    "SHC"
+  ],
+  "bastin_backend": "folded",
+  "scope": "clean toy, hard/shift, both metric routes; radius 1.2 Angstrom is a truncation diagnostic, not an accepted model"
+}

@@ -1,0 +1,35 @@
+Anderson sympy derivation: {'forms': {'physical': D*S/2 + S*D/2, 'generalised': X*(D*S/2 + S*D/2), 'lowdin': Y*(D*S/2 + S*D/2)*Y, 'anticommutator': (X*(D*S/2 + S*D/2) + (D*S/2 + S*D/2)*X)/2}, 'hermiticity': {'physical': {'hermitian': True, 's_hermitian': False}, 'generalised': {'hermitian': False, 's_hermitian': True}, 'lowdin': {'hermitian': True, 's_hermitian': False}, 'anticommutator': {'hermitian': True, 's_hermitian': False}}, 'symmetric_weight': 1/2, 'constant_residual': 0, 'orthogonal_residual': 0, 'incorrect_diagonal_constant_residual': w - w*S}
+periodic position proof: {'position': A + (S*position + position*S)/2, 'commutator': I*(H*X*(A + (S*position + position*S)/2) - (A + (S*position + position*S)/2)*X*H), 'residual': 0}
+disorder velocity bare {'forms': {'physical': dH_cell + (D*dS_cell + dS_cell*D)/2 - (H*X*dS_cell + dS_cell*X*H)/2 - (dS_cell*X*(D*S/2 + S*D/2) + (D*S/2 + S*D/2)*X*dS_cell)/2, 'generalised': X*(dH_cell + (D*dS_cell + dS_cell*D)/2 - (H*X*dS_cell + dS_cell*X*H)/2 - (dS_cell*X*(D*S/2 + S*D/2) + (D*S/2 + S*D/2)*X*dS_cell)/2), 'lowdin': Y*(dH_cell + (D*dS_cell + dS_cell*D)/2 - (H*X*dS_cell + dS_cell*X*H)/2 - (dS_cell*X*(D*S/2 + S*D/2) + (D*S/2 + S*D/2)*X*dS_cell)/2)*Y, 'anticommutator': (X*(dH_cell + (D*dS_cell + dS_cell*D)/2 - (H*X*dS_cell + dS_cell*X*H)/2 - (dS_cell*X*(D*S/2 + S*D/2) + (D*S/2 + S*D/2)*X*dS_cell)/2) + (dH_cell + (D*dS_cell + dS_cell*D)/2 - (H*X*dS_cell + dS_cell*X*H)/2 - (dS_cell*X*(D*S/2 + S*D/2) + (D*S/2 + S*D/2)*X*dS_cell)/2)*X)/2}, 'derivative': (D*dS_cell + dS_cell*D)/2, 'correction': (D*dS_cell + dS_cell*D)/2 - (dS_cell*X*(D*S/2 + S*D/2) + (D*S/2 + S*D/2)*X*dS_cell)/2, 'substitution_residual': 0, 'hermitian': True}
+disorder velocity berry_connection {'forms': {'physical': dH + (D*dS + dS*D)/2 - (H*X*dS + dS*X*H)/2 - (dS*X*(D*S/2 + S*D/2) + (D*S/2 + S*D/2)*X*dS)/2, 'generalised': X*(dH + (D*dS + dS*D)/2 - (H*X*dS + dS*X*H)/2 - (dS*X*(D*S/2 + S*D/2) + (D*S/2 + S*D/2)*X*dS)/2), 'lowdin': Y*(dH + (D*dS + dS*D)/2 - (H*X*dS + dS*X*H)/2 - (dS*X*(D*S/2 + S*D/2) + (D*S/2 + S*D/2)*X*dS)/2)*Y, 'anticommutator': (X*(dH + (D*dS + dS*D)/2 - (H*X*dS + dS*X*H)/2 - (dS*X*(D*S/2 + S*D/2) + (D*S/2 + S*D/2)*X*dS)/2) + (dH + (D*dS + dS*D)/2 - (H*X*dS + dS*X*H)/2 - (dS*X*(D*S/2 + S*D/2) + (D*S/2 + S*D/2)*X*dS)/2)*X)/2}, 'derivative': (D*dS + dS*D)/2, 'correction': (D*dS + dS*D)/2 - (dS*X*(D*S/2 + S*D/2) + (D*S/2 + S*D/2)*X*dS)/2, 'substitution_residual': 0, 'hermitian': True}
+disorder velocity covariant {'forms': {'physical': dH + (D*dS + dS*D)/2 + I*(-A*X*H + H*X*A) + I*(-A*X*(D*S/2 + S*D/2) + (D*S/2 + S*D/2)*X*A) - (H*X*dS + dS*X*H)/2 - (dS*X*(D*S/2 + S*D/2) + (D*S/2 + S*D/2)*X*dS)/2, 'generalised': X*(dH + (D*dS + dS*D)/2 + I*(-A*X*H + H*X*A) + I*(-A*X*(D*S/2 + S*D/2) + (D*S/2 + S*D/2)*X*A) - (H*X*dS + dS*X*H)/2 - (dS*X*(D*S/2 + S*D/2) + (D*S/2 + S*D/2)*X*dS)/2), 'lowdin': Y*(dH + (D*dS + dS*D)/2 + I*(-A*X*H + H*X*A) + I*(-A*X*(D*S/2 + S*D/2) + (D*S/2 + S*D/2)*X*A) - (H*X*dS + dS*X*H)/2 - (dS*X*(D*S/2 + S*D/2) + (D*S/2 + S*D/2)*X*dS)/2)*Y, 'anticommutator': (X*(dH + (D*dS + dS*D)/2 + I*(-A*X*H + H*X*A) + I*(-A*X*(D*S/2 + S*D/2) + (D*S/2 + S*D/2)*X*A) - (H*X*dS + dS*X*H)/2 - (dS*X*(D*S/2 + S*D/2) + (D*S/2 + S*D/2)*X*dS)/2) + (dH + (D*dS + dS*D)/2 + I*(-A*X*H + H*X*A) + I*(-A*X*(D*S/2 + S*D/2) + (D*S/2 + S*D/2)*X*A) - (H*X*dS + dS*X*H)/2 - (dS*X*(D*S/2 + S*D/2) + (D*S/2 + S*D/2)*X*dS)/2)*X)/2}, 'derivative': (D*dS + dS*D)/2, 'correction': (D*dS + dS*D)/2 + I*(-A*X*(D*S/2 + S*D/2) + (D*S/2 + S*D/2)*X*A) - (dS*X*(D*S/2 + S*D/2) + (D*S/2 + S*D/2)*X*dS)/2, 'substitution_residual': 0, 'hermitian': True}
+(a) W=0 mapped phases lowdin: max_abs=3.5561831257524545e-17 relative_max=8.5348395018058889e-16 tolerance=1e-12
+(a) W=0 mapped phases lowdin: max_abs=3.5869891226989284e-17 relative_max=8.6087738944774261e-16 tolerance=1e-12
+(a) W=0 real/Bloch lowdin Tr[delta(E-H)]: max_abs=3.9994012218731495e-15 relative_max=3.8738594794825075e-15 tolerance=1e-10
+(a) clean Bloch/6b lowdin Tr[delta(E-H)]: max_abs=0 relative_max=0 tolerance=1e-12
+(a) W=0 real/Bloch lowdin Tr[JXSZ delta(E-H) VY dG-(E)/dE]: max_abs=6.77050483281023e-15 relative_max=2.4661493218057418e-15 tolerance=1e-10
+(a) clean Bloch/6b lowdin Tr[JXSZ delta(E-H) VY dG-(E)/dE]: max_abs=0 relative_max=0 tolerance=1e-12
+(c) V Hermitian lowdin W=0.0: max_abs=0
+(b) W=1 eV seed=7 12x12 mapped phases lowdin: max_abs=3.5561831257524545e-17 relative_max=8.5348395018058889e-16 tolerance=1e-12
+(b) W=1 eV seed=7 12x12 mapped phases lowdin: max_abs=3.5869891226989284e-17 relative_max=8.6087738944774261e-16 tolerance=1e-12
+(b) W=1 eV seed=7 12x12 real/Bloch lowdin Tr[delta(E-H)]: max_abs=1.4993092168768713e-15 relative_max=9.9859605605664271e-16 tolerance=1e-09
+(b) W=1 eV seed=7 12x12 real/Bloch lowdin Tr[JXSZ delta(E-H) VY dG-(E)/dE]: max_abs=2.8366160936764147e-15 relative_max=9.8496756674845572e-16 tolerance=1e-09
+(c) V Hermitian lowdin W=1.0: max_abs=0
+(c) FFT/CSR potential lowdin: max_abs=4.9650683064945462e-16 relative_max=2.2881986138221118e-16 tolerance=1e-12
+(c) FFT/CSR potential lowdin: max_abs=5.2369115333442702e-16 relative_max=2.4782792884883225e-16 tolerance=1e-12
+(a) W=0 mapped phases generalised: max_abs=3.5561831257524545e-17 relative_max=8.5348395018058889e-16 tolerance=1e-12
+(a) W=0 mapped phases generalised: max_abs=3.5869891226989284e-17 relative_max=8.6087738944774261e-16 tolerance=1e-12
+(a) W=0 real/Bloch generalised Tr[delta(E-H)]: max_abs=2.4717628151232442e-15 relative_max=2.3941738478323764e-15 tolerance=1e-10
+(a) clean Bloch/6b generalised Tr[delta(E-H)]: max_abs=0 relative_max=0 tolerance=1e-12
+(a) W=0 real/Bloch generalised Tr[JXSZ delta(E-H) VY dG-(E)/dE]: max_abs=6.3208448532275292e-15 relative_max=2.3023611433648763e-15 tolerance=1e-10
+(a) clean Bloch/6b generalised Tr[JXSZ delta(E-H) VY dG-(E)/dE]: max_abs=0 relative_max=0 tolerance=1e-12
+(c) V Hermitian generalised W=0.0: max_abs=0
+(b) W=1 eV seed=7 12x12 mapped phases generalised: max_abs=3.5561831257524545e-17 relative_max=8.5348395018058889e-16 tolerance=1e-12
+(b) W=1 eV seed=7 12x12 mapped phases generalised: max_abs=3.5869891226989284e-17 relative_max=8.6087738944774261e-16 tolerance=1e-12
+(b) W=1 eV seed=7 12x12 real/Bloch generalised Tr[delta(E-H)]: max_abs=1.1392338512038513e-15 relative_max=7.5877238526428178e-16 tolerance=1e-09
+(b) W=1 eV seed=7 12x12 real/Bloch generalised Tr[JXSZ delta(E-H) VY dG-(E)/dE]: max_abs=2.4372216622573198e-15 relative_max=8.4628452036628093e-16 tolerance=1e-09
+(c) V Hermitian generalised W=1.0: max_abs=0
+(c) FFT/CSR potential generalised: max_abs=4.9650683064945462e-16 relative_max=2.2366132963864498e-16 tolerance=1e-12
+(c) FFT/CSR potential generalised: max_abs=6.2803698347351007e-16 relative_max=2.3245172594775114e-16 tolerance=1e-12
+(c) orthogonal stage-5 DOS bytes equal: True
+stage_6c_check: (a)-(c) passed; Bi gate and thread-count checks remain with the tester

@@ -1,0 +1,215 @@
+[
+  {
+    "phase": "source_started",
+    "material": "pdse2",
+    "model_sha256": "588c6364cb34282d9bb7e1343895c02743bb88651dd7533336a2eb8f71d82d27"
+  },
+  {
+    "phase": "oracle_crosscheck",
+    "exact_selected_trace": [
+      -0.0011379408393651905,
+      1.9865029234732192
+    ],
+    "previous_projected_oracle": [
+      -0.0011379448702026368,
+      1.986502920884376
+    ],
+    "max_difference": 4.030837446374752e-09,
+    "min_kept": 36,
+    "max_kept": 40
+  },
+  {
+    "phase": "exact_moments",
+    "seconds": 74.59438535571098,
+    "weighted_hermiticity_max": 1.1104245176186759e-16,
+    "original_dimension": 126720
+  },
+  {
+    "phase": "folded_convergence",
+    "moments": 256,
+    "effective_moments": 256,
+    "broadening_meV": 10.0,
+    "energies": [
+      -0.3844,
+      1.052
+    ],
+    "exact_trace_kpm": [
+      -0.0012776219469532817,
+      1.9802508168950677
+    ],
+    "gaussian_oracle": [
+      -0.0011379408393651905,
+      1.9865029234732192
+    ],
+    "difference": [
+      -0.00013968110758809122,
+      -0.006252106578151562
+    ],
+    "seconds": 0.07013335078954697
+  },
+  {
+    "phase": "folded_convergence",
+    "moments": 256,
+    "effective_moments": 256,
+    "broadening_meV": 1.0,
+    "energies": [
+      -0.3844,
+      1.052
+    ],
+    "exact_trace_kpm": [
+      -0.0012776219469532817,
+      1.9802508168950677
+    ],
+    "gaussian_oracle": [
+      -0.0011379408393651905,
+      1.986509988396536
+    ],
+    "difference": [
+      -0.00013968110758809122,
+      -0.006259171501468375
+    ],
+    "seconds": 0.07115985453128815
+  },
+  {
+    "phase": "folded_convergence",
+    "moments": 1024,
+    "effective_moments": 1024,
+    "broadening_meV": 10.0,
+    "energies": [
+      -0.3844,
+      1.052
+    ],
+    "exact_trace_kpm": [
+      -0.0011469402720304764,
+      2.126076427881302
+    ],
+    "gaussian_oracle": [
+      -0.0011379408393651905,
+      1.9865029234732192
+    ],
+    "difference": [
+      -8.999432665285963e-06,
+      0.13957350440808258
+    ],
+    "seconds": 0.933124378323555
+  },
+  {
+    "phase": "folded_convergence",
+    "moments": 1024,
+    "effective_moments": 1024,
+    "broadening_meV": 1.0,
+    "energies": [
+      -0.3844,
+      1.052
+    ],
+    "exact_trace_kpm": [
+      -0.0011469402720304764,
+      2.126076427881302
+    ],
+    "gaussian_oracle": [
+      -0.0011379408393651905,
+      1.986509988396536
+    ],
+    "difference": [
+      -8.999432665285963e-06,
+      0.13956643948476577
+    ],
+    "seconds": 0.9319185130298138
+  },
+  {
+    "phase": "folded_convergence",
+    "moments": 2048,
+    "effective_moments": 1885,
+    "broadening_meV": 10.0,
+    "energies": [
+      -0.3844,
+      1.052
+    ],
+    "exact_trace_kpm": [
+      -0.0011406101156005996,
+      2.025971186142324
+    ],
+    "gaussian_oracle": [
+      -0.0011379408393651905,
+      1.9865029234732192
+    ],
+    "difference": [
+      -2.669276235409178e-06,
+      0.03946826266910475
+    ],
+    "seconds": 2.9898033849895
+  },
+  {
+    "phase": "folded_convergence",
+    "moments": 2048,
+    "effective_moments": 2048,
+    "broadening_meV": 1.0,
+    "energies": [
+      -0.3844,
+      1.052
+    ],
+    "exact_trace_kpm": [
+      -0.001140203261099918,
+      2.019736084294654
+    ],
+    "gaussian_oracle": [
+      -0.0011379408393651905,
+      1.986509988396536
+    ],
+    "difference": [
+      -2.2624217347274895e-06,
+      0.03322609589811787
+    ],
+    "seconds": 3.643478389829397
+  },
+  {
+    "phase": "folded_convergence",
+    "moments": 4096,
+    "effective_moments": 1885,
+    "broadening_meV": 10.0,
+    "energies": [
+      -0.3844,
+      1.052
+    ],
+    "exact_trace_kpm": [
+      -0.0011406101156005996,
+      2.025971186142324
+    ],
+    "gaussian_oracle": [
+      -0.0011379408393651905,
+      1.9865029234732192
+    ],
+    "difference": [
+      -2.669276235409178e-06,
+      0.03946826266910475
+    ],
+    "seconds": 3.06945963203907
+  },
+  {
+    "phase": "folded_convergence",
+    "moments": 4096,
+    "effective_moments": 4096,
+    "broadening_meV": 1.0,
+    "energies": [
+      -0.3844,
+      1.052
+    ],
+    "exact_trace_kpm": [
+      -0.0011385080614245556,
+      1.9949008540738462
+    ],
+    "gaussian_oracle": [
+      -0.0011379408393651905,
+      1.986509988396536
+    ],
+    "difference": [
+      -5.672220593651821e-07,
+      0.008390865677310178
+    ],
+    "seconds": 14.435398604720831
+  },
+  {
+    "phase": "complete",
+    "status": "convergence diagnostic; kernels differ; no gate changed"
+  }
+]

@@ -1,0 +1,146 @@
+[
+  {
+    "route": "lowdin",
+    "kind": "hard",
+    "radius": null,
+    "word": "Tr[1 delta(E-H)]",
+    "max_absolute_moment_difference": 5.629779158265427e-16,
+    "limit": 1e-10,
+    "passed": true
+  },
+  {
+    "route": "lowdin",
+    "kind": "hard",
+    "radius": null,
+    "word": "Tr[JXSZ delta(E-H) VY dG-(E)/dE]",
+    "max_absolute_moment_difference": 2.3346691088852925e-15,
+    "limit": 1e-10,
+    "passed": true
+  },
+  {
+    "route": "lowdin",
+    "kind": "hard",
+    "radius": 1.2,
+    "word": "Tr[1 delta(E-H)]",
+    "max_absolute_moment_difference": 6.106325198476751e-16,
+    "limit": 1e-10,
+    "passed": true
+  },
+  {
+    "route": "lowdin",
+    "kind": "hard",
+    "radius": 1.2,
+    "word": "Tr[JXSZ delta(E-H) VY dG-(E)/dE]",
+    "max_absolute_moment_difference": 2.3818015120446382e-15,
+    "limit": 1e-10,
+    "passed": true
+  },
+  {
+    "route": "lowdin",
+    "kind": "shift",
+    "radius": null,
+    "word": "Tr[1 delta(E-H)]",
+    "max_absolute_moment_difference": 7.307048087616824e-16,
+    "limit": 1e-10,
+    "passed": true
+  },
+  {
+    "route": "lowdin",
+    "kind": "shift",
+    "radius": null,
+    "word": "Tr[JXSZ delta(E-H) VY dG-(E)/dE]",
+    "max_absolute_moment_difference": 2.3668850885147743e-15,
+    "limit": 1e-10,
+    "passed": true
+  },
+  {
+    "route": "lowdin",
+    "kind": "shift",
+    "radius": 1.2,
+    "word": "Tr[1 delta(E-H)]",
+    "max_absolute_moment_difference": 6.542899160650294e-16,
+    "limit": 1e-10,
+    "passed": true
+  },
+  {
+    "route": "lowdin",
+    "kind": "shift",
+    "radius": 1.2,
+    "word": "Tr[JXSZ delta(E-H) VY dG-(E)/dE]",
+    "max_absolute_moment_difference": 2.3314780421529558e-15,
+    "limit": 1e-10,
+    "passed": true
+  },
+  {
+    "route": "generalised",
+    "kind": "hard",
+    "radius": null,
+    "word": "Tr[1 delta(E-H)]",
+    "max_absolute_moment_difference": 4.454935405609523e-16,
+    "limit": 1e-10,
+    "passed": true
+  },
+  {
+    "route": "generalised",
+    "kind": "hard",
+    "radius": null,
+    "word": "Tr[JXSZ delta(E-H) VY dG-(E)/dE]",
+    "max_absolute_moment_difference": 1.2722186292132596e-15,
+    "limit": 1e-10,
+    "passed": true
+  },
+  {
+    "route": "generalised",
+    "kind": "hard",
+    "radius": 1.2,
+    "word": "Tr[1 delta(E-H)]",
+    "max_absolute_moment_difference": 7.079393540718771e-16,
+    "limit": 1e-10,
+    "passed": true
+  },
+  {
+    "route": "generalised",
+    "kind": "hard",
+    "radius": 1.2,
+    "word": "Tr[JXSZ delta(E-H) VY dG-(E)/dE]",
+    "max_absolute_moment_difference": 8.761558169759963e-16,
+    "limit": 1e-10,
+    "passed": true
+  },
+  {
+    "route": "generalised",
+    "kind": "shift",
+    "radius": null,
+    "word": "Tr[1 delta(E-H)]",
+    "max_absolute_moment_difference": 5.274764690851165e-16,
+    "limit": 1e-10,
+    "passed": true
+  },
+  {
+    "route": "generalised",
+    "kind": "shift",
+    "radius": null,
+    "word": "Tr[JXSZ delta(E-H) VY dG-(E)/dE]",
+    "max_absolute_moment_difference": 1.1607879812187582e-15,
+    "limit": 1e-10,
+    "passed": true
+  },
+  {
+    "route": "generalised",
+    "kind": "shift",
+    "radius": 1.2,
+    "word": "Tr[1 delta(E-H)]",
+    "max_absolute_moment_difference": 6.051302876929975e-16,
+    "limit": 1e-10,
+    "passed": true
+  },
+  {
+    "route": "generalised",
+    "kind": "shift",
+    "radius": 1.2,
+    "word": "Tr[JXSZ delta(E-H) VY dG-(E)/dE]",
+    "max_absolute_moment_difference": 9.581956755997207e-16,
+    "limit": 1e-10,
+    "passed": true
+  }
+]

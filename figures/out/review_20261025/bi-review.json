@@ -1,0 +1,80 @@
+{
+  "material": "bi",
+  "source_tree": "bf70c9b8c8b8ec66df329265d6c170a1cb315e0e",
+  "model_sha256": "e17355e699678ea4f1f6228a1ce436c5e83d6cd90b4d7f61942945f2f170f6bc",
+  "material_model": "SIESTA; covariant velocity; exact Lowdin metric; W=0",
+  "mesh": [
+    24,
+    24,
+    1
+  ],
+  "projection": {
+    "kind": "shift",
+    "window_eV": [
+      -5,
+      5
+    ],
+    "radius": null
+  },
+  "reference_mu_eV": 0.0,
+  "stored_fermi_level_eV": 0.0,
+  "energy_reference": "Reference chemical potential relative to stored SIESTA Fermi zero",
+  "gaussian_DOS_KG_eta_eV": 0.05,
+  "gaussian_SHC_occupation_eta_eV": 0.01,
+  "charge_units": "e^2/h",
+  "spin_units": "Pauli",
+  "shc_units": "e^2/h, Pauli spin current",
+  "longitudinal_formula": "2*pi^2/(Nk*A) sum_knm |C_n^+ VX C_m|^2 delta_eta(E-e_n) delta_eta(E-e_m)",
+  "longitudinal_scope": "Finite Gaussian width and k mesh; clean broadened diagnostic, not converged DC transport",
+  "projected_DOS": "Selected physical identity only; shifted complement spikes excluded",
+  "valence_band_index_zero_based": 29,
+  "gap_eV": [
+    -0.1288974093151779,
+    0.17552803907690911
+  ],
+  "valence_multiplicity": [
+    1
+  ],
+  "spin_texture": "Upper valence band; if energy-degenerate, unique maximal sigma_z eigenstate within that multiplet. Original versus explicitly projected state.",
+  "min_abs_projected_spin_eigenvalue": 0.02779201366408175,
+  "max_multiplet_average_spin": 0.8447928694650838,
+  "spin_projection_max_error": 3.885782135047986e-15,
+  "band_path_labels": [
+    "$\\Gamma$",
+    "$M$",
+    "$K$",
+    "$\\Gamma$"
+  ],
+  "path_MAE_meV": 2.3435110601410976e-12,
+  "path_max_band_error_meV": 1.687538997430238e-11,
+  "projected_path_eigenvalue_max_error_eV": 3.3084646133829665e-12,
+  "shc_at_reference": {
+    "full": 1.1441538380905518,
+    "projected": 1.0797584982375708,
+    "saved_KPM_M1024_R16": 1.1353409434012425
+  },
+  "max_SHC_multiplet_tolerance_eV": 1e-06,
+  "saved_KPM_file": "/home/jgarcia/lsquant-verify-20261023-1100/reduced-validation/materials/bi-covariant-k24-shift5/M1024.dat",
+  "saved_KPM_sha256": "57e129c0a5d3195a8f86f19655c36a3b007123406e9c170a57c2b0142c6ec9f7",
+  "note": "Review figure; does not close any material gate.",
+  "figure_style": {
+    "width_inches": 7.0,
+    "height_inches": 5.8,
+    "export_pixels": [
+      4200,
+      3480
+    ],
+    "dpi": 600,
+    "renderer": "mathtext-cm",
+    "tick_font_points": 8.5,
+    "minimum_line_points": 0.5,
+    "redundant_curves": "gray solid / blue dashed / orange dotted",
+    "caption": true,
+    "no_titles": true,
+    "scientific_scope": "diagnostic; no transport convergence claim"
+  },
+  "spin_texture_max_difference": 9.103828801926284e-15,
+  "unresolved_spin_points": 0,
+  "figure_script_sha256": "c9f1b82ffd44ab716e55114a35559a907f5afd66e205b2b7eb5e23d494b20bcb",
+  "numerical_script_sha256": "a676a8330e7a85a8057e12e56f1e19d6e3406b835818127e54f465ebe60c7ed6"
+}

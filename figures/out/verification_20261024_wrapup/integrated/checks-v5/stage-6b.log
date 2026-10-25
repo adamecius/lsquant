@@ -1,0 +1,167 @@
+{
+  "V": {
+    "forms": {
+      "physical": "-I*A*X*H + I*H*X*A - H*X*dS/2 + dH - dS*X*H/2",
+      "generalised": "-I*X*A*X*H + I*X*H*X*A - X*H*X*dS/2 + X*dH - X*dS*X*H/2",
+      "lowdin": "-I*Y*A*X*H*Y + I*Y*H*X*A*Y - Y*H*X*dS*Y/2 + Y*dH*Y - Y*dS*X*H*Y/2",
+      "anticommutator": "-I*A*X*H*X/2 + I*H*X*A*X/2 - H*X*dS*X/4 - I*X*A*X*H/2 + I*X*H*X*A/2 - X*H*X*dS/4 + X*dH/2 - X*dS*X*H/4 + dH*X/2 - dS*X*H*X/4"
+    },
+    "hermiticity": {
+      "physical": {
+        "hermitian": true,
+        "s_hermitian": false
+      },
+      "generalised": {
+        "hermitian": false,
+        "s_hermitian": true
+      },
+      "lowdin": {
+        "hermitian": true,
+        "s_hermitian": false
+      },
+      "anticommutator": {
+        "hermitian": true,
+        "s_hermitian": false
+      }
+    }
+  },
+  "Sigma_z": {
+    "forms": {
+      "physical": "S*sigma_z",
+      "generalised": "sigma_z",
+      "lowdin": "sigma_z",
+      "anticommutator": "sigma_z"
+    },
+    "hermiticity": {
+      "physical": {
+        "hermitian": true,
+        "s_hermitian": true
+      },
+      "generalised": {
+        "hermitian": true,
+        "s_hermitian": true
+      },
+      "lowdin": {
+        "hermitian": true,
+        "s_hermitian": true
+      },
+      "anticommutator": {
+        "hermitian": true,
+        "s_hermitian": true
+      }
+    }
+  },
+  "J": {
+    "forms": {
+      "physical": "V*sigma_z/2 + sigma_z*V/2",
+      "generalised": "X*V*sigma_z/2 + X*sigma_z*V/2",
+      "lowdin": "Y*V*Y*sigma_z/2 + Y*sigma_z*V*Y/2",
+      "anticommutator": "V*X*sigma_z/4 + X*V*sigma_z/4 + X*sigma_z*V/4 + sigma_z*V*X/4"
+    },
+    "hermiticity": {
+      "physical": {
+        "hermitian": true,
+        "s_hermitian": false
+      },
+      "generalised": {
+        "hermitian": false,
+        "s_hermitian": true
+      },
+      "lowdin": {
+        "hermitian": true,
+        "s_hermitian": false
+      },
+      "anticommutator": {
+        "hermitian": true,
+        "s_hermitian": false
+      }
+    }
+  }
+}
+symbolic trace proofs: {'hamiltonian_similarity': True, 'dos': {'generalised': F0, 'lowdin_after_similarity': Z*F0*Y, 'trace_residual': 0, 'equal': True}, 'spectral_operator': {'generalised': X*O0*F0, 'lowdin_after_similarity': Y*O0*Y*Z*F0*Y, 'trace_residual': 0, 'equal': True}, 'greenwood': {'generalised': X*O0*F0*X*O1*F1, 'lowdin_after_similarity': Y*O0*Y*Z*F0*Y**2*O1*Y*Z*F1*Y, 'trace_residual': 0, 'equal': True}, 'bastin': {'generalised': X*O0*F0*X*O1*F1, 'lowdin_after_similarity': Y*O0*Y*Z*F0*Y**2*O1*Y*Z*F1*Y, 'trace_residual': 0, 'equal': True}, 'time_correlation': {'generalised': X*O0*F0*X*O1*F1*F2, 'lowdin_after_similarity': Y*O0*Y*Z*F0*Y**2*O1*Y*Z*F1*Y*Z*F2*Y, 'trace_residual': 0, 'equal': True}, 'projected_evolution': {'generalised': X*O0*F0*X*O1*F1*X*O2*F2, 'lowdin_after_similarity': Y*O0*Y*Z*F0*Y**2*O1*Y*Z*F1*Y**2*O2*Y*Z*F2*Y, 'trace_residual': 0, 'equal': True}, 'msd_expanded_term': {'generalised': X*O0*F0*X*O1*F1*F2, 'lowdin_after_similarity': Y*O0*Y*Z*F0*Y**2*O1*Y*Z*F1*Y*Z*F2*Y, 'trace_residual': 0, 'equal': True}, 'anticommutator': {'single_operator_equal': True, 'pair_residual': A*B*X**2/4 - A*X*B*X/2 + A*X**2*B/4, 'generic_products_equal': False, 'sufficient_exact_condition': '[S,H]=0 and [S,O_i]=0 for every static slot', 'classification': 'approximation for DOS, Bastin, Greenwood and TD in general'}}
+(g) KM generalised bloch one-vector quadratic-form residual=2.4825341532472731e-16
+eigen JXSZ: Hermitian fold removed anti-Hermitian norm=4.7102773760513248e-16 operator_scale=3.6166282640050258 relative_norm=1.3023946704534129e-16
+eigen VY: Hermitian fold removed anti-Hermitian norm=2.324270529436321e-16 operator_scale=3.9999999999999991 relative_norm=5.8106763235908038e-17
+(g) KM generalised eigen one-vector quadratic-form residual=2.2887833992611187e-16
+(g) KM lowdin bloch one-vector quadratic-form residual=2.4825341532472731e-16
+eigen JXSZ: Hermitian fold removed anti-Hermitian norm=4.7102773760513248e-16 operator_scale=3.6166282640050258 relative_norm=1.3023946704534129e-16
+eigen VY: Hermitian fold removed anti-Hermitian norm=2.324270529436321e-16 operator_scale=3.9999999999999991 relative_norm=5.8106763235908038e-17
+(g) KM lowdin eigen one-vector quadratic-form residual=2.2887833992611187e-16
+(g) KM_rotated generalised bloch one-vector quadratic-form residual=8.9895506265045532e-16
+eigen JXSZ: Hermitian fold removed anti-Hermitian norm=4.0734709289191856e-16 operator_scale=3.6166282640050236 relative_norm=1.1263172854840929e-16
+eigen VY: Hermitian fold removed anti-Hermitian norm=7.19865060579251e-16 operator_scale=3.9999999999999996 relative_norm=1.7996626514481277e-16
+(g) KM_rotated generalised eigen one-vector quadratic-form residual=3.3565890684838572e-16
+(g) KM_rotated lowdin bloch one-vector quadratic-form residual=4.6526822989446134e-16
+eigen JXSZ: Hermitian fold removed anti-Hermitian norm=4.0734709289191856e-16 operator_scale=3.6166282640050236 relative_norm=1.1263172854840929e-16
+eigen VY: Hermitian fold removed anti-Hermitian norm=7.19865060579251e-16 operator_scale=3.9999999999999996 relative_norm=1.7996626514481277e-16
+(g) KM_rotated lowdin eigen one-vector quadratic-form residual=3.3565890684838572e-16
+dipole axis=0 norm=0
+dipole axis=1 norm=2.1355434509488158
+dipole axis=0 norm=0
+dipole axis=1 norm=1.5501087998862573
+dipole axis=0 norm=0
+dipole axis=1 norm=2.1024095507782361
+dipole axis=0 norm=0
+dipole axis=1 norm=1.0633294681024845
+dipole axis=0 norm=0
+dipole axis=1 norm=4.9778332759447181
+(a)-(d) covariance=1.0007415106216803e-15 Hermiticity=0 HF=1.76397785267568e-10
+(e) sigma_xy=2.000000000000 spin_chern=2.000000000000 Z2=1
+(e) explicit Lowdin oracle plateau=2.000000000000
+oracle eigenphase-minus-exact=-1.0913936421275139e-11
+eigen JXSZ: Hermitian fold removed anti-Hermitian norm=5.0183604329794396e-16 operator_scale=3.616628264005028 relative_norm=1.3875798303423485e-16
+eigen VY: Hermitian fold removed anti-Hermitian norm=7.19865060579251e-16 operator_scale=3.9999999999999996 relative_norm=1.7996626514481277e-16
+SHC exact block Bloch-minus-eigen moments=1.7880497275568653e-14
+(f) generalised exact KPM M=256 Nk=12x12 plateau=2.005512511421 oracle=1.999923700485
+SHC orbital-phase same-sample Bloch-minus-eigen moments=1.7885643447720596e-14; random-minus-exact=0.066468016565226259 (diagnostic only)
+(f) Lowdin exact KPM M=256 Nk=12x12 plateau=2.005512511421
+eigen JXSZ: Hermitian fold removed anti-Hermitian norm=8.0131832750148718e-16 operator_scale=5.129327441292868 relative_norm=1.5622288432019298e-16
+eigen VY: Hermitian fold removed anti-Hermitian norm=9.912827232309742e-16 operator_scale=5.7999999999999998 relative_norm=1.7091081435016797e-16
+anticommutator exact plateau=2.011089149550; equality is NOT required by the derivation
+DOS single eigenphase-minus-exact=1.6653345463335904e-15
+eigen JXSZ: Hermitian fold removed anti-Hermitian norm=5.7421181325282296e-16 operator_scale=3.6263691846733459 relative_norm=1.5834345153816613e-16
+eigen VY: Hermitian fold removed anti-Hermitian norm=4.9809199501585818e-16 operator_scale=3.9999999999999991 relative_norm=1.2452299875396457e-16
+stage-3 real-space baseline (tester review-2 addendum, 10 seeds): orthogonal KM mesh=60x60 M=512 broadening_meV=30 states=16 mean=2.0027 std=0.0041; seed=12345 plateau=1.9957
+SHC eigenbasis noise sample=1/20 seed=12345 plateau=2.002592650725
+SHC eigenbasis noise sample=2/20 seed=12346 plateau=2.002592650726
+SHC eigenbasis noise sample=3/20 seed=12347 plateau=2.002592650726
+SHC eigenbasis noise sample=4/20 seed=12348 plateau=2.002592650726
+SHC eigenbasis noise sample=5/20 seed=12349 plateau=2.002592650726
+SHC eigenbasis noise sample=6/20 seed=12350 plateau=2.002592650726
+SHC eigenbasis noise sample=7/20 seed=12351 plateau=2.002592650727
+SHC eigenbasis noise sample=8/20 seed=12352 plateau=2.002592650725
+SHC eigenbasis noise sample=9/20 seed=12353 plateau=2.002592650727
+SHC eigenbasis noise sample=10/20 seed=12354 plateau=2.002592650726
+SHC eigenbasis noise sample=11/20 seed=12355 plateau=2.002592650726
+SHC eigenbasis noise sample=12/20 seed=12356 plateau=2.002592650726
+SHC eigenbasis noise sample=13/20 seed=12357 plateau=2.002592650726
+SHC eigenbasis noise sample=14/20 seed=12358 plateau=2.002592650726
+SHC eigenbasis noise sample=15/20 seed=12359 plateau=2.002592650725
+SHC eigenbasis noise sample=16/20 seed=12360 plateau=2.002592650725
+SHC eigenbasis noise sample=17/20 seed=12361 plateau=2.002592650726
+SHC eigenbasis noise sample=18/20 seed=12362 plateau=2.002592650727
+SHC eigenbasis noise sample=19/20 seed=12363 plateau=2.002592650725
+SHC eigenbasis noise sample=20/20 seed=12364 plateau=2.002592650726
+SHC eigenbasis noise orthogonal_KM mesh=60x60 M=512 broadening_meV=30 states=16 seeds=20 mean=2.002592650726 std=0.000000000001 standard_error=0.000000000000 exact_KPM=2.002592650726 stage3_real_space_std=0.0041 (quoted 10-seed baseline) [e^2/h, sigma_z Pauli]
+SHC orbital-Bloch noise sample=1/20 seed=12345 plateau=2.002592650725
+SHC orbital-Bloch noise sample=2/20 seed=12346 plateau=2.002592650725
+SHC orbital-Bloch noise sample=3/20 seed=12347 plateau=2.002592650725
+SHC orbital-Bloch noise sample=4/20 seed=12348 plateau=2.002592650726
+SHC orbital-Bloch noise sample=5/20 seed=12349 plateau=2.002592650726
+SHC orbital-Bloch noise sample=6/20 seed=12350 plateau=2.002592650726
+SHC orbital-Bloch noise sample=7/20 seed=12351 plateau=2.002592650726
+SHC orbital-Bloch noise sample=8/20 seed=12352 plateau=2.002592650726
+SHC orbital-Bloch noise sample=9/20 seed=12353 plateau=2.002592650726
+SHC orbital-Bloch noise sample=10/20 seed=12354 plateau=2.002592650726
+SHC orbital-Bloch noise sample=11/20 seed=12355 plateau=2.002592650725
+SHC orbital-Bloch noise sample=12/20 seed=12356 plateau=2.002592650725
+SHC orbital-Bloch noise sample=13/20 seed=12357 plateau=2.002592650725
+SHC orbital-Bloch noise sample=14/20 seed=12358 plateau=2.002592650725
+SHC orbital-Bloch noise sample=15/20 seed=12359 plateau=2.002592650725
+SHC orbital-Bloch noise sample=16/20 seed=12360 plateau=2.002592650725
+SHC orbital-Bloch noise sample=17/20 seed=12361 plateau=2.002592650725
+SHC orbital-Bloch noise sample=18/20 seed=12362 plateau=2.002592650725
+SHC orbital-Bloch noise sample=19/20 seed=12363 plateau=2.002592650726
+SHC orbital-Bloch noise sample=20/20 seed=12364 plateau=2.002592650726
+SHC orbital-Bloch noise orthogonal_KM mesh=60x60 M=512 broadening_meV=30 states=16 seeds=20 mean=2.002592650725 std=0.000000000000 standard_error=0.000000000000 exact_KPM=2.002592650726 stage3_real_space_std=0.0041 (quoted 10-seed baseline) [e^2/h, sigma_z Pauli]
+stage_6b_check: developer self-check passed (not a golden gate)

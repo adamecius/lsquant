@@ -1,0 +1,44 @@
+{
+  "sympy_version": "1.14.0",
+  "C4_charge_group_projection": "Matrix([[m0/2 + m4/2, m1/2 - m3/2, 0], [-m1/2 + m3/2, m0/2 + m4/2, 0], [0, 0, m8]])",
+  "C4_projection_idempotent": true,
+  "mirror_x_charge_projection": "Matrix([[m0, 0, 0], [0, m4, m5], [0, m7, m8]])",
+  "mirror_x_parities": {
+    "Vx": "-1",
+    "Vy": "1",
+    "Sz": "-1",
+    "Jxz": "1",
+    "charge_xy": "-1",
+    "spin_hall_xzy": "1"
+  },
+  "inversion_parities": {
+    "Vx": "-1",
+    "Vy": "-1",
+    "Sz": "1",
+    "Jxz": "-1",
+    "charge_xy": "1",
+    "spin_hall_xzy": "1"
+  },
+  "TR_charge_constraint": "2*I*imag",
+  "TR_spin_hall_constraint": "2*real",
+  "finite_random_state_counterexample": {
+    "H": "Matrix([[1/3, 0], [0, 2/3]])",
+    "U": "Matrix([[1, 0], [0, -1]])",
+    "A": "Matrix([[0, 1], [1, 0]])",
+    "r": "Matrix([[sqrt(2)/2], [sqrt(2)/2]])",
+    "exact_trace": "0",
+    "single_sample": "1",
+    "orbit_averaged_sample": "0"
+  },
+  "chiral_parity_polynomial_checks": "T_n(-x)=(-1)^n T_n(x), n=0..12; general parity follows from Chebyshev recurrence.",
+  "chiral_offcenter_residual": "2*(E0 - center)/width",
+  "C4_xy_orbit": [
+    "m1",
+    "-m3",
+    "m1",
+    "-m3"
+  ],
+  "C4_xy_sum": "2*m1 - 2*m3",
+  "scope": "Group/tensor identities and counterexamples only; no symmetry certification of the frozen Bi/PdSe2 models.",
+  "audit_sha256": "b9f0de54baa73db9382291ba749e7682d3f62cc13ffc48b3d0ee32d8e1d8cc30"
+}

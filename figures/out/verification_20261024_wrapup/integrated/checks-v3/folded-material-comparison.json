@@ -1,0 +1,16 @@
+[
+  {
+    "material": "bi",
+    "grid_equal": true,
+    "max_absolute": 1.6862067298006878e-12,
+    "relative_to_peak": 3.892309449793178e-14,
+    "seconds": 0.924711924046278
+  },
+  {
+    "material": "pdse2",
+    "grid_equal": true,
+    "max_absolute": 1.2798651027878805e-12,
+    "relative_to_peak": 3.502632661284988e-14,
+    "seconds": 0.915850855410099
+  }
+]
