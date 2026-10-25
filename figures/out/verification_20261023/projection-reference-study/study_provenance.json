@@ -1,0 +1,46 @@
+{
+  "host": "tcn-aronnode",
+  "created_utc": "2026-10-23T11:13:39.672074+00:00",
+  "tested_commit": "22965bfe40f75a6d479f25b906c5ccc069ea8827",
+  "reference_loader_commit": "99cbda7b9fdb2cb777e87ae3d11da5cfd55755ec",
+  "reference_loader": "Validated existing cache key, certificate and checksum using the original loader before exporting matrices",
+  "models": {
+    "bi": {
+      "file_sha256": "e17355e699678ea4f1f6228a1ce436c5e83d6cd90b4d7f61942945f2f170f6bc",
+      "array_sha256": {
+        "uc": "c4daf345e3d28de4d99a5e52956a5d2e5773e8037d3a8ab5634191ce2e7b155d",
+        "tau": "d285b0a1c0df33e62c5ebfa389ab215427948298516fbc81cbf20ffe0bf35fe9",
+        "r_int": "44d0c93813e861702130c2087338b564ed5782949a85f0eb8657fcc491eda890",
+        "hoppings": "668c6852354d20758efdc693e414fd6d18eefca2c5ca74cf7fa807f97874c9c1",
+        "overlaps": "f3da245efef60ef722dc389a9b882d7504c3049f4fb365ca43b2bd2897e0c71a",
+        "dipoles": "35dbb1cf830c564ba8a12ba27a02178b3f404f66da580b82b1e988477de0915e"
+      },
+      "cache": {
+        "hit": true,
+        "path": "/home/jgarcia/from_fatnode/shc_bi/run/.lsquant-cache/dipoles-0ca84a674374f9f28eeadc733f95929a069bed4caa6e99bfe772ff133a3e47c9.npz",
+        "key": "0ca84a674374f9f28eeadc733f95929a069bed4caa6e99bfe772ff133a3e47c9",
+        "wall_seconds": 0.011774208396673203
+      },
+      "quadrature_tolerance": 5e-05
+    },
+    "pdse2": {
+      "file_sha256": "588c6364cb34282d9bb7e1343895c02743bb88651dd7533336a2eb8f71d82d27",
+      "array_sha256": {
+        "uc": "d59d3cf57761f6c6202e1b864d44b79001919a1306d659f0845ef8882410f400",
+        "tau": "3df24c211da11ba0f8a1779164ed93dc358584ac4f5262c2330e7db82e823452",
+        "r_int": "44d0c93813e861702130c2087338b564ed5782949a85f0eb8657fcc491eda890",
+        "hoppings": "bb27862a6e4b16923b827f2f70f55fd46a34c25e9a514b1465a13eae069d6959",
+        "overlaps": "31f991d35a8b174b35628a9ee717d1796da9b47069891e583917d1553832461d",
+        "dipoles": "df09647850ce6fe4d7f5c7fbb74a818e48c19a99a6e42ca985138f8445ca5ebe"
+      },
+      "cache": {
+        "hit": true,
+        "path": "/home/jgarcia/from_fatnode/shc_pdse2/run/.lsquant-cache/dipoles-51d1398e9c61e7b4e3e2de7334e1f0d9039afda5ec54dde8683210c899452982.npz",
+        "key": "51d1398e9c61e7b4e3e2de7334e1f0d9039afda5ec54dde8683210c899452982",
+        "wall_seconds": 0.1111859418451786
+      },
+      "quadrature_tolerance": 5e-05
+    }
+  },
+  "scope": "Clean W=0; exact k-space 24/48 meshes; untruncated 4x4 real-space CSR equivalence"
+}

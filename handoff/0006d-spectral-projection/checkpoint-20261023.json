@@ -1,0 +1,52 @@
+{
+  "purpose": "Unmerged work-in-progress checkpoint requested by the maintainer. Existing artifacts preserved; no numerical closure is implied.",
+  "base_commit": "22965bfe40f75a6d479f25b906c5ccc069ea8827",
+  "source_checkout": "C:\\Users\\adame\\LSQUANT\\lsquant",
+  "raw_local_snapshot": "C:\\Users\\adame\\LSQUANT\\checkpoints\\20261023\\local-uncommitted.tar.gz",
+  "files": [
+    {
+      "path": "handoff/0006d-spectral-projection/tests.md",
+      "sha256": "3594dc578ea287da52a1b9d423dd45baf9562fc22141d2fb06b5177fb28fdbf3",
+      "original_source_sha256": "a7788ba4acb5ba55977170f7f0e460c7a03df6d4fae835bc328b392b570d4ca2"
+    },
+    {
+      "path": "figures/stage_6d_projection_comparison.py",
+      "sha256": "bd700c221b69ed660546102fd1b583f0cb63637b5eb39343ba8e5ca17e4de1a4",
+      "original_source_sha256": "bd700c221b69ed660546102fd1b583f0cb63637b5eb39343ba8e5ca17e4de1a4"
+    },
+    {
+      "path": "figures/out/verification_20261023/projection-reference-study/projection-vs-golden.png",
+      "sha256": "2d14bd4fcc8c89f9abfc0cdc512781d3c6548f183c4a55c6f6bfe0fa63704b12",
+      "original_source_sha256": "2d14bd4fcc8c89f9abfc0cdc512781d3c6548f183c4a55c6f6bfe0fa63704b12"
+    },
+    {
+      "path": "figures/out/verification_20261023/projection-reference-study/projection-vs-golden-caption.txt",
+      "sha256": "ab14abd67dc15b1d63f1e4cf23b6c41b1d4f853424604c1ea54a789c99b1b09d",
+      "original_source_sha256": "ab14abd67dc15b1d63f1e4cf23b6c41b1d4f853424604c1ea54a789c99b1b09d"
+    },
+    {
+      "path": "figures/out/verification_20261023/projection-reference-study/study_provenance.json",
+      "sha256": "07c650c98e2bf264237b2424e29bcaf5e8286b46055d7f27b9ac10e855f609bc",
+      "original_source_sha256": "07c650c98e2bf264237b2424e29bcaf5e8286b46055d7f27b9ac10e855f609bc"
+    },
+    {
+      "path": "handoff/0006d-spectral-projection/checkpoint-gate-stage3.log",
+      "sha256": "d36e968c1e7ef3caf9aff21a172af8b4b22d642ef519d34b049766a9686b6835"
+    }
+  ],
+  "sha256_convention": "SHA-256 of bytes stored in Git, after configured text line-ending normalization. original_source_sha256 records the original local snapshot bytes.",
+  "validation": {
+    "branch": "handoff/0006d-dev",
+    "commit": "22965bfe40f75a6d479f25b906c5ccc069ea8827",
+    "step": "golden-stage3",
+    "returncode": 0,
+    "seconds": 1002.7877638339996,
+    "log": "handoff/0006d-spectral-projection/checkpoint-gate-stage3.log",
+    "seed": 12345,
+    "hostname": "fatnode-tacn",
+    "utc": "2026-10-23T13:49:16.242948Z",
+    "execution": "concurrent correctness gates; not performance measurements",
+    "summary": "GATE PASS (stage 3)",
+    "totals": "== 47 files compared; failures: 0"
+  }
+}
