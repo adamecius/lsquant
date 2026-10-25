@@ -4,15 +4,15 @@
     "dir": "examples/07_spin_hall_bi_bilayer/siesta",
     "label": "bi",
     "params": {
-      "velocity_mode": "berry_connection",
+      "velocity_mode": "covariant",
       "oracle": true
     }
   },
   "basis": {
     "name": "eigen",
     "supercell": [
-      12,
-      12,
+      24,
+      24,
       1
     ]
   },

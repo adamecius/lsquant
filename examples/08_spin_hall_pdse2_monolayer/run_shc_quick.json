@@ -4,7 +4,7 @@
     "dir": "examples/08_spin_hall_pdse2_monolayer/siesta",
     "label": "pdse2",
     "params": {
-      "velocity_mode": "berry_connection",
+      "velocity_mode": "covariant",
       "oracle": true
     }
   },
