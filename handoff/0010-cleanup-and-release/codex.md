@@ -1,8 +1,8 @@
-# Handoff 0009 (tester) — release gate: goldens unchanged, examples regenerated
+# Handoff 0010 (tester) — release gate: goldens unchanged, examples regenerated
 
 Read `AGENTS.md` sections 8, 9, 12 and `brief.md`. TCN, your own worktree and build directory
-(shared machine rule: record your PIDs, stop only those). Branch `handoff/0009-codex` from
-`origin/handoff/0009-agi` at the commit Fable names. Edit only `scripts/check_goldens.sh`,
+(shared machine rule: record your PIDs, stop only those). Branch `handoff/0010-codex` from
+`origin/handoff/0010-agi` at the commit Fable names. Edit only `scripts/check_goldens.sh`,
 `figures/`, the `fig_*` files under `examples/`, and `tests.md`.
 
 ## 1. Build
@@ -19,8 +19,10 @@ Nothing else in the harness moves; no tolerance, seed or golden changes.
 ## 3. Gate
 `KPM_SEED=12345 scripts/check_goldens.sh 7` with the golden build, at 16 and at 1 thread. Expected:
 the same 70 numeric files identical as on 2026-10-25, every text check PASS. Then the 24 G11 run
-files under `runs/goldens/g11_*` with the golden build: compare with the outputs of the 2026-10-25
-candidate run in `~/lsquant-wrapup-20261024/` (byte for byte; report the first difference if any).
+files under `runs/goldens/g11_*` with the golden build: compare with the outputs of the same run files on the
+unchanged starting point `bbf81cf` (candidate v5), built the same way: byte for byte, report the
+first difference if any. The developer checks `tests/dev/stage_6b_check.py`, `stage_6c_check.py`
+and `stage_6d_check.py --moments 8192 --backend folded` must give the same output as on `bbf81cf`.
 The native build is not a gate; run gate 7 with it once and report identical/differing counts.
 
 ## 4. Examples

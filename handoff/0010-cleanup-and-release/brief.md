@@ -1,36 +1,39 @@
-# Handoff 0009 (Agi) — clean-up, build, README, examples, and the release pull request
+# Handoff 0010 (Agi) — clean-up, build, README, examples, and the release pull request
 
 Roles: Agi implements (maximum reasoning effort), the tester (`codex.md`) runs the gates and
 regenerates every example figure on TCN, Fable reviews and opens the pull request. If Agi runs out
 of credits or quota, Codex (reasoning effort `medium`) takes over this brief as developer from Agi's
 last commit, with the same rules; the tester role then goes to an Opus subagent driven by Fable.
 
-Read `AGENTS.md` (sections 3, 8, 10, 11 and 12 are binding) and this brief completely. Nothing is
-optional; deviations go in `report.md`.
+Read `AGENTS.md` (sections 3, 8, 10, 11 and 12 are binding), `handoff/0009-wrapup/plan.md` and
+`report.md` (what the integration did and what is still open), and this brief completely. Nothing
+is optional; deviations go in `report.md`.
 
-Starting point: branch `handoff/0009-agi` from `origin/handoff/0009-agi`. It is
-`handoff/0006b-dev` (`2c790f1`, stages 1 to 7 plus the SIESTA spin Hall work) plus this brief and
-the SIESTA inputs of the two new examples. `origin/handoff/0008-dev` (`10d02e4`, the stage-8
-performance work) is merged in step 1.
+Starting point: branch `handoff/0010-agi` from `origin/handoff/0010-agi`. It is
+`handoff/0009-wrapup` plus this brief and the SIESTA inputs of the two new examples.
+`handoff/0009-wrapup` holds everything: 6b (`2c790f1`) with 6c (non-orthogonal disorder), 6d
+(spectral projection, `python/lsquant/projection/`, `tools/downfold_origin/`) and 8 (performance)
+integrated in commit `bbf81cf`, whose tree `bf70c9b8` is the candidate v5 tested on Aron and TCN,
+plus the wrap-up reports in `handoff/0009-wrapup/`. Nothing needs merging.
 
 ## 0. Scope
 
-The code works and its goldens pass. This handoff makes it a release:
+The code works and its historical goldens pass. This handoff makes it a release:
 
-1. one branch that holds stages 1 to 8 (step 1);
-2. no file, function, option or comment left over from the legacy code or from the stage
+1. no file, function, option or comment left over from the legacy code or from the stage
    scaffolding that a user does not need (steps 2 and 3);
-3. a CMake build a user can read and drive from options or presets (step 4);
-4. a README that says what the code is now, written like the old one (step 5);
-5. the six tutorials driven by the new code, plus two new SIESTA examples: the Bi(111) bilayer
+2. a CMake build a user can read and drive from options or presets (step 4);
+3. a README that says what the code is now, written like the old one (step 5);
+4. the six tutorials driven by the new code, plus two new SIESTA examples: the Bi(111) bilayer
    and the PdSe2 monolayer, both with spin-orbit coupling (step 6).
 
-Out of scope: new physics, new spectral functions, any change of a numerical result, the
-performance items still open from 0008 (`MomentTable` by rows, rank 2 with stored right vectors,
-k/-k pairing), and the numerical difference measured on Aron (Bi 1.135 against 1.155, PdSe2 2.52
-against 2.34). Fable diagnoses that difference separately; do not touch the SIESTA, oracle or
-velocity numerics while it is open. If Fable's diagnosis needs a code change, it arrives as an
-amendment to this brief.
+Out of scope: new physics, new spectral functions, any change of a numerical result, and every
+open item of `handoff/0009-wrapup/plan.md` (W02 to W12: the reduced-material residuals, the
+disorder and projection matrices, the FFT and native verdicts, performance, the symmetry input).
+That includes the numerical difference measured on Aron (Bi 1.135 against 1.155, PdSe2 2.52
+against 2.34, `profiling-results.md`): Fable diagnoses it separately. Do not touch the SIESTA,
+projection, disorder, oracle, velocity or reconstruction numerics; the folded Bastin backend stays
+opt-in. If Fable's diagnosis needs a code change, it arrives as an amendment to this brief.
 
 ## 1. Restrictions
 
@@ -41,8 +44,10 @@ amendment to this brief.
   do not make it; list it in `report.md` under "needs harness change" and Fable decides.
 - `lsquant/compat/` stays as it is (AGENTS.md section 3).
 - The C++ and Python entry points the gate calls keep their names in this handoff:
-  `stage1_moments`, `stage6_nonorth`, `stage_1_check`, `python -m lsquant.apps.stage*`,
-  `python -m lsquant.apps.tutorial0*`. The README calls them what they are (golden reproduction
+  `stage1_moments`, `stage6_nonorth`, `stage_1_check`, `python -m lsquant.apps.stage*`
+  (including `stage6b_siesta` and `stage6c_disorder`), `python -m lsquant.apps.tutorial0*`, and
+  the developer checks `tests/dev/stage_6b_check.py`, `stage_6c_check.py`, `stage_6d_check.py`
+  that `handoff/0009-wrapup` runs. The README calls them what they are (golden reproduction
   drivers). Renaming them is a follow-up with a harness change.
 - No new tests. No new dependencies beyond what `pyproject.toml` and the CMake already require,
   except `sisl` as an optional extra for the SIESTA examples (it is already imported by
@@ -50,20 +55,12 @@ amendment to this brief.
 - Everything in English. Commits small and by topic (merge, deletions, code fixes, CMake, README,
   each example). Never push.
 
-## 2. Step 1 — merge stage 8
+## 2. Step 1 — baseline
 
-`git merge origin/handoff/0008-dev`. Three files conflict (checked by Fable on a trial merge), one
-hunk each:
-
-- `lsquant/core/chebyshev/moment_engine.cpp`: 0006b parallelised the rank-2 rows with a static
-  schedule (`d1b4202`); 0008 added a `LSQUANT_NATIVE_BUILD` path through `linalg::MomentTable`.
-  Keep both: the golden profile runs 0006b's row-owned loop unchanged, the native profile runs the
-  `MomentTable` block. Both branches must accumulate into `mu` in the same order as before.
-- `lsquant/core/algebra/block_diagonal_operator.cpp` and `python/lsquant/runfile.py`: union of
-  both sides; neither side removes what the other added.
-
-Check: the tree builds with `LSQUANT_BUILD_PROFILE=golden` and `=native`, zero warnings at
-`-Wall -Wextra`; `tests/dev/stage_1_check` passes. Record both build logs in `report.md`.
+Build the starting point on TCN with `LSQUANT_BUILD_PROFILE=golden` and `=native` (see
+`handoff/0009-wrapup/report.md` for the Eigen selection needed on Aron) and record the warnings
+and both build logs in `report.md`. Run `tests/dev/stage_1_check`. This is the reference every
+later step compares with: warnings may only go down, and nothing that builds now may stop building.
 
 ## 3. Step 2 — remove dead files
 
@@ -90,6 +87,7 @@ figure script references (`scripts/check_goldens.sh`, `figures/*.py`) is never d
 | `tests/block_domains/` (untracked, Fable's local-domain benchmark) | move to `bench/block_domains/` without `BRIEFING_LSQUANT_SESSION.md`; Fable hands you the files | evidence for the README performance section |
 | `docs/Doxyfile.in`, `docs/main.cpp`, `docs/main.md`, `docs/CMakeLists.txt`, `docs/requirements.txt` | update to the new tree (inputs `lsquant/` and `python/lsquant/`), or delete if Read the Docs no longer builds from them; say which | |
 | `docs/*.md` | remove every mention of `.chebmom1D/2D/TD` as a user format and of `inline_*`, `lsquant compute`, `lsquant reconstruct <file> dos` | |
+| `tools/downfold_origin/`, `python/lsquant/projection/`, `runs/stage6c/`, `runs/projection/`, `figures/stage_9_*.py` | keep (0006c, 0006d and wrap-up work, still under validation); only the naming and comment pass of step 3 applies, with no change of behaviour | |
 | `.gitignore`, `examples/.gitignore` | drop the `test/golden`, `test/models` and legacy `bench/gr` lines | the paths no longer exist |
 
 Then search the whole tree for what the table does not cover: `git ls-files` for `*.pyc`,
@@ -210,8 +208,9 @@ the tester on TCN and committed by the tester; Agi does not commit figures.
 
 ## 8. Report
 
-`handoff/0009-cleanup-and-release/report.md`: the merge resolution; per step the files changed,
+`handoff/0010-cleanup-and-release/report.md`: the merge resolution; per step the files changed,
 the grep evidence and the check output verbatim; the "needs harness change" list; the list of
 renamed identifiers and named constants; deviations; open questions. Agi does not declare the
-item done. Fable reviews, the tester runs `codex.md`, and after a clean review Fable merges into
-`cpp-unified` and opens the pull request `cpp-unified -> main`.
+item done. Fable reviews, the tester runs `codex.md`, and after a clean review Fable merges `handoff/0009-wrapup` and this
+handoff into `cpp-unified` and opens the pull request `cpp-unified -> main`. The pull request
+states that the 0009 wrap-up items W02 to W12 are open; the maintainer decides on closure.
