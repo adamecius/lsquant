@@ -1,7 +1,7 @@
 {
   "model": {
     "kind": "siesta",
-    "dir": "~/from_fatnode/shc_pdse2/run",
+    "dir": "examples/08_spin_hall_pdse2_monolayer/siesta",
     "label": "pdse2",
     "params": {
       "velocity_mode": "berry_connection",

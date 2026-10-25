@@ -1,7 +1,7 @@
 {
   "model": {
     "kind": "siesta",
-    "dir": "~/from_fatnode/shc_bi/run",
+    "dir": "examples/07_spin_hall_bi_bilayer/siesta",
     "label": "bi",
     "params": {
       "velocity_mode": "bare",
