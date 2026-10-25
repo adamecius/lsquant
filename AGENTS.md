@@ -350,7 +350,7 @@ The goldens, by stage (section 9 says which stage closes which):
 | Golden | Inputs (committed) | Reference output | Oracle |
 |---|---|---|---|
 | G1 chain1d DOS moments | `test/golden/chain1d/operators`, window `[-2, 2]`, exact trace, `M = 64` | `SpectralOp1chain1d...chebmom1D` | `mu_m = delta_m0` |
-| G2 chain1d Kubo-Greenwood moments | same, `VX`,`VX` | `NonEqOpVX-VXchain1d...chebmom2D` | closed form B.15 (`lsquant_chain_reference.py`) |
+| G2 chain1d Kubo-Greenwood moments | same, `VX`,`VX` | `NonEqOpVX-VXchain1d...chebmom2D` | closed form B.15 (`python/lsquant/oracle/chain.py`, `python -m lsquant.oracle.chain`) |
 | G3 chain1d DOS curve | G1 + Jackson, broadening 120 meV | `mean...JACKSON.dat`, tutorial 01 figure data | `1/(pi sqrt(4-E^2))` |
 | G4 graphene `VX-VX` moments and Kubo-Bastin curve | `test/golden/operators`, seed 12345, `M = 64` | `.chebmom2D`, `KuboBastin...dat` | regression only |
 | G5 Haldane Hall | `test/golden/haldane`, exact trace, `M = 128` | Bastin, Sea, Surf, Greenwood `.dat`; tutorial 03 figure data | `C = +1` |
