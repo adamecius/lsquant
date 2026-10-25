@@ -158,9 +158,7 @@ A Hall-conductivity run uses two velocity operators:
 `compute` writes a `.chebmom*` moment table; `reconstruct` turns it into a curve.
 Every operator travels with a `.desc` sidecar (its identity, units, and spectral
 bounds), so a result stays traceable to the operator that produced it, and
-`inspect` reports that provenance. The legacy per-task drivers
-(`inline_compute-kpm-*`, `*FromChebmom`) remain in `build/` and give
-byte-identical results.
+`inspect` reports that provenance.
 
 ## Tutorials
 

@@ -15,16 +15,14 @@ Performs the stage-4 checks without a test framework:
       max abs diff < 1e-13.
   (d) Runs ``time_correlation_plan`` on ``chain1d`` ``VX, VX`` (``M = 64``,
       ``16`` steps, ``tmax = 5``, exact trace) and asserts ``numpy.array_equal``
-      against the legacy ``inline_compute-kpm-CorrOp chain1d VX VX 64 16 5 exact``
-      binary run in the same session.
+      against the reference SHA-256 of the ``Tr[VX delta(E-H) U(t)^+ VX U(t)]``
+      capture.
 """
 
 from __future__ import annotations
 
 import hashlib
 import os
-import shutil
-import subprocess
 import sys
 import tempfile
 import numpy as np
@@ -78,27 +76,11 @@ def _diff_lines(
     return diffs, len(gold_lines)
 
 
-# SHA-256 of TimeCorrVX-VXchain1dKPM_M64_stateexact.chebmomTD produced by
-# legacy-final inline_compute-kpm-CorrOp chain1d VX VX 64 16 5 exact.
+# SHA-256 of TimeCorrVX-VXchain1dKPM_M64_stateexact.chebmomTD for
+# Tr[VX delta(E-H) U(t)^+ VX U(t)] on chain1d (M=64, 16 steps, tmax=5, exact).
 _LEGACY_CORR_SHA256 = (
     "84047151f40de0933e725fbfbf56627bc1e5b33f1bba7ec9671da1908e661445"
 )
-
-
-def _find_legacy_corr_op(repo_root: str) -> str | None:
-    """Locate ``inline_compute-kpm-CorrOp`` in ``~/lsquant-unified/build`` or local build if present."""
-    candidates = [
-        os.environ.get("LSQUANT_LEGACY_BUILD", ""),
-        os.path.expanduser("~/lsquant-unified/build"),
-        os.path.join(repo_root, "build"),
-    ]
-    for d in candidates:
-        if not d:
-            continue
-        exe = os.path.join(d, "inline_compute-kpm-CorrOp")
-        if os.path.isfile(exe) and os.access(exe, os.X_OK):
-            return exe
-    return None
 
 
 def main() -> int:
@@ -237,45 +219,7 @@ def main() -> int:
     )
 
     # (d) time_correlation_plan on chain1d VX, VX (M=64, 16 steps, tmax=5, exact)
-    #     vs legacy inline_compute-kpm-CorrOp (run live if binary present, plus exact SHA-256)
-    corr_exe = _find_legacy_corr_op(repo_root)
-    ref_corr = None
-    if corr_exe is not None:
-        with tempfile.TemporaryDirectory() as work_dir:
-            op_sub = os.path.join(work_dir, "operators")
-            os.makedirs(op_sub, exist_ok=True)
-            shutil.copyfile(
-                os.path.join(g6_op_dir, "chain1d.HAM.CSR"),
-                os.path.join(op_sub, "chain1d.HAM.CSR"),
-            )
-            shutil.copyfile(
-                os.path.join(g6_op_dir, "chain1d.VX.CSR"),
-                os.path.join(op_sub, "chain1d.VX.CSR"),
-            )
-            with open(os.path.join(work_dir, "BOUNDS"), "w", encoding="utf-8") as fh:
-                fh.write("-2 2\n")
-            with open(os.path.join(work_dir, "exact"), "w", encoding="utf-8") as fh:
-                fh.write(f"local\n{b_dim}\n")
-                for idx in range(b_dim):
-                    fh.write(f"{idx}\n")
-
-            cmd = [corr_exe, "chain1d", "VX", "VX", "64", "16", "5", "exact"]
-            env = dict(os.environ)
-            env["OMP_NUM_THREADS"] = os.environ.get("OMP_NUM_THREADS", "1")
-            env["KPM_SEED"] = "12345"
-            subprocess.run(
-                cmd,
-                cwd=work_dir,
-                env=env,
-                check=True,
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
-            )
-            leg_corr_path = os.path.join(
-                work_dir, "TimeCorrVX-VXchain1dKPM_M64_stateexact.chebmomTD"
-            )
-            ref_corr = _core.ReadChebmom(leg_corr_path)
-
+    #     vs exact SHA-256 reference of Tr[VX delta(E-H) U(t)^+ VX U(t)]
     corr_dt = time_step_from_tmax(16, 5.0)
     # Byte identity with the legacy captures requires the GSL Bessel values.
     corr_coeffs, corr_phase = time_evolution_series(
@@ -308,21 +252,16 @@ def main() -> int:
         _core.WriteLegacyChebmomTD(tmp_corr_path, mu_corr)
         with open(tmp_corr_path, "rb") as fh_corr:
             corr_sha256 = hashlib.sha256(fh_corr.read()).hexdigest()
-        mu_corr_disk = _core.ReadChebmom(tmp_corr_path)
     finally:
         if os.path.exists(tmp_corr_path):
             os.remove(tmp_corr_path)
 
     corr_equal = corr_sha256 == _LEGACY_CORR_SHA256
-    if ref_corr is not None:
-        corr_equal = corr_equal and bool(
-            np.array_equal(mu_corr_disk.data, ref_corr.data)
-        )
     print(
         f"(d) time_correlation_plan chain1d VX-VX (M=64, steps=16, tmax=5, exact) "
-        f"array_equal vs inline_compute-kpm-CorrOp: {corr_equal}"
+        f"array_equal vs reference SHA-256: {corr_equal}"
     )
-    assert corr_equal, "time_correlation_plan moments do not equal legacy inline_compute-kpm-CorrOp"
+    assert corr_equal, "time_correlation_plan moments do not match reference SHA-256"
 
     return 0
 

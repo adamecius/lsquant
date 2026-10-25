@@ -172,11 +172,6 @@ public:
   Direction GetDirection() const { return direction_; }
 
   /**
-   * @brief Return the normalised phase table `exp(-i k . tau_alpha) / sqrt(N_k)`.
-   */
-  const std::vector<Scalar>& ScaledPhases() const { return *scaledPhases_; }
-
-  /**
    * @brief Evaluate `y = a * B * x + b * y` (or `a * B^+ * x + b * y`).
    *
    * @param a Multiplicative scalar factor for the transformed vector.

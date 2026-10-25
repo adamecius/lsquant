@@ -13,7 +13,7 @@ is a discipline with consequences for every paragraph.
 Lead with the phenomenon, not the tool. The reader should feel a small puzzle
 before they ever see a command. "A finite chain has $N$ levels, yet we draw a
 smooth curve; where did the curve come from?" earns attention. "This tutorial
-computes the DOS with `inline_compute-kpm-spectralOp`" does not.
+computes the DOS with `python -m lsquant run`" does not.
 
 Carry one idea. A tutorial is not a tour of features. It is the unfolding of a
 single physical lesson, and every step exists to advance that one lesson. If a
@@ -97,9 +97,9 @@ the legend, so the figure is readable on its own.
 
 Keep labels and file patterns consistent across tutorials, because readers paste
 commands and expect the output names to match. Tutorial 1 uses `chain1d_N<N>`
-for the system label, operator label `1` for the identity, and the moment file
-pattern `SpectralOp<op><label>KPM_M<M>_state<state>.chebmom1D`. When you add a
-system, extend the convention rather than inventing a new one.
+for the system label, `run_dos.json` for the run configuration, and writes
+outputs into `out/`. When you add a system, extend the convention rather than
+inventing a new one.
 
 ## References
 

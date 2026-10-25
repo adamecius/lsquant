@@ -181,9 +181,8 @@ def kubo_plan(
 
     Notes
     -----
-    Pitfall: In legacy ``inline_compute-kpm-nonEqOp <label> <OP_R> <OP_L> <M>``,
-    the first CLI operator seeds the bra recursion (``left_index``) and the
-    second is applied to the ket batch (``right_index``).
+    In ``Tr[OP_L delta(E-H) OP_R delta(E-H)]``, ``left_index`` seeds the bra
+    recursion and ``right_index`` is applied to the ket batch.
     """
     if num_moments <= 0:
         raise ValueError("kubo_plan: num_moments must be positive")

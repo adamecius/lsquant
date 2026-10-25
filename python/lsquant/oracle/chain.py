@@ -1,7 +1,7 @@
 """
-chain_reference.py
+lsquant.oracle.chain
 Closed-form analytics of the clean 1D monatomic tight-binding chain.
-Verified symbolically with sympy in derive_core.py / derive_spin.py.
+Verified symbolically with sympy in docs/derivations/lsquant_derive_core.py and lsquant_derive_spin.py.
 
 Conventions
 -----------

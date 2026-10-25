@@ -114,13 +114,6 @@ public:
   Index Dimension() const override;
 
   /**
-   * @brief Return a const reference to the diagonal entries.
-   *
-   * @return Vector of `N` complex diagonal values.
-   */
-  const std::vector<Scalar>& Values() const { return values_; }
-
-  /**
    * @brief Evaluate `y[i] = a * d[i] * x[i] + b * y[i]` across all `i in 0..N-1`.
    *
    * @param a Scalar multiplier for `D * x`.
