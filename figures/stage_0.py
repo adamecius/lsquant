@@ -9,6 +9,8 @@ For each tutorial this script
   1. copies the tutorial's inputs (*.py, *.json, README.md, requirements.txt, never the
      committed figures or .dat files) into a fresh work tree that mirrors the repository
      layout (work/examples/<tutorial>, work/examples/prl_style.py, work/test -> test),
+     all taken from the legacy-final tag (git archive into <work>/legacy-final), never
+     from the current tree,
      so the scripts' relative paths (../../test/golden, ../prl_style.py) resolve and
      examples/ itself is never written;
   2. runs every command block of the README in order (shell blocks through bash, Python
@@ -226,9 +228,28 @@ def run_shim(capdir, argv):
 # ---------------------------------------------------------------------------------
 # driver
 # ---------------------------------------------------------------------------------
+LEGACY_TAG = "legacy-final"
+LEGACY = None  # extracted legacy-final tree (examples/, test/, utilities/); set in main()
+
+
+def extract_legacy(work):
+    """Extract examples/, test/ and utilities/ of the legacy-final tag into <work>/legacy-final.
+
+    Stage 0 is legacy provenance: the tutorial scripts, prl_style.py and the test/ inputs
+    they read are taken from the tag, never from the current tree (which no longer holds
+    the legacy drivers). `git archive` leaves the repository and its worktrees untouched."""
+    dst = os.path.join(work, LEGACY_TAG)
+    shutil.rmtree(dst, ignore_errors=True)
+    os.makedirs(dst)
+    arch = subprocess.run(["git", "-C", REPO, "archive", LEGACY_TAG, "examples", "test", "utilities"],
+                          stdout=subprocess.PIPE, check=True).stdout
+    subprocess.run(["tar", "-x", "-C", dst], input=arch, check=True)
+    return dst
+
+
 def prepare(work, tut):
-    """Fresh work tree mirroring the repository layout around one tutorial."""
-    src = os.path.join(REPO, "examples", tut)
+    """Fresh work tree mirroring the legacy-final layout around one tutorial."""
+    src = os.path.join(LEGACY, "examples", tut)
     dst = os.path.join(work, "examples", tut)
     if os.path.exists(os.path.join(work, "examples")):
         shutil.rmtree(os.path.join(work, "examples", tut), ignore_errors=True)
@@ -236,16 +257,17 @@ def prepare(work, tut):
     for f in os.listdir(src):
         if f.endswith((".py", ".json", ".md", ".txt")) and os.path.isfile(os.path.join(src, f)):
             shutil.copy(os.path.join(src, f), dst)
-    shutil.copy(os.path.join(REPO, "examples", "prl_style.py"), os.path.join(work, "examples"))
+    shutil.copy(os.path.join(LEGACY, "examples", "prl_style.py"), os.path.join(work, "examples"))
     for link in ("test", "utilities"):
         lp = os.path.join(work, link)
-        if not os.path.lexists(lp):
-            os.symlink(os.path.join(REPO, link), lp)
+        if os.path.lexists(lp):
+            os.remove(lp)
+        os.symlink(os.path.join(LEGACY, link), lp)
     return dst
 
 
 def stage_mag(cwd):
-    opd = os.path.join(REPO, "test", "models", "chain1d_mag", "operators")
+    opd = os.path.join(LEGACY, "test", "models", "chain1d_mag", "operators")
     os.makedirs(os.path.join(cwd, "operators"), exist_ok=True)
     for op in ("HAM", "SX", "SY", "SZ", "PX"):
         shutil.copy(os.path.join(opd, "chain1d_mag.%s.CSR" % op), os.path.join(cwd, "operators"))
@@ -359,6 +381,8 @@ def main():
     build, out, work = (os.path.abspath(p) for p in (a.build, a.out, a.work))
     os.makedirs(out, exist_ok=True)
     os.makedirs(work, exist_ok=True)
+    global LEGACY
+    LEGACY = extract_legacy(work)
 
     stab_text, stab = stability(build, a.stability_log)
     with open(os.path.join(out, "check_goldens_stage0.log"), "w") as f:
