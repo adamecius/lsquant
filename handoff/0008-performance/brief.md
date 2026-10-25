@@ -78,3 +78,11 @@ schedules, deterministic reductions). No new dependency. The engine stays basis-
 `handoff/0008-performance/report.md`: the profiles before and after each item, the
 benchmark table, the NUMA recipe, the flags of each build profile, deviations, open
 questions. No "done", no gate claims, no push.
+
+## 4. Rule (user, 2026-10-22): no ninja programming
+
+Only standard, boring optimisations: compiler flags, thread binding and NUMA placement,
+batching so that memory is read once, GEMM where the arithmetic is a GEMM, cache-sized
+batches. No hand-written intrinsics, no custom allocators, no lock-free tricks, no
+template metaprogramming, no code that the next reader cannot follow in one pass. Each
+change is one idea, measured, and reverted if the number does not move.
