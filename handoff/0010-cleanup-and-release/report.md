@@ -1240,3 +1240,341 @@ DONE 08_spin_hall_pdse2_monolayer
   5. **`.githooks/pre-commit` and `scripts/check_reporting.sh`:** Deleted `scripts/check_reporting.sh` (which checked the removed legacy `src/` and `include/` directories for the abandoned reporting plan) and updated `.githooks/pre-commit` in `da6239f` to guard its invocation with `if [ -x scripts/check_reporting.sh ]`.
   6. **Deletion of `.projectile` and `.vscode/settings.json`:** Deleted both tracked editor configuration files (which referenced legacy header and CMake paths) in `da6239f` as part of the Step 2 whole-tree search for editor files in `git ls-files`.
 - **Open questions:** None for Handoff 0010. As stated in Section 0 and Section 8 of the brief, the 0009 wrap-up items W02 to W12 (including the numerical difference on Aron for Bi and PdSe2) remain open for Fable's separate diagnosis and maintainer decision.
+
+---
+
+## 10. Review 1 applied
+
+All six review items from `handoff/0010-cleanup-and-release/review-1.md` have been applied in order, one commit per item (`fae21b2`, `9732f29`, `cbd7dc4`, `e586b49`, `79cb251`, `8839055`), and verified on TCN (`~/lsquant-agi-build-0010`).
+
+### Item 1 — Restore `python/lsquant/projection/diagnostics.py` and its export in `projection/__init__.py` (Commit `fae21b2`)
+
+```text
+commit fae21b21dad9d3448a4a608b00d5af2b44f8ed00
+Author: Agi <agi@deepmind.com>
+Date:   Sun Oct 25 22:13:58 2026 +0000
+
+    fix(projection): restore diagnostics.py and export in projection/__init__.py
+
+ python/lsquant/projection/__init__.py    |  5 ++++-
+ python/lsquant/projection/diagnostics.py | 29 +++++++++++++++++++++++++++++
+ 2 files changed, 33 insertions(+), 1 deletion(-)
+```
+
+Verbatim check output on TCN (`~/lsquant-agi-build-0010/logs/r1_item1.log`):
+
+```text
+exported: lsquant.projection.diagnostics compare_windows
+```
+
+### Item 2 — `README.md`: remove unsupported statements, verify API and CLI help, add "What is new" and "Performance" sections (Commit `9732f29`)
+
+```text
+commit 9732f2972a6fcfb0864a644a2e17a5c2caf1457a
+Author: Agi <agi@deepmind.com>
+Date:   Sun Oct 25 22:18:29 2026 +0000
+
+    docs(readme): remove unsupported claims and add what-is-new and performance sections
+
+ README.md                | 315 ++++++++++++++++++++++++++++++++++++-----------
+ python/lsquant/README.md |  54 ++++----
+ 2 files changed, 274 insertions(+), 95 deletions(-)
+```
+
+Verbatim output of the `README.md` high-level (`lsquant.execute_runfile(dict)`) and low-level (`ReadCsrText` + `kubo_plan` + `run_plan` + `kubo_bastin`) Python API examples on TCN (`~/lsquant-agi-build-0010/logs/r1_item2_api.log`):
+
+```text
+ReadCsrText: /home/ICN2/jgarcia/lsquant-agi-build-0010/goldens/stage0/haldane/operators/haldane.HAM.CSR anti_hermitian_norm=0 relative=0 legacy_fold=0
+ReadCsrText: /home/ICN2/jgarcia/lsquant-agi-build-0010/goldens/stage0/haldane/operators/haldane.VX.CSR anti_hermitian_norm=0 relative=0 legacy_fold=0
+ReadCsrText: /home/ICN2/jgarcia/lsquant-agi-build-0010/goldens/stage0/haldane/operators/haldane.VY.CSR anti_hermitian_norm=0 relative=0 legacy_fold=0
+ReadCsrText: goldens/stage0/haldane/operators/haldane.HAM.CSR anti_hermitian_norm=0 relative=0 legacy_fold=0
+ReadCsrText: goldens/stage0/haldane/operators/haldane.VX.CSR anti_hermitian_norm=0 relative=0 legacy_fold=0
+ReadCsrText: goldens/stage0/haldane/operators/haldane.VY.CSR anti_hermitian_norm=0 relative=0 legacy_fold=0
+High-level curve_files: ['/tmp/haldane_api/KuboBastin_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat']
+Low-level energies.shape, sigma_xy.shape: (3839,) (3839,)
+```
+
+Verbatim output of `python3 -m lsquant <cmd> --help` on TCN (`~/lsquant-agi-build-0010/logs/r1_item2_cli.log`):
+
+```text
+=== python3 -m lsquant  --help ===
+usage: lsquant [-h] {run,reconstruct,inspect,words} ...
+
+LSQUANT unified Kernel Polynomial Method CLI.
+
+positional arguments:
+  {run,reconstruct,inspect,words}
+    run                 Validate and execute a JSON run file.
+    reconstruct         Reconstruct curves from a moment file or run output
+                        directory.
+    inspect             Inspect a moment file, run file, or output directory
+                        and print JSON metadata.
+    words               List recognised observable word shapes or describe a
+                        specific word.
+
+options:
+  -h, --help            show this help message and exit
+=== python3 -m lsquant run --help ===
+usage: lsquant run [-h] [--out OUT] [--json] runfile
+
+positional arguments:
+  runfile            Path to the JSON run file.
+
+options:
+  -h, --help         show this help message and exit
+  --out OUT, -o OUT  Override the output directory specified in the run file.
+  --json             Print execution summary as JSON.
+=== python3 -m lsquant reconstruct --help ===
+usage: lsquant reconstruct [-h] [--formula FORMULA]
+                           [--broadening-meV BROADENING_MEV]
+                           [--fermi-energies FERMI_ENERGIES [FERMI_ENERGIES ...]]
+                           [--out OUT] [--json]
+                           target [pos_formula] [pos_broadening]
+
+positional arguments:
+  target                Path to a moment file or run output directory.
+  pos_formula           Optional positional reconstruction formula.
+  pos_broadening        Optional positional broadening in meV.
+
+options:
+  -h, --help            show this help message and exit
+  --formula FORMULA, -f FORMULA
+                        Reconstruction formula ('shc', 'dos', 'greenwood',
+                        'bastin', 'sea', 'surf', 'greenwood_fft',
+                        'bastin_fft', 'time_correlation').
+  --broadening-meV BROADENING_MEV, -b BROADENING_MEV
+                        Gaussian broadening in meV.
+  --fermi-energies FERMI_ENERGIES [FERMI_ENERGIES ...], --fermi-energy FERMI_ENERGIES [FERMI_ENERGIES ...], -e FERMI_ENERGIES [FERMI_ENERGIES ...]
+                        Fermi energy values in eV (for time correlations).
+  --out OUT, -o OUT     Destination directory for reconstructed curve files.
+  --json                Print reconstruction summary as JSON.
+=== python3 -m lsquant inspect --help ===
+usage: lsquant inspect [-h] path
+
+positional arguments:
+  path        Path to a moment file, run file, or output directory.
+
+options:
+  -h, --help  show this help message and exit
+=== python3 -m lsquant words --help ===
+usage: lsquant words [-h] [action] [word]
+
+positional arguments:
+  action      'list', 'describe', or an observable word string.
+  word        Observable word string when action is 'describe'.
+
+options:
+  -h, --help  show this help message and exit
+```
+
+### Item 3 — Examples 07 and 08 quick runs: `covariant` velocity, `lowdin` metric, Bi at $24 \times 24 \times 1$ ($M = 256$), PdSe2 at $12 \times 12 \times 1$ ($M = 256$) (Commit `cbd7dc4`)
+
+```text
+commit cbd7dc47f97e72ca38c134098a4add961c50ef32
+Author: Agi <agi@deepmind.com>
+Date:   Sun Oct 25 22:18:57 2026 +0000
+
+    fix(examples): use covariant velocity and 24x24 Bi mesh in 07 and 08 quick runs
+
+ examples/07_spin_hall_bi_bilayer/run_dos_quick.json      | 6 +++---
+ examples/07_spin_hall_bi_bilayer/run_shc_quick.json      | 6 +++---
+ examples/08_spin_hall_pdse2_monolayer/run_dos_quick.json | 2 +-
+ examples/08_spin_hall_pdse2_monolayer/run_shc_quick.json | 2 +-
+ 4 files changed, 8 insertions(+), 8 deletions(-)
+```
+
+Measured dipole certification and cache-reuse timings on TCN:
+
+- **Example 07 (`examples/07_spin_hall_bi_bilayer`, $24 \times 24 \times 1$, `covariant` + `lowdin`, $M = 256$):**
+  - First run (`run_dos_quick.json`, dipole cache miss): dipole quadrature certification took `930.060143` s (`largest_order=192`, `margin_factor=10.0042`, `stored_overlap_tolerance=1e-05`, `max_overlap_error=1.11465e-06`, `pair_evaluations=26126`, `requested_tensor_grid_points=3719208960`), writing `examples/07_spin_hall_bi_bilayer/.lsquant-cache/dipoles-58b06a67515bdf805e8035c667715cc268efa72c7228499369925d0e76fd986a.npz`; remaining phases (`metric build` `4.04` s, `moments` `40.56` s, `reconstruction` `0.62` s, `oracle` `6.77` s) took `51.99` s.
+  - Second run (`run_shc_quick.json`, dipole cache hit): dipole cache reuse took `0.041372` s (`metric build` `4.09` s, `operators` `4.89` s, `moments` `99.10` s, `reconstruction` `1.12` s, `oracle` `3.11` s; total `112.36` s).
+- **Example 08 (`examples/08_spin_hall_pdse2_monolayer`, $12 \times 12 \times 1$, `covariant` + `lowdin`, $M = 256$):**
+  - First run (`run_dos_quick.json`, dipole cache miss): dipole quadrature certification took `2303.894673` s (`largest_order=192`, `margin_factor=10.0071`, `stored_overlap_tolerance=1e-05`, `max_overlap_error=5.29132e-06`, `pair_evaluations=71124`, `requested_tensor_grid_points=11610086400`), writing `examples/08_spin_hall_pdse2_monolayer/.lsquant-cache/dipoles-6433b5bef320b2d7a2d81c62381523eb51014b62527e39f0012dd7f7b0f4f643.npz`; remaining phases (`metric build` `14.59` s, `moments` `13.21` s, `reconstruction` `0.68` s, `oracle` `27.25` s) took `55.73` s.
+  - Second run (`run_shc_quick.json`, dipole cache hit): dipole cache reuse took `0.218174` s (`metric build` `15.23` s, `operators` `18.67` s, `moments` `329.44` s, `reconstruction` `1.05` s, `oracle` `12.51` s; total `377.12` s).
+
+Verbatim output of Example 07 quick runs (`~/lsquant-agi-build-0010/logs/r1_ex07.log`):
+
+```text
+stage6b: dipole quadrature started {'enabled': True}
+dipole quadrature certified: largest_order=192 margin_factor=10.0042 stored_overlap_tolerance=1e-05 max_overlap_error=1.11465e-06 pair_evaluations=26126 requested_tensor_grid_points=3719208960 certification_seconds=930.060143 total_cache_miss_seconds=930.169127; cache=/home/ICN2/jgarcia/lsquant-agi-build-0010/examples/07_spin_hall_bi_bilayer/.lsquant-cache/dipoles-58b06a67515bdf805e8035c667715cc268efa72c7228499369925d0e76fd986a.npz
+stage6b: dipole quadrature completed wall_seconds=930.169352 {'enabled': True}
+stage6b: metric build started {}
+stage6b: metric build completed wall_seconds=4.036925 {}
+stage6b: operators started {}
+stage6b: operators completed wall_seconds=0.002011 {}
+stage6b: moments started {'word': 'Tr[delta(E-H)]'}
+stage6b: moments completed wall_seconds=40.563506 {'word': 'Tr[delta(E-H)]'}
+stage6b: reconstruction started {'word': 'Tr[delta(E-H)]'}
+stage6b: reconstruction completed wall_seconds=0.624183 {'word': 'Tr[delta(E-H)]'}
+stage6b: eigen reference skipped: production already computes the exact eigenbasis trace {'word': 'Tr[delta(E-H)]'}
+stage6b: oracle started {}
+stage6b: oracle completed wall_seconds=6.770393 {}
+/tmp/lsquant_r1_smoke/07_spin_hall_bi_bilayer/run_dos_quick/SpectralOp1biKPM_M256_stateexact.chebmom
+/tmp/lsquant_r1_smoke/07_spin_hall_bi_bilayer/run_dos_quick/SpectralOp1biKPM_M256_stateexact.chebmom1D
+/tmp/lsquant_r1_smoke/07_spin_hall_bi_bilayer/run_dos_quick/basis.json
+/tmp/lsquant_r1_smoke/07_spin_hall_bi_bilayer/run_dos_quick/dos.dat
+/tmp/lsquant_r1_smoke/07_spin_hall_bi_bilayer/run_dos_quick/eigen_comparison.json
+/tmp/lsquant_r1_smoke/07_spin_hall_bi_bilayer/run_dos_quick/eigen_hermiticity.json
+/tmp/lsquant_r1_smoke/07_spin_hall_bi_bilayer/run_dos_quick/exact_shc.json
+/tmp/lsquant_r1_smoke/07_spin_hall_bi_bilayer/run_dos_quick/run.resolved.json
+/tmp/lsquant_r1_smoke/07_spin_hall_bi_bilayer/run_dos_quick/spin_chern.json
+stage6b: dipole quadrature started {'enabled': True}
+dipole cache hit: /home/ICN2/jgarcia/lsquant-agi-build-0010/examples/07_spin_hall_bi_bilayer/.lsquant-cache/dipoles-58b06a67515bdf805e8035c667715cc268efa72c7228499369925d0e76fd986a.npz; reuse_seconds=0.041372; stored_overlap_tolerance=1e-05; max_overlap_error=1.11465e-06; original_certification_seconds=930.060143
+stage6b: dipole quadrature completed wall_seconds=0.041472 {'enabled': True}
+stage6b: metric build started {}
+stage6b: metric build completed wall_seconds=4.089299 {}
+stage6b: operators started {}
+eigen JXSZ: Hermitian fold removed anti-Hermitian norm=3.9279029701536363e-13 operator_scale=200.37576472983429 relative_norm=1.9602684862860583e-15
+eigen VY: Hermitian fold removed anti-Hermitian norm=5.1618720929501334e-13 operator_scale=200.43878792285489 relative_norm=2.5752860244479429e-15
+stage6b: operators completed wall_seconds=4.894930 {}
+stage6b: moments started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: moments completed wall_seconds=99.104356 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: reconstruction started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: reconstruction completed wall_seconds=1.120890 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: eigen reference skipped: production already computes the exact eigenbasis trace {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: oracle started {}
+stage6b: oracle completed wall_seconds=3.108026 {}
+/tmp/lsquant_r1_smoke/07_spin_hall_bi_bilayer/run_shc_quick/NonEqOpJXSZ-VYbiKPM_M256x256_stateexact.chebmom
+/tmp/lsquant_r1_smoke/07_spin_hall_bi_bilayer/run_shc_quick/NonEqOpJXSZ-VYbiKPM_M256x256_stateexact.chebmom2D
+/tmp/lsquant_r1_smoke/07_spin_hall_bi_bilayer/run_shc_quick/basis.json
+/tmp/lsquant_r1_smoke/07_spin_hall_bi_bilayer/run_shc_quick/eigen_comparison.json
+/tmp/lsquant_r1_smoke/07_spin_hall_bi_bilayer/run_shc_quick/eigen_hermiticity.json
+/tmp/lsquant_r1_smoke/07_spin_hall_bi_bilayer/run_shc_quick/exact_shc.json
+/tmp/lsquant_r1_smoke/07_spin_hall_bi_bilayer/run_shc_quick/run.resolved.json
+/tmp/lsquant_r1_smoke/07_spin_hall_bi_bilayer/run_shc_quick/shc.dat
+/tmp/lsquant_r1_smoke/07_spin_hall_bi_bilayer/run_shc_quick/spin_chern.json
+wrote /tmp/lsquant_r1_smoke/07_spin_hall_bi_bilayer/fig_dos_shc.png
+```
+
+Verbatim output of Example 08 quick runs (`~/lsquant-agi-build-0010/logs/r1_ex08.log`):
+
+```text
+stage6b: dipole quadrature started {'enabled': True}
+dipole quadrature certified: largest_order=192 margin_factor=10.0071 stored_overlap_tolerance=1e-05 max_overlap_error=5.29132e-06 pair_evaluations=71124 requested_tensor_grid_points=11610086400 certification_seconds=2303.894673 total_cache_miss_seconds=2304.250434; cache=/home/ICN2/jgarcia/lsquant-agi-build-0010/examples/08_spin_hall_pdse2_monolayer/.lsquant-cache/dipoles-6433b5bef320b2d7a2d81c62381523eb51014b62527e39f0012dd7f7b0f4f643.npz
+stage6b: dipole quadrature completed wall_seconds=2304.250751 {'enabled': True}
+stage6b: metric build started {}
+stage6b: metric build completed wall_seconds=14.594460 {}
+stage6b: operators started {}
+stage6b: operators completed wall_seconds=0.002489 {}
+stage6b: moments started {'word': 'Tr[delta(E-H)]'}
+stage6b: moments completed wall_seconds=13.206317 {'word': 'Tr[delta(E-H)]'}
+stage6b: reconstruction started {'word': 'Tr[delta(E-H)]'}
+stage6b: reconstruction completed wall_seconds=0.680721 {'word': 'Tr[delta(E-H)]'}
+stage6b: eigen reference skipped: production already computes the exact eigenbasis trace {'word': 'Tr[delta(E-H)]'}
+stage6b: oracle started {}
+stage6b: oracle completed wall_seconds=27.245599 {}
+/tmp/lsquant_r1_smoke/08_spin_hall_pdse2_monolayer/run_dos_quick/SpectralOp1pdse2KPM_M256_stateexact.chebmom
+/tmp/lsquant_r1_smoke/08_spin_hall_pdse2_monolayer/run_dos_quick/SpectralOp1pdse2KPM_M256_stateexact.chebmom1D
+/tmp/lsquant_r1_smoke/08_spin_hall_pdse2_monolayer/run_dos_quick/basis.json
+/tmp/lsquant_r1_smoke/08_spin_hall_pdse2_monolayer/run_dos_quick/dos.dat
+/tmp/lsquant_r1_smoke/08_spin_hall_pdse2_monolayer/run_dos_quick/eigen_comparison.json
+/tmp/lsquant_r1_smoke/08_spin_hall_pdse2_monolayer/run_dos_quick/eigen_hermiticity.json
+/tmp/lsquant_r1_smoke/08_spin_hall_pdse2_monolayer/run_dos_quick/exact_shc.json
+/tmp/lsquant_r1_smoke/08_spin_hall_pdse2_monolayer/run_dos_quick/run.resolved.json
+/tmp/lsquant_r1_smoke/08_spin_hall_pdse2_monolayer/run_dos_quick/spin_chern.json
+stage6b: dipole quadrature started {'enabled': True}
+dipole cache hit: /home/ICN2/jgarcia/lsquant-agi-build-0010/examples/08_spin_hall_pdse2_monolayer/.lsquant-cache/dipoles-6433b5bef320b2d7a2d81c62381523eb51014b62527e39f0012dd7f7b0f4f643.npz; reuse_seconds=0.218174; stored_overlap_tolerance=1e-05; max_overlap_error=5.29132e-06; original_certification_seconds=2303.894673
+stage6b: dipole quadrature completed wall_seconds=0.218291 {'enabled': True}
+stage6b: metric build started {}
+stage6b: metric build completed wall_seconds=15.231832 {}
+stage6b: operators started {}
+eigen JXSZ: Hermitian fold removed anti-Hermitian norm=8.0426565887058945e-13 operator_scale=324.05599054982775 relative_norm=2.4818725230352541e-15
+eigen VY: Hermitian fold removed anti-Hermitian norm=1.0962584703917553e-12 operator_scale=343.44783038972059 relative_norm=3.191921373175652e-15
+stage6b: operators completed wall_seconds=18.670146 {}
+stage6b: moments started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: moments completed wall_seconds=329.437825 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: reconstruction started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: reconstruction completed wall_seconds=1.048889 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: eigen reference skipped: production already computes the exact eigenbasis trace {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: oracle started {}
+stage6b: oracle completed wall_seconds=12.511109 {}
+/tmp/lsquant_r1_smoke/08_spin_hall_pdse2_monolayer/run_shc_quick/NonEqOpJXSZ-VYpdse2KPM_M256x256_stateexact.chebmom
+/tmp/lsquant_r1_smoke/08_spin_hall_pdse2_monolayer/run_shc_quick/NonEqOpJXSZ-VYpdse2KPM_M256x256_stateexact.chebmom2D
+/tmp/lsquant_r1_smoke/08_spin_hall_pdse2_monolayer/run_shc_quick/basis.json
+/tmp/lsquant_r1_smoke/08_spin_hall_pdse2_monolayer/run_shc_quick/eigen_comparison.json
+/tmp/lsquant_r1_smoke/08_spin_hall_pdse2_monolayer/run_shc_quick/eigen_hermiticity.json
+/tmp/lsquant_r1_smoke/08_spin_hall_pdse2_monolayer/run_shc_quick/exact_shc.json
+/tmp/lsquant_r1_smoke/08_spin_hall_pdse2_monolayer/run_shc_quick/run.resolved.json
+/tmp/lsquant_r1_smoke/08_spin_hall_pdse2_monolayer/run_shc_quick/shc.dat
+/tmp/lsquant_r1_smoke/08_spin_hall_pdse2_monolayer/run_shc_quick/spin_chern.json
+wrote /tmp/lsquant_r1_smoke/08_spin_hall_pdse2_monolayer/fig_dos_shc.png
+```
+
+### Item 4 — Examples 07 and 08 READMEs: state only oracle outputs with source citations (Commit `e586b49`)
+
+```text
+commit e586b49b9a61ab27d8ca51396c1a7b4973525b10
+Author: Agi <agi@deepmind.com>
+Date:   Sun Oct 25 22:20:24 2026 +0000
+
+    docs(examples): cite only oracle outputs in 07 and 08 READMEs
+
+ examples/07_spin_hall_bi_bilayer/README.md      | 53 ++++++++++++++-----------
+ examples/08_spin_hall_pdse2_monolayer/README.md | 53 ++++++++++++++-----------
+ 2 files changed, 59 insertions(+), 47 deletions(-)
+```
+
+Verbatim oracle output check from `/tmp/lsquant_r1_smoke/07_spin_hall_bi_bilayer/run_dos_quick/` and `/tmp/lsquant_r1_smoke/08_spin_hall_pdse2_monolayer/run_dos_quick/`:
+
+```text
+=== Example 07 (Bi, 24x24x1, covariant + lowdin) ===
+spin_chern.json: chern_plus=1.0, chern_minus=-1.0, spin_chern=2.0, prodan_half_difference=1.0, z2=1, occupied_bands=30, energy_gap=0.30442544839208807, projected_spin_gap=0.5131069721366895
+exact_shc.json: E_min=-0.22889740931517616, E_max=0.2755280390769119, E[i0]=0.00011174425483181927, values[i0]=1.1441527527256172 [e^2/h, sigma_z Pauli]
+
+=== Example 08 (PdSe2, 12x12x1, covariant + lowdin) ===
+spin_chern.json: chern_plus=3.533949646070574e-17, chern_minus=4.417437057588218e-17, spin_chern=-8.834874115176437e-18, prodan_half_difference=-4.417437057588219e-18, z2=0, occupied_bands=100, energy_gap=1.174631663661832, projected_spin_gap=0.9961948681997879, sigma_xy=0.010513036781877119
+exact_shc.json: E_min=-1.265357395883118, E_max=0.4965900996096299, E[i0]=-0.00027909411932491857, values[i0]=0.010513036781877119 [e^2/h, sigma_z Pauli]
+```
+
+### Item 5 — CMake: drop unused `${FFTW3_OMP_LIBRARY}` link and verify 0 warnings under `-Wall -Wextra -Wpedantic` (Commit `79cb251`)
+
+```text
+commit 79cb251eba0459a5794bd6f9173d405be4a958f3
+Author: Agi <agi@deepmind.com>
+Date:   Sun Oct 25 22:21:23 2026 +0000
+
+    build(cmake): drop unused fftw3_omp link from lsquant_core
+
+ CMakeLists.txt         | 23 +++++++----------------
+ lsquant/CMakeLists.txt |  1 -
+ 2 files changed, 7 insertions(+), 17 deletions(-)
+```
+
+Verbatim `ldd` and compiler warning count check on TCN (`~/lsquant-agi-build-0010/logs/r1_item5_ldd.log`, `r1_golden_build.log`, `r1_native_build.log`):
+
+```text
+=== golden _core.so ===
+	libfftw3.so.3 => /lib/x86_64-linux-gnu/libfftw3.so.3 (0x00007ff6fe3bb000)
+=== native _core.so ===
+	libfftw3.so.3 => /lib/x86_64-linux-gnu/libfftw3.so.3 (0x00007f8c9e2f2000)
+=== warning counts ===
+golden warnings: 0
+native warnings: 0
+```
+
+### Item 6 — List all six deviations in Section 9 of `report.md` (Commit `8839055`)
+
+```text
+commit 88390559f10ce13a4c59b7ec7415961fba2b1839
+Author: Agi <agi@deepmind.com>
+Date:   Sun Oct 25 22:21:51 2026 +0000
+
+    docs(report): list all six deviations in section 9 of report.md
+
+ handoff/0010-cleanup-and-release/report.md | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+```
+
+Verbatim diff of Section 9 (`git show 8839055`):
+
+```diff
+- - **Deviations from the brief:** None.
++ - **Deviations from the brief:**
++   1. **`python/lsquant/projection/diagnostics.py` deletion (now reverted):** Deleted in `a8252cc` as an unimported module; reverted in Review 1 Item 1 (`fae21b2`) and exported in `python/lsquant/projection/__init__.py` because `python/lsquant/projection/` is 0006d work still under validation.
++   2. **Quick-run settings in Examples 07 and 08 (now fixed):** In `360339a`, `examples/07_spin_hall_bi_bilayer/run_*_quick.json` and `examples/08_spin_hall_pdse2_monolayer/run_*_quick.json` used `"velocity_mode": "berry_connection"` (and `12x12x1` for Bi instead of `24x24x1`). Fixed in Review 1 Item 3 (`cbd7dc4`) to use `"velocity_mode": "covariant"` with `24x24x1` ($M = 256$) for Bi and `12x12x1` ($M = 256$) for PdSe2.
++   3. **`fftw3_omp` link (now removed):** In `26313dc`, `CMakeLists.txt` looked up `FFTW3_OMP_LIBRARY` and linked it into `lsquant_core` even though `fftw_init_threads` is never called. Removed in Review 1 Item 5 (`79cb251`).
++   4. **`-Wpedantic` warning flag:** Added `-Wpedantic` alongside `-Wall -Wextra` on the `lsquant_warnings` interface target in `CMakeLists.txt` (`26313dc`); retained per Review 1 Item 5 because both `golden` and `native` presets build with 0 compiler warnings.
++   5. **`.githooks/pre-commit` and `scripts/check_reporting.sh`:** Deleted `scripts/check_reporting.sh` (which checked the removed legacy `src/` and `include/` directories for the abandoned reporting plan) and updated `.githooks/pre-commit` in `da6239f` to guard its invocation with `if [ -x scripts/check_reporting.sh ]`.
++   6. **Deletion of `.projectile` and `.vscode/settings.json`:** Deleted both tracked editor configuration files (which referenced legacy header and CMake paths) in `da6239f` as part of the Step 2 whole-tree search for editor files in `git ls-files`.
+```
+
