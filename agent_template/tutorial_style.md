@@ -81,11 +81,11 @@ what they are about to learn. "Plot the moments" tells them nothing.
 
 Figures are the argument, so make them carry it.
 
-Ship a small script with each tutorial that produces every embedded PNG, either
-by calling the compiled kernels through `lsqplot.py` or, where the physics has a
+Ship a small script (`plot.py`) with each tutorial that produces every embedded PNG
+from the output directory of `python -m lsquant run` or, where the physics has a
 closed form, by computing it directly. The two agree to machine precision when
 the moments come from an exact trace, so a closed-form figure is faithful, not a
-mock-up. Commit the PNGs next to the README so the page renders offline.
+mock-up.
 
 Name figures for their content: `fig_levels.png`, `fig_moments.png`,
 `fig_dos.png`. Keep one idea per figure or per panel. A two panel figure should

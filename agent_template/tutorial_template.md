@@ -91,7 +91,7 @@ $$ [[ \text{closed form, e.g. } \rho(E) = \dots ]] $$
 -->
 
 ```bash
-[[python -c "import lsqplot; lsqplot.figure_*( ... )"   or   python lsqplot.py]]
+[[python plot.py /tmp/tut_out]]
 ```
 
 ![[[alt text stating what this figure shows]]](fig_[[name]].png)

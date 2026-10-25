@@ -1,0 +1,80 @@
+{
+  "model": {
+    "kind": "generator",
+    "name": "make_ey",
+    "tutorial": 6,
+    "params": {
+      "ey_l": 20,
+      "ey_ds": [
+        0.05,
+        0.07,
+        0.1
+      ],
+      "dp_l": 20,
+      "dp_lambda": 0.2,
+      "dp_ws": [
+        0.0,
+        6.0
+      ],
+      "dp_moments": 160,
+      "dp_steps": 120,
+      "dp_tmax": 45.0,
+      "ratelaw_l": 50,
+      "ratelaw_ds": [
+        0.04,
+        0.06,
+        0.08,
+        0.1,
+        0.14
+      ],
+      "ratelaw_nr": 20,
+      "crosscheck_l": 8,
+      "crosscheck_d": 0.1,
+      "crosscheck_nr": 20,
+      "crosscheck_moments": 96,
+      "crosscheck_steps": 60,
+      "crosscheck_tmax": 220.0,
+      "disorder_seed": 1
+    }
+  },
+  "basis": {
+    "name": "real"
+  },
+  "metric": {
+    "policy": "orthogonal"
+  },
+  "word": "Tr[P:PZ U(t)^+ SZ U(t) delta(E-H) P:PZ]",
+  "words": [
+    "Tr[P:PZ U(t)^+ SZ U(t) delta(E-H) P:PZ]",
+    "Tr[P:PZ U(t)^+ 1 U(t) delta(E-H) P:PZ]",
+    "Tr[P:PX U(t)^+ SX U(t) delta(E-H) P:PX]",
+    "Tr[P:PX U(t)^+ 1 U(t) delta(E-H) P:PX]"
+  ],
+  "expansion": {
+    "moments": 128,
+    "window": "gershgorin",
+    "trace": "exact"
+  },
+  "time": {
+    "steps": 80,
+    "tmax": 260.0,
+    "bessel": "legacy"
+  },
+  "reconstruction": {
+    "kernel": "jackson",
+    "broadening_meV": 140.0,
+    "fermi_energies": [
+      2.0
+    ],
+    "formulas": [
+      "time_correlation"
+    ],
+    "legacy_text_round_trip": true
+  },
+  "output": {
+    "dir": ".",
+    "legacy_names": true,
+    "legacy_layout": true,
+    "capture_tutorial": false
+  }
+}
