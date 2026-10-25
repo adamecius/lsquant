@@ -1,0 +1,18 @@
+[check a] BlochTransform vs dense B (6,4,1) graphene: rel(B x) = 3.613e-15, rel(B^+ x) = 3.221e-15
+[check a] BlochTransform unitarity (8,8,1) graphene: max|B B^+ x - x| = 5.562e-17, max|B^+ B x - x| = 5.722e-17
+[check b] (graphene 6x4x1) max_x ||H_k x - B H_csr B^+ x||_inf = 4.872e-16
+[check c] (graphene 6x4x1) max_x ||v_x x - B VX_csr B^+ x||_inf = 2.483e-16
+[check b] (haldane 6x4x1) max_x ||H_k x - B H_csr B^+ x||_inf = 4.034e-16
+[check c] (haldane 6x4x1) max_x ||v_x x - B VX_csr B^+ x||_inf = 2.989e-16
+[check d] Anderson disorder W=1.0 (seed=12345): max|mu_real - mu_bloch| DOS(64) = 4.462e-16, VX-VX(64x64) = 1.776e-15
+[check e] (16,16,1) real vs bloch: DOS max|d_mu|=6.664e-15, max_rel|d_curve|=3.031e-15; KuboXX max|d_mu|=4.219e-14, max|d_curve/N|=1.405e-14, max_rel|d_curve|=9.896e-15
+[check e] (16,16,1) real vs eigen: DOS max|d_mu|=6.772e-15, max_rel|d_curve|=3.175e-15; KuboXX max|d_mu|=4.263e-14, max|d_curve/N|=1.372e-14, max_rel|d_curve|=9.664e-15
+[check e] (16,16,1) bloch vs eigen: DOS max|d_mu|=2.000e-15, max_rel|d_curve|=9.730e-16; KuboXX max|d_mu|=5.995e-15, max|d_curve/N|=1.554e-15, max_rel|d_curve|=1.095e-15
+[check e] Jackson KPM (M=128) vs Gaussian exact-diag: rel_L2(DOS)=1.150e-02, rel_L2(KuboXX)=4.129e-02
+[check f] G1 chain1d DOS byte-identical to golden: PASS
+Traceback (most recent call last):
+  File "/home/jgarcia/lsquant-final2/tests/dev/stage_5_check.py", line 741, in <module>
+    sys.exit(main())
+  File "/home/jgarcia/lsquant-final2/tests/dev/stage_5_check.py", line 680, in main
+    assert f_new.read() == f_ref.read(), "G4 byte-identity regression!"
+AssertionError: G4 byte-identity regression!

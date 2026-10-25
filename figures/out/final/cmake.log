@@ -1,0 +1,108 @@
+-- The CXX compiler identification is GNU 9.4.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Eigen3 headers: /home/jgarcia/lsq-env/include/eigen3
+-- Found OpenMP_CXX: -fopenmp (found version "4.5")
+-- Found OpenMP: TRUE (found version "4.5")
+-- Found GSL: /home/jgarcia/lsq-env/include (found version "2.8")
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+-- Looking for pthread_create in pthreads
+-- Looking for pthread_create in pthreads - not found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - found
+-- Found Threads: TRUE
+-- Found PkgConfig: /home/jgarcia/lsq-env/bin/pkg-config (found version "0.29.2")
+-- Checking for module 'fftw3'
+--   Found fftw3, version 3.3.11
+CMake Warning (author) at /home/jgarcia/lsq-env/lib/python3.10/site-packages/pybind11/share/cmake/pybind11/FindPythonLibsNew.cmake:101 (message):
+  Policy CMP0148 is not set: The FindPythonInterp and FindPythonLibs modules
+  are removed.  Run "cmake --help-policy CMP0148" for policy details.  Use
+  the cmake_policy command to set the policy and suppress this warning, or
+  preferably upgrade to using FindPython, either by calling it explicitly
+  before pybind11, or by setting PYBIND11_FINDPYTHON ON before pybind11.
+Call Stack (most recent call first):
+  /home/jgarcia/lsq-env/lib/python3.10/site-packages/pybind11/share/cmake/pybind11/pybind11Tools.cmake:44 (find_package)
+  /home/jgarcia/lsq-env/lib/python3.10/site-packages/pybind11/share/cmake/pybind11/pybind11Common.cmake:243 (include)
+  /home/jgarcia/lsq-env/lib/python3.10/site-packages/pybind11/share/cmake/pybind11/pybind11Config.cmake:257 (include)
+  lsquant/CMakeLists.txt:50 (find_package)
+This warning is for project developers.  Use -Wno-author to suppress it.
+
+CMake Warning (deprecated) at /home/jgarcia/lsq-env/lib/python3.10/site-packages/pybind11/share/cmake/pybind11/FindPythonLibsNew.cmake:110 (cmake_policy):
+  The OLD behavior for policy CMP0148 will be removed from a future version
+  of CMake.
+
+  The cmake-policies(7) manual explains that the OLD behaviors of all
+  policies are deprecated and that a policy should be set to OLD only under
+  specific short-term circumstances.  Projects should be ported to the NEW
+  behavior and not rely on setting a policy to OLD.
+Call Stack (most recent call first):
+  /home/jgarcia/lsq-env/lib/python3.10/site-packages/pybind11/share/cmake/pybind11/pybind11Tools.cmake:44 (find_package)
+  /home/jgarcia/lsq-env/lib/python3.10/site-packages/pybind11/share/cmake/pybind11/pybind11Common.cmake:243 (include)
+  /home/jgarcia/lsq-env/lib/python3.10/site-packages/pybind11/share/cmake/pybind11/pybind11Config.cmake:257 (include)
+  lsquant/CMakeLists.txt:50 (find_package)
+This warning is for project developers.  Use -Wno-author or -Wno-deprecated
+to suppress it.
+
+-- Found PythonInterp: /home/jgarcia/lsq-env/bin/python3 (found suitable version "3.10.22", minimum required is "3.9")
+-- Found PythonLibs: /home/jgarcia/lsq-env/lib/libpython3.10.so
+-- Performing Test HAS_FLTO_AUTO
+-- Performing Test HAS_FLTO_AUTO - Success
+-- Found pybind11: /home/jgarcia/lsq-env/lib/python3.10/site-packages/pybind11/include (found version "3.1.0")
+-- Configuring done (1.5s)
+CMake Warning at lsquant/CMakeLists.txt:34 (add_executable):
+  Cannot generate a safe runtime search path for target stage1_moments
+  because files in some directories may conflict with libraries in implicit
+  directories:
+
+    runtime library [libgomp.so.1] in /usr/lib/gcc/x86_64-linux-gnu/9 may be hidden by files in:
+      /home/jgarcia/lsq-env/lib
+
+  Some of these libraries may not be found correctly.
+
+
+CMake Warning at lsquant/CMakeLists.txt:39 (add_executable):
+  Cannot generate a safe runtime search path for target stage6_nonorth
+  because files in some directories may conflict with libraries in implicit
+  directories:
+
+    runtime library [libgomp.so.1] in /usr/lib/gcc/x86_64-linux-gnu/9 may be hidden by files in:
+      /home/jgarcia/lsq-env/lib
+
+  Some of these libraries may not be found correctly.
+
+
+CMake Warning at lsquant/CMakeLists.txt:44 (add_executable):
+  Cannot generate a safe runtime search path for target stage_1_check because
+  files in some directories may conflict with libraries in implicit
+  directories:
+
+    runtime library [libgomp.so.1] in /usr/lib/gcc/x86_64-linux-gnu/9 may be hidden by files in:
+      /home/jgarcia/lsq-env/lib
+
+  Some of these libraries may not be found correctly.
+
+
+CMake Warning at /home/jgarcia/lsq-env/lib/python3.10/site-packages/pybind11/share/cmake/pybind11/pybind11Tools.cmake:159 (add_library):
+  Cannot generate a safe runtime search path for target _core because files
+  in some directories may conflict with libraries in implicit directories:
+
+    runtime library [libgomp.so.1] in /usr/lib/gcc/x86_64-linux-gnu/9 may be hidden by files in:
+      /home/jgarcia/lsq-env/lib
+
+  Some of these libraries may not be found correctly.
+Call Stack (most recent call first):
+  lsquant/CMakeLists.txt:51 (pybind11_add_module)
+
+
+-- Generating done (0.0s)
+CMake Warning (unused-cli):
+  Manually-specified variables were not used by the project:
+
+    FFTW3_DIR
+
+
+-- Build files have been written to: /home/jgarcia/lsquant-final2-build

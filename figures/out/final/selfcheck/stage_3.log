@@ -1,0 +1,9 @@
+(0) SparseMatrix.from_csr (scipy) dos array_equal vs ReadCsrText: True
+(a) Haldane VX-VY array_equal vs G5: False
+(a) Haldane VX-VX array_equal vs G5: False
+Traceback (most recent call last):
+  File "/home/jgarcia/lsquant-final2/tests/dev/stage_3_check.py", line 337, in <module>
+    sys.exit(main())
+  File "/home/jgarcia/lsquant-final2/tests/dev/stage_3_check.py", line 196, in main
+    assert g5_xy_equal, "Haldane VX-VY moments do not equal G5"
+AssertionError: Haldane VX-VY moments do not equal G5

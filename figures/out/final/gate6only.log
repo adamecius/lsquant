@@ -1,0 +1,244 @@
+== stage 6: /home/jgarcia/lsquant-final2-build/lsquant_core/stage6_nonorth on goldens/stage0/nonorth vs G1, G2, G5 moments (OMP_NUM_THREADS=16)
+          stdout: stage6_nonorth: route=lowdin applier=exact word=dos dim=2048 states=2048 (exact) M=64 -> SpectralOp1chain1dKPM_M64_stateexact.chebmom1D order=60 coeff_tol=1.000000e-12 tol=1.000000e-13 max_iterations=200 max_dim=4096 residual=2.481259e-14
+PASS      chain1d/real dos lowdin/exact  rel=6.757e-13 header_ok=True max_abs=6.757e-13 at_element=62 max|gold|=1.000e+00  tol=1e-10
+          golden_diff.py: first-diff line 4 m=1 re, new=5.22151766269019e-16 golden=0; max abs diff 6.757e-13 at line 65 m=62 re; max rel diff 1.000e+00 at line 4 m=1 re; DEFECT level (>= 1e-12)
+N/A       chain1d/real dos lowdin/ischo  (ISCHO provides S^-1 only; the Lowdin route needs S^-1/2)
+          stdout: stage6_nonorth: route=lowdin applier=chebyshev word=dos dim=2048 states=2048 (exact) M=64 -> SpectralOp1chain1dKPM_M64_stateexact.chebmom1D order=60 effective_order=38 coeff_tol=1.000000e-12 tol=1.000000e-13 max_iterations=200 max_dim=4096 residual=1.772763e-12
+PASS      chain1d/real dos lowdin/chebyshev  rel=9.383e-12 header_ok=True max_abs=9.383e-12 at_element=62 max|gold|=1.000e+00  tol=1e-8
+          golden_diff.py: first-diff line 4 m=1 re, new=-3.08888521314762e-14 golden=0; max abs diff 9.383e-12 at line 65 m=62 re; max rel diff 1.000e+00 at line 4 m=1 re; DEFECT level (>= 1e-12)
+          stdout: stage6_nonorth: route=generalised applier=exact word=dos dim=2048 states=2048 (exact) M=64 -> SpectralOp1chain1dKPM_M64_stateexact.chebmom1D order=60 coeff_tol=1.000000e-12 tol=1.000000e-13 max_iterations=200 max_dim=4096 residual=3.706430e-16
+PASS      chain1d/real dos generalised/exact  rel=3.347e-16 header_ok=True max_abs=3.347e-16 at_element=62 max|gold|=1.000e+00  tol=1e-10
+          golden_diff.py: first-diff line 4 m=1 re, new=-2.54787510534094e-18 golden=0; max abs diff 3.347e-16 at line 65 m=62 re; max rel diff 1.000e+00 at line 4 m=1 re; DEFECT level (>= 1e-12)
+          stdout: stage6_nonorth: route=generalised applier=ischo word=dos dim=2048 states=2048 (exact) M=64 -> SpectralOp1chain1dKPM_M64_stateexact.chebmom1D order=60 coeff_tol=1.000000e-12 tol=1.000000e-12 max_iterations=200 max_dim=4096 iterations=0 residual=3.519960e-14
+PASS      chain1d/real dos generalised/ischo  rel=3.270e-14 header_ok=True max_abs=3.270e-14 at_element=62 max|gold|=1.000e+00  tol=1e-9
+          golden_diff.py: first-diff line 4 m=1 re, new=-9.42442738433025e-17 golden=0; max abs diff 3.270e-14 at line 65 m=62 re; max rel diff 1.000e+00 at line 4 m=1 re; DEFECT level (>= 1e-12)
+          stdout: stage6_nonorth: route=generalised applier=chebyshev word=dos dim=2048 states=2048 (exact) M=64 -> SpectralOp1chain1dKPM_M64_stateexact.chebmom1D order=60 effective_order=41 coeff_tol=1.000000e-12 tol=1.000000e-13 max_iterations=200 max_dim=4096 residual=1.650961e-12
+PASS      chain1d/real dos generalised/chebyshev  rel=1.506e-12 header_ok=True max_abs=1.506e-12 at_element=62 max|gold|=1.000e+00  tol=1e-8
+          golden_diff.py: first-diff line 4 m=1 re, new=-2.03154550473816e-14 golden=0; max abs diff 1.506e-12 at line 65 m=62 re; max rel diff 1.000e+00 at line 4 m=1 re; DEFECT level (>= 1e-12)
+          stdout: stage6_nonorth: route=naive applier=exact word=dos dim=2048 states=2048 (exact) M=64 -> SpectralOp1chain1dKPM_M64_stateexact.chebmom1D order=60 coeff_tol=1.000000e-12 tol=1.000000e-13 max_iterations=200 max_dim=4096 residual=3.706430e-16
+EVIDENCE  chain1d/real dos naive/exact  rel=3.347e-16 header_ok=True max_abs=3.347e-16 at_element=62 max|gold|=1.000e+00  (would be PASS at tol 1e-10; not counted)
+          golden_diff.py: first-diff line 4 m=1 re, new=-2.54787510534094e-18 golden=0; max abs diff 3.347e-16 at line 65 m=62 re; max rel diff 1.000e+00 at line 4 m=1 re; DEFECT level (>= 1e-12)
+PASS      chain1d/real dos generalised/exact vs lowdin/exact  rel=6.760e-13 header_ok=True max_abs=6.760e-13 at_element=62 max|gold|=1.000e+00  tol=1e-10
+          golden_diff.py: first-diff line 4 m=1 re, new=-2.54787510534094e-18 golden=5.22151766269019e-16; max abs diff 6.760e-13 at line 65 m=62 re; max rel diff 1.005e+00 at line 4 m=1 re; DEFECT level (>= 1e-12)
+PASS      chain1d/real dos generalised/chebyshev vs lowdin/chebyshev  rel=7.876e-12 header_ok=True max_abs=7.876e-12 at_element=62 max|gold|=1.000e+00  tol=1e-8
+          golden_diff.py: first-diff line 4 m=1 re, new=-2.03154550473816e-14 golden=-3.08888521314762e-14; max abs diff 7.876e-12 at line 65 m=62 re; max rel diff 1.132e+00 at line 5 m=2 re; DEFECT level (>= 1e-12)
+PASS      chain1d/real dos generalised/ischo vs lowdin/exact  rel=7.084e-13 header_ok=True max_abs=7.084e-13 at_element=62 max|gold|=1.000e+00  tol=1e-9
+          golden_diff.py: first-diff line 4 m=1 re, new=-9.42442738433025e-17 golden=5.22151766269019e-16; max abs diff 7.084e-13 at line 65 m=62 re; max rel diff 1.255e+00 at line 22 m=19 re; DEFECT level (>= 1e-12)
+          stdout: stage6_nonorth: route=lowdin applier=exact word=kubo dim=2048 states=2048 (exact) M=64 -> NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D order=60 coeff_tol=1.000000e-12 tol=1.000000e-13 max_iterations=200 max_dim=4096 residual=2.481259e-14
+PASS      chain1d/real kubo lowdin/exact  rel=1.243e-14 header_ok=True max_abs=4.974e-14 at_element=195 max|gold|=4.000e+00  tol=1e-10
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=2.00000000000002 golden=2; max abs diff 4.974e-14 at line 198 (m,n)=(3,3) re; max rel diff 1.000e+00 at line 4 (m,n)=(0,1) re; DEFECT level (>= 1e-12)
+N/A       chain1d/real kubo lowdin/ischo  (ISCHO provides S^-1 only; the Lowdin route needs S^-1/2)
+          stdout: stage6_nonorth: route=lowdin applier=chebyshev word=kubo dim=2048 states=2048 (exact) M=64 -> NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D order=60 effective_order=38 coeff_tol=1.000000e-12 tol=1.000000e-13 max_iterations=200 max_dim=4096 residual=1.772763e-12
+PASS      chain1d/real kubo lowdin/chebyshev  rel=1.650e-13 header_ok=True max_abs=6.599e-13 at_element=130 max|gold|=4.000e+00  tol=1e-8
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=1.99999999999974 golden=2; max abs diff 6.599e-13 at line 133 (m,n)=(2,2) re; max rel diff 1.000e+00 at line 4 (m,n)=(0,1) re; DEFECT level (>= 1e-12)
+          stdout: stage6_nonorth: route=generalised applier=exact word=kubo dim=2048 states=2048 (exact) M=64 -> NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D order=60 coeff_tol=1.000000e-12 tol=1.000000e-13 max_iterations=200 max_dim=4096 residual=3.706430e-16
+PASS      chain1d/real kubo generalised/exact  rel=2.442e-15 header_ok=True max_abs=9.770e-15 at_element=455 max|gold|=4.000e+00  tol=1e-10
+          golden_diff.py: first-diff line 4 (m,n)=(0,1) re, new=2.43945488809238e-19 golden=0; max abs diff 9.770e-15 at line 458 (m,n)=(7,7) re; max rel diff 1.000e+00 at line 4 (m,n)=(0,1) re; DEFECT level (>= 1e-12)
+          stdout: stage6_nonorth: route=generalised applier=ischo word=kubo dim=2048 states=2048 (exact) M=64 -> NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D order=60 coeff_tol=1.000000e-12 tol=1.000000e-12 max_iterations=200 max_dim=4096 iterations=0 residual=2.276607e-16
+PASS      chain1d/real kubo generalised/ischo  rel=2.839e-15 header_ok=True max_abs=1.136e-14 at_element=3195 max|gold|=4.000e+00  tol=1e-9
+          golden_diff.py: first-diff line 4 (m,n)=(0,1) re, new=-4.78417761136385e-16 golden=0; max abs diff 1.136e-14 at line 3198 (m,n)=(49,59) re; max rel diff 1.000e+00 at line 4 (m,n)=(0,1) re; DEFECT level (>= 1e-12)
+          stdout: stage6_nonorth: route=generalised applier=chebyshev word=kubo dim=2048 states=2048 (exact) M=64 -> NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D order=60 effective_order=41 coeff_tol=1.000000e-12 tol=1.000000e-13 max_iterations=200 max_dim=4096 residual=1.650961e-12
+PASS      chain1d/real kubo generalised/chebyshev  rel=1.026e-13 header_ok=True max_abs=4.103e-13 at_element=195 max|gold|=4.000e+00  tol=1e-8
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=2.00000000000016 golden=2; max abs diff 4.103e-13 at line 198 (m,n)=(3,3) re; max rel diff 1.000e+00 at line 4 (m,n)=(0,1) re; DEFECT level (>= 1e-12)
+          stdout: stage6_nonorth: route=naive applier=exact word=kubo dim=2048 states=2048 (exact) M=64 -> NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D order=60 coeff_tol=1.000000e-12 tol=1.000000e-13 max_iterations=200 max_dim=4096 residual=3.706430e-16
+EVIDENCE  chain1d/real kubo naive/exact  rel=1.989e-01 header_ok=True max_abs=7.954e-01 at_element=130 max|gold|=4.000e+00  (would be FAIL at tol 1e-10; not counted)
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=2.47772731757612 golden=2; max abs diff 7.954e-01 at line 133 (m,n)=(2,2) re; max rel diff 1.000e+00 at line 4 (m,n)=(0,1) re; DEFECT level (>= 1e-12)
+PASS      chain1d/real kubo generalised/exact vs lowdin/exact  rel=1.243e-14 header_ok=True max_abs=4.974e-14 at_element=195 max|gold|=4.000e+00  tol=1e-10
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=2 golden=2.00000000000002; max abs diff 4.974e-14 at line 198 (m,n)=(3,3) re; max rel diff 1.862e+00 at line 927 (m,n)=(14,28) re; DEFECT level (>= 1e-12)
+PASS      chain1d/real kubo generalised/chebyshev vs lowdin/chebyshev  rel=2.476e-13 header_ok=True max_abs=9.903e-13 at_element=130 max|gold|=4.000e+00  tol=1e-8
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=2.00000000000016 golden=1.99999999999974; max abs diff 9.903e-13 at line 133 (m,n)=(2,2) re; max rel diff 1.998e+00 at line 1920 (m,n)=(29,61) re; DEFECT level (>= 1e-12)
+PASS      chain1d/real kubo generalised/ischo vs lowdin/exact  rel=1.243e-14 header_ok=True max_abs=4.974e-14 at_element=195 max|gold|=4.000e+00  tol=1e-9
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=2 golden=2.00000000000002; max abs diff 4.974e-14 at line 198 (m,n)=(3,3) re; max rel diff 1.999e+00 at line 409 (m,n)=(6,22) re; DEFECT level (>= 1e-12)
+          stdout: stage6_nonorth: route=lowdin applier=exact word=dos dim=2048 states=2048 (exact) M=64 -> SpectralOp1chain1dKPM_M64_stateexact.chebmom1D order=60 coeff_tol=1.000000e-12 tol=1.000000e-13 max_iterations=200 max_dim=4096 residual=2.687842e-14
+PASS      chain1d/complex dos lowdin/exact  rel=7.088e-13 header_ok=True max_abs=7.088e-13 at_element=62 max|gold|=1.000e+00  tol=1e-10
+          golden_diff.py: first-diff line 4 m=1 re, new=-2.99646375420681e-17 golden=0; max abs diff 7.088e-13 at line 65 m=62 re; max rel diff 1.000e+00 at line 4 m=1 re; DEFECT level (>= 1e-12)
+N/A       chain1d/complex dos lowdin/ischo  (ISCHO provides S^-1 only; the Lowdin route needs S^-1/2)
+          stdout: stage6_nonorth: route=lowdin applier=chebyshev word=dos dim=2048 states=2048 (exact) M=64 -> SpectralOp1chain1dKPM_M64_stateexact.chebmom1D order=60 effective_order=33 coeff_tol=1.000000e-12 tol=1.000000e-13 max_iterations=200 max_dim=4096 residual=1.758790e-12
+PASS      chain1d/complex dos lowdin/chebyshev  rel=9.356e-13 header_ok=True max_abs=9.356e-13 at_element=63 max|gold|=1.000e+00  tol=1e-8
+          golden_diff.py: first-diff line 4 m=1 re, new=-2.39210506871451e-14 golden=0; max abs diff 9.356e-13 at line 66 m=63 re; max rel diff 1.000e+00 at line 4 m=1 re; DEFECT level (>= 1e-12)
+          stdout: stage6_nonorth: route=generalised applier=exact word=dos dim=2048 states=2048 (exact) M=64 -> SpectralOp1chain1dKPM_M64_stateexact.chebmom1D order=60 coeff_tol=1.000000e-12 tol=1.000000e-13 max_iterations=200 max_dim=4096 residual=4.053147e-16
+PASS      chain1d/complex dos generalised/exact  rel=8.184e-16 header_ok=True max_abs=8.184e-16 at_element=62 max|gold|=1.000e+00  tol=1e-10
+          golden_diff.py: first-diff line 4 m=1 re, new=-1.6940658945086e-18 golden=0; max abs diff 8.180e-16 at line 65 m=62 re; max rel diff 1.000e+00 at line 4 m=1 re; DEFECT level (>= 1e-12)
+          stdout: stage6_nonorth: route=generalised applier=ischo word=dos dim=2048 states=2048 (exact) M=64 -> SpectralOp1chain1dKPM_M64_stateexact.chebmom1D order=60 coeff_tol=1.000000e-12 tol=1.000000e-12 max_iterations=200 max_dim=4096 iterations=0 residual=1.461252e-14
+PASS      chain1d/complex dos generalised/ischo  rel=2.736e-14 header_ok=True max_abs=2.736e-14 at_element=62 max|gold|=1.000e+00  tol=1e-9
+          golden_diff.py: first-diff line 4 m=1 re, new=-5.96311194867027e-19 golden=0; max abs diff 2.604e-14 at line 65 m=62 im; max rel diff 1.000e+00 at line 4 m=1 re; DEFECT level (>= 1e-12)
+          stdout: stage6_nonorth: route=generalised applier=chebyshev word=dos dim=2048 states=2048 (exact) M=64 -> SpectralOp1chain1dKPM_M64_stateexact.chebmom1D order=60 effective_order=36 coeff_tol=1.000000e-12 tol=1.000000e-13 max_iterations=200 max_dim=4096 residual=1.131412e-12
+PASS      chain1d/complex dos generalised/chebyshev  rel=2.867e-12 header_ok=True max_abs=2.867e-12 at_element=62 max|gold|=1.000e+00  tol=1e-8
+          golden_diff.py: first-diff line 4 m=1 re, new=-3.57186339967203e-15 golden=0; max abs diff 2.867e-12 at line 65 m=62 re; max rel diff 1.000e+00 at line 4 m=1 re; DEFECT level (>= 1e-12)
+          stdout: stage6_nonorth: route=naive applier=exact word=dos dim=2048 states=2048 (exact) M=64 -> SpectralOp1chain1dKPM_M64_stateexact.chebmom1D order=60 coeff_tol=1.000000e-12 tol=1.000000e-13 max_iterations=200 max_dim=4096 residual=4.053147e-16
+EVIDENCE  chain1d/complex dos naive/exact  rel=8.184e-16 header_ok=True max_abs=8.184e-16 at_element=62 max|gold|=1.000e+00  (would be PASS at tol 1e-10; not counted)
+          golden_diff.py: first-diff line 4 m=1 re, new=-1.6940658945086e-18 golden=0; max abs diff 8.180e-16 at line 65 m=62 re; max rel diff 1.000e+00 at line 4 m=1 re; DEFECT level (>= 1e-12)
+PASS      chain1d/complex dos generalised/exact vs lowdin/exact  rel=7.080e-13 header_ok=True max_abs=7.080e-13 at_element=62 max|gold|=1.000e+00  tol=1e-10
+          golden_diff.py: first-diff line 4 m=1 re, new=-1.6940658945086e-18 golden=-2.99646375420681e-17; max abs diff 7.080e-13 at line 65 m=62 re; max rel diff 1.997e+00 at line 23 m=20 im; DEFECT level (>= 1e-12)
+PASS      chain1d/complex dos generalised/chebyshev vs lowdin/chebyshev  rel=2.528e-12 header_ok=True max_abs=2.528e-12 at_element=62 max|gold|=1.000e+00  tol=1e-8
+          golden_diff.py: first-diff line 4 m=1 re, new=-3.57186339967203e-15 golden=-2.39210506871451e-14; max abs diff 2.528e-12 at line 65 m=62 re; max rel diff 1.746e+00 at line 41 m=38 im; DEFECT level (>= 1e-12)
+PASS      chain1d/complex dos generalised/ischo vs lowdin/exact  rel=7.009e-13 header_ok=True max_abs=7.009e-13 at_element=62 max|gold|=1.000e+00  tol=1e-9
+          golden_diff.py: first-diff line 4 m=1 re, new=-5.96311194867027e-19 golden=-2.99646375420681e-17; max abs diff 7.004e-13 at line 65 m=62 re; max rel diff 1.943e+00 at line 5 m=2 im; DEFECT level (>= 1e-12)
+          stdout: stage6_nonorth: route=lowdin applier=exact word=kubo dim=2048 states=2048 (exact) M=64 -> NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D order=60 coeff_tol=1.000000e-12 tol=1.000000e-13 max_iterations=200 max_dim=4096 residual=2.687842e-14
+PASS      chain1d/complex kubo lowdin/exact  rel=1.243e-14 header_ok=True max_abs=4.974e-14 at_element=195 max|gold|=4.000e+00  tol=1e-10
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=2.00000000000002 golden=2; max abs diff 4.974e-14 at line 198 (m,n)=(3,3) re; max rel diff 1.000e+00 at line 4 (m,n)=(0,1) re; DEFECT level (>= 1e-12)
+N/A       chain1d/complex kubo lowdin/ischo  (ISCHO provides S^-1 only; the Lowdin route needs S^-1/2)
+          stdout: stage6_nonorth: route=lowdin applier=chebyshev word=kubo dim=2048 states=2048 (exact) M=64 -> NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D order=60 effective_order=33 coeff_tol=1.000000e-12 tol=1.000000e-13 max_iterations=200 max_dim=4096 residual=1.758790e-12
+PASS      chain1d/complex kubo lowdin/chebyshev  rel=6.750e-14 header_ok=True max_abs=2.700e-13 at_element=325 max|gold|=4.000e+00  tol=1e-8
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=2.00000000000009 golden=2; max abs diff 2.700e-13 at line 328 (m,n)=(5,5) re; max rel diff 1.000e+00 at line 4 (m,n)=(0,1) re; DEFECT level (>= 1e-12)
+          stdout: stage6_nonorth: route=generalised applier=exact word=kubo dim=2048 states=2048 (exact) M=64 -> NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D order=60 coeff_tol=1.000000e-12 tol=1.000000e-13 max_iterations=200 max_dim=4096 residual=4.053147e-16
+PASS      chain1d/complex kubo generalised/exact  rel=2.554e-15 header_ok=True max_abs=1.021e-14 at_element=325 max|gold|=4.000e+00  tol=1e-10
+          golden_diff.py: first-diff line 4 (m,n)=(0,1) re, new=-8.35513299171642e-18 golden=0; max abs diff 1.021e-14 at line 328 (m,n)=(5,5) re; max rel diff 1.000e+00 at line 4 (m,n)=(0,1) re; DEFECT level (>= 1e-12)
+          stdout: stage6_nonorth: route=generalised applier=ischo word=kubo dim=2048 states=2048 (exact) M=64 -> NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D order=60 coeff_tol=1.000000e-12 tol=1.000000e-12 max_iterations=200 max_dim=4096 iterations=0 residual=2.092948e-16
+PASS      chain1d/complex kubo generalised/ischo  rel=7.466e-15 header_ok=True max_abs=2.986e-14 at_element=3711 max|gold|=4.000e+00  tol=1e-9
+          golden_diff.py: first-diff line 4 (m,n)=(0,1) re, new=-4.94938291739633e-17 golden=0; max abs diff 2.929e-14 at line 3714 (m,n)=(57,63) im; max rel diff 1.000e+00 at line 4 (m,n)=(0,1) re; DEFECT level (>= 1e-12)
+          stdout: stage6_nonorth: route=generalised applier=chebyshev word=kubo dim=2048 states=2048 (exact) M=64 -> NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D order=60 effective_order=36 coeff_tol=1.000000e-12 tol=1.000000e-13 max_iterations=200 max_dim=4096 residual=1.131412e-12
+PASS      chain1d/complex kubo generalised/chebyshev  rel=8.260e-14 header_ok=True max_abs=3.304e-13 at_element=195 max|gold|=4.000e+00  tol=1e-8
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=2.00000000000012 golden=2; max abs diff 3.304e-13 at line 198 (m,n)=(3,3) re; max rel diff 1.000e+00 at line 4 (m,n)=(0,1) re; DEFECT level (>= 1e-12)
+          stdout: stage6_nonorth: route=naive applier=exact word=kubo dim=2048 states=2048 (exact) M=64 -> NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D order=60 coeff_tol=1.000000e-12 tol=1.000000e-13 max_iterations=200 max_dim=4096 residual=4.053147e-16
+EVIDENCE  chain1d/complex kubo naive/exact  rel=1.809e-01 header_ok=True max_abs=7.235e-01 at_element=650 max|gold|=4.000e+00  (would be FAIL at tol 1e-10; not counted)
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=2.35331020904151 golden=2; max abs diff 7.235e-01 at line 653 (m,n)=(10,10) re; max rel diff 1.000e+00 at line 4 (m,n)=(0,1) re; DEFECT level (>= 1e-12)
+PASS      chain1d/complex kubo generalised/exact vs lowdin/exact  rel=1.499e-14 header_ok=True max_abs=5.995e-14 at_element=325 max|gold|=4.000e+00  tol=1e-10
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=2 golden=2.00000000000002; max abs diff 5.995e-14 at line 328 (m,n)=(5,5) re; max rel diff 2.000e+00 at line 1730 (m,n)=(26,63) im; DEFECT level (>= 1e-12)
+PASS      chain1d/complex kubo generalised/chebyshev vs lowdin/chebyshev  rel=8.377e-14 header_ok=True max_abs=3.351e-13 at_element=332 max|gold|=4.000e+00  tol=1e-8
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=2.00000000000012 golden=2.00000000000009; max abs diff 3.351e-13 at line 335 (m,n)=(5,12) re; max rel diff 2.000e+00 at line 1538 (m,n)=(23,63) im; DEFECT level (>= 1e-12)
+PASS      chain1d/complex kubo generalised/ischo vs lowdin/exact  rel=1.499e-14 header_ok=True max_abs=5.995e-14 at_element=1820 max|gold|=4.000e+00  tol=1e-9
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=2 golden=2.00000000000002; max abs diff 5.995e-14 at line 1823 (m,n)=(28,28) re; max rel diff 1.999e+00 at line 1981 (m,n)=(30,58) re; DEFECT level (>= 1e-12)
+          stdout: stage6_nonorth: route=lowdin applier=exact word=kuboxy dim=512 states=512 (exact) M=128 -> NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom2D order=60 coeff_tol=1.000000e-12 tol=1.000000e-13 max_iterations=200 max_dim=4096 residual=1.972306e-14
+PASS      haldane/real kuboxy lowdin/exact  rel=4.706e-14 header_ok=True max_abs=1.404e-13 at_element=15485 max|gold|=2.982e+00  tol=1e-10
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=-2.12828886458905e-16 golden=0; max abs diff 1.403e-13 at line 15488 (m,n)=(120,125) im; max rel diff 1.989e+00 at line 2135 (m,n)=(16,84) re; DEFECT level (>= 1e-12)
+N/A       haldane/real kuboxy lowdin/ischo  (ISCHO provides S^-1 only; the Lowdin route needs S^-1/2)
+          stdout: stage6_nonorth: route=lowdin applier=chebyshev word=kuboxy dim=512 states=512 (exact) M=128 -> NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom2D order=60 effective_order=34 coeff_tol=1.000000e-12 tol=1.000000e-13 max_iterations=200 max_dim=4096 residual=1.551017e-12
+PASS      haldane/real kuboxy lowdin/chebyshev  rel=7.662e-13 header_ok=True max_abs=2.285e-12 at_element=15871 max|gold|=2.982e+00  tol=1e-8
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=1.12733715591784e-14 golden=0; max abs diff 2.271e-12 at line 15874 (m,n)=(123,127) im; max rel diff 1.972e+00 at line 4441 (m,n)=(34,86) re; DEFECT level (>= 1e-12)
+          stdout: stage6_nonorth: route=generalised applier=exact word=kuboxy dim=512 states=512 (exact) M=128 -> NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom2D order=60 coeff_tol=1.000000e-12 tol=1.000000e-13 max_iterations=200 max_dim=4096 residual=1.045161e-15
+PASS      haldane/real kuboxy generalised/exact  rel=1.340e-14 header_ok=True max_abs=3.997e-14 at_element=261 max|gold|=2.982e+00  tol=1e-10
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=4.06575814682064e-18 golden=0; max abs diff 3.997e-14 at line 264 (m,n)=(2,5) im; max rel diff 2.000e+00 at line 8956 (m,n)=(69,121) re; DEFECT level (>= 1e-12)
+          stdout: stage6_nonorth: route=generalised applier=ischo word=kuboxy dim=512 states=512 (exact) M=128 -> NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom2D order=60 coeff_tol=1.000000e-12 tol=1.000000e-12 max_iterations=200 max_dim=4096 iterations=6 residual=9.821714e-13
+PASS      haldane/real kuboxy generalised/ischo  rel=3.116e-13 header_ok=True max_abs=9.294e-13 at_element=15483 max|gold|=2.982e+00  tol=1e-9
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=1.34901855311509e-15 golden=0; max abs diff 8.999e-13 at line 15486 (m,n)=(120,123) im; max rel diff 1.976e+00 at line 1990 (m,n)=(15,67) re; DEFECT level (>= 1e-12)
+          stdout: stage6_nonorth: route=generalised applier=chebyshev word=kuboxy dim=512 states=512 (exact) M=128 -> NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom2D order=60 effective_order=37 coeff_tol=1.000000e-12 tol=1.000000e-13 max_iterations=200 max_dim=4096 residual=1.047087e-12
+PASS      haldane/real kuboxy generalised/chebyshev  rel=5.812e-13 header_ok=True max_abs=1.733e-12 at_element=15227 max|gold|=2.982e+00  tol=1e-8
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=-1.38488938199177e-14 golden=0; max abs diff 1.710e-12 at line 15230 (m,n)=(118,123) im; max rel diff 1.747e+00 at line 1299 (m,n)=(10,16) re; DEFECT level (>= 1e-12)
+          stdout: stage6_nonorth: route=naive applier=exact word=kuboxy dim=512 states=512 (exact) M=128 -> NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom2D order=60 coeff_tol=1.000000e-12 tol=1.000000e-13 max_iterations=200 max_dim=4096 residual=1.045161e-15
+EVIDENCE  haldane/real kuboxy naive/exact  rel=1.772e-01 header_ok=True max_abs=5.285e-01 at_element=261 max|gold|=2.982e+00  (would be FAIL at tol 1e-10; not counted)
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=-0.000852776237133368 golden=0; max abs diff 5.283e-01 at line 264 (m,n)=(2,5) im; max rel diff 1.642e+00 at line 5349 (m,n)=(41,98) im; DEFECT level (>= 1e-12)
+PASS      haldane/real kuboxy generalised/exact vs lowdin/exact  rel=5.037e-14 header_ok=True max_abs=1.502e-13 at_element=15483 max|gold|=2.982e+00  tol=1e-10
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=4.06575814682064e-18 golden=-2.12828886458905e-16; max abs diff 1.501e-13 at line 15486 (m,n)=(120,123) im; max rel diff 1.997e+00 at line 297 (m,n)=(2,38) im; DEFECT level (>= 1e-12)
+PASS      haldane/real kuboxy generalised/chebyshev vs lowdin/chebyshev  rel=1.117e-12 header_ok=True max_abs=3.330e-12 at_element=15481 max|gold|=2.982e+00  tol=1e-8
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=-1.38488938199177e-14 golden=1.12733715591784e-14; max abs diff 3.190e-12 at line 15230 (m,n)=(118,123) im; max rel diff 2.000e+00 at line 6763 (m,n)=(52,104) re; DEFECT level (>= 1e-12)
+PASS      haldane/real kuboxy generalised/ischo vs lowdin/exact  rel=3.569e-13 header_ok=True max_abs=1.064e-12 at_element=15483 max|gold|=2.982e+00  tol=1e-9
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=1.34901855311509e-15 golden=-2.12828886458905e-16; max abs diff 1.040e-12 at line 15486 (m,n)=(120,123) im; max rel diff 1.999e+00 at line 5211 (m,n)=(40,88) re; DEFECT level (>= 1e-12)
+          stdout: stage6_nonorth: route=lowdin applier=exact word=kubo dim=512 states=512 (exact) M=128 -> NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom2D order=60 coeff_tol=1.000000e-12 tol=1.000000e-13 max_iterations=200 max_dim=4096 residual=1.972306e-14
+PASS      haldane/real kubo lowdin/exact  rel=7.002e-14 header_ok=True max_abs=3.060e-13 at_element=13938 max|gold|=4.370e+00  tol=1e-10
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=1.70250000000001 golden=1.70249999999999; max abs diff 3.060e-13 at line 13941 (m,n)=(108,114) re; max rel diff 1.999e+00 at line 403 (m,n)=(3,16) im; DEFECT level (>= 1e-12)
+N/A       haldane/real kubo lowdin/ischo  (ISCHO provides S^-1 only; the Lowdin route needs S^-1/2)
+          stdout: stage6_nonorth: route=lowdin applier=chebyshev word=kubo dim=512 states=512 (exact) M=128 -> NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom2D order=60 effective_order=34 coeff_tol=1.000000e-12 tol=1.000000e-13 max_iterations=200 max_dim=4096 residual=1.551017e-12
+PASS      haldane/real kubo lowdin/chebyshev  rel=7.668e-13 header_ok=True max_abs=3.351e-12 at_element=13933 max|gold|=4.370e+00  tol=1e-8
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=1.70249999999994 golden=1.70249999999999; max abs diff 3.351e-12 at line 13936 (m,n)=(108,109) re; max rel diff 1.998e+00 at line 9681 (m,n)=(75,78) im; DEFECT level (>= 1e-12)
+          stdout: stage6_nonorth: route=generalised applier=exact word=kubo dim=512 states=512 (exact) M=128 -> NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom2D order=60 coeff_tol=1.000000e-12 tol=1.000000e-13 max_iterations=200 max_dim=4096 residual=1.045161e-15
+PASS      haldane/real kubo generalised/exact  rel=1.148e-14 header_ok=True max_abs=5.018e-14 at_element=9546 max|gold|=4.370e+00  tol=1e-10
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=1.7025 golden=1.70249999999999; max abs diff 5.018e-14 at line 9549 (m,n)=(74,74) re; max rel diff 1.999e+00 at line 5311 (m,n)=(41,60) im; DEFECT level (>= 1e-12)
+          stdout: stage6_nonorth: route=generalised applier=ischo word=kubo dim=512 states=512 (exact) M=128 -> NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom2D order=60 coeff_tol=1.000000e-12 tol=1.000000e-12 max_iterations=200 max_dim=4096 iterations=6 residual=9.666831e-13
+PASS      haldane/real kubo generalised/ischo  rel=3.854e-13 header_ok=True max_abs=1.684e-12 at_element=13938 max|gold|=4.370e+00  tol=1e-9
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=1.70249999999989 golden=1.70249999999999; max abs diff 1.684e-12 at line 13941 (m,n)=(108,114) re; max rel diff 1.659e+00 at line 34 (m,n)=(0,31) im; DEFECT level (>= 1e-12)
+          stdout: stage6_nonorth: route=generalised applier=chebyshev word=kubo dim=512 states=512 (exact) M=128 -> NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom2D order=60 effective_order=37 coeff_tol=1.000000e-12 tol=1.000000e-13 max_iterations=200 max_dim=4096 residual=1.047087e-12
+PASS      haldane/real kubo generalised/chebyshev  rel=7.528e-13 header_ok=True max_abs=3.290e-12 at_element=15222 max|gold|=4.370e+00  tol=1e-8
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=1.70250000000012 golden=1.70249999999999; max abs diff 3.290e-12 at line 15225 (m,n)=(118,118) re; max rel diff 2.000e+00 at line 846 (m,n)=(6,75) im; DEFECT level (>= 1e-12)
+          stdout: stage6_nonorth: route=naive applier=exact word=kubo dim=512 states=512 (exact) M=128 -> NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom2D order=60 coeff_tol=1.000000e-12 tol=1.000000e-13 max_iterations=200 max_dim=4096 residual=1.045161e-15
+EVIDENCE  haldane/real kubo naive/exact  rel=1.847e-01 header_ok=True max_abs=8.070e-01 at_element=258 max|gold|=4.370e+00  (would be FAIL at tol 1e-10; not counted)
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=2.01859387134818 golden=1.70249999999999; max abs diff 8.070e-01 at line 261 (m,n)=(2,2) re; max rel diff 1.807e+00 at line 1857 (m,n)=(14,62) re; DEFECT level (>= 1e-12)
+PASS      haldane/real kubo generalised/exact vs lowdin/exact  rel=6.842e-14 header_ok=True max_abs=2.990e-13 at_element=13938 max|gold|=4.370e+00  tol=1e-10
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=1.7025 golden=1.70250000000001; max abs diff 2.990e-13 at line 13941 (m,n)=(108,114) re; max rel diff 2.000e+00 at line 9215 (m,n)=(71,124) re; DEFECT level (>= 1e-12)
+PASS      haldane/real kubo generalised/chebyshev vs lowdin/chebyshev  rel=1.275e-12 header_ok=True max_abs=5.570e-12 at_element=15222 max|gold|=4.370e+00  tol=1e-8
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=1.70250000000012 golden=1.70249999999994; max abs diff 5.570e-12 at line 15225 (m,n)=(118,118) re; max rel diff 2.000e+00 at line 662 (m,n)=(5,19) im; DEFECT level (>= 1e-12)
+PASS      haldane/real kubo generalised/ischo vs lowdin/exact  rel=4.554e-13 header_ok=True max_abs=1.990e-12 at_element=13938 max|gold|=4.370e+00  tol=1e-9
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=1.70249999999989 golden=1.70250000000001; max abs diff 1.990e-12 at line 13941 (m,n)=(108,114) re; max rel diff 1.990e+00 at line 96 (m,n)=(0,93) re; DEFECT level (>= 1e-12)
+          stdout: stage6_nonorth: route=lowdin applier=exact word=kuboxy dim=512 states=512 (exact) M=128 -> NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom2D order=60 coeff_tol=1.000000e-12 tol=1.000000e-13 max_iterations=200 max_dim=4096 residual=1.489341e-14
+PASS      haldane/complex kuboxy lowdin/exact  rel=4.035e-14 header_ok=True max_abs=1.203e-13 at_element=15485 max|gold|=2.982e+00  tol=1e-10
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=-1.99384779520084e-16 golden=0; max abs diff 1.203e-13 at line 15488 (m,n)=(120,125) im; max rel diff 1.998e+00 at line 3238 (m,n)=(25,35) re; DEFECT level (>= 1e-12)
+N/A       haldane/complex kuboxy lowdin/ischo  (ISCHO provides S^-1 only; the Lowdin route needs S^-1/2)
+          stdout: stage6_nonorth: route=lowdin applier=chebyshev word=kuboxy dim=512 states=512 (exact) M=128 -> NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom2D order=60 effective_order=31 coeff_tol=1.000000e-12 tol=1.000000e-13 max_iterations=200 max_dim=4096 residual=2.213767e-12
+PASS      haldane/complex kuboxy lowdin/chebyshev  rel=6.440e-13 header_ok=True max_abs=1.921e-12 at_element=15352 max|gold|=2.982e+00  tol=1e-8
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=-2.08774241384352e-14 golden=0; max abs diff 1.660e-12 at line 15230 (m,n)=(118,123) im; max rel diff 1.184e+00 at line 6076 (m,n)=(47,57) re; DEFECT level (>= 1e-12)
+          stdout: stage6_nonorth: route=generalised applier=exact word=kuboxy dim=512 states=512 (exact) M=128 -> NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom2D order=60 coeff_tol=1.000000e-12 tol=1.000000e-13 max_iterations=200 max_dim=4096 residual=1.061611e-15
+PASS      haldane/complex kuboxy generalised/exact  rel=1.340e-14 header_ok=True max_abs=3.997e-14 at_element=261 max|gold|=2.982e+00  tol=1e-10
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=3.98986399474666e-17 golden=0; max abs diff 3.997e-14 at line 264 (m,n)=(2,5) im; max rel diff 1.998e+00 at line 10464 (m,n)=(81,93) re; DEFECT level (>= 1e-12)
+          stdout: stage6_nonorth: route=generalised applier=ischo word=kuboxy dim=512 states=512 (exact) M=128 -> NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom2D order=60 coeff_tol=1.000000e-12 tol=1.000000e-12 max_iterations=200 max_dim=4096 iterations=6 residual=8.559000e-14
+PASS      haldane/complex kuboxy generalised/ischo  rel=5.431e-14 header_ok=True max_abs=1.620e-13 at_element=15483 max|gold|=2.982e+00  tol=1e-9
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=8.54405522027202e-16 golden=0; max abs diff 1.599e-13 at line 15486 (m,n)=(120,123) im; max rel diff 1.965e+00 at line 650 (m,n)=(5,7) re; DEFECT level (>= 1e-12)
+          stdout: stage6_nonorth: route=generalised applier=chebyshev word=kuboxy dim=512 states=512 (exact) M=128 -> NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom2D order=60 effective_order=34 coeff_tol=1.000000e-12 tol=1.000000e-13 max_iterations=200 max_dim=4096 residual=1.136654e-12
+PASS      haldane/complex kuboxy generalised/chebyshev  rel=3.196e-13 header_ok=True max_abs=9.531e-13 at_element=13945 max|gold|=2.982e+00  tol=1e-8
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=9.41054959652243e-15 golden=0; max abs diff 9.490e-13 at line 13948 (m,n)=(108,121) im; max rel diff 1.612e+00 at line 1710 (m,n)=(13,43) re; DEFECT level (>= 1e-12)
+          stdout: stage6_nonorth: route=naive applier=exact word=kuboxy dim=512 states=512 (exact) M=128 -> NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom2D order=60 coeff_tol=1.000000e-12 tol=1.000000e-13 max_iterations=200 max_dim=4096 residual=1.061611e-15
+EVIDENCE  haldane/complex kuboxy naive/exact  rel=1.745e-01 header_ok=True max_abs=5.203e-01 at_element=261 max|gold|=2.982e+00  (would be FAIL at tol 1e-10; not counted)
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=-0.00242857169226304 golden=0; max abs diff 5.202e-01 at line 264 (m,n)=(2,5) im; max rel diff 1.963e+00 at line 1622 (m,n)=(12,83) im; DEFECT level (>= 1e-12)
+PASS      haldane/complex kuboxy generalised/exact vs lowdin/exact  rel=4.028e-14 header_ok=True max_abs=1.201e-13 at_element=15483 max|gold|=2.982e+00  tol=1e-10
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=3.98986399474666e-17 golden=-1.99384779520084e-16; max abs diff 1.201e-13 at line 15486 (m,n)=(120,123) im; max rel diff 2.000e+00 at line 286 (m,n)=(2,27) re; DEFECT level (>= 1e-12)
+PASS      haldane/complex kuboxy generalised/chebyshev vs lowdin/chebyshev  rel=5.746e-13 header_ok=True max_abs=1.714e-12 at_element=15352 max|gold|=2.982e+00  tol=1e-8
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=9.41054959652243e-15 golden=-2.08774241384352e-14; max abs diff 1.630e-12 at line 15226 (m,n)=(118,119) re; max rel diff 2.000e+00 at line 192 (m,n)=(1,61) re; DEFECT level (>= 1e-12)
+PASS      haldane/complex kuboxy generalised/ischo vs lowdin/exact  rel=9.091e-14 header_ok=True max_abs=2.711e-13 at_element=15483 max|gold|=2.982e+00  tol=1e-9
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=8.54405522027202e-16 golden=-1.99384779520084e-16; max abs diff 2.700e-13 at line 15486 (m,n)=(120,123) im; max rel diff 1.999e+00 at line 6145 (m,n)=(47,126) re; DEFECT level (>= 1e-12)
+          stdout: stage6_nonorth: route=lowdin applier=exact word=kubo dim=512 states=512 (exact) M=128 -> NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom2D order=60 coeff_tol=1.000000e-12 tol=1.000000e-13 max_iterations=200 max_dim=4096 residual=1.489341e-14
+PASS      haldane/complex kubo lowdin/exact  rel=5.584e-14 header_ok=True max_abs=2.440e-13 at_element=13938 max|gold|=4.370e+00  tol=1e-10
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=1.70250000000001 golden=1.70249999999999; max abs diff 2.440e-13 at line 13941 (m,n)=(108,114) re; max rel diff 1.999e+00 at line 376 (m,n)=(2,117) im; DEFECT level (>= 1e-12)
+N/A       haldane/complex kubo lowdin/ischo  (ISCHO provides S^-1 only; the Lowdin route needs S^-1/2)
+          stdout: stage6_nonorth: route=lowdin applier=chebyshev word=kubo dim=512 states=512 (exact) M=128 -> NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom2D order=60 effective_order=31 coeff_tol=1.000000e-12 tol=1.000000e-13 max_iterations=200 max_dim=4096 residual=2.213767e-12
+PASS      haldane/complex kubo lowdin/chebyshev  rel=6.076e-13 header_ok=True max_abs=2.655e-12 at_element=13950 max|gold|=4.370e+00  tol=1e-8
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=1.70250000000006 golden=1.70249999999999; max abs diff 2.655e-12 at line 13953 (m,n)=(108,126) re; max rel diff 1.999e+00 at line 11906 (m,n)=(92,127) im; DEFECT level (>= 1e-12)
+          stdout: stage6_nonorth: route=generalised applier=exact word=kubo dim=512 states=512 (exact) M=128 -> NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom2D order=60 coeff_tol=1.000000e-12 tol=1.000000e-13 max_iterations=200 max_dim=4096 residual=1.061611e-15
+PASS      haldane/complex kubo generalised/exact  rel=1.148e-14 header_ok=True max_abs=5.018e-14 at_element=9546 max|gold|=4.370e+00  tol=1e-10
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=1.7025 golden=1.70249999999999; max abs diff 5.018e-14 at line 9549 (m,n)=(74,74) re; max rel diff 1.999e+00 at line 15873 (m,n)=(123,126) im; DEFECT level (>= 1e-12)
+          stdout: stage6_nonorth: route=generalised applier=ischo word=kubo dim=512 states=512 (exact) M=128 -> NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom2D order=60 coeff_tol=1.000000e-12 tol=1.000000e-12 max_iterations=200 max_dim=4096 iterations=6 residual=9.976994e-14
+PASS      haldane/complex kubo generalised/ischo  rel=6.636e-14 header_ok=True max_abs=2.900e-13 at_element=15222 max|gold|=4.370e+00  tol=1e-9
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=1.70249999999998 golden=1.70249999999999; max abs diff 2.900e-13 at line 15225 (m,n)=(118,118) re; max rel diff 1.989e+00 at line 4011 (m,n)=(31,40) im; DEFECT level (>= 1e-12)
+          stdout: stage6_nonorth: route=generalised applier=chebyshev word=kubo dim=512 states=512 (exact) M=128 -> NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom2D order=60 effective_order=34 coeff_tol=1.000000e-12 tol=1.000000e-13 max_iterations=200 max_dim=4096 residual=1.136654e-12
+PASS      haldane/complex kubo generalised/chebyshev  rel=4.144e-13 header_ok=True max_abs=1.811e-12 at_element=13950 max|gold|=4.370e+00  tol=1e-8
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=1.70250000000008 golden=1.70249999999999; max abs diff 1.811e-12 at line 13953 (m,n)=(108,126) re; max rel diff 2.000e+00 at line 4460 (m,n)=(34,105) im; DEFECT level (>= 1e-12)
+          stdout: stage6_nonorth: route=naive applier=exact word=kubo dim=512 states=512 (exact) M=128 -> NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom2D order=60 coeff_tol=1.000000e-12 tol=1.000000e-13 max_iterations=200 max_dim=4096 residual=1.061611e-15
+EVIDENCE  haldane/complex kubo naive/exact  rel=1.765e-01 header_ok=True max_abs=7.711e-01 at_element=258 max|gold|=4.370e+00  (would be FAIL at tol 1e-10; not counted)
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=2.00376128602705 golden=1.70249999999999; max abs diff 7.711e-01 at line 261 (m,n)=(2,2) re; max rel diff 1.710e+00 at line 3161 (m,n)=(24,86) re; DEFECT level (>= 1e-12)
+PASS      haldane/complex kubo generalised/exact vs lowdin/exact  rel=5.378e-14 header_ok=True max_abs=2.350e-13 at_element=13938 max|gold|=4.370e+00  tol=1e-10
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=1.7025 golden=1.70250000000001; max abs diff 2.350e-13 at line 13941 (m,n)=(108,114) re; max rel diff 1.999e+00 at line 419 (m,n)=(3,32) im; DEFECT level (>= 1e-12)
+PASS      haldane/complex kubo generalised/chebyshev vs lowdin/chebyshev  rel=8.410e-13 header_ok=True max_abs=3.675e-12 at_element=15739 max|gold|=4.370e+00  tol=1e-8
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=1.70250000000008 golden=1.70250000000006; max abs diff 3.675e-12 at line 15742 (m,n)=(122,123) re; max rel diff 2.000e+00 at line 10236 (m,n)=(79,121) im; DEFECT level (>= 1e-12)
+PASS      haldane/complex kubo generalised/ischo vs lowdin/exact  rel=1.128e-13 header_ok=True max_abs=4.931e-13 at_element=13938 max|gold|=4.370e+00  tol=1e-9
+          golden_diff.py: first-diff line 3 (m,n)=(0,0) re, new=1.70249999999998 golden=1.70250000000001; max abs diff 4.931e-13 at line 13941 (m,n)=(108,114) re; max rel diff 1.996e+00 at line 4906 (m,n)=(38,39) im; DEFECT level (>= 1e-12)
+== stage 6: chain1d rows repeated at OMP_NUM_THREADS=1, cmp vs OMP_NUM_THREADS=16
+IDENTICAL [T=1 vs T=16] chain1d_complex_dos_generalised_chebyshev/SpectralOp1chain1dKPM_M64_stateexact.chebmom1D
+IDENTICAL [T=1 vs T=16] chain1d_complex_dos_generalised_exact/SpectralOp1chain1dKPM_M64_stateexact.chebmom1D
+IDENTICAL [T=1 vs T=16] chain1d_complex_dos_generalised_ischo/SpectralOp1chain1dKPM_M64_stateexact.chebmom1D
+IDENTICAL [T=1 vs T=16] chain1d_complex_dos_lowdin_chebyshev/SpectralOp1chain1dKPM_M64_stateexact.chebmom1D
+IDENTICAL [T=1 vs T=16] chain1d_complex_dos_lowdin_exact/SpectralOp1chain1dKPM_M64_stateexact.chebmom1D
+IDENTICAL [T=1 vs T=16] chain1d_complex_dos_naive_exact/SpectralOp1chain1dKPM_M64_stateexact.chebmom1D
+IDENTICAL [T=1 vs T=16] chain1d_complex_kubo_generalised_chebyshev/NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D
+IDENTICAL [T=1 vs T=16] chain1d_complex_kubo_generalised_exact/NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D
+IDENTICAL [T=1 vs T=16] chain1d_complex_kubo_generalised_ischo/NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D
+IDENTICAL [T=1 vs T=16] chain1d_complex_kubo_lowdin_chebyshev/NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D
+IDENTICAL [T=1 vs T=16] chain1d_complex_kubo_lowdin_exact/NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D
+IDENTICAL [T=1 vs T=16] chain1d_complex_kubo_naive_exact/NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D
+IDENTICAL [T=1 vs T=16] chain1d_real_dos_generalised_chebyshev/SpectralOp1chain1dKPM_M64_stateexact.chebmom1D
+IDENTICAL [T=1 vs T=16] chain1d_real_dos_generalised_exact/SpectralOp1chain1dKPM_M64_stateexact.chebmom1D
+IDENTICAL [T=1 vs T=16] chain1d_real_dos_generalised_ischo/SpectralOp1chain1dKPM_M64_stateexact.chebmom1D
+IDENTICAL [T=1 vs T=16] chain1d_real_dos_lowdin_chebyshev/SpectralOp1chain1dKPM_M64_stateexact.chebmom1D
+IDENTICAL [T=1 vs T=16] chain1d_real_dos_lowdin_exact/SpectralOp1chain1dKPM_M64_stateexact.chebmom1D
+IDENTICAL [T=1 vs T=16] chain1d_real_dos_naive_exact/SpectralOp1chain1dKPM_M64_stateexact.chebmom1D
+IDENTICAL [T=1 vs T=16] chain1d_real_kubo_generalised_chebyshev/NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D
+IDENTICAL [T=1 vs T=16] chain1d_real_kubo_generalised_exact/NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D
+IDENTICAL [T=1 vs T=16] chain1d_real_kubo_generalised_ischo/NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D
+IDENTICAL [T=1 vs T=16] chain1d_real_kubo_lowdin_chebyshev/NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D
+IDENTICAL [T=1 vs T=16] chain1d_real_kubo_lowdin_exact/NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D
+IDENTICAL [T=1 vs T=16] chain1d_real_kubo_naive_exact/NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D
+== stage 6: Hall plateau, python3 -m lsquant.apps.stage3_kubo --formula bastin --broadening-meV 10
+REFERENCE Hall golden G5 KuboBastin (legacy)  C=1.017017 plateau=107.656458 points=450
+PASS      Hall haldane_complex_kuboxy_generalised_chebyshev  C=1.017017 plateau=107.656458 points=450  (|C - 1| <= 0.05)
+PASS      Hall haldane_complex_kuboxy_generalised_exact  C=1.017017 plateau=107.656458 points=450  (|C - 1| <= 0.05)
+PASS      Hall haldane_complex_kuboxy_generalised_ischo  C=1.017017 plateau=107.656458 points=450  (|C - 1| <= 0.05)
+PASS      Hall haldane_complex_kuboxy_lowdin_chebyshev  C=1.017017 plateau=107.656458 points=450  (|C - 1| <= 0.05)
+PASS      Hall haldane_complex_kuboxy_lowdin_exact  C=1.017017 plateau=107.656458 points=450  (|C - 1| <= 0.05)
+EVIDENCE  Hall haldane_complex_kuboxy_naive_exact  C=1.193531 plateau=126.341424 points=450  (would be FAIL; not counted)
+PASS      Hall haldane_real_kuboxy_generalised_chebyshev  C=1.017017 plateau=107.656458 points=450  (|C - 1| <= 0.05)
+PASS      Hall haldane_real_kuboxy_generalised_exact  C=1.017017 plateau=107.656458 points=450  (|C - 1| <= 0.05)
+PASS      Hall haldane_real_kuboxy_generalised_ischo  C=1.017017 plateau=107.656458 points=450  (|C - 1| <= 0.05)
+PASS      Hall haldane_real_kuboxy_lowdin_chebyshev  C=1.017017 plateau=107.656458 points=450  (|C - 1| <= 0.05)
+PASS      Hall haldane_real_kuboxy_lowdin_exact  C=1.017017 plateau=107.656458 points=450  (|C - 1| <= 0.05)
+EVIDENCE  Hall haldane_real_kuboxy_naive_exact  C=1.197943 plateau=126.808467 points=450  (would be FAIL; not counted)
+          kept: /home/jgarcia/fv2/s6keep/{runs,gate_table.tsv,chern.tsv}
+== 98 files compared; failures: 0
+== tolerance mode (GOLDEN_TOL=1): 24 byte-identical, 0 tolerance-PASS (compare() and index.tsv rows)
+GATE PASS (stage 6only)

@@ -1,0 +1,38 @@
+== (a) Catalogue canonical parse/print round-trip ==
+  PASS  Tr[delta(E-H)]                             -> shape=dos_identity         plan_builder=dos_plan
+  PASS  Tr[A delta(E-H)]                           -> shape=dos_operator         plan_builder=dos_plan
+  PASS  Tr[VX delta(E-H) VX delta(E-H)]            -> shape=kubo_greenwood       plan_builder=kubo_plan
+  PASS  Tr[VX delta(E-H) VY dG-(E)/dE]             -> shape=kubo_bastin          plan_builder=kubo_plan
+  PASS  Tr[[X,U(t)]^+ delta(E-H) [X,U(t)]]         -> shape=msd                  plan_builder=msd_plan
+  PASS  Tr[P U(t)^+ SX U(t) delta(E-H) P]          -> shape=projected_evolution  plan_builder=projected_evolution_plan
+  PASS  Tr[A delta(E-H) U(t)^+ B U(t)]             -> shape=time_correlation     plan_builder=time_correlation_plan
+  PASS  Tr[sea[VX delta(E-H) VY dG-(E)/dE]]        -> shape=kubo_bastin          plan_builder=kubo_plan
+  PASS  Tr[P:PX U(t)^+ SX U(t) delta(E-H) P:PX]    -> shape=projected_evolution  plan_builder=projected_evolution_plan
+  PASS  Tr[B^+ VX@bloch B delta(E-H)]              -> shape=dos_operator         plan_builder=dos_plan
+
+== (b) Refusal of 5 malformed / unsupported inputs ==
+  PASS  [unknown_operator] refused with: Unknown operator 'FOO' in word 'Tr[FOO delta(E-H)]' (registered operators: ['1', 'VX', 'VY'])
+  PASS  [rank_3] refused with: Unsupported word 'Tr[VX delta(E-H) VY delta(E-H) VZ delta(E-H)]' of rank 3 (3 expanded spectral slots): rank >= 3 moment tensors are out of scope; nearest recognised shape is 'Tr[VX delta(E-H) VX delta(E-H)]' (kubo_greenwood)
+  PASS  [mixed_basis_without_transform] refused with: Mixed basis without explicit transform: operator 'VX@bloch' is in 'bloch' basis while calculation/active basis is 'real' (insert explicit B^+ ... B or U^+ ... U transform)
+  PASS  [ut_without_time] refused with: Word 'Tr[A delta(E-H) U(t)^+ B U(t)]' contains time evolution U(t) without 'time' parameters (steps and tmax required)
+  PASS  [unknown_key_in_runfile] refused with: Unknown key 'unknown_extra_key' in run file (top-level); allowed keys are ['basis', 'expansion', 'metric', 'model', 'output', 'reconstruction', 'time', 'word', 'words']
+  PASS  [unsupported_green_word] refused with: Unrecognised word shape 'Tr[VX delta(E-H) VY G+(E)]'; nearest recognised shape is 'Tr[VX delta(E-H) VY dG-(E)/dE]' (kubo_bastin)
+  PASS  [eigen_window_on_csr] refused with: expansion.window='eigen' is not supported for model.kind='csr' (no k blocks; use gershgorin or an explicit window)
+  PASS  [unmatched_formula_for_word] refused with: Reconstruction formula 'greenwood' in reconstruction.formulas does not match any word in ['Tr[VX delta(E-H) VY dG-(E)/dE]'] (allowed formulas for given word(s): ['bastin', 'bastin_fft', 'kubo_bastin', 'kubo_bastin_fft', 'kubo_bastin_sea', 'kubo_bastin_surf', 'sea', 'surf'])
+  PASS  [unknown_generator_param] refused with: Unknown key 'bogus_param' in run file (model.params (make_chain)); allowed keys are ['hopping_t', 'sizes']
+  PASS  [unknown_generator] refused with: Unknown generator name 'evil_script' in run file (model.name); allowed generators are ['gen_models', 'make_chain', 'make_chain_mag', 'make_disordered_chain', 'make_ey', 'make_haldane', 'make_rashba', 'make_square']
+  PASS  [window_default_by_basis] real->gershgorin, bloch->eigen, eigen->eigen
+  PASS  [runfile_schema] all 40 files in runs/goldens/*.json validated
+
+== (c) CLI reproduction of G1, G5, G9 (g9_graphene_eigen.json), and G10 (g10_chain1d_real_generalised.json) ==
+  PASS  cmp IDENTICAL: G1 (SpectralOp1chain1dKPM_M64_stateexact.chebmom1D)
+Traceback (most recent call last):
+  File "/home/jgarcia/lsquant-final2/tests/dev/stage_7_check.py", line 574, in <module>
+    sys.exit(main())
+  File "/home/jgarcia/lsquant-final2/tests/dev/stage_7_check.py", line 567, in main
+    check_c_cli_goldens(tmp_root)
+  File "/home/jgarcia/lsquant-final2/tests/dev/stage_7_check.py", line 305, in check_c_cli_goldens
+    _cmp_file(
+  File "/home/jgarcia/lsquant-final2/tests/dev/stage_7_check.py", line 273, in _cmp_file
+    raise AssertionError(f"DIFFERS {tag}: {new_path} != {gold_path}")
+AssertionError: DIFFERS G5 (NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom2D): /tmp/stage7_check_c0zwxw_n/g5/NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom2D != /home/jgarcia/lsquant-final2/goldens/stage0/haldane/NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom2D

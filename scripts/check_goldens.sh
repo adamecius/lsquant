@@ -97,6 +97,29 @@
 #            g9_graphene_{real,eigen} g10_haldane_real_generalised tutorial01 tutorial03
 #            tutorial04) at 16 threads; S7_SET=all (default) runs every run file.
 #
+#            Stage "7runs" runs the run-file part alone (setup, the run files of S7_SET at
+#            S7_THREADS, the per-golden comparison, totals; no MCP, refusals, greps, section 2.5):
+#            independent "7runs" invocations with disjoint S7_LIST plus one "7tail" make up "7".
+#
+# Tolerance mode (GOLDEN_TOL=1; final validation on a machine that is not byte-identical to the
+# fat node where the goldens were blessed, e.g. tcn-aronnode: gcc 9.4, conda Eigen 3.4, glibc 2.31).
+# Every compare() that is not byte-identical is classified by a helper (tolcmp.py, written into
+# $TMP) and reported as TOLPASS (counted as passing) or DIFFERS (counted as failing), with the
+# scripts/golden_diff.py numbers either way:
+#   moment files (*.chebmom*, 15 significant digits): the two header lines identical as text,
+#     same layout (lines, tokens per line), and max_k |new_k - gold_k| <= 1e-12 * max_k |gold_k|
+#     over the complex moments (the stage-6 measure);
+#   text curves (*.dat, 6 significant digits): same layout, the energy column (first column)
+#     identical as text, every other value within one unit of the last printed significant digit
+#     (unit = 10^(floor(log10|x|) - P + 1), P = the largest number of significant digits printed
+#     in the two files, the larger unit of the two values; absolute, never relative to the value);
+#   every other file (JSON, TSV, CSR, index files): non-numeric text identical, every number within
+#     one unit of the last printed significant digit as above.
+#   captured/index.tsv (sha1 column): an entry whose sha1 does not match passes if the produced
+#     capture passes the rule above against the golden capture of the same name.
+# The stage-6 thread rows (OMP_NUM_THREADS=1 vs S6_THREADS on the same machine) stay byte
+# comparisons. Totals report byte-identical and tolerance-PASS counts separately.
+#
 # Output: one line per compared file, IDENTICAL or DIFFERS; for DIFFERS the first
 # differing bytes (cmp -l | head -5) and the numeric localisation of
 # scripts/golden_diff.py (first differing line, element index, both values, max
@@ -119,21 +142,118 @@ TMP="$(mktemp -d "${TMPDIR:-/tmp}/check_goldens.XXXXXX")"
 trap 'rm -rf "$TMP"' EXIT
 NFAIL=0
 NCMP=0
+GOLDEN_TOL="${GOLDEN_TOL:-0}"
+NBYTE=0; NTOLP=0; CMP_LAST=""; FORCE_BYTE=0
+TOLCMP="$TMP/tolcmp.py"
+cat >"$TOLCMP" <<'TOLEOF'
+# tolerance classifier of check_goldens.sh (GOLDEN_TOL=1); prints "TOLPASS ..." or "DIFFERS ...", exit 0/1
+import math, os, re, sys
+new_p, gold_p = sys.argv[1], sys.argv[2]
+NUM = re.compile(r'[-+]?(?:\d+\.?\d*|\.\d+)(?:[eE][-+]?\d+)?|[-+]?(?:nan|inf)', re.I)
+def toks(line):
+    out, pos = [], 0
+    for m in NUM.finditer(line):
+        if m.start() > pos: out.append(("t", line[pos:m.start()]))
+        out.append(("n", m.group(0))); pos = m.end()
+    if pos < len(line): out.append(("t", line[pos:]))
+    return out
+def sig(tok):
+    m = re.match(r'[-+]?(\d*)\.?(\d*)', tok)
+    d = (m.group(1) + m.group(2)).lstrip("0") if m else ""
+    return len(d)
+def done(ok, msg):
+    print(("TOLPASS " if ok else "DIFFERS ") + msg); sys.exit(0 if ok else 1)
+new = open(new_p, errors="replace").read().split("\n")
+gold = open(gold_p, errors="replace").read().split("\n")
+if len(new) != len(gold):
+    done(False, "layout: %d lines new vs %d golden" % (len(new), len(gold)))
+ext = os.path.splitext(gold_p)[1]
+if ext.startswith(".chebmom"):
+    if new[:2] != gold[:2]:
+        done(False, "moment header differs: new %r golden %r" % (new[:2], gold[:2]))
+    a, b = [], []
+    for i, (x, y) in enumerate(zip(new[2:], gold[2:])):
+        tx, ty = x.split(), y.split()
+        if len(tx) != len(ty):
+            done(False, "layout: line %d has %d vs %d tokens" % (i + 3, len(tx), len(ty)))
+        if not tx: continue
+        a.append(complex(float(tx[0]), float(tx[1]) if len(tx) > 1 else 0.0))
+        b.append(complex(float(ty[0]), float(ty[1]) if len(ty) > 1 else 0.0))
+    g = max((abs(v) for v in b), default=0.0)
+    d = [abs(x - y) for x, y in zip(a, b)]
+    k = max(range(len(d)), key=lambda i: d[i]) if d else 0
+    r = (d[k] / g) if g > 0 else (0.0 if not d or d[k] == 0 else math.inf)
+    ok = all(math.isfinite(abs(v)) for v in a) and r <= 1e-12
+    done(ok, "moments: max|d|/max|gold| = %.3e (<= 1e-12 required), max|d| = %.3e at moment %d, max|gold| = %.3e, header identical"
+         % (r, d[k] if d else 0.0, k, g))
+P = 1
+for y in gold + new:
+    for kind, t in toks(y):
+        if kind == "n": P = max(P, sig(t))
+def unit(x):
+    if x == 0 or not math.isfinite(x): return 0.0
+    return 10.0 ** (math.floor(math.log10(abs(x))) - P + 1)
+curve = ext == ".dat"
+worst, nd, nbad, where, maxabs = 0.0, 0, 0, "-", 0.0
+for i, (x, y) in enumerate(zip(new, gold)):
+    if x == y: continue
+    tx, ty = toks(x), toks(y)
+    if len(tx) != len(ty) or any(p[0] != q[0] for p, q in zip(tx, ty)):
+        done(False, "layout: line %d tokenises differently: %r vs %r" % (i + 1, x[:120], y[:120]))
+    col = -1
+    for (kx, sx), (ky, sy) in zip(tx, ty):
+        if kx == "n": col += 1
+        if sx == sy: continue
+        if kx == "t":
+            done(False, "text differs at line %d: %r vs %r" % (i + 1, sx[:80], sy[:80]))
+        if curve and col == 0:
+            done(False, "energy column differs at line %d: %s vs %s" % (i + 1, sx, sy))
+        a, b = float(sx), float(sy)
+        if not (math.isfinite(a) and math.isfinite(b)):
+            done(False, "non-finite value differs at line %d col %d: %s vs %s" % (i + 1, col + 1, sx, sy))
+        u = max(unit(a), unit(b))
+        dd = abs(a - b); nd += 1; maxabs = max(maxabs, dd)
+        q = dd / u if u > 0 else math.inf
+        nbad += q > 1.0 + 1e-9
+        if q > worst: worst, where = q, "line %d col %d new=%s golden=%s" % (i + 1, col + 1, sx, sy)
+ok = worst <= 1.0 + 1e-9
+gmax = 0.0
+for y in gold:
+    col = -1
+    for kind, t in toks(y):
+        if kind != "n": continue
+        col += 1
+        if curve and col == 0: continue
+        try: v = abs(float(t))
+        except ValueError: continue
+        if math.isfinite(v): gmax = max(gmax, v)
+done(ok, "%s: %d values differ, %d beyond one unit, max %.3g units of the last printed digit (P = %d significant digits; <= 1 required) at %s, max|d| = %.3e, max|d|/max|gold| = %.3e (informative)"
+     % ("curve" if curve else "text", nd, nbad, worst, P, where, maxabs, maxabs / gmax if gmax > 0 else 0.0))
+TOLEOF
 
 # compare <produced file> <golden file> <tag>
 compare() {
   local new="$1" gold="$2" tag="$3"
   NCMP=$((NCMP + 1))
   if [ ! -f "$new" ]; then
-    echo "DIFFERS   $tag  (not produced: $(basename "$new"))"; NFAIL=$((NFAIL + 1)); return
+    echo "DIFFERS   $tag  (not produced: $(basename "$new"))"; NFAIL=$((NFAIL + 1)); CMP_LAST=DIFFERS; return
   fi
   if [ ! -f "$gold" ]; then
-    echo "DIFFERS   $tag  (no golden: ${gold#$REPO/})"; NFAIL=$((NFAIL + 1)); return
+    echo "DIFFERS   $tag  (no golden: ${gold#$REPO/})"; NFAIL=$((NFAIL + 1)); CMP_LAST=DIFFERS; return
   fi
   if cmp -s "$new" "$gold"; then
-    echo "IDENTICAL $tag"
+    echo "IDENTICAL $tag"; NBYTE=$((NBYTE + 1)); CMP_LAST=IDENTICAL
+  elif [ "$GOLDEN_TOL" = 1 ] && [ "$FORCE_BYTE" = 0 ]; then
+    local t; t="$(python3 "$TOLCMP" "$new" "$gold" 2>&1)"
+    if [ "${t%% *}" = TOLPASS ]; then
+      echo "TOLPASS   $tag"; NTOLP=$((NTOLP + 1)); CMP_LAST=TOLPASS
+    else
+      echo "DIFFERS   $tag"; NFAIL=$((NFAIL + 1)); CMP_LAST=DIFFERS
+    fi
+    echo "          tolerance: ${t#* }"
+    echo "          golden_diff.py: $(python3 "$REPO/scripts/golden_diff.py" "$new" "$gold" 2>&1)"
   else
-    NFAIL=$((NFAIL + 1))
+    NFAIL=$((NFAIL + 1)); CMP_LAST=DIFFERS
     echo "DIFFERS   $tag"
     echo "          cmp: $(cmp "$new" "$gold" 2>&1 | head -1)"
     cmp -l "$new" "$gold" 2>/dev/null | head -5 | sed 's/^/          cmp -l: /'
@@ -833,7 +953,7 @@ stage6() {
       if [ -z "$f" ]; then
         NCMP=$((NCMP + 1)); NFAIL=$((NFAIL + 1)); echo "DIFFERS   [T=1 vs T=$T6] $tag (no T=$T6 output)"
       else
-        compare "$W/T1/$(basename "$f")" "$f" "[T=1 vs T=$T6] $tag/$(basename "$f")"
+        FORCE_BYTE=1; compare "$W/T1/$(basename "$f")" "$f" "[T=1 vs T=$T6] $tag/$(basename "$f")"; FORCE_BYTE=0
       fi
     done
   fi
@@ -897,7 +1017,7 @@ S7_REF6="${S7_REF6:-}"
 s7skip() { [ "$1" = "${S7_THREADS%% *}" ] && return 1; case " $S7_T1_SKIP " in *" $2 "*) return 0 ;; esac; return 1; }
 S7_RUNS="$REPO/runs/goldens"
 G1F2=NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D
-declare -A S7I S7D S7ORDER
+declare -A S7I S7D S7ORDER S7B S7T
 # S7_SET=all (default): every run file. S7_SET=quick: the closure subset of handoff 0007 (16 threads
 # by default; g6, g7, the other g9 and g10 files, tutorial02 and tutorial05 deferred to the final run).
 # S7_SET=list: the run files named in S7_LIST (space separated), at S7_THREADS.
@@ -911,14 +1031,20 @@ s7want() {
 
 # captured/index.tsv: every line "<NNNN_name> <sha1> <source>" must name a produced capture with that sha1
 s7idx() {   # <group> <produced captured dir> <golden index.tsv> <tag>
-  local g="$1" d="$2" idx="$3" tag="$4" bad=0 n=0 name sha
+  local g="$1" d="$2" idx="$3" tag="$4" bad=0 n=0 tp=0 name sha t
   [ -n "${S7ORDER[$g]:-}" ] || { S7ORDER[$g]=1; S7GROUPS+=("$g"); }
   NCMP=$((NCMP + 1))
   while IFS=$'\t' read -r name sha _; do
     n=$((n + 1))
-    [ -f "$d/$name" ] && [ "$(sha1sum "$d/$name" | cut -d' ' -f1)" = "$sha" ] || { bad=$((bad + 1)); echo "          index.tsv line $n: $name sha1 $sha not matched by $d/$name"; }
+    [ -f "$d/$name" ] && [ "$(sha1sum "$d/$name" | cut -d' ' -f1)" = "$sha" ] && continue
+    if [ "$GOLDEN_TOL" = 1 ] && [ -f "$d/$name" ] && [ -f "$(dirname "$idx")/$name" ] \
+       && t="$(python3 "$TOLCMP" "$d/$name" "$(dirname "$idx")/$name" 2>&1)"; then
+      tp=$((tp + 1)); echo "          index.tsv line $n: $name sha1 differs, capture within tolerance: ${t#* }"; continue
+    fi
+    bad=$((bad + 1)); echo "          index.tsv line $n: $name sha1 $sha not matched by $d/$name"
   done <"$idx"
-  if [ $bad -eq 0 ] && [ $n -gt 0 ]; then echo "IDENTICAL $tag ($n entries, every sha1 matches)"; S7I[$g]=$(( ${S7I[$g]:-0} + 1 ))
+  if [ $bad -eq 0 ] && [ $tp -eq 0 ] && [ $n -gt 0 ]; then echo "IDENTICAL $tag ($n entries, every sha1 matches)"; S7I[$g]=$(( ${S7I[$g]:-0} + 1 )); S7B[$g]=$(( ${S7B[$g]:-0} + 1 )); NBYTE=$((NBYTE + 1))
+  elif [ $bad -eq 0 ] && [ $n -gt 0 ]; then echo "TOLPASS   $tag ($n entries: $((n - tp)) sha1 match, $tp captures within tolerance)"; S7I[$g]=$(( ${S7I[$g]:-0} + 1 )); S7T[$g]=$(( ${S7T[$g]:-0} + 1 )); NTOLP=$((NTOLP + 1))
   else echo "DIFFERS   $tag ($bad of $n entries do not match)"; NFAIL=$((NFAIL + 1)); S7D[$g]=$(( ${S7D[$g]:-0} + 1 )); fi
 }
 S7GROUPS=()
@@ -928,6 +1054,7 @@ s7cmp() {   # <group> <new> <golden> <tag>   (compare(), plus a per-group tally)
   [ -n "${S7ORDER[$g]:-}" ] || { S7ORDER[$g]=1; S7GROUPS+=("$g"); }
   compare "$2" "$3" "$4"
   if [ "$NFAIL" -eq "$before" ]; then S7I[$g]=$(( ${S7I[$g]:-0} + 1 )); else S7D[$g]=$(( ${S7D[$g]:-0} + 1 )); fi
+  case "$CMP_LAST" in IDENTICAL) S7B[$g]=$(( ${S7B[$g]:-0} + 1 )) ;; TOLPASS) S7T[$g]=$(( ${S7T[$g]:-0} + 1 )) ;; esac
 }
 
 # max relative difference as the stage-6 gate defines it (handoff 0006 tests.md 2.1):
@@ -1314,7 +1441,11 @@ stage7_setup() {
 s7_totals() {
   local g
   echo "== stage 7 totals per golden (IDENTICAL or PASS / DIFFERS or FAIL)"
-  for g in "${S7GROUPS[@]}"; do printf "   %-26s %4d identical  %4d differ\n" "$g" "${S7I[$g]:-0}" "${S7D[$g]:-0}"; done
+  for g in "${S7GROUPS[@]}"; do
+    if [ "$GOLDEN_TOL" = 1 ]; then
+      printf "   %-26s %4d pass (%4d byte-identical, %4d tolerance-PASS)  %4d differ\n" "$g" "${S7I[$g]:-0}" "${S7B[$g]:-0}" "${S7T[$g]:-0}" "${S7D[$g]:-0}"
+    else printf "   %-26s %4d identical  %4d differ\n" "$g" "${S7I[$g]:-0}" "${S7D[$g]:-0}"; fi
+  done
 }
 
 stage7() {
@@ -1408,9 +1539,13 @@ case "$STAGE" in
   7deleted) stage7_deleted ;;
   7tail) stage7_setup; s7_mcp; s7_refusals; s7_totals; core_grep; stage2_grep; stage3_grep; stage4_grep; stage5_grep; stage7_grep; stage7_deleted ;;
   7aux) stage7_setup; s7_mcp; s7_refusals; s7_totals ;;
+  7runs) stage7_setup; echo "== stage 7 (run files only): S7_SET=$S7_SET${S7_LIST:+ S7_LIST=$S7_LIST}, threads: $S7_THREADS"
+         for T in $S7_THREADS; do s7_goldens $T; done; s7_totals
+         [ -z "${S7_KEEP:-}" ] || { rm -rf "$S7_KEEP"; cp -r "$TMP/s7" "$S7_KEEP"; echo "   stage-7 outputs kept in $S7_KEEP"; } ;;
   *) echo "ERROR: stage $STAGE has no gate defined yet"; exit 2 ;;
 esac
 
 echo "== $NCMP files compared; failures: $NFAIL"
+[ "$GOLDEN_TOL" = 1 ] && echo "== tolerance mode (GOLDEN_TOL=1): $NBYTE byte-identical, $NTOLP tolerance-PASS (compare() and index.tsv rows)"
 [ "$NFAIL" -eq 0 ] && { echo "GATE PASS (stage $STAGE)"; exit 0; }
 echo "GATE FAIL (stage $STAGE)"; exit 1

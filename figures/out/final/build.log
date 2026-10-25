@@ -1,0 +1,33 @@
+[  3%] Building CXX object lsquant_core/CMakeFiles/lsquant_core.dir/core/algebra/sparse_matrix.cpp.o
+[  7%] Building CXX object lsquant_core/CMakeFiles/lsquant_core.dir/core/algebra/metric_policy.cpp.o
+[ 10%] Building CXX object lsquant_core/CMakeFiles/lsquant_core.dir/core/algebra/block_diagonal_operator.cpp.o
+[ 17%] Building CXX object lsquant_core/CMakeFiles/lsquant_core.dir/core/algebra/bloch_transform.cpp.o
+[ 17%] Building CXX object lsquant_core/CMakeFiles/lsquant_core.dir/core/algebra/linalg.cpp.o
+[ 21%] Building CXX object lsquant_core/CMakeFiles/lsquant_core.dir/core/algebra/state_generator.cpp.o
+[ 25%] Building CXX object lsquant_core/CMakeFiles/lsquant_core.dir/core/algebra/composite_operators.cpp.o
+[ 28%] Building CXX object lsquant_core/CMakeFiles/lsquant_core.dir/core/algebra/spectral_bounds.cpp.o
+[ 32%] Building CXX object lsquant_core/CMakeFiles/lsquant_core.dir/core/algebra/overlap_appliers.cpp.o
+[ 39%] Building CXX object lsquant_core/CMakeFiles/lsquant_core.dir/core/chebyshev/chebyshev_recursion.cpp.o
+[ 42%] Building CXX object lsquant_core/CMakeFiles/lsquant_core.dir/io/csr_text.cpp.o
+[ 46%] Building CXX object lsquant_core/CMakeFiles/lsquant_core.dir/core/chebyshev/contraction.cpp.o
+[ 39%] Building CXX object lsquant_core/CMakeFiles/lsquant_core.dir/core/chebyshev/rescaled_operator.cpp.o
+[ 53%] Building CXX object lsquant_core/CMakeFiles/lsquant_core.dir/core/chebyshev/chebyshev_vectors.cpp.o
+[ 53%] Building CXX object lsquant_core/CMakeFiles/lsquant_core.dir/core/chebyshev/moment_engine.cpp.o
+[ 57%] Building CXX object lsquant_core/CMakeFiles/lsquant_core.dir/io/chebmom_file.cpp.o
+[ 64%] Building CXX object lsquant_core/CMakeFiles/lsquant_core.dir/core/chebyshev/chebyshev_moments.cpp.o
+[ 64%] Building CXX object lsquant_core/CMakeFiles/lsquant_core.dir/io/curve_text.cpp.o
+[ 67%] Linking CXX static library ../lib/liblsquant_core.a
+[ 67%] Built target lsquant_core
+[ 71%] Building CXX object lsquant_core/CMakeFiles/_core.dir/api/bindings.cpp.o
+[ 75%] Building CXX object lsquant_core/CMakeFiles/_core.dir/compat/legacy_kernels.cpp.o
+[ 78%] Building CXX object lsquant_core/CMakeFiles/stage1_moments.dir/apps/stage1_moments.cpp.o
+[ 82%] Building CXX object lsquant_core/CMakeFiles/stage_1_check.dir/__/tests/dev/stage_1_check.cpp.o
+[ 85%] Building CXX object lsquant_core/CMakeFiles/stage6_nonorth.dir/apps/stage6_nonorth.cpp.o
+[ 89%] Linking CXX executable stage1_moments
+[ 89%] Built target stage1_moments
+[ 92%] Linking CXX executable stage6_nonorth
+[ 92%] Built target stage6_nonorth
+[ 96%] Linking CXX executable stage_1_check
+[ 96%] Built target stage_1_check
+[100%] Linking CXX shared module _core.cpython-310-x86_64-linux-gnu.so
+[100%] Built target _core

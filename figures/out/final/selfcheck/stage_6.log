@@ -1,0 +1,19 @@
+=== Stage 6 Self-Check: Rotated chain1d (N = 2048) ===
+[1] real: max |eigvalsh(H', S') - eigvalsh(H)| = 1.154632e-14
+[4] real: max ||S^-1_cheb v - S^-1_exact v|| / ||S^-1_exact v|| (M_S=60) = 1.452446e-12
+[2] real route=lowdin      applier=exact     applier_res=2.517275e-14 max|mu - G1|=6.756790e-13 max|mu - delta_m0|=6.756790e-13
+[2] real route=generalised applier=exact     applier_res=3.915305e-16 max|mu - G1|=3.347298e-16 max|mu - delta_m0|=3.347298e-16
+[3] real route=lowdin      applier=chebyshev (M_S=12, eff_order=12) applier_res=7.094662e-05 max|mu - delta_m0|=5.308428e-04
+[3] real route=generalised applier=chebyshev (M_S=12, eff_order=12) applier_res=2.580411e-04 max|mu - delta_m0|=1.859680e-03
+[3] real route=lowdin      applier=chebyshev (M_S=60, eff_order=38) applier_res=1.780993e-12 max|mu - delta_m0|=9.382504e-12
+[3] real route=generalised applier=chebyshev (M_S=60, eff_order=41) applier_res=1.687860e-12 max|mu - delta_m0|=1.506496e-12
+[3] real route=generalised applier=ischo     (tol=1e-06) applier_res=5.071275e-07 max|mu - delta_m0|=1.675476e-08
+[3] real route=generalised applier=ischo     (tol=1e-13) applier_res=1.647323e-16 max|mu - delta_m0|=2.726223e-15
+[1] complex: max |eigvalsh(H', S') - eigvalsh(H)| = 7.993606e-15
+[4] complex: max ||S^-1_cheb v - S^-1_exact v|| / ||S^-1_exact v|| (M_S=60) = 9.663969e-13
+[2] complex route=lowdin      applier=exact     applier_res=2.852495e-14 max|mu - G1|=7.087722e-13 max|mu - delta_m0|=7.087722e-13
+[2] complex route=generalised applier=exact     applier_res=4.157102e-16 max|mu - G1|=8.183970e-16 max|mu - delta_m0|=8.183970e-16
+[3] complex route=lowdin      applier=chebyshev (M_S=60, eff_order=33) applier_res=1.782846e-12 max|mu - delta_m0|=9.355902e-13
+[3] complex route=generalised applier=chebyshev (M_S=60, eff_order=36) applier_res=1.138160e-12 max|mu - delta_m0|=2.867454e-12
+[3] complex route=generalised applier=ischo     (tol=1e-13) applier_res=1.724592e-16 max|mu - delta_m0|=2.862186e-15
+=== Stage 6 Self-Check PASSED ===
