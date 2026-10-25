@@ -1232,5 +1232,11 @@ DONE 08_spin_hall_pdse2_monolayer
 
 ## 9. Deviations and Open Questions
 
-- **Deviations from the brief:** None.
+- **Deviations from the brief:**
+  1. **`python/lsquant/projection/diagnostics.py` deletion (now reverted):** Deleted in `a8252cc` as an unimported module; reverted in Review 1 Item 1 (`fae21b2`) and exported in `python/lsquant/projection/__init__.py` because `python/lsquant/projection/` is 0006d work still under validation.
+  2. **Quick-run settings in Examples 07 and 08 (now fixed):** In `360339a`, `examples/07_spin_hall_bi_bilayer/run_*_quick.json` and `examples/08_spin_hall_pdse2_monolayer/run_*_quick.json` used `"velocity_mode": "berry_connection"` (and `12x12x1` for Bi instead of `24x24x1`). Fixed in Review 1 Item 3 (`cbd7dc4`) to use `"velocity_mode": "covariant"` with `24x24x1` ($M = 256$) for Bi and `12x12x1` ($M = 256$) for PdSe2.
+  3. **`fftw3_omp` link (now removed):** In `26313dc`, `CMakeLists.txt` looked up `FFTW3_OMP_LIBRARY` and linked it into `lsquant_core` even though `fftw_init_threads` is never called. Removed in Review 1 Item 5 (`79cb251`).
+  4. **`-Wpedantic` warning flag:** Added `-Wpedantic` alongside `-Wall -Wextra` on the `lsquant_warnings` interface target in `CMakeLists.txt` (`26313dc`); retained per Review 1 Item 5 because both `golden` and `native` presets build with 0 compiler warnings.
+  5. **`.githooks/pre-commit` and `scripts/check_reporting.sh`:** Deleted `scripts/check_reporting.sh` (which checked the removed legacy `src/` and `include/` directories for the abandoned reporting plan) and updated `.githooks/pre-commit` in `da6239f` to guard its invocation with `if [ -x scripts/check_reporting.sh ]`.
+  6. **Deletion of `.projectile` and `.vscode/settings.json`:** Deleted both tracked editor configuration files (which referenced legacy header and CMake paths) in `da6239f` as part of the Step 2 whole-tree search for editor files in `git ls-files`.
 - **Open questions:** None for Handoff 0010. As stated in Section 0 and Section 8 of the brief, the 0009 wrap-up items W02 to W12 (including the numerical difference on Aron for Bi and PdSe2) remain open for Fable's separate diagnosis and maintainer decision.
