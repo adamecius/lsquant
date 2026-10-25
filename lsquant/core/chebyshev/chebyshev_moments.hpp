@@ -13,6 +13,7 @@
 #include <vector>
 
 #include "core/algebra/types.hpp"
+#include "core/algebra/build_profile.hpp"
 #include "core/chebyshev/spectral_window.hpp"
 
 namespace lsquant {
@@ -144,6 +145,7 @@ public:
   int numberOfStates = 0;
   std::string stateLabel;
   std::string word;
+  std::string buildProfile = BuildProfileName();
   bool kpmWeighted = false;
   bool symmetrised = false;
   double timeStep = 0.0;

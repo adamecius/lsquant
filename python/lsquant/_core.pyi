@@ -6,6 +6,11 @@ from typing import Sequence, Union, overload
 import numpy as np
 import numpy.typing as npt
 
+build_profile: str
+def ConfigurePerformance(spmv_min_nnz: int = 16384, kernel_batch: int = 0) -> None: ...
+
+def FftMomentContraction(moments: npt.NDArray[np.complex128], points: int) -> npt.NDArray[np.complex128]: ...
+
 class SparseMatrix:
     def __init__(self) -> None: ...
     @staticmethod
@@ -83,6 +88,12 @@ class LowdinOperator(LinearOperator):
 
 class MetricInverseProduct(LinearOperator):
     def __init__(self, inverse: LinearOperator, operator: LinearOperator) -> None: ...
+
+class HermitianTripleProduct(LinearOperator):
+    def __init__(
+        self, first: LinearOperator, middle: LinearOperator, last: LinearOperator,
+        coefficient: complex = 0.5,
+    ) -> None: ...
 
 class MetricPolicy:
     # Bound via pybind11 def_property_readonly (read-only properties, not methods).
@@ -354,6 +365,7 @@ class Plan:
     def __init__(self, code: Sequence[Instruction] = ..., word: str = "") -> None: ...
 
 class ChebyshevMoments:
+    build_profile: str
     window: SpectralWindow
     system_size: int
     number_of_states: int

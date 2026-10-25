@@ -262,4 +262,41 @@ void MetricInverseProduct::Multiply(Scalar a, const Vector& x, Scalar b, Vector&
   inverse_->Multiply(a, temp, b, y);
 }
 
+HermitianTripleProduct::HermitianTripleProduct(
+    const LinearOperator& first, const LinearOperator& middle,
+    const LinearOperator& last, Scalar coefficient)
+    : first_(&first), middle_(&middle), last_(&last), coefficient_(coefficient) {
+  if (first.Dimension() != middle.Dimension() || first.Dimension() != last.Dimension()) {
+    throw std::invalid_argument("HermitianTripleProduct: operator dimensions must match");
+  }
+  if (!first.IsHermitian() || !middle.IsHermitian() || !last.IsHermitian()) {
+    throw std::invalid_argument("HermitianTripleProduct: every factor must be Hermitian");
+  }
+  if (!std::isfinite(coefficient.real()) || !std::isfinite(coefficient.imag())) {
+    throw std::invalid_argument("HermitianTripleProduct: coefficient must be finite");
+  }
+}
+
+Index HermitianTripleProduct::Dimension() const { return first_->Dimension(); }
+
+void HermitianTripleProduct::Multiply(Scalar a, const Vector& x, Scalar b, Vector& y) const {
+  const Index dim = Dimension();
+  if (static_cast<Index>(x.size()) != dim || static_cast<Index>(y.size()) != dim) {
+    throw std::invalid_argument("HermitianTripleProduct::Multiply: vector dimension mismatch");
+  }
+  Vector alias;
+  const Vector* input = &x;
+  if (&x == &y) {
+    alias = x;
+    input = &alias;
+  }
+  Vector t1(static_cast<std::size_t>(dim)), t2(static_cast<std::size_t>(dim));
+  last_->Multiply(Scalar(1.0, 0.0), *input, Scalar(0.0, 0.0), t1);
+  middle_->Multiply(Scalar(1.0, 0.0), t1, Scalar(0.0, 0.0), t2);
+  first_->Multiply(a * coefficient_, t2, b, y);
+  first_->Multiply(Scalar(1.0, 0.0), *input, Scalar(0.0, 0.0), t1);
+  middle_->Multiply(Scalar(1.0, 0.0), t1, Scalar(0.0, 0.0), t2);
+  last_->Multiply(a * std::conj(coefficient_), t2, Scalar(1.0, 0.0), y);
+}
+
 }  // namespace lsquant

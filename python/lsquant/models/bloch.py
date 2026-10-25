@@ -43,8 +43,8 @@ def bloch_sum(r_cart, centres, matrices, k_points, *, derivative=None, cell=Fals
     if derivative is not None:
         displacement = r_cart[:, derivative, None, None]
         if not cell:
-            displacement = (displacement + centres[None, None, :, derivative]
-                            - centres[None, :, None, derivative])
+            displacement = displacement + (centres[None, None, :, derivative]
+                                           - centres[None, :, None, derivative])
         data = (1j*displacement)*data
         del displacement
     points_2d = np.atleast_2d(points)
@@ -58,11 +58,17 @@ def bloch_sum(r_cart, centres, matrices, k_points, *, derivative=None, cell=Fals
         blocks = out[start:stop]
         np.einsum("kr,rij->kij", phase, data, out=blocks, optimize=True)
         if not cell:
+            # The atom-gauge phase is exactly one for i=j. Multiplying two
+            # approximate inverse phases would perturb an identity overlap
+            # and prevent the exact orthogonal limit of the disorder adapter.
+            diagonal = np.arange(width)
+            cell_diagonal = blocks[:, diagonal, diagonal].copy()
             orbital = np.asarray(k @ centres.T, dtype=np.complex128)
             orbital *= 1j
             np.exp(orbital, out=orbital)
             blocks *= orbital[:, None, :]
             blocks *= orbital.conj()[:, :, None]
+            blocks[:, diagonal, diagonal] = cell_diagonal
             del orbital
         del phase
     return out[0] if points.ndim == 1 else out

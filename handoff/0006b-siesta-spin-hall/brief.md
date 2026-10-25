@@ -218,3 +218,46 @@ stage-6 list):
 - wannier2sparse (https://github.com/adamecius/wannier2sparse): `include/tbmodel.hpp`
   `createCovariantVelocity_list`, `readPositionMatrix` (the `ndegen` pitfall is in its own
   comment), `hopping_product_R`.
+
+## 11. Binding clarification (user, 2026-10-22): non-orthogonal is the target, not a cross-check
+
+The systems this stage is for cannot be Wannierised. The SIESTA route must therefore stand
+on its own: every operator (`H`, `S`, `dH`, `dS`, the intra-cell dipole matrix `A`, the
+spin and spin-current matrices) comes from the SIESTA output and the SIESTA basis
+functions, never from a Wannier90 file; the oracle (section 5) runs on those same SIESTA
+operators with the generalised eigenproblem; the KPM runs on them with the per-block exact
+`S^-1`. The Wannier route (wannier2sparse, `_r.dat`) is only an optional cross-check on a
+material where both exist, and nothing in `models/siesta.py`, `bases.py` or the oracle may
+import or require it. A `covariant` velocity on the SIESTA route means the dipole matrix
+computed by quadrature of the atomic orbitals (section 3), and the self-check of section 8
+(rotated Kane-Mele with `A' = T^+ R T`) is what proves that formula; it needs no Wannier
+input either.
+
+## 12. The metric forms of every operator, derived with sympy (user, 2026-10-22)
+
+Every physical operator of this stage (velocity in its three rungs, spin, spin current, and
+the words built from them) is to be written in the three metric forms and the code must
+carry all three, selected by the run file's `route`:
+
+- **generalised**: operators as `S^-1 O` on the ket side with the asymmetric bra of
+  `theory.md` equations 2a to 2c (the matrix the engine applies is not Hermitian, the
+  trace is);
+- **Löwdin**: `O_L = S^-1/2 O S^-1/2` with `H_L = S^-1/2 H S^-1/2`; Hermitian matrices, the
+  stage-1 engine unchanged; the user's preferred default for this reason;
+- **symmetrised anticommutator**: `1/2 {S^-1, O}` and its products, Hermitian when `O` is,
+  acceptable where the trace identity holds; state exactly for which words it is equal to
+  the other two and for which it is only an approximation (it is not a similarity
+  transform, so this must be shown, not assumed).
+
+Derive them with sympy (noncommutative symbols for `H`, `S`, `S^-1`, `S^-1/2`, `V`,
+`sigma`, with the rules `S^-1/2 S^-1/2 = S^-1`, `S S^-1 = 1`, Hermitian conjugation as a
+transformation) in `python/lsquant/metric_forms.py`: a function per operator that returns
+the three forms as sympy expressions, a check that each form is Hermitian or not, and the
+proof (symbolic expansion to the same normal form) that the traces `Tr[A f(H) B g(H)]` of
+the generalised and Löwdin forms coincide for the words of the catalogue; the sympy output
+is then what the numerical code implements (the formulas in docstrings cite the sympy
+function), as the spectral functions already go from sympy to coefficient tables
+(AGENTS.md section 4). The self-check prints the three forms of `V`, `Sigma_z` and `J` and
+the Hermiticity verdicts, and runs the rotated Kane-Mele plateau on both the generalised
+and the Löwdin route (2.000 on both) and on the anticommutator form (report the number;
+PASS only if the derivation says it must be equal).

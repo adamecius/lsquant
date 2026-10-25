@@ -7,17 +7,24 @@
 #include <stdexcept>
 
 #include "core/algebra/linalg.hpp"
+#include "core/algebra/memory_placement.hpp"
 
 namespace lsquant {
 
 ChebyshevRecursion::ChebyshevRecursion(const LinearOperator& rescaledH)
     : rescaledH_(&rescaledH),
+#ifdef LSQUANT_NATIVE_BUILD
+      current_(MakeZeroVector(rescaledH.Dimension())),
+      previous_(MakeZeroVector(rescaledH.Dimension())),
+      next_(MakeZeroVector(rescaledH.Dimension())),
+#else
       current_(static_cast<std::size_t>(rescaledH.Dimension() > 0 ? rescaledH.Dimension() : 0),
                Scalar(0.0, 0.0)),
       previous_(static_cast<std::size_t>(rescaledH.Dimension() > 0 ? rescaledH.Dimension() : 0),
                 Scalar(0.0, 0.0)),
       next_(static_cast<std::size_t>(rescaledH.Dimension() > 0 ? rescaledH.Dimension() : 0),
             Scalar(0.0, 0.0)),
+#endif
       order_(-1) {
   if (rescaledH.Dimension() <= 0) {
     throw std::invalid_argument("ChebyshevRecursion: operator dimension must be positive");

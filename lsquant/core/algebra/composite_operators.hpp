@@ -576,6 +576,30 @@ private:
   const LinearOperator* op_;
 };
 
+/**
+ * @brief Apply c*A*M*B + conj(c)*B*M*A for three Hermitian operators.
+ *
+ * c=1/2 gives a symmetric product; c=i gives a Hermitian commutator.
+ * No intermediate matrix is assembled. Cost is two applications of each
+ * factor and two length-N scratch vectors. All references must outlive this
+ * operator. Scratch is local, and each factor retains its own reentrancy rules.
+ */
+class HermitianTripleProduct : public LinearOperator {
+public:
+  HermitianTripleProduct(const LinearOperator& first, const LinearOperator& middle,
+                        const LinearOperator& last, Scalar coefficient = Scalar(0.5, 0.0));
+  Index Dimension() const override;
+  void Multiply(Scalar a, const Vector& x, Scalar b, Vector& y) const override;
+  using LinearOperator::Multiply;
+  bool IsHermitian() const override { return true; }
+
+private:
+  const LinearOperator* first_;
+  const LinearOperator* middle_;
+  const LinearOperator* last_;
+  Scalar coefficient_;
+};
+
 }  // namespace lsquant
 
 #endif  // LSQUANT_CORE_ALGEBRA_COMPOSITE_OPERATORS_HPP_

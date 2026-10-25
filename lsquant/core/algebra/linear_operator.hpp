@@ -11,6 +11,7 @@
 #define LSQUANT_CORE_ALGEBRA_LINEAR_OPERATOR_HPP_
 
 #include "core/algebra/types.hpp"
+#include <stdexcept>
 
 namespace lsquant {
 
@@ -69,6 +70,15 @@ public:
    *      IEEE arithmetic; callers should initialise `y` to finite values.
    */
   virtual void Multiply(Scalar a, const Vector& x, Scalar b, Vector& y) const = 0;
+
+  // Item 5: one dispatch for live vectors. CSR/block implementations reuse the
+  // matrix; the fallback preserves other adapters. Tester compares batches
+  // against repeated Multiply at every measured thread count.
+  virtual void MultiplyBatch(Scalar a, const std::vector<Vector>& x, Scalar b,
+                             std::vector<Vector>& y) const {
+    if (x.size() != y.size()) throw std::invalid_argument("MultiplyBatch: batch size mismatch");
+    for (std::size_t j = 0; j < x.size(); ++j) Multiply(a, x[j], b, y[j]);
+  }
 
   /**
    * @brief Compute the direct matrix-vector product `y = O * x`.

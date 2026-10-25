@@ -10,6 +10,11 @@
 #include <limits>
 #include <stdexcept>
 #include <utility>
+#include "core/algebra/memory_placement.hpp"
+#ifdef LSQUANT_NATIVE_BUILD
+#include <Eigen/Core>
+#include "core/algebra/work_partition.hpp"
+#endif
 
 namespace lsquant {
 
@@ -30,6 +35,18 @@ BlockDiagonalOperator::BlockDiagonalOperator(Index numBlocks, Index blockSize,
 
   const std::size_t w = static_cast<std::size_t>(blockSize_);
   const std::size_t w2 = w * w;
+#ifdef LSQUANT_NATIVE_BUILD
+  // Item 4: initialize contiguous block groups with the same static owners as
+  // Multiply. Tester: compare per-node resident pages and socket recipes.
+  std::vector<Scalar> placed(blocks_.size());
+  DiscardInteriorPages(placed.data(), placed.size() * sizeof(Scalar));
+#pragma omp parallel for schedule(static)
+  for (Index ik = 0; ik < numBlocks_; ++ik) {
+    const std::size_t begin = static_cast<std::size_t>(ik) * w2;
+    std::copy_n(blocks_.data() + begin, w2, placed.data() + begin);
+  }
+  blocks_.swap(placed);
+#endif
   double largestNorm = 0.0;
   double largestAntiNorm = 0.0;
   bool finite = true;
@@ -65,6 +82,20 @@ void BlockDiagonalOperator::Multiply(Scalar a, const Vector& x, Scalar b, Vector
     return;
   }
 
+#ifdef LSQUANT_NATIVE_BUILD
+  // A single vector is the B=1 case; materialize the W-entry result before
+  // overwriting so aliases retain their documented semantics.
+  using Dense = Eigen::Matrix<Scalar, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
+  using DenseVector = Eigen::Matrix<Scalar, Eigen::Dynamic, 1>;
+#pragma omp parallel for schedule(static)
+  for (Index ik = 0; ik < numBlocks_; ++ik) {
+    const Index offset = ik * blockSize_;
+    Eigen::Map<const Dense> block(blocks_.data() + ik * blockSize_ * blockSize_, blockSize_, blockSize_);
+    Eigen::Map<const DenseVector> input(x.data() + offset, blockSize_);
+    const DenseVector product = block * input;
+    for (Index row = 0; row < blockSize_; ++row) y[offset + row] = a * product(row) + b * y[offset + row];
+  }
+#else
   const Index nk = numBlocks_;
   const std::size_t w = static_cast<std::size_t>(blockSize_);
   const std::size_t w2 = w * w;
@@ -106,6 +137,7 @@ void BlockDiagonalOperator::Multiply(Scalar a, const Vector& x, Scalar b, Vector
       }
     }
   }
+#endif
 }
 
 BlockDiagonalOperator BlockDiagonalOperator::Adjoint() const {
@@ -123,6 +155,52 @@ BlockDiagonalOperator BlockDiagonalOperator::Adjoint() const {
     }
   }
   return BlockDiagonalOperator(numBlocks_, blockSize_, std::move(adj));
+}
+
+void BlockDiagonalOperator::MultiplyBatch(Scalar a, const std::vector<Vector>& x, Scalar b,
+                                         std::vector<Vector>& y) const {
+  if (x.size() != y.size() || &x == &y) {
+    throw std::invalid_argument("BlockDiagonalOperator::MultiplyBatch: invalid batch");
+  }
+  for (std::size_t j = 0; j < x.size(); ++j) {
+    if (static_cast<Index>(x[j].size()) != Dimension() || x[j].size() != y[j].size()) {
+      throw std::invalid_argument("BlockDiagonalOperator::MultiplyBatch: dimension mismatch");
+    }
+  }
+#ifdef LSQUANT_NATIVE_BUILD
+  if (x.empty() || blockSize_ == 0) return;
+  using Dense = Eigen::Matrix<Scalar, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
+  // Item 5d: fixed microbatch geometry, one GEMM per block/group, no team-dependent
+  // reduction tree. 16*(W^2+2*W*B) <= half L2; each static owner visits adjacent
+  // blocks. Tester measures W=72, B sweep, throughput and thread-count byte identity.
+  const Index budget = 512 * 1024 / (2 * sizeof(Scalar));
+  const int candidate = static_cast<int>(std::max<Index>(1, std::min<Index>(
+      static_cast<Index>(x.size()), (budget - blockSize_ * blockSize_) / (2 * blockSize_))));
+  const int width = KernelBatchSetting() > 0 ? KernelBatchOverride(static_cast<int>(x.size())) : candidate;
+#pragma omp parallel
+  {
+    Dense input(blockSize_, width), output(blockSize_, width);
+#pragma omp for schedule(static)
+    for (Index ik = 0; ik < numBlocks_; ++ik) {
+      const Index offset = ik * blockSize_;
+      Eigen::Map<const Dense> block(blocks_.data() + ik * blockSize_ * blockSize_, blockSize_, blockSize_);
+      for (std::size_t base = 0; base < x.size(); base += static_cast<std::size_t>(width)) {
+        const int count = static_cast<int>(std::min<std::size_t>(width, x.size() - base));
+        for (Index row = 0; row < blockSize_; ++row) {
+          for (int j = 0; j < count; ++j) input(row, j) = x[base + j][offset + row];
+        }
+        output.leftCols(count).noalias() = block * input.leftCols(count);
+        for (Index row = 0; row < blockSize_; ++row) {
+          for (int j = 0; j < count; ++j) {
+            y[base + j][offset + row] = a * output(row, j) + b * y[base + j][offset + row];
+          }
+        }
+      }
+    }
+  }
+#else
+  LinearOperator::MultiplyBatch(a, x, b, y);
+#endif
 }
 
 }  // namespace lsquant

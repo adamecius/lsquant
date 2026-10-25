@@ -5,10 +5,40 @@
 #include "core/chebyshev/contraction.hpp"
 
 #include <stdexcept>
+#ifdef LSQUANT_NATIVE_BUILD
+#include <Eigen/Core>
+#include <algorithm>
+#endif
 
 namespace lsquant {
 
 namespace {
+
+#ifdef LSQUANT_NATIVE_BUILD
+// Item 5c: (mu B) by GEMM, then diagonal A^T(mu B). Fixed groups of 32 points
+// keep every reduction independent of OpenMP team size. No nested Eigen teams.
+// Tester: wall time, residual to scalar tables, bytes across thread counts.
+template <typename A, typename B>
+void GemmContract(const Scalar* moments, Index m0, Index m1, const A* tableA,
+                   const B* tableB, Index points, double* values, bool imaginary) {
+  using Dense = Eigen::Matrix<Scalar, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
+  using TableB = Eigen::Matrix<B, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
+  Eigen::Map<const Dense> mu(moments, m0, m1);
+  Eigen::Map<const TableB> b(tableB, m1, points);
+  constexpr Index tile = 32;
+#pragma omp parallel for schedule(static)
+  for (Index first = 0; first < points; first += tile) {
+    const Index count = std::min(tile, points - first);
+    Dense partial(m0, count);
+    partial.noalias() = mu * b.middleCols(first, count).template cast<Scalar>();
+    for (Index j = 0; j < count; ++j) {
+      Scalar sum(0.0, 0.0);
+      for (Index m = 0; m < m0; ++m) sum += Scalar(tableA[m * points + first + j]) * partial(m, j);
+      values[first + j] = imaginary ? sum.imag() : sum.real();
+    }
+  }
+}
+#endif
 
 void ValidateRank2Inputs(const char* funcName, const Scalar* moments, Index numMoments0,
                          Index numMoments1, const void* tableA, const void* tableB,
@@ -136,6 +166,11 @@ void ContractRank2Imag(const Scalar* moments, Index numMoments0, Index numMoment
   ValidateRank2Inputs("ContractRank2Imag", moments, numMoments0, numMoments1, tableA, tableB,
                       numPoints, values);
 
+#ifdef LSQUANT_NATIVE_BUILD
+  GemmContract(moments, numMoments0, numMoments1, tableA, tableB, numPoints, values, true);
+  return;
+#endif
+
 #pragma omp parallel for schedule(static)
   for (Index i = 0; i < numPoints; ++i) {
     double out = 0.0;
@@ -169,6 +204,11 @@ void ContractRank2Real(const Scalar* moments, Index numMoments0, Index numMoment
   ValidateRank2Inputs("ContractRank2Real", moments, numMoments0, numMoments1, tableA, tableB,
                       numPoints, values);
 
+#ifdef LSQUANT_NATIVE_BUILD
+  GemmContract(moments, numMoments0, numMoments1, tableA, tableB, numPoints, values, false);
+  return;
+#endif
+
 #pragma omp parallel for schedule(static)
   for (Index i = 0; i < numPoints; ++i) {
     double out = 0.0;
@@ -201,6 +241,11 @@ void ContractRank2RealReal(const Scalar* moments, Index numMoments0, Index numMo
                            double* values) {
   ValidateRank2Inputs("ContractRank2RealReal", moments, numMoments0, numMoments1, tableA, tableB,
                       numPoints, values);
+
+#ifdef LSQUANT_NATIVE_BUILD
+  GemmContract(moments, numMoments0, numMoments1, tableA, tableB, numPoints, values, false);
+  return;
+#endif
 
 #pragma omp parallel for schedule(static)
   for (Index i = 0; i < numPoints; ++i) {

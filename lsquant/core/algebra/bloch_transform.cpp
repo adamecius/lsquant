@@ -3,6 +3,7 @@
  * @brief Implementation of BlochTransform using batched 3D FFTW plans.
  */
 #include "core/algebra/bloch_transform.hpp"
+#include "core/algebra/fftw_planner.hpp"
 
 #include <fftw3.h>
 
@@ -17,8 +18,7 @@ namespace lsquant {
 namespace {
 
 std::mutex& FftwPlannerMutex() {
-  static std::mutex m;
-  return m;
+  return detail::FftwPlannerMutex();
 }
 
 }  // namespace

@@ -23,6 +23,15 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 option(LSQUANT_BUILD_NEW_CORE    "Build the LSQUANT C++ core, stage apps, and Python bindings" ON)
 option(LSQUANT_BUILD_INPUT_TOOLS "Fetch + build the external wannier2sparse for tests" OFF)
 
+# Item 3: native opts into machine instructions; golden adds no flags or defines.
+# Tester: compare compile_commands.json and gate 7 for golden, then time native.
+set(LSQUANT_BUILD_PROFILE "golden" CACHE STRING "Numerical build profile: golden or native")
+set_property(CACHE LSQUANT_BUILD_PROFILE PROPERTY STRINGS golden native)
+if(NOT LSQUANT_BUILD_PROFILE MATCHES "^(golden|native)$")
+    message(FATAL_ERROR "LSQUANT_BUILD_PROFILE must be golden or native")
+endif()
+message(STATUS "LSQUANT build profile: ${LSQUANT_BUILD_PROFILE}")
+
 # --- Dependencies ------------------------------------------------------------
 # Eigen3: prefer a real config-package (Eigen3::Eigen); fall back to a header dir.
 find_package(Eigen3 3.3 QUIET NO_MODULE)

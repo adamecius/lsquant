@@ -157,6 +157,8 @@ public:
    *      rows causes a data race and mathematical corruption.
    */
   void Multiply(Scalar a, const Vector& x, Scalar b, Vector& y) const;
+  void MultiplyBatch(Scalar a, const std::vector<Vector>& x, Scalar b,
+                     std::vector<Vector>& y) const;
 
   /**
    * @brief Return a new sparse matrix equal to the affine transformation `a * M + b * I`.
@@ -237,6 +239,9 @@ public:
   const Eigen::SparseMatrix<Scalar, Eigen::RowMajor, Index>& Eigen() const;
 
 private:
+#ifdef LSQUANT_NATIVE_BUILD
+  void PlaceOnThreads();
+#endif
   Eigen::SparseMatrix<Scalar, Eigen::RowMajor, Index> matrix_;
 };
 
@@ -280,6 +285,8 @@ public:
    * @param y Input/output vector of length `Dimension()`.
    */
   void Multiply(Scalar a, const Vector& x, Scalar b, Vector& y) const override;
+  void MultiplyBatch(Scalar a, const std::vector<Vector>& x, Scalar b,
+                     std::vector<Vector>& y) const override;
 
   using LinearOperator::Multiply;
 

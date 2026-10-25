@@ -97,6 +97,8 @@ public:
    *      `W`-element input slice before overwriting the output slice.
    */
   void Multiply(Scalar a, const Vector& x, Scalar b, Vector& y) const override;
+  void MultiplyBatch(Scalar a, const std::vector<Vector>& x, Scalar b,
+                     std::vector<Vector>& y) const override;
 
   using LinearOperator::Multiply;
 

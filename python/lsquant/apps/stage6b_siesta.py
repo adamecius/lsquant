@@ -260,7 +260,8 @@ def execute_siesta_runfile(rf, out_dir):
                              if rf.reconstruction["legacy_text_round_trip"] else mu)
         with timing.phase("reconstruction", word=word):
             if mu.rank == 2:
-                energy, values = shc(reconstruction_mu, broadening, bloch.num_cells, area)
+                energy, values = shc(reconstruction_mu, broadening, bloch.num_cells, area,
+                                     backend=rf.reconstruction.get("bastin_backend", "tables"))
                 curve_name, header = "shc", f"energy_eV sigma_z_xy [{UNITS}]"
             else:
                 energy, values = dos_curve(reconstruction_mu, broadening)
@@ -285,7 +286,8 @@ def execute_siesta_runfile(rf, out_dir):
             _core.WriteChebmom(str(reference_path), reference)
             moment_files.append(str(reference_path))
             if mu.rank == 2:
-                er, vr = shc(reference, broadening, bloch.num_cells, area)
+                er, vr = shc(reference, broadening, bloch.num_cells, area,
+                             backend=rf.reconstruction.get("bastin_backend", "tables"))
             else:
                 er, vr = dos_curve(reference, broadening)
                 vr = vr/bloch.num_cells

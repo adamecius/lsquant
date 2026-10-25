@@ -10,6 +10,7 @@
 #include <vector>
 
 #include "core/algebra/linalg.hpp"
+#include "core/algebra/memory_placement.hpp"
 #include "core/chebyshev/chebyshev_recursion.hpp"
 #include "core/chebyshev/chebyshev_vectors.hpp"
 
@@ -328,6 +329,21 @@ ChebyshevMoments MomentEngine::Run(const Plan& plan) {
   const Index dim = rescaledH_->Dimension();
   states_->Reset();
 
+#ifdef LSQUANT_NATIVE_BUILD
+  Vector r = MakeZeroVector(dim);
+  Vector ketSeed = MakeZeroVector(dim);
+  Vector braSeed = MakeZeroVector(dim);
+  Vector auxSeed = MakeZeroVector(dim);
+  Vector ketInit = MakeZeroVector(dim);
+  Vector braInit = MakeZeroVector(dim);
+  Vector scratch = MakeZeroVector(dim);
+  Vector cheb0 = MakeZeroVector(dim);
+  Vector cheb1 = MakeZeroVector(dim);
+  Vector chebx0 = MakeZeroVector(dim);
+  Vector chebx1 = MakeZeroVector(dim);
+  Vector phiT = MakeZeroVector(dim);
+  Vector postVec = MakeZeroVector(dim);
+#else
   Vector r(static_cast<std::size_t>(dim), Scalar(0.0, 0.0));
   Vector ketSeed(static_cast<std::size_t>(dim), Scalar(0.0, 0.0));
   Vector braSeed(static_cast<std::size_t>(dim), Scalar(0.0, 0.0));
@@ -341,6 +357,7 @@ ChebyshevMoments MomentEngine::Run(const Plan& plan) {
   Vector chebx1(static_cast<std::size_t>(dim), Scalar(0.0, 0.0));
   Vector phiT(static_cast<std::size_t>(dim), Scalar(0.0, 0.0));
   Vector postVec(static_cast<std::size_t>(dim), Scalar(0.0, 0.0));
+#endif
 
   if (hasTimeAxis) {
     ChebyshevRecursion rec(*rescaledH_);
@@ -540,6 +557,23 @@ ChebyshevMoments MomentEngine::Run(const Plan& plan) {
           vecR.ApplyToAll(*operators_[static_cast<std::size_t>(opIdx)]);
         }
 
+#ifdef LSQUANT_NATIVE_BUILD
+        std::vector<const Vector*> left, right;
+        const int liveL = std::min(effBatchL, numMomsL - mL);
+        const int liveR = std::min(effBatchR, numMomsR - mR);
+        for (int m = 0; m < liveL; ++m) left.push_back(&vecL.At(m));
+        for (int n = 0; n < liveR; ++n) right.push_back(&vecR.At(n));
+        const auto table = linalg::MomentTable(left, right);
+        for (int m = 0; m < liveL; ++m) {
+          for (int n = 0; n < liveR; ++n) {
+            const std::size_t index = static_cast<std::size_t>(mL + m) * numMomsR + mR + n;
+            const Scalar& weight = scalarWeight ? traceWeights[0] : traceWeights[index];
+            const Scalar& value = table[static_cast<std::size_t>(m) * liveR + n];
+            if (weight.imag() == 0.0) mu.At(mL + m, mR + n) += weight.real() * value;
+            else mu.At(mL + m, mR + n) += weight * value;
+          }
+        }
+#else
         // Each row has one owner; dot products and trace-state additions keep
         // their serial order, so thread count cannot change the moment values.
 #pragma omp parallel for schedule(static)
@@ -560,6 +594,7 @@ ChebyshevMoments MomentEngine::Run(const Plan& plan) {
             AccumulateWeightedDot(mu.At(row, col), w, vecL.At(m0), vecR.At(m1));
           }
         }
+#endif
       }
     }
   }

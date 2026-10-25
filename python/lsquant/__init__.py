@@ -9,12 +9,20 @@ from __future__ import annotations
 
 import sys as _sys
 
+from .runtime import configure_threads as _configure_threads
+
+_configure_threads()
+
 try:
     from . import _core
 except ImportError:
     import _core as _core  # type: ignore[no-redef]
 
     _sys.modules[f"{__name__}._core"] = _core
+
+from .runtime import configure_kernels as _configure_kernels
+
+_configure_kernels(_core)
 
 from . import bases, cli, kernels, models, moments, reconstruct, runfile, spectral_functions, words
 from .bases import BlochMetricBasis, EigenMetricBasis, BlochBasis, EigenBasis, RealBasis, make_basis

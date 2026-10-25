@@ -12,6 +12,7 @@ from typing import Any, Mapping, Sequence
 import numpy as np
 
 from . import _core
+from .projection.spectral import resolve_projection
 from .bases import (
     BlochBasis,
     EigenBasis,
@@ -40,6 +41,7 @@ ALLOWED_TOP_KEYS: frozenset[str] = frozenset(
         "model",
         "basis",
         "metric",
+        "projection",
         "word",
         "words",
         "expansion",
@@ -48,6 +50,8 @@ ALLOWED_TOP_KEYS: frozenset[str] = frozenset(
         "output",
         "receipt",
         "reference",
+        "build_profile",
+        "runtime",
     }
 )
 
@@ -215,6 +219,7 @@ ALLOWED_RECONSTRUCTION_KEYS: frozenset[str] = frozenset(
         "cell_area",
         "energies",
         "energy_grid",
+        "bastin_backend",
     }
 )
 
@@ -344,6 +349,14 @@ def validate_runfile_dict(raw: Mapping[str, Any]) -> None:
         raise ValueError("Run file must be a JSON object")
 
     _check_keys("top-level", raw, ALLOWED_TOP_KEYS)
+    projection = resolve_projection(raw.get("projection"))
+    # Item 3: a resolved receipt cannot silently select a different binary profile.
+    # Tester: replay matching receipts and verify mismatched profiles fail before work.
+    if "build_profile" in raw and raw["build_profile"] != _core.build_profile:
+        raise ValueError(
+            f"Run file build_profile={raw['build_profile']!r} differs from "
+            f"loaded engine profile={_core.build_profile!r}"
+        )
 
     for req in ("model", "word", "expansion"):
         if req not in raw:
@@ -359,6 +372,8 @@ def validate_runfile_dict(raw: Mapping[str, Any]) -> None:
         raise ValueError("reference must be a boolean when supplied")
     if reference is not None and kind != "siesta":
         raise ValueError("reference is supported only for SIESTA stage6b runs")
+    if projection["kind"] != "none" and kind != "siesta":
+        raise ValueError("stage6d run-file projection requires a SIESTA model")
     if kind not in ("csr", "wannier", "siesta", "generator"):
         raise ValueError(
             f"Unknown model.kind '{kind}'; expected 'csr', 'wannier', 'siesta', or 'generator'"
@@ -380,7 +395,11 @@ def validate_runfile_dict(raw: Mapping[str, Any]) -> None:
             raise ValueError("SIESTA model.params must be a JSON object")
         _check_keys("model.params (siesta)", model.get("params") or {}, frozenset({
             "velocity_mode", "oracle", "oracle_degeneracy_tolerance", "bloch_memory_mb",
-            "quadrature_order", "quadrature_max_order", "quadrature_tolerance"}))
+            "quadrature_order", "quadrature_max_order", "quadrature_tolerance",
+            "nonorthogonal_disorder"}))
+        if "nonorthogonal_disorder" in (model.get("params") or {}) and not isinstance(
+                model["params"]["nonorthogonal_disorder"], bool):
+            raise ValueError("model.params.nonorthogonal_disorder must be a boolean")
         degeneracy_tolerance = float((model.get("params") or {}).get("oracle_degeneracy_tolerance", 1e-6))
         if not np.isfinite(degeneracy_tolerance) or degeneracy_tolerance <= 0:
             raise ValueError("oracle_degeneracy_tolerance must be positive and finite (eV)")
@@ -536,6 +555,11 @@ def validate_runfile_dict(raw: Mapping[str, Any]) -> None:
         if not isinstance(rec, Mapping):
             raise ValueError("Run file 'reconstruction' must be a JSON object")
         _check_keys("reconstruction", rec, ALLOWED_RECONSTRUCTION_KEYS)
+        if rec.get("bastin_backend", "tables") not in ("tables", "folded"):
+            raise ValueError("reconstruction.bastin_backend must be tables or folded")
+        if rec.get("bastin_backend") == "folded" and (
+                raw.get("model", {}).get("kind") != "siesta" or rec.get("fft_grid", False)):
+            raise ValueError("folded run-file reconstruction requires SIESTA and the uniform grid")
         if rec.get("energies") is not None and rec.get("energy_grid") is not None:
             raise ValueError("choose reconstruction.energies or energy_grid, not both")
         if rec.get("energies") is not None:
@@ -653,6 +677,7 @@ class RunFile:
     output: dict[str, Any]
     source_path: str | None = field(default=None, repr=False)
     reference: bool | None = None
+    projection: dict[str, Any] = field(default_factory=lambda: {"kind": "none", "window": None, "radius": None})
 
     @classmethod
     def from_dict(
@@ -794,6 +819,7 @@ class RunFile:
                 else None
             ),
             "fft_grid": bool(_get_or(raw_rec, "fft_grid", False)),
+            **({"bastin_backend": raw_rec["bastin_backend"]} if "bastin_backend" in raw_rec else {}),
             "legacy_text_round_trip": bool(
                 _get_or(raw_rec, "legacy_text_round_trip", False)
             ),
@@ -842,6 +868,7 @@ class RunFile:
             output=output_cfg,
             source_path=source_path,
             reference=raw.get("reference"),
+            projection=resolve_projection(raw.get("projection")),
         )
 
     @classmethod
@@ -858,6 +885,13 @@ class RunFile:
     def to_resolved_dict(self) -> dict[str, Any]:
         """Return the fully resolved run-file dictionary written to ``run.resolved.json``."""
         out: dict[str, Any] = {
+            "build_profile": _core.build_profile,
+            # Item 6: record effective launch choices, never use receipt values
+            # to override the caller's environment. Tester archives with timings.
+            "runtime": {key: os.environ.get(key) for key in (
+                "OMP_NUM_THREADS", "OMP_PROC_BIND", "OMP_PLACES", "OMP_DYNAMIC",
+                "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS", "LSQUANT_SPMV_MIN_NNZ",
+                "LSQUANT_KERNEL_BATCH", "LSQUANT_FFT_BACKEND")},
             "model": dict(self.model),
             "basis": dict(self.basis),
             "metric": dict(self.metric),
@@ -871,6 +905,8 @@ class RunFile:
             out["reference"] = self.reference
         if len(self.words) > 1 or self.words != [self.word]:
             out["words"] = list(self.words)
+        if self.projection["kind"] != "none":
+            out["projection"] = dict(self.projection)
         return out
 
 
@@ -1154,6 +1190,13 @@ def execute_runfile(
     )
     kind = str(rf.model["kind"])
     if kind == "siesta":
+        if rf.projection["kind"] != "none":
+            from .projection.runfile import execute_projection_runfile
+            return execute_projection_runfile(rf, out_dir)
+        if (rf.model["params"].get("nonorthogonal_disorder", False) or
+                rf.basis["name"] == "real" or rf.basis["disorder"]["W"] != 0):
+            from .apps.stage6c_disorder import execute_disorder_runfile
+            return execute_disorder_runfile(rf, out_dir)
         from .apps.stage6b_siesta import execute_siesta_runfile
         return execute_siesta_runfile(rf, out_dir)
     if kind == "wannier":

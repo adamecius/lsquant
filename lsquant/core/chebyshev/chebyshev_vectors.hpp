@@ -121,6 +121,9 @@ private:
   int firstOrder_ = 0;
   std::vector<Vector> vectors_;
   Vector scratch_;
+#ifdef LSQUANT_NATIVE_BUILD
+  std::vector<Vector> batchScratch_;
+#endif
 };
 
 namespace chebyshev {

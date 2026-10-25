@@ -7,6 +7,10 @@
 #include <algorithm>
 #include <cmath>
 #include <stdexcept>
+#include "core/algebra/memory_placement.hpp"
+#ifdef LSQUANT_NATIVE_BUILD
+#include "core/algebra/work_partition.hpp"
+#endif
 
 namespace lsquant {
 
@@ -62,6 +66,9 @@ SparseMatrix SparseMatrix::FromCsr(Index dim, Index rowPointersSize, const Index
   if (!result.matrix_.isCompressed()) {
     result.matrix_.makeCompressed();
   }
+#ifdef LSQUANT_NATIVE_BUILD
+  result.PlaceOnThreads();
+#endif
   return result;
 }
 
@@ -98,6 +105,9 @@ SparseMatrix SparseMatrix::FromTriplets(Index dim, const std::vector<Index>& row
   if (!result.matrix_.isCompressed()) {
     result.matrix_.makeCompressed();
   }
+#ifdef LSQUANT_NATIVE_BUILD
+  result.PlaceOnThreads();
+#endif
   return result;
 }
 
@@ -123,6 +133,18 @@ void SparseMatrix::Multiply(Scalar a, const Vector& x, Scalar b, Vector& y) cons
   const Scalar* const xp = x.data();
   Scalar* const yp = y.data();
 
+#ifdef LSQUANT_NATIVE_BUILD
+#pragma omp parallel if(NonZeros() >= SpmvParallelThreshold())
+  {
+    const Index first = RowBoundary(rp, n, omp_get_thread_num(), omp_get_num_threads());
+    const Index last = RowBoundary(rp, n, omp_get_thread_num() + 1, omp_get_num_threads());
+    for (Index i = first; i < last; ++i) {
+      Scalar acc(0.0, 0.0);
+      for (Index p = rp[i]; p < rp[i + 1]; ++p) acc += vl[p] * xp[cl[p]];
+      yp[i] = a * acc + b * yp[i];
+    }
+  }
+#else
 #pragma omp parallel for schedule(static)
   for (Index i = 0; i < n; ++i) {
     Scalar acc(0.0, 0.0);
@@ -131,6 +153,49 @@ void SparseMatrix::Multiply(Scalar a, const Vector& x, Scalar b, Vector& y) cons
     }
     yp[i] = a * acc + b * yp[i];
   }
+#endif
+}
+
+void SparseMatrix::MultiplyBatch(Scalar a, const std::vector<Vector>& x, Scalar b,
+                                std::vector<Vector>& y) const {
+  if (x.size() != y.size() || &x == &y) {
+    throw std::invalid_argument("SparseMatrix::MultiplyBatch: mismatched or aliased batch");
+  }
+  for (std::size_t j = 0; j < x.size(); ++j) {
+    if (static_cast<Index>(x[j].size()) != Dimension() || x[j].size() != y[j].size()) {
+      throw std::invalid_argument("SparseMatrix::MultiplyBatch: dimension mismatch");
+    }
+  }
+#ifdef LSQUANT_NATIVE_BUILD
+  const Index n = Dimension();
+  if (n == 0 || x.empty()) return;
+  const Index* rp = matrix_.outerIndexPtr();
+  const Index* cl = matrix_.innerIndexPtr();
+  const Scalar* vl = matrix_.valuePtr();
+  const int width = CacheBatchSize(n, static_cast<int>(x.size()));
+#pragma omp parallel if(NonZeros() >= SpmvParallelThreshold())
+  {
+    const Index first = RowBoundary(rp, n, omp_get_thread_num(), omp_get_num_threads());
+    const Index last = RowBoundary(rp, n, omp_get_thread_num() + 1, omp_get_num_threads());
+    Vector sums(static_cast<std::size_t>(width));
+    for (std::size_t base = 0; base < x.size(); base += static_cast<std::size_t>(width)) {
+      const std::size_t count = std::min<std::size_t>(width, x.size() - base);
+      for (Index row = first; row < last; ++row) {
+        std::fill(sums.begin(), sums.end(), Scalar(0.0, 0.0));
+        for (Index p = rp[row]; p < rp[row + 1]; ++p) {
+          const Scalar value = vl[p];
+          const Index column = cl[p];
+          for (std::size_t j = 0; j < count; ++j) sums[j] += value * x[base + j][column];
+        }
+        for (std::size_t j = 0; j < count; ++j) {
+          y[base + j][row] = a * sums[j] + b * y[base + j][row];
+        }
+      }
+    }
+  }
+#else
+  for (std::size_t j = 0; j < x.size(); ++j) Multiply(a, x[j], b, y[j]);
+#endif
 }
 
 SparseMatrix SparseMatrix::Rescaled(Scalar a, Scalar b) const {
@@ -144,6 +209,9 @@ SparseMatrix SparseMatrix::Rescaled(Scalar a, Scalar b) const {
   if (!result.matrix_.isCompressed()) {
     result.matrix_.makeCompressed();
   }
+#ifdef LSQUANT_NATIVE_BUILD
+  result.PlaceOnThreads();
+#endif
   return result;
 }
 
@@ -153,6 +221,9 @@ SparseMatrix SparseMatrix::Adjoint() const {
   if (!result.matrix_.isCompressed()) {
     result.matrix_.makeCompressed();
   }
+#ifdef LSQUANT_NATIVE_BUILD
+  result.PlaceOnThreads();
+#endif
   return result;
 }
 
@@ -166,6 +237,9 @@ SparseMatrix SparseMatrix::HermitianFold() const {
   if (!result.matrix_.isCompressed()) {
     result.matrix_.makeCompressed();
   }
+#ifdef LSQUANT_NATIVE_BUILD
+  result.PlaceOnThreads();
+#endif
   return result;
 }
 
@@ -189,6 +263,34 @@ const Eigen::SparseMatrix<Scalar, Eigen::RowMajor, Index>& SparseMatrix::Eigen()
   return matrix_;
 }
 
+#ifdef LSQUANT_NATIVE_BUILD
+void SparseMatrix::PlaceOnThreads() {
+  const Index n = Dimension();
+  if (n == 0) return;
+  const Index nnz = NonZeros();
+  Eigen::SparseMatrix<Scalar, Eigen::RowMajor, Index> placed(n, n);
+  placed.makeCompressed();
+  placed.resizeNonZeros(nnz);
+  DiscardInteriorPages(placed.valuePtr(), static_cast<std::size_t>(nnz) * sizeof(Scalar));
+  DiscardInteriorPages(placed.innerIndexPtr(), static_cast<std::size_t>(nnz) * sizeof(Index));
+  DiscardInteriorPages(placed.outerIndexPtr(), static_cast<std::size_t>(n + 1) * sizeof(Index));
+#pragma omp parallel if(nnz >= SpmvParallelThreshold())
+  {
+    const Index first = RowBoundary(matrix_.outerIndexPtr(), n, omp_get_thread_num(), omp_get_num_threads());
+    const Index last = RowBoundary(matrix_.outerIndexPtr(), n, omp_get_thread_num() + 1, omp_get_num_threads());
+    for (Index row = first; row < last; ++row) {
+      placed.outerIndexPtr()[row] = matrix_.outerIndexPtr()[row];
+      for (Index p = matrix_.outerIndexPtr()[row]; p < matrix_.outerIndexPtr()[row + 1]; ++p) {
+        placed.innerIndexPtr()[p] = matrix_.innerIndexPtr()[p];
+        placed.valuePtr()[p] = matrix_.valuePtr()[p];
+      }
+    }
+  }
+  placed.outerIndexPtr()[n] = nnz;
+  matrix_.swap(placed);
+}
+#endif
+
 SparseMatrixOperator::SparseMatrixOperator(const SparseMatrix& matrix)
     : matrix_(&matrix), isHermitian_(matrix.IsHermitian()) {}
 
@@ -196,6 +298,11 @@ Index SparseMatrixOperator::Dimension() const { return matrix_->Dimension(); }
 
 void SparseMatrixOperator::Multiply(Scalar a, const Vector& x, Scalar b, Vector& y) const {
   matrix_->Multiply(a, x, b, y);
+}
+
+void SparseMatrixOperator::MultiplyBatch(Scalar a, const std::vector<Vector>& x, Scalar b,
+                                        std::vector<Vector>& y) const {
+  matrix_->MultiplyBatch(a, x, b, y);
 }
 
 bool SparseMatrixOperator::IsHermitian() const { return isHermitian_; }

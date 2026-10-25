@@ -10,6 +10,7 @@ order of the legacy C++ reconstruction routines.
 from __future__ import annotations
 
 import math
+import os
 import numpy as np
 import numpy.typing as npt
 
@@ -228,10 +229,62 @@ def kubo_greenwood(
     return energies, values
 
 
+def _folded_bastin_contraction(moments, x):
+    """Contract on arbitrary real nodes using two real Chebyshev series.
+
+    cos(m theta) exp(-i n theta) = (exp(-i(n-m)theta) +
+    exp(-i(n+m)theta))/2. Sum the two frequency diagonals once, also
+    weighted by n for the Green-function derivative. Pair +/- frequencies
+    into cos(l theta) and sin(l theta)=sin(theta) U_(l-1)(x), then use
+    U_j=2(T_j+T_(j-2)+...)-[j even] T_0.
+
+    If F=A+i sin(theta) B and F_n=C+i sin(theta) D, the requested
+    imaginary contraction is
+    (-x Re(A)+(1-x*x) Re(D)+sin(theta)*(x Im(B)+Im(C))) /
+    (pi*(1-x*x)^2). This changes summation order, not nodes or kernels.
+    Cost O(M0*M1+(M0+M1)*N), scratch O(M0+M1+N); no M-by-N tables.
+    """
+    m0, m1 = moments.shape
+    offset, highest = m0-1, m0+m1-2
+    frequencies = np.zeros((2, offset+highest+1), dtype=np.complex128)
+    n = np.arange(m1, dtype=float)
+    for m in range(m0):
+        row = 0.5*moments[m]
+        weighted = n*row
+        for start in (offset-m, offset+m):
+            frequencies[0, start:start+m1] += row
+            frequencies[1, start:start+m1] += weighted
+    positive = frequencies[:, offset:].copy()
+    negative = np.zeros_like(positive)
+    negative[:, 1:offset+1] = frequencies[:, :offset][:, ::-1]
+    cosine = positive+negative
+    sine = negative-positive
+
+    def u_to_t(coefficients):
+        if not len(coefficients):
+            return np.zeros(1)
+        result = np.empty_like(coefficients)
+        for parity in (0, 1):
+            result[parity::2] = 2*np.cumsum(coefficients[parity::2][::-1])[::-1]
+        if len(result):
+            result[0] *= 0.5
+        return result
+
+    from numpy.polynomial.chebyshev import chebadd, chebsub, chebmulx, chebval
+    b = u_to_t(sine[0, 1:].imag)
+    d = u_to_t(sine[1, 1:].real)
+    polynomial = chebsub(chebsub(d, chebmulx(chebmulx(d))), chebmulx(cosine[0].real))
+    radical = chebadd(chebmulx(b), cosine[1].imag)
+    x = np.asarray(x, dtype=float)
+    sine_squared = 1-x*x
+    return (chebval(x, polynomial)+np.sqrt(sine_squared)*chebval(x, radical)) / sine_squared / sine_squared / math.pi
+
+
 def kubo_bastin(
     moments: _core.ChebyshevMoments,
     broadening_meV: float,
     alpha: float = 0.95,
+    *, backend: str = "tables",
 ) -> tuple[npt.NDArray[np.float64], npt.NDArray[np.float64]]:
     """Reconstruct the Kubo-Bastin conductivity curve on the uniform grid.
 
@@ -256,6 +309,9 @@ def kubo_bastin(
         Jackson Gaussian broadening in meV (``broadening_meV > 0``).
     alpha : float, optional
         Chebyshev domain cutoff ``(0 < alpha < 1)``, default ``0.95``.
+    backend : str, optional
+        ``tables`` preserves legacy accumulation; ``folded`` evaluates the
+        same finite series and grid with O(M^2+M*N) work and bounded scratch.
 
     Returns
     -------
@@ -276,6 +332,8 @@ def kubo_bastin(
     """
     if not (0.0 < alpha < 1.0):
         raise ValueError("kubo_bastin: alpha must lie strictly between 0 and 1")
+    if backend not in ("tables", "folded"):
+        raise ValueError("kubo_bastin: backend must be 'tables' or 'folded'")
 
     damped, m0, m1 = _truncate_and_damp_2d(moments, broadening_meV, broadening_meV)
     m_max = m1 if m1 > m0 else m0
@@ -284,9 +342,12 @@ def kubo_bastin(
         -alpha + i * (2.0 * alpha) / (num_div - 1) for i in range(num_div)
     ]
 
-    delta_tbl = legacy_delta_table(x_grid, m0)
-    _, dgreen_r_tbl = legacy_green_tables(x_grid, m0, m1)
-    out = _core.ContractRank2Imag(damped, delta_tbl, dgreen_r_tbl)
+    if backend == "folded":
+        out = _folded_bastin_contraction(damped, x_grid)
+    else:
+        delta_tbl = legacy_delta_table(x_grid, m0)
+        _, dgreen_r_tbl = legacy_green_tables(x_grid, m0, m1)
+        out = _core.ContractRank2Imag(damped, delta_tbl, dgreen_r_tbl)
 
     scale = moments.window.scale
     shift = moments.window.shift
@@ -474,6 +535,8 @@ def kubo_fft_grid(
     moments: _core.ChebyshevMoments,
     broadening_meV: float,
     formula: str | bool = "bastin",
+    *,
+    backend: str | None = None,
 ) -> tuple[npt.NDArray[np.float64], npt.NDArray[np.float64]]:
     """Reconstruct Kubo-Greenwood or Kubo-Bastin on the Chebyshev FFT-node grid.
 
@@ -521,6 +584,11 @@ def kubo_fft_grid(
     ``shift``; although algebraically equal, they differ by 1 ULP for general
     bandwidths.
     """
+    # Item 5c: opt-in FFT polynomial contraction; same nodes and Python factors.
+    # Tester compares tables (native GEMM/golden scalar) and FFT on identical inputs.
+    backend = backend or os.environ.get("LSQUANT_FFT_BACKEND", "tables")
+    if backend not in ("tables", "fft"):
+        raise ValueError("kubo_fft_grid: backend must be 'tables' or 'fft'")
     if isinstance(formula, bool):
         integrate = formula
     else:
@@ -541,21 +609,38 @@ def kubo_fft_grid(
     x_grid = [
         math.cos(math.pi * (2 * i + disp) / num_div) for i in range(num_div)
     ]
+    order = list(range(num_div))
 
     if integrate:
         orig = list(x_grid)
+        orig_order = list(order)
         for k in range(num_div // 2):
             x_grid[2 * k] = orig[k]
             x_grid[2 * k + 1] = orig[num_div - k - 1]
+            order[2 * k] = orig_order[k]
+            order[2 * k + 1] = orig_order[num_div - k - 1]
         for k in range(num_div // 2):
             t = x_grid[k]
             x_grid[k] = x_grid[num_div - k - 1]
             x_grid[num_div - k - 1] = t
+            order[k], order[num_div - k - 1] = order[num_div - k - 1], order[k]
 
-    delta_tbl = legacy_delta_table(x_grid, m0)
-    green_r_tbl, dgreen_r_tbl = legacy_green_tables(x_grid, m0, m1)
-    b_tbl = dgreen_r_tbl if integrate else green_r_tbl
-    out = _core.ContractRank2Imag(damped, delta_tbl, b_tbl)
+    if backend == "fft":
+        sums = _core.FftMomentContraction(np.ascontiguousarray(damped), num_div)
+        out = np.empty(num_div, dtype=np.float64)
+        for i, j in enumerate(order):
+            x = x_grid[i]
+            sine = math.sqrt(1.0 - x * x)
+            if integrate:
+                green = (-1j * x * complex(sums[0, j]) + sine * complex(sums[1, j])) / sine / sine / sine
+            else:
+                green = -1j * complex(sums[0, j]) / sine
+            out[i] = green.imag / sine / math.pi
+    else:
+        delta_tbl = legacy_delta_table(x_grid, m0)
+        green_r_tbl, dgreen_r_tbl = legacy_green_tables(x_grid, m0, m1)
+        b_tbl = dgreen_r_tbl if integrate else green_r_tbl
+        out = _core.ContractRank2Imag(damped, delta_tbl, b_tbl)
 
     hw = moments.window.half_width
     bc = moments.window.center
@@ -644,7 +729,7 @@ def time_correlation_curve(
     return times, values
 
 
-def shc(moments, broadening_meV, num_cells, cell_area):
+def shc(moments, broadening_meV, num_cells, cell_area, *, backend="tables"):
     """Return sigma^z_xy in ``e^2/h, sigma_z Pauli`` from a Bastin tensor.
 
     Symbolic source: metric_forms.spin_hall_normalisation.
@@ -655,5 +740,5 @@ def shc(moments, broadening_meV, num_cells, cell_area):
     """
     if num_cells <= 0 or cell_area <= 0:
         raise ValueError("shc requires positive num_cells and cell_area")
-    energies, values = kubo_bastin(moments, broadening_meV)
+    energies, values = kubo_bastin(moments, broadening_meV, backend=backend)
     return energies, values * (2*np.pi/(num_cells*cell_area))
