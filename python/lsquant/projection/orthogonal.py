@@ -14,7 +14,8 @@ from scipy.linalg import qr
 
 from .origin import origin_module, run_origin_downfolder
 from .spectral import spectral_projection, adjoint
-from .real_space import LocalMatrix
+
+__all__ = ["OrthogonalDownfold", "downfold_orthogonal", "validate_bands", "run_origin_downfolder"]
 
 
 @dataclass

@@ -1,0 +1,43 @@
+{
+  "model": {
+    "kind": "generator",
+    "name": "make_chain",
+    "tutorial": 1,
+    "params": {
+      "sizes": [
+        256,
+        1024,
+        4096
+      ],
+      "hopping_t": -1.0
+    }
+  },
+  "basis": {
+    "name": "real"
+  },
+  "metric": {
+    "policy": "orthogonal"
+  },
+  "word": "Tr[delta(E-H)]",
+  "expansion": {
+    "moments": 512,
+    "window": [
+      -2.0,
+      2.0
+    ],
+    "trace": "exact"
+  },
+  "reconstruction": {
+    "kernel": "jackson",
+    "broadening_meV": 20.0,
+    "formulas": [
+      "dos"
+    ]
+  },
+  "output": {
+    "dir": ".",
+    "legacy_names": true,
+    "legacy_layout": true,
+    "capture_tutorial": false
+  }
+}

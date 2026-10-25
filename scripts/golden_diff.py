@@ -12,7 +12,7 @@ File layouts understood (all legacy LSQUANT text formats):
   .chebmom1D   line 1 header "N BandWidth BandCenter", line 2 "M", then one moment
                "re im" per line; element k -> m = k.
   .chebmom2D   line 1 header, line 2 "M0 M1", then the flat moment vector "re im" per
-               line; element k -> (m, n) = divmod(k, M1)   (Moments2D index m*M1 + n).
+               line; element k -> (m, n) = divmod(k, M1)   (2D row-major index m*M1 + n).
   .chebmomTD   line 1 header "N BW BC Nt dt", line 2 "M Nt", then "re im" per line,
                m-major; element k -> (m, t) = divmod(k, Nt).
   anything else (.dat, .CSR, BOUNDS): whitespace-separated tokens; element = (row, column).

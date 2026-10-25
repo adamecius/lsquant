@@ -61,8 +61,8 @@ struct Expand {
 /**
  * @brief Instruction contracting a Chebyshev series `scale * sum_n coeffs[n] T_n(H~) v` on the fly.
  *
- * Replaces the active seed vector `v` using the forward three-term recursion of legacy
- * `MomentsTD::Evolve`: `cheb0 = v`, `cheb1 = H~ cheb0`, `v = 0`, and for
+ * Replaces the active seed vector `v` using the forward three-term time-evolution
+ * recursion: `cheb0 = v`, `cheb1 = H~ cheb0`, `v = 0`, and for
  * `n = 0 .. coeffs.size() - 1`: `axpy(coeffs[n], cheb0, v)`,
  * `cheb0 <- 2 H~ cheb1 - cheb0`, `swap(cheb0, cheb1)`, followed by a final
  * `scal(scale, v)`. An empty `coeffs` is the zero map (`v <- 0`), which is how a seed
@@ -71,7 +71,7 @@ struct Expand {
  * @warning Must appear before `Expand` on the active side.
  * @par Pitfall
  *      Keep the global phase factor in `scale` rather than folding it into `coeffs` when
- *      bit-identical reproduction of legacy `MomentsTD::Evolve` is required.
+ *      bit-identical reproduction of the legacy time-evolution recursion is required.
  */
 struct ApplySeries {
   std::vector<Scalar> coeffs;
@@ -81,8 +81,8 @@ struct ApplySeries {
 /**
  * @brief Instruction contracting a derived Chebyshev series `scale * sum_n coeffs[n] D_n v` on the fly.
  *
- * Replaces the active seed vector `v` using the coupled `(T_n, D_n)` recursion of legacy
- * `MomentsTD::Conv_Evolve`: `D_0 v = 0`, `D_1 v = O_k T_0 v`, and
+ * Replaces the active seed vector `v` using the coupled `(T_n, D_n)` commutator-evolution
+ * recursion: `D_0 v = 0`, `D_1 v = O_k T_0 v`, and
  * `D_{n+1} v = 2 H~ D_n v - D_{n-1} v + 2 O_k T_n v`, where `k = operatorIndex`,
  * followed by a final `scal(scale, v)`. The `n = 0` term contributes zero regardless of
  * `coeffs[0]`. An empty `coeffs` is the zero map (`v <- 0`), which is how a seed
@@ -91,7 +91,7 @@ struct ApplySeries {
  * @warning `operatorIndex` must be in `[0, operators.size())` of the executing `MomentEngine`.
  * @par Pitfall
  *      The recursion order per step (`T` update, `D` update, `+2 O_k T_n` accumulation, then
- *      swaps) must match `MomentsTD::Conv_Evolve` verbatim.
+ *      swaps) must match the legacy commutator-evolution recursion verbatim.
  */
 struct ApplyDerivedSeries {
   std::vector<Scalar> coeffs;
@@ -129,7 +129,7 @@ struct EvolveRegister {
  * @brief Register-update step between trailing-axis slices accumulating a derived Chebyshev series from `source` into `target`.
  *
  * Computes `phiT = scale * sum_n coeffs[n] D_n seed[source]` with operator
- * `O_{operatorIndex}` (matching `MomentsTD::Conv_Evolve`) and accumulates
+ * `O_{operatorIndex}` (using the coupled commutator recursion) and accumulates
  * `seed[target] += phiT` via `axpy(1.0, phiT, seed[target])`.
  */
 struct EvolveDerived {

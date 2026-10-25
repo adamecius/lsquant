@@ -94,11 +94,11 @@ Scalar dot(const Vector& x, const Vector& y);
  */
 double norm2(const Vector& x);
 
-// Item 5b: GEMM table, row-major output <left_m|right_n>. Fixed output tiles
-// own the full inner reduction regardless of team size. Tester compares data
-// bytes at 1/24/48/96 threads, and numerical residuals against scalar dot.
+/**
+ * @brief Compute the inner-product table `<left[m] | right[n]>` in row-major order.
+ */
 std::vector<Scalar> MomentTable(const std::vector<const Vector*>& left,
-                               const std::vector<const Vector*>& right);
+                                const std::vector<const Vector*>& right);
 
 }  // namespace linalg
 }  // namespace lsquant

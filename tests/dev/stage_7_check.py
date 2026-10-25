@@ -30,6 +30,11 @@ BUILD_DIR = (
     if os.path.isabs(_RAW_BUILD_DIR)
     else os.path.abspath(os.path.join(REPO, _RAW_BUILD_DIR))
 )
+if not os.path.isdir(os.path.join(BUILD_DIR, "lsquant_core")):
+    for _cand in (os.path.join(REPO, "build", "golden"), os.path.join(REPO, "build", "native")):
+        if os.path.isdir(os.path.join(_cand, "lsquant_core")):
+            BUILD_DIR = _cand
+            break
 _PY_PATHS = [
     os.path.join(REPO, "python"),
     os.path.join(BUILD_DIR, "lsquant_core"),

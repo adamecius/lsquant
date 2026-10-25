@@ -1,4 +1,4 @@
-"""Projection-aware preparation on top of the unchanged stage-6b compiler."""
+"""Projection-aware word preparation preserving explicit identity projectors."""
 from dataclasses import replace
 
 from .. import _core
@@ -13,7 +13,7 @@ def prepare_projection_moments(basis, word, **options):
     The general word catalogue removes literal 1 before compiling. Once
     selected it represents P, not the full identity, so give it the existing
     named-projector spelling P:WINDOW. A DOS word without any static slot
-    still counts every zero/edge complement state, as the brief requires.
+    still counts every zero/edge complement state.
     """
     parsed = parse_word(word)
     selected = replace(parsed, slots=tuple(

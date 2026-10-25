@@ -11,7 +11,9 @@ std::vector<Scalar> FftMomentContraction(const Scalar* moments, Index m0, Index 
                                         Index points) {
   if (!moments || m0 <= 0 || m1 <= 0 || points <= 0 ||
       points > std::numeric_limits<int>::max()) {
-    throw std::invalid_argument("FftMomentContraction: invalid dimensions/buffer");
+    throw std::invalid_argument(
+        "FftMomentContraction: expected non-null moments and positive (m0, m1, points), got m0=" +
+        std::to_string(m0) + " m1=" + std::to_string(m1) + " points=" + std::to_string(points));
   }
   const double pi = std::acos(-1.0), offset = pi / (2.0 * points);
   const Index limit = m0 + m1;

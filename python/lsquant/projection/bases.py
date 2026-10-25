@@ -1,4 +1,4 @@
-"""Projection adapters isolated from the concurrently developed 6b/6c bases.
+"""Spectral-projection basis adapters for Bloch, Eigen, and real-space layouts.
 
 Operators are projected from the ORIGINAL physical velocity ladder, never
 recomputed by differentiating H_P/H_s. The cached metric factors are reused
@@ -31,7 +31,7 @@ class ProjectedEigenBasis(EigenMetricBasis):
         return super().operator(name)
 
     def states(self, trace_mode="random", num_states=None, seed=None):
-        """Use eigenbasis phases as requested by the stage-6d material study."""
+        """Return random-phase or exact states in the projected eigenbasis."""
         if trace_mode == "random":
             return _core.RandomPhaseStates(self.dimension, 16 if num_states is None else int(num_states),
                                             self.bloch.seed if seed is None else int(seed))
@@ -162,11 +162,10 @@ class ProjectedBlochBasis(BlochMetricBasis):
         return self._local(key, blocks)
 
     def supercell_operators(self, names):
-        """Local CSR export for 6c; include unchanged, untruncated overlap.
+        """Local CSR export including the unchanged, untruncated overlap.
 
         A disorder term added later can couple the retained and discarded
-        subspaces. This API makes no claim that clean projection commutes
-        with that disorder; the 6c caller must measure that error separately.
+        subspaces; clean projection does not automatically commute with disorder.
         """
         result = {"H": self.local_matrix("H").supercell_csr()}
         overlap = LocalMatrix(self.sk_array, self.model.uc, self.centres,
@@ -181,8 +180,8 @@ class ProjectedRealSpaceBasis:
     """Apply local hard/shift matrices as CSR with the original overlap.
 
     LocalMatrix supplies H and every physical operator in the same cell
-    gauge, including the requested hopping-radius cutoff. The existing 6c
-    adapter supplies S, its metric appliers and the B-mapped phase stream.
+    gauge, including the requested hopping-radius cutoff. RealSpaceMetricBasis
+    supplies S, its metric appliers and the B-mapped phase stream.
     No velocity is differentiated from the projected Hamiltonian.
     """
 

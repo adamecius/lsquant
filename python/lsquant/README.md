@@ -1,109 +1,147 @@
-# `lsquant` — Python Library, CLI, and MCP Server
+# `lsquant` — Python API, Run-File Schema, and MCP Reference
 
-`lsquant` compiles observable words `Tr[A_0 f_1(H) A_1 ... f_p(H) A_p]` into bytecode `Plan`s for the C++ Kernel Polynomial Method engine (`lsquant._core`) and reconstructs spectral and transport curves.
+For an overview of LSQUANT, installation instructions, the observable word
+catalogue, and the worked examples `01`–`08`, see the main repository
+[**README.md**](../../README.md). This page documents the Python package API,
+the JSON run-file schema accepted by `python -m lsquant run`, and the MCP server
+surface.
 
-## Command-Line Interface (`python -m lsquant` / `lsquant`)
+---
+
+## Python API Summary
+
+- **High-level execution** (`lsquant.runfile`):
+  - `execute_runfile(runfile_path_or_dict, *, out_dir_override=None)` $\to$ `dict` (`output_dir`, `resolved_runfile`, `moment_files`, `curve_files`, `written_files`)
+  - `reconstruct_target(target_path, *, formula=None, broadening_meV=None, fermi_energies=None, out_dir=None)`
+  - `inspect_target(path)`
+- **Bases** (`lsquant.bases`, `lsquant.disorder_bases`):
+  - `RealBasis(model, supercell=(1, 1, 1), *, disorder_w=0.0, seed=12345, disorder_seed=7, csr_dir=None)`
+  - `BlochBasis(model, supercell=(1, 1, 1), *, disorder_w=0.0, seed=12345, disorder_seed=7)`
+  - `EigenBasis(model, supercell=(1, 1, 1))`
+  - `BlochMetricBasis(model, supercell, *, route="lowdin", applier="exact", velocity_mode="covariant", ...)`
+  - `EigenMetricBasis(model, supercell, *, velocity_mode="covariant")`
+  - `make_basis(basis_name, model, supercell=(1, 1, 1), ...)`
+- **Models** (`lsquant.models`):
+  - `load_wannier_model(directory, seed)` — reads Wannier90 `<seed>_hr.dat`, `.uc`, and `.xyz`.
+  - `load_siesta_model(directory, label=None, *, velocity_mode="covariant", ...)` — reads SIESTA `.fdf` + `.TSHS`/`.HSX` and `.ion.xml` via `sisl`, with certified Gauss–Legendre midpoint quadrature for orbital dipole matrices $A_\alpha(\mathbf{R})$.
+- **Words & Compilation** (`lsquant.words`):
+  - `lsquant.words.parse(word_str)` $\to$ `Word` AST
+  - `lsquant.words.compile(word, basis=None, params=None)` $\to$ `CompiledWord` (`plan`, `operator_names`, `operators`, `reconstruction`, `dt`)
+  - `lsquant.words.describe(word, basis=None, params=None)` $\to$ `dict`
+  - `lsquant.words.list_catalogue()` $\to$ `list[dict]`
+- **Engine Execution & Reconstruction** (`lsquant.moments`, `lsquant.reconstruct`):
+  - `dos_plan(num_moments, num_states, word, *, operator_index=None)` $\to$ `_core.Plan`
+  - `kubo_plan(num_moments, *, left_index, right_index, word)` $\to$ `_core.Plan`
+  - `run_plan(plan, hamiltonian, window, states, operators=(), batch_size=None, symmetrise=True, dt=None)` $\to$ `_core.ChebyshevMoments`
+  - `dos_curve(moments, broadening_meV, alpha=0.95)`
+  - `kubo_greenwood(moments, broadening_meV, alpha=0.95)`
+  - `kubo_bastin(moments, broadening_meV, alpha=0.95, *, backend="tables")` (plus `kubo_bastin_sea`, `kubo_bastin_surf`, `kubo_fft_grid`)
+  - `shc(moments, broadening_meV, num_cells, cell_area, *, backend="tables")`
+  - `time_correlation_curve(moments, broadening_meV, fermi_energy)`
+- **Spectral Projection & Downfolding** (`lsquant.projection`):
+  - `spectral_projection(hamiltonian, overlap, window, *, kind="shift")` (`kind` in `"hard"` | `"shift"`)
+  - `downfold_orthogonal(hamiltonian, overlap, window)` and `LocalMatrix`
+  - `compare_windows(source, words, windows, energies, *, cell_area, ...)`
+
+---
+
+## Command-Line Interface (`python -m lsquant`)
 
 ```bash
-# List recognised word shapes in the catalogue
-python -m lsquant words
-
-# Describe a specific observable word (AST, bytecode plan, operators, reconstruction spec)
-python -m lsquant words describe "Tr[VX delta(E-H) VY dG-(E)/dE]"
-
-# Validate and execute a run file
-python -m lsquant run runs/goldens/g5.json --out /tmp/haldane_out
-
-# Reconstruct a curve from a moment file or output directory
-python -m lsquant reconstruct /tmp/haldane_out --formula bastin --broadening-meV 10
-
-# Inspect a moment file, run file, or output directory
-python -m lsquant inspect /tmp/haldane_out
+python3 -m lsquant words
+python3 -m lsquant words describe "Tr[VX delta(E-H) VY dG-(E)/dE]"
+python3 -m lsquant run <run.json> [--out <output_dir>] [--json]
+python3 -m lsquant reconstruct <moment_file_or_dir> [--formula <name>] [--broadening-meV <val>] [--fermi-energies <E...>] [--out <dir>] [--json]
+python3 -m lsquant inspect <run_json_or_moment_file_or_dir>
 ```
 
-### Generator Catalogue (`model.kind = "generator"`)
+---
 
-`model.name` is validated against a fixed catalogue in `python/lsquant/runfile.py` and resolved relative to the repository root:
+## Run-File Schema (`python/lsquant/runfile.py`)
 
-| `model.name` | Module Path |
+Every calculation is configured by a strictly validated JSON run file. Unknown keys
+at the top level or inside any sub-object are rejected before any operator file is
+loaded.
+
+### Top-level sections
+
+| Section / Field | Allowed Values / Type | Default | Description |
+|---|---|---|---|
+| `model.kind` | `"csr"` \| `"wannier"` \| `"siesta"` \| `"generator"` | `"csr"` | Model input source. |
+| `model.dir` | path | `null` | Directory containing `<label>.<OP>.CSR` (`csr`), `<seed>_hr.dat` (`wannier`), or `<label>.fdf` + `.TSHS`/`.HSX` (`siesta`). |
+| `model.label` | string | `null` | File prefix `<label>` for `csr` or `siesta` models. |
+| `model.seed` | string | `null` | Wannier90 seed name when `model.kind == "wannier"`. |
+| `model.operators` | `list[str]` | `[]` | Static operator names available in `model.dir`. |
+| `model.csr_dir` | path | `null` | Pre-built supercell CSR directory for `model.kind == "wannier"`. |
+| `model.name` | string | `null` | Generator name from `GENERATOR_CATALOGUE` when `model.kind == "generator"`. |
+| `model.tutorial` | `1..6` | `null` | Tutorial driver selector when `model.kind == "generator"`. |
+| `model.params` | `dict` | `{}` | Generator or SIESTA model parameters (e.g. `velocity_mode`: `"bare"` \| `"berry_connection"` \| `"covariant"`, `oracle`: `bool`). |
+| `basis.name` | `"real"` \| `"bloch"` \| `"eigen"` | `"real"` | Representation basis. |
+| `basis.supercell` | `[N1, N2, N3]` | `[1, 1, 1]` | Supercell or $k$-mesh dimensions. |
+| `basis.disorder` | `{"W": float, "seed": int}` | `{"W": 0.0, "seed": 7}` | Real-space Anderson box disorder parameters. |
+| `metric.policy` | `"orthogonal"` \| `"nonorthogonal"` | `"orthogonal"` | Basis overlap policy. |
+| `metric.route` | `"lowdin"` \| `"generalised"` | `"lowdin"` | Non-orthogonal evaluation route ($S^{-1/2} H S^{-1/2}$ vs. $S^{-1} H$). |
+| `metric.applier` | `"exact"` \| `"chebyshev"` \| `"ischo"` | `"exact"` | Overlap inverse / inverse-square-root applier. |
+| `metric.order` | `int` | `60` | Chebyshev polynomial order for overlap appliers. |
+| `metric.coeff_tol` | `float` | `1e-12` | Chebyshev coefficient truncation threshold for overlap appliers. |
+| `metric.tol` | `float` | `1e-13` | PCG solver tolerance for `"ischo"`. |
+| `metric.max_iter` | `int` | `200` | Maximum PCG iterations for `"ischo"`. |
+| `metric.max_dim` | `int` | `4096` | Maximum dense matrix dimension for `"exact"` overlap appliers. |
+| `projection` | `dict` \| `null` | `null` | Spectral window projection (`{"kind": "hard" \| "shift" \| "orthogonal", "window": [emin, emax], ...}`). |
+| `word` | string | *(required)* | Primary observable word `Tr[...]`. |
+| `words` | `list[str]` | `[word]` | Multiple observable words evaluated on the same basis in one run. |
+| `expansion.moments` | `int` | `64` | Number of Chebyshev moments $M$ per expanded slot. |
+| `expansion.window` | `"gershgorin"` \| `"eigen"` \| `[lo, hi]` | `"gershgorin"` (`real`), `"eigen"` (`bloch`, `eigen`) | Spectral window mode or explicit `[lo, hi]` bounds in eV. |
+| `expansion.trace` | `"exact"` \| `"random"` | `"exact"` | Trace evaluation mode. |
+| `expansion.states` | `int` \| `null` | `null` | Number of trace states (`dim` for `exact`, `1` for `random` when omitted). |
+| `expansion.seed` | `int` | `12345` | Random-phase state generator seed (`KPM_SEED`). |
+| `expansion.batch` | `int` \| `null` | `moments` | Engine vector batch size. |
+| `time.steps` | `int` | — | Number of time steps (`> 1`) for time-dependent words. |
+| `time.tmax` | `float` \| `null` | `20.0` | Maximum evolution time in fs. |
+| `time.dt` | `float` \| `null` | `null` | Explicit time step in fs as an alternative to `tmax = dt * (steps - 1)`. |
+| `time.bessel` | `"scipy"` \| `"legacy"` | `"scipy"` | Bessel coefficient backend (`"legacy"` uses GSL values for legacy byte identity). |
+| `reconstruction.kernel` | `"jackson"` \| `"lorentz"` \| `"none"` | `"jackson"` | Chebyshev damping kernel. |
+| `reconstruction.broadening_meV` | `float` \| `null` | `null` | Target broadening in meV. |
+| `reconstruction.fermi_energies` | `list[float]` | `[]` | Fermi energies in eV for time-correlation reconstruction. |
+| `reconstruction.formulas` | `list[str]` \| `null` | shape default | Reconstruction formulas (`dos`, `greenwood`, `bastin`, `sea`, `surf`, `greenwood_fft`, `bastin_fft`, `shc`, `time_correlation`, `row_m0`). |
+| `reconstruction.num_points` | `int` \| `null` | `null` | Explicit energy grid point count. |
+| `reconstruction.fft_grid` | `bool` | `false` | Reconstruct on the Chebyshev-node FFT grid. |
+| `reconstruction.legacy_text_round_trip` | `bool` | `false` | Round-trip moments through the 15-digit legacy ASCII format before reconstruction. |
+| `reconstruction.per_site_dos` | `bool` | `false` | Also write standalone per-site `DOS_reconstructed.dat`. |
+| `reconstruction.targets` | `list[dict]` | `[]` | Additional `(formulas, broadening_meV, subdir, also_top_dir)` reconstruction targets from the same moments. |
+| `output.dir` | path | `"."` | Output directory (always receives `run.resolved.json`). |
+| `output.legacy_names` | `bool` | `true` | Use legacy file naming conventions when writing `.chebmom*` and `.dat` files. |
+| `output.legacy_layout` | `bool` | `true` | Write `.chebmom1D`/`.chebmom2D`/`.chebmomTD` text files. |
+| `output.write_chebmom` | `bool` | `false` | Also write the unified `.chebmom` file. |
+| `output.write_basis_json` | `bool` | `false` | Write `<stem>.basis.json` provenance metadata. |
+| `output.capture_tutorial` | `bool` | `false` | Copy outputs into `captured/NNNN_*` for tutorial golden verification. |
+
+### Generator catalogue (`model.kind = "generator"`)
+
+| `model.name` | Module path |
 |---|---|
 | `make_chain` | `examples/01_dos_1d_chain/make_chain.py` |
 | `make_disordered_chain` | `examples/02_localization_1d_chain/make_disordered_chain.py` |
 | `make_haldane` | `examples/03_haldane_hall/make_haldane.py` |
-| `make_chain_mag` | `examples/04_spin_precession_magnetic_chain/lsqspin.py` |
+| `make_chain_mag` | `examples/04_spin_precession_magnetic_chain/make_chain_mag.py` |
 | `make_square` | `examples/05_charge_transport_square/make_square.py` |
+| `make_ey` | `examples/06_spin_relaxation_square/make_ey.py` |
+| `make_rashba` | `examples/06_spin_relaxation_square/make_rashba.py` |
 | `gen_models` | `python/lsquant/models/wannier.py` |
 
-## Run-File Schema
-
-Every calculation is configured by a strictly validated JSON run file (`python/lsquant/runfile.py`). Unknown keys at the top level or inside any sub-object are refused before any file is loaded. Fields marked **[extension]** are schema additions beyond `handoff/0007-words-cli-mcp/brief.md` section 4 needed to reproduce the multi-word, multi-target, and tutorial golden fixtures.
-
-| Section / Field | Allowed Values / Type | Default | Brief / Extension | Description |
-|---|---|---|---|---|
-| `model.kind` | `"csr"` \| `"wannier"` \| `"generator"` | `"csr"` | `"csr"`, `"wannier"` in brief; `"generator"` **[extension]** | Model source (`"generator"` runs a named model generator from `GENERATOR_CATALOGUE` for Tutorials 01, 02, and 05). |
-| `model.dir` | path | `null` | Brief | Directory containing `<label>.<OP>.CSR` (`csr`) or `<seed>_hr.dat`/`.uc`/`.xyz` (`wannier`). |
-| `model.label` | string | `null` | Brief | Operator file prefix `<label>.<OP>.CSR` when `model.kind == "csr"`. |
-| `model.seed` | string | `null` | Brief | Wannier90 seed name when `model.kind == "wannier"`. |
-| `model.operators` | `list[str]` | `[]` | Brief | Static operator names available in `model.dir`. |
-| `model.csr_dir` | path | `null` | **[extension]** | Pre-built supercell CSR directory for `model.kind == "wannier"` (G9 real-space runs). |
-| `model.name` | `"make_chain"` \| `"make_disordered_chain"` \| `"make_haldane"` \| `"make_square"` \| `"make_chain_mag"` \| `"gen_models"` | `null` | **[extension]** | Generator name from the fixed `GENERATOR_CATALOGUE` in `runfile.py`, resolved from the repository root (Tutorials 01, 02, 05). |
-| `model.tutorial` | `1..5` | `null` | **[extension]** | Tutorial driver number when `model.kind == "generator"` (Tutorials 01, 02, 05). |
-| `model.params` | `dict` | `{}` | **[extension]** | Generator parameter dictionary (`sizes`, `hopping_t`, `W`, `realisations`, `L`, `disorder_seed`) (Tutorials 01, 02, 05). |
-| `basis.name` | `"real"` \| `"bloch"` \| `"eigen"` | `"real"` | Brief | Representation basis. |
-| `basis.supercell` | `[N1, N2, N3]` | `[1, 1, 1]` | Brief | Supercell or k-grid dimensions. |
-| `basis.disorder` | `{"W": float, "seed": int}` | `{"W": 0.0, "seed": 7}` | Brief | Real-space Anderson box disorder parameters. |
-| `metric.policy` | `"orthogonal"` \| `"nonorthogonal"` | `"orthogonal"` | Brief | Basis overlap policy. |
-| `metric.route` | `"lowdin"` \| `"generalised"` | `"lowdin"` | Brief | Non-orthogonal evaluation route. |
-| `metric.applier` | `"exact"` \| `"chebyshev"` \| `"ischo"` | `"exact"` | Brief (`"ischo"` from Stage 6) | Overlap inverse / inverse-square-root applier. |
-| `metric.order` | `int` | `60` | Brief | Chebyshev polynomial order for overlap appliers. |
-| `metric.coeff_tol` | `float` | `1e-12` | **[extension]** | Chebyshev coefficient truncation threshold for overlap appliers (G10). |
-| `metric.tol` | `float` | `1e-13` | Brief | PCG solver tolerance for `"ischo"`. |
-| `metric.max_iter` | `int` | `200` | **[extension]** | Maximum PCG iterations for `"ischo"` (G10). |
-| `metric.max_dim` | `int` | `4096` | **[extension]** | Maximum dense matrix dimension for `"exact"` overlap appliers (G10). |
-| `word` | string | *(required)* | Brief | Primary observable word `Tr[...]`. |
-| `words` | `list[str]` | `[word]` | **[extension]** | Multiple observable words evaluated in a single run (G7, G9, G10 chain1d, Tutorials 04 and 05). |
-| `expansion.moments` | `int` | `64` | Brief | Number of Chebyshev moments `M` per expanded slot. |
-| `expansion.window` | `"gershgorin"` \| `"eigen"` \| `[lo, hi]` | `"gershgorin"` (`real`), `"eigen"` (`bloch`, `eigen`) | Brief | Spectral window mode or explicit `[lo, hi]` bounds in eV (default is a function of `basis.name`). |
-| `expansion.trace` | `"exact"` \| `"random"` | `"exact"` | Brief | Trace evaluation mode. |
-| `expansion.states` | `int` \| `null` | `null` | Brief | Number of trace states (`dim` for `exact`, `1` for `random` when omitted). |
-| `expansion.seed` | `int` | `12345` | Brief | Random-phase state generator seed (`KPM_SEED`). |
-| `expansion.batch` | `int` \| `null` | `moments` | Brief | Engine vector batch size. |
-| `expansion.state_label` | string \| `null` | `null` | **[extension]** | Explicit `_state<label>` suffix override when needed by a golden filename. |
-| `time.steps` | `int` | — | Brief | Number of time steps (`> 1`). |
-| `time.tmax` | `float` \| `null` | `20.0` | Brief | Maximum evolution time in fs. |
-| `time.dt` | `float` \| `null` | `null` | **[extension]** | Explicit time step in fs as an alternative to `tmax = dt * (steps - 1)`. |
-| `time.bessel` | `"scipy"` \| `"legacy"` | `"scipy"` | Brief (Section 5) | Bessel coefficient backend (`"legacy"` uses GSL values for stage-0 byte identity). |
-| `reconstruction.kernel` | `"jackson"` \| `"lorentz"` \| `"none"` | `"jackson"` | `"jackson"` in brief; `"lorentz"`, `"none"` **[extension]** | Damping kernel (`lorentz` and `none` expose the additional kernels in `python/lsquant/kernels.py`). |
-| `reconstruction.broadening_meV` | `float` \| `null` | `null` | Brief | Broadening in meV. |
-| `reconstruction.fermi_energies` | `list[float]` | `[]` | Brief | Fermi energies in eV for time-correlation reconstruction. |
-| `reconstruction.formulas` | `list[str]` \| `null` | shape default | Brief | Reconstruction formulas (`dos`, `greenwood`, `bastin`, `sea`, `surf`, `greenwood_fft`, `bastin_fft`, `time_correlation`, `row_m0`). |
-| `reconstruction.num_points` | `int` \| `null` | `null` | **[extension]** | Explicit energy grid point count override. |
-| `reconstruction.fft_grid` | `bool` | `false` | **[extension]** | Reconstruct on the Chebyshev-node FFT grid (`Kubo*_JACKSON_FFTgrid.dat` in G4). |
-| `reconstruction.legacy_text_round_trip` | `bool` | `false` | Brief (Section 5) | Round-trip moments through the 15-digit legacy ASCII file before reconstruction (Tutorial 03, G4, G5, G6, G10). |
-| `reconstruction.per_site_dos` | `bool` | `false` | **[extension]** | Also write standalone per-site `DOS_reconstructed.dat` (G3). |
-| `reconstruction.targets` | `list[dict]` | `[]` | **[extension]** | Additional `(formulas, broadening_meV, subdir, also_top_dir)` reconstruction targets from the same moments (G4 `64` meV top-level + `10` meV `sea_surf/` and `fft_grid/`). |
-| `output.dir` | path | `"."` | Brief | Output directory (always receives `run.resolved.json`). |
-| `output.legacy_names` | `bool` | `true` | Brief | Use legacy stage-0 file naming conventions. |
-| `output.legacy_layout` | `bool` | `true` | Brief | Write legacy `.chebmom1D`/`.chebmom2D`/`.chebmomTD` text files. |
-| `output.write_chebmom` | `bool` | `false` | **[extension]** | Also write the unified `.chebmom` file alongside legacy moment files (G9 and G10). |
-| `output.write_basis_json` | `bool` | `false` | **[extension]** | Write `<stem>.basis.json` provenance metadata (G9). |
-| `output.capture_tutorial` | `bool` | `false` | **[extension]** | Copy outputs into `captured/NNNN_*` for tutorial golden verification (Tutorials 01–05). |
+---
 
 ## MCP Server (`python -m lsquant.mcp_server`)
 
 `lsquant.mcp_server` exposes five tools over `stdio` using `FastMCP` (`pip install mcp`):
 
 - `words_describe(word)` — parses and compiles `word`, returning the same JSON structure as `python -m lsquant words describe "<word>"`.
-- `run(runfile_json)` — validates `runfile_json` and dispatches `python -m lsquant run` in a background subprocess, returning `{"run_id", "log", "output_dir"}` immediately.
+- `run(runfile_json)` — validates `runfile_json` and dispatches `python -m lsquant run` in a background subprocess, returning `{"run_id", "log", "output_dir"}`.
 - `status(run_id)` — polls a background calculation started by `run`.
 - `reconstruct(output_dir, formula, broadening_meV, fermi_energies)` — reconstructs curves from moment files in `output_dir`.
-- `inspect(path)` — inspects a moment file, run file, or output directory, returning the same JSON structure as `python -m lsquant inspect <path>`.
+- `inspect(path)` — inspects a moment file, run file, or output directory.
 
 All file operations are restricted to `LSQUANT_MCP_ROOT` (defaults to the repository root or `--root <dir>`).
-
-### Claude Code `mcp.json` Configuration
-
-Add the following entry to `.mcp.json` (or `~/.claude/mcp.json`):
 
 ```json
 {
@@ -112,7 +150,7 @@ Add the following entry to `.mcp.json` (or `~/.claude/mcp.json`):
       "command": "python3",
       "args": ["-m", "lsquant.mcp_server"],
       "env": {
-        "PYTHONPATH": "/path/to/lsquant/build/lsquant_core:/path/to/lsquant/python",
+        "PYTHONPATH": "/path/to/lsquant/build/golden/lsquant_core:/path/to/lsquant/python",
         "LSQUANT_MCP_ROOT": "/path/to/lsquant",
         "OMP_NUM_THREADS": "16",
         "KPM_SEED": "12345"

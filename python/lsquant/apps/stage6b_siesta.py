@@ -1,4 +1,4 @@
-"""Stage-6b gate executor; the CLI only constructs a stage-7 RunFile.
+"""SIESTA non-orthogonal spin Hall and DOS run-file executor.
 
 No material data or expected plateau is embedded here. The same loaded
 SIESTA matrices feed the Bloch engine, exact eigen reference, and NumPy
@@ -48,7 +48,9 @@ def prepare_moments(basis, word, *, moments=1024, trace="random", states=16,
                             params={"expansion": {"moments": moments, "states": nstates,
                                                    "window": window}, "metric": metric})
     if compiled.match.entry.shape_id not in ("dos_identity", "dos_operator", "kubo_bastin"):
-        raise ValueError("stage6b supports spectral and Bastin words only")
+        raise ValueError(
+            f"Expected spectral or Bastin word shape, got {compiled.match.entry.shape_id!r}"
+        )
     plan, engine_ops = compiled.plan, compiled.operators
     if eigen:
         h = _core.RescaledOperator(basis.hamiltonian(), window)
@@ -64,7 +66,7 @@ def compute_moments(basis, word, *, _prepared=None, **options):
     """Run a prevalidated word through the unchanged C++ moment engine.
 
     Symbolic source: metric_forms.trace_equivalence. Rank-2 KPM weights are
-    applied once with the trace-cyclic Hermitian projection used by stage 3.
+    applied once with trace-cyclic Hermitian projection.
     For Hermitian physical A and B the exact trace obeys mu_mn=conj(mu_nm).
     A raw stochastic word does not; imposing this exact trace identity before
     the Bastin contraction removes its large cancelling stochastic terms.
@@ -154,21 +156,35 @@ def execute_siesta_runfile(rf, out_dir):
     without declaring a tolerance verdict or a gate result.
     """
     if rf.basis["name"] not in ("bloch", "eigen"):
-        raise ValueError("SIESTA stage6b requires basis.name bloch or eigen")
+        raise ValueError(
+            f"Expected basis.name in ('bloch', 'eigen') for clean SIESTA run, got {rf.basis['name']!r}"
+        )
     if rf.metric["policy"] != "nonorthogonal" or rf.metric["applier"] != "exact":
-        raise ValueError("SIESTA stage6b requires nonorthogonal metric with exact per-block applier")
+        raise ValueError(
+            f"Expected nonorthogonal metric with exact per-block applier, "
+            f"got policy={rf.metric['policy']!r} applier={rf.metric['applier']!r}"
+        )
     if rf.basis["disorder"]["W"] != 0:
-        raise ValueError("nonorthogonal disorder belongs to stage6c")
+        raise ValueError(
+            f"Expected clean Hamiltonian (disorder.W=0), got W={rf.basis['disorder']['W']}"
+        )
     if rf.expansion["trace"] not in ("random", "exact"):
-        raise ValueError("SIESTA trace must be random or exact")
+        raise ValueError(f"Expected trace in ('random', 'exact'), got {rf.expansion['trace']!r}")
     supported = {parse_word(SHC_WORD).canonical(), parse_word(DOS_WORD).canonical()}
     if any(parse_word(word).canonical() not in supported for word in rf.words):
-        raise ValueError("stage6b run files accept the physical SHC word or identity DOS word")
+        raise ValueError(
+            f"Expected SHC ({SHC_WORD!r}) or identity DOS ({DOS_WORD!r}) word, got {rf.words!r}"
+        )
     allowed_formulas = {"shc", "dos", "dos_curve"}
     if rf.reconstruction["formulas"] and not set(rf.reconstruction["formulas"]) <= allowed_formulas:
-        raise ValueError("stage6b reconstruction supports shc and dos")
+        raise ValueError(
+            f"Expected reconstruction.formulas subset of {sorted(allowed_formulas)}, "
+            f"got {rf.reconstruction['formulas']!r}"
+        )
     if rf.reconstruction["targets"]:
-        raise ValueError("stage6b does not accept legacy tutorial reconstruction targets")
+        raise ValueError(
+            f"Expected empty reconstruction.targets for SIESTA run, got {rf.reconstruction['targets']!r}"
+        )
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
     resolved = rf.to_resolved_dict()
@@ -211,7 +227,7 @@ def execute_siesta_runfile(rf, out_dir):
     moment_files, curve_files, comparisons = [], [], []
     broadening = rf.reconstruction["broadening_meV"]
     if broadening is None:
-        raise ValueError("stage6b requires reconstruction.broadening_meV")
+        raise ValueError("Expected positive reconstruction.broadening_meV, got None")
     states = rf.expansion["states"] or 16
     options = dict(moments=rf.expansion["moments"], states=states, trace=rf.expansion["trace"],
                    seed=rf.expansion["seed"], window=window, batch=rf.expansion["batch"])

@@ -37,6 +37,11 @@ _BUILD_DIR = (
     if os.path.isabs(_RAW_BUILD_DIR)
     else (_REPO_ROOT / _RAW_BUILD_DIR).resolve()
 )
+if not (_BUILD_DIR / "lsquant_core").is_dir() and not (_BUILD_DIR / "stage6_nonorth").is_file():
+    for _cand in (_REPO_ROOT / "build" / "golden", _REPO_ROOT / "build" / "native"):
+        if (_cand / "lsquant_core").is_dir():
+            _BUILD_DIR = _cand.resolve()
+            break
 for _p in (_BUILD_DIR / "lsquant_core", _BUILD_DIR, _REPO_ROOT / "python"):
     if _p.is_dir() and str(_p) not in sys.path:
         sys.path.insert(0, str(_p))

@@ -13,8 +13,7 @@
 namespace lsquant {
 
 namespace {
-// Item 3: tag native on the existing first header line; golden bytes stay unchanged.
-// Tester: round-trip all four layouts across profiles and reject mixed-profile comparisons.
+// Tag non-golden builds on the first header line while keeping golden output byte-identical.
 void WriteProfileTag(std::ostream& out, const ChebyshevMoments& moments) {
   if (moments.buildProfile != "golden") {
     out << " # build_profile=" << moments.buildProfile;

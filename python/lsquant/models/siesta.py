@@ -274,7 +274,8 @@ def _write_dipole_cache(path, key, A, certificate):
 
 
 def load_siesta_model(directory, label=None, *, dipoles=False, quadrature_order=24,
-                      quadrature_tolerance=1e-5, quadrature_max_order=384, phase=None):
+                      quadrature_tolerance=1e-5, quadrature_max_order=384, phase=None,
+                      cache_dir=None):
     """Read .fdf/.TSHS or .HSX and optional .ion.xml radial functions with sisl.
 
     sisl 0.16.4 SOC storage is (Re Huu,Re Hdd,Re Hud,Im Hud,Im Huu,
@@ -283,8 +284,9 @@ def load_siesta_model(directory, label=None, *, dipoles=False, quadrature_order=
     fail on an unknown layout rather than permuting or silently folding it.
     Round-off up to 1e-7 relative from TSHS is measured, recorded and folded
     in Bloch sums (notes section 11); no CSR tolerance is relaxed.
-    Certified A(R) is cached under the SIESTA run's .lsquant-cache directory,
-    independently of the k mesh/metric/word, with content-based invalidation.
+    Certified A(R) is cached in a .lsquant-cache directory (outside siesta/
+    input directories), independently of the k mesh/metric/word, with
+    content-based invalidation.
     """
     import sisl
 
@@ -307,7 +309,7 @@ def load_siesta_model(directory, label=None, *, dipoles=False, quadrature_order=
     # the binary-only reader can leave placeholder atomic species behind.
     source = fdf.read_hamiltonian(order=[binary.suffix.lstrip(".")])
     if source.orthogonal or not source.spin.is_spinorbit:
-        raise ValueError("stage6b requires a nonorthogonal SIESTA SOC Hamiltonian")
+        raise ValueError("load_siesta_model requires a nonorthogonal SIESTA SOC Hamiltonian")
     geometry = source.geometry
     no = int(geometry.no)
     cell = np.asarray(geometry.cell, float)
@@ -377,25 +379,41 @@ def load_siesta_model(directory, label=None, *, dipoles=False, quadrature_order=
             cache_key = _dipole_cache_key(settings, (cell, centres, atom_indices, r_int,
                                                     s_blocks, np.asarray(support)),
                                           radial_paths)
-            cache_path = root/".lsquant-cache"/f"dipoles-{cache_key}.npz"
-            if cache_path.is_file():
-                try:
-                    A, certificate = _read_dipole_cache(cache_path, cache_key, (3, *s_blocks.shape),
-                                                         quadrature_tolerance/10, 1e-5)
-                except (OSError, ValueError, KeyError) as error:
-                    print(f"dipole cache rejected {cache_path}: {error}; recertifying", flush=True)
-                else:
-                    model.dipoles = spinor_scalar(A)
-                    metadata["dipole_quadrature"] = certificate
-                    metadata["orbital_metadata"] = certificate["orbital_metadata"]
-                    metadata["dipole_cache"] = dict(hit=True, path=str(cache_path), key=cache_key,
-                                                   wall_seconds=perf_counter()-cache_started)
-                    print(f"dipole cache hit: {cache_path}; reuse_seconds="
-                          f"{metadata['dipole_cache']['wall_seconds']:.6f}; "
-                          f"stored_overlap_tolerance={certificate['stored_overlap_tolerance']:.6g}; "
-                          f"max_overlap_error={certificate['max_overlap_error']:.6g}; "
-                          f"original_certification_seconds={certificate['wall_seconds']:.6f}", flush=True)
-                    return model
+            env_cache = os.environ.get("LSQUANT_CACHE_DIR")
+            if cache_dir is not None:
+                write_cache_dir = Path(cache_dir).expanduser().resolve()
+            elif env_cache:
+                write_cache_dir = Path(env_cache).expanduser().resolve()
+            elif root.name == "siesta":
+                write_cache_dir = root.parent / ".lsquant-cache"
+            elif not os.access(root, os.W_OK):
+                write_cache_dir = Path(tempfile.gettempdir()) / "lsquant-cache"
+            else:
+                write_cache_dir = root / ".lsquant-cache"
+            cache_path = write_cache_dir / f"dipoles-{cache_key}.npz"
+            legacy_cache_path = root / ".lsquant-cache" / f"dipoles-{cache_key}.npz"
+            read_candidates = [cache_path]
+            if legacy_cache_path != cache_path:
+                read_candidates.append(legacy_cache_path)
+            for candidate in read_candidates:
+                if candidate.is_file():
+                    try:
+                        A, certificate = _read_dipole_cache(candidate, cache_key, (3, *s_blocks.shape),
+                                                             quadrature_tolerance/10, 1e-5)
+                    except (OSError, ValueError, KeyError) as error:
+                        print(f"dipole cache rejected {candidate}: {error}; recertifying", flush=True)
+                    else:
+                        model.dipoles = spinor_scalar(A)
+                        metadata["dipole_quadrature"] = certificate
+                        metadata["orbital_metadata"] = certificate["orbital_metadata"]
+                        metadata["dipole_cache"] = dict(hit=True, path=str(candidate), key=cache_key,
+                                                       wall_seconds=perf_counter()-cache_started)
+                        print(f"dipole cache hit: {candidate}; reuse_seconds="
+                              f"{metadata['dipole_cache']['wall_seconds']:.6f}; "
+                              f"stored_overlap_tolerance={certificate['stored_overlap_tolerance']:.6g}; "
+                              f"max_overlap_error={certificate['max_overlap_error']:.6g}; "
+                              f"original_certification_seconds={certificate['wall_seconds']:.6f}", flush=True)
+                        return model
         orbitals = []
         for ia, atom in enumerate(geometry.atoms):
             tag = str(atom.tag)

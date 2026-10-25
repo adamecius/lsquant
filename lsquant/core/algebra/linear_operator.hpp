@@ -71,12 +71,15 @@ public:
    */
   virtual void Multiply(Scalar a, const Vector& x, Scalar b, Vector& y) const = 0;
 
-  // Item 5: one dispatch for live vectors. CSR/block implementations reuse the
-  // matrix; the fallback preserves other adapters. Tester compares batches
-  // against repeated Multiply at every measured thread count.
+  /**
+   * @brief Apply `y[j] = a * O * x[j] + b * y[j]` across a batch of vectors.
+   */
   virtual void MultiplyBatch(Scalar a, const std::vector<Vector>& x, Scalar b,
                              std::vector<Vector>& y) const {
-    if (x.size() != y.size()) throw std::invalid_argument("MultiplyBatch: batch size mismatch");
+    if (x.size() != y.size()) {
+      throw std::invalid_argument("MultiplyBatch: expected matching batch sizes, got x=" +
+                                  std::to_string(x.size()) + " and y=" + std::to_string(y.size()));
+    }
     for (std::size_t j = 0; j < x.size(); ++j) Multiply(a, x[j], b, y[j]);
   }
 

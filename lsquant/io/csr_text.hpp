@@ -21,7 +21,7 @@ namespace lsquant {
  * Parses `dim` and `nnz`, followed by `nnz` complex value pairs `(re, im)`, `nnz` column
  * indices, and `dim + 1` row offsets, assembles the matrix via `SparseMatrix::FromCsr`, and
  * checks the anti-Hermitian norm and applies `SparseMatrix::HermitianFold()` (`0.5 * (M + M^+)`) to match the
- * legacy `SparseMatrixType::ConvertFromCSR` reader convention (which also normalises `-0.0`
+ * legacy CSR reader convention (which also normalises `-0.0`
  * to `+0.0`). Complexity is `O(dim + nnz)` in time and memory.
  *
  * Reports `||(M-M^+)/2||_F / ||M||_F` for every operator before folding. Refuses

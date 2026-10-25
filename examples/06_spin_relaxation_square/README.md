@@ -5,177 +5,107 @@
 Tutorial 4 showed a spin precessing forever in a clean magnetic field, a perfect
 clock that never forgets which way it pointed. Real materials forget. Inject a
 spin-polarized current into a metal and its polarization fades over a spin
-lifetime $\tau_s$, the central number of spintronics. The surprising part is that
-two completely different mechanisms erase the spin, and the cleanest way to tell
-them apart is that they respond to disorder in opposite directions: one relaxes
-the spin faster when you add scattering, the other relaxes it slower.
-
-We build both on the square lattice of Tutorial 5 and watch the spin decay. The
-lesson here is that spin relaxation is not one process but two, Elliott-Yafet and
-Dyakonov-Perel, and that their opposite dependence on the momentum-scattering rate
-is their fingerprint.
+lifetime $\tau_s$, the central number of spintronics. Two distinct mechanisms
+erase the spin, and they respond to momentum scattering in opposite directions:
+**Elliott–Yafet** relaxes the spin faster when scattering increases, whereas
+**Dyakonov–Perel** relaxes it slower.
 
 ## The physics
 
-A spin loses its orientation in two ways. In the **Elliott-Yafet** mechanism the
-spin flips during a momentum-scattering event: each collision carries a small
-amplitude to exchange up and down, so more scattering means faster spin loss. With
-a random onsite spin-flip field of variance $\Delta_{\rm sf}^2$ the golden rule
+In the **Elliott–Yafet** mechanism the spin flips during a momentum-scattering
+event: each collision carries a small amplitude to exchange up and down. With a
+random onsite spin-flip field of variance $\Delta_{\rm sf}^2$ the Fermi golden rule
 gives a rate set by the spin-flip strength and the density of states,
 
 $$ \frac{1}{T_1} = \frac{4\pi}{\hbar}\,\Delta_{\rm sf}^2\,\rho(E), \qquad \tau_s \ \text{shrinks as scattering grows.} $$
 
-In the **Dyakonov-Perel** mechanism the spin instead precesses between collisions
+In the **Dyakonov–Perel** mechanism the spin instead precesses between collisions
 around a momentum-dependent spin-orbit field $\boldsymbol\Omega(\mathbf k)$ (here a
 uniform Rashba coupling). Each collision throws the spin onto a new $\mathbf k$
 with a new precession axis, so the spin random-walks on the Bloch sphere. In the
 motional-narrowing regime $\Omega_F\tau_p\ll1$ the rate is
 
-$$ \frac{1}{T_z} = \Omega_F^2\,\tau_p, \qquad \tau_s \ \text{grows as scattering grows,} $$
+$$ \frac{1}{T_z} = \Omega_F^2\,\tau_p, \qquad \tau_s \ \text{grows as scattering grows.} $$
 
-the opposite trend: more frequent collisions interrupt the precession sooner and
-*protect* the spin. The Rashba field lies in the plane, so it relaxes the
-out-of-plane spin faster than the in-plane one, with the parameter-free ratio
-$T_\parallel/T_z = 2$.
+The Rashba field lies in the plane, so it relaxes the out-of-plane spin faster than
+the in-plane one ($T_\parallel/T_z = 2$).
 
-We measure both with Tutorial 4's machinery: prepare a polarized spin, evolve it,
-and read the energy-resolved spin $S_a(E,t)$ at the working energy $E=2t$ of
-Tutorial 5. Because energy is conserved, the local density of states in the
-denominator is constant in time, so it is just a normalisation.
+LSQUANT measures both by evaluating the projected spin time-evolution words
+`Tr[P:PZ U(t)^+ SZ U(t) delta(E-H) P:PZ]` and `Tr[P:PX U(t)^+ SX U(t) delta(E-H) P:PX]`
+normalised by the conserved energy-projected state norm
+`Tr[P:P_a U(t)^+ 1 U(t) delta(E-H) P:P_a]` at $E = 2t$.
 
-Those boxed formulas are the textbook results. At the toy scale of this tutorial
-(small systems, a single disorder sample, short evolutions) the figures reproduce
-the *mechanisms* and their qualitative trends, not the exact coefficients: the
-precise golden-rule rate, the $T_\parallel/T_z = 2$ ratio, and the
-$\tau_s \propto 1/\tau_p$ law all need larger systems and disorder averaging.
+## Step 1: evaluate the Elliott–Yafet and Dyakonov–Perel words
 
-## Step 1: build the spin-flip (Elliott-Yafet) model
-
-Two spin orbitals per site, the clean band in each channel, and a random onsite
-spin-flip field of strength $\Delta_{\rm sf}$:
+[`run_relaxation.json`](run_relaxation.json) calls [`make_ey.py`](make_ey.py) and
+[`make_rashba.py`](make_rashba.py), evaluates the projected spin evolution words for
+Part A (Elliott–Yafet, $L = 20$, $\Delta_{\rm sf} = 0.05, 0.07, 0.10$), Part B
+(Dyakonov–Perel Rashba, $L = 20$, $\lambda = 0.2$, $W = 0, 6$, out-of-plane $S_z$
+and in-plane $S_x$), and the random-phase rate-law sweep ($L = 50$, $N = 5000$,
+$N_r = 20$ random-phase vectors across $\Delta_{\rm sf} \in [0.04, 0.14]$):
 
 ```bash
-python make_ey.py 20 0.1 1
+python3 -m lsquant run examples/06_spin_relaxation_square/run_relaxation.json --out /tmp/tut06
 ```
 
-This writes the spinful Hamiltonian, the spin operators $S_{x,y,z}$, and the
-projector $P_z=\tfrac12(1+S_z)$ that prepares the $S_z=+1$ state.
-
-## Step 2: the spin decays, faster for a stronger spin-flip
-
-Evolving the $S_z=+1$ state and reading $S_z(E=2t,t)$, then repeating for several
-spin-flip strengths $\Delta_{\rm sf}$:
+To build a single Elliott–Yafet or Rashba model on disk directly:
 
 ```bash
-python lsqrelax.py        # runs Part A (this figure) and Part B (Step 4)
+python3 examples/06_spin_relaxation_square/make_ey.py 20 0.1 1
+python3 examples/06_spin_relaxation_square/make_rashba.py 20 0.2 6 1
+```
+
+## Step 2: generate the relaxation and rate-law figures
+
+```bash
+python3 examples/06_spin_relaxation_square/plot.py /tmp/tut06
 ```
 
 ![S_z decays exponentially at E=2t, and a stronger spin-flip field relaxes it faster](fig_ey.png)
 
-The left panel shows $S_z(E,t)$ falling from one to zero along a clean exponential
-$e^{-t/T_1}$: the random spin-flip scattering erases the spin, with a lifetime of a
-few tens of femtoseconds. The right panel overlays three spin-flip strengths, and
-the trend is the Elliott-Yafet one, a stronger spin-flip field gives a faster
-decay. The rate is consistent with the golden rule
-$1/T_1 = (4\pi/\hbar)\Delta_{\rm sf}^2\rho(E)$ to a factor of order one at this toy
-size; pinning the exact $\Delta_{\rm sf}^2$ law needs larger systems and averaging.
-
-## Step 3: build the Rashba (Dyakonov-Perel) model
-
-Now give the lattice a uniform Rashba spin-orbit coupling and the scalar Anderson
-disorder of Tutorial 5, which sets the momentum-scattering time $\tau_p$:
-
-```bash
-python make_rashba.py 20 0.2 3 1
-```
-
-The Rashba term is the in-plane, $\mathbf k$-dependent spin field; the disorder
-$W$ is the scattering knob.
-
-## Step 4: clean precesses, disorder relaxes, and out-of-plane dies first
-
-`lsqrelax.py` also sweeps the disorder and compares the spin directions:
+In `fig_ey.png`, panel (a) shows $S_z(E=2t, t)$ decaying exponentially as
+$e^{-t/T_1}$, and panel (b) overlays $\Delta_{\rm sf} = 0.05, 0.07, 0.10$, showing
+faster relaxation with stronger spin-flip scattering.
 
 ![With no disorder S_z precesses; adding disorder relaxes it, and the in-plane spin S_x lives longer than the out-of-plane S_z](fig_dp.png)
 
-With no disorder ($W=0$) the spin precesses around the Rashba field rather than
-decaying. Turning on disorder ($W=6$) collapses the precession into a decay, the
-Dyakonov-Perel relaxation: the spin-orbit field, reshuffled at every collision, can
-no longer hold the spin. The right panel contrasts the two spin directions at fixed
-disorder: the in-plane $S_x$ outlives the out-of-plane $S_z$, the spin-relaxation
-anisotropy of an in-plane spin-orbit field. (The textbook $\tau_s\propto1/\tau_p$
-motional-narrowing trend and the $T_\parallel/T_z=2$ ratio need the larger-system
-averaging noted above; here we show the mechanism and the direction of the
-anisotropy.)
-
-## What to take away
-
-- Spin relaxation comes in two mechanisms: Elliott-Yafet (spin-flip at each
-  collision) and Dyakonov-Perel (precession between collisions, randomized by
-  scattering).
-- Elliott-Yafet is seen directly here: $S_z$ decays exponentially, and faster for
-  a stronger spin-flip field, with a rate of golden-rule order
-  $(4\pi/\hbar)\Delta_{\rm sf}^2\rho(E)$.
-- Dyakonov-Perel is seen directly here: the clean system precesses, disorder turns
-  that precession into relaxation, and the in-plane spin outlives the out-of-plane
-  spin.
-- The quantitative fingerprints that tell them apart, the Elliott-Yafet lifetime
-  shrinking with scattering while the Dyakonov-Perel lifetime grows, and the
-  $T_\parallel/T_z = 2$ ratio, are predictions this toy-scale run indicates but does
-  not pin down; they need larger systems and disorder averaging.
-- Both are computed by real-time evolution of the spin (Tutorial 4's method),
-  energy-resolved at the transport energy of Tutorial 5.
-
-Spin precession, transport, and relaxation all come from the same real-time
-Chebyshev evolution, which scales to the disordered, spin-orbit-coupled materials
-where these lifetimes actually matter.
-
-## Scaling up: a random-phase trace, checked against theory
-
-The steps above use the **exact trace** — they loop over *every* basis state, so the
-cost grows with system size and the lattice stays small. With the SpMV now threaded,
-the cheaper route is a **random-phase stochastic trace**: replace the full trace by an
-average over $N_r$ random-phase vectors, $\mathrm{Tr}\,A \approx (N/N_r)\sum_r\langle
-r|A|r\rangle$. The error falls as $\sim 1/\sqrt{N_r N}$, so a *larger* lattice needs
-*fewer* vectors. Here $N_r=20$ vectors (each one driver run with `KPM_SEED=1…20`, no
-state file, averaged in `rp_spin.py`) replace the $N$-state loop.
-
-```bash
-OMP_NUM_THREADS=64 python3 rp_validate.py   # rate law + exact check
-python3 plot_ratelaw.py                     # writes fig_ey_ratelaw
-```
-
-**Faithful to the exact trace.** At $L=20$ ($N=800$) the random-phase $T_1$ matches the
-exact trace to **1–3 %** ($\Delta_{\rm sf}=0.05,0.08$: $T_1=51,35$ fs exact vs $50,34$
-fs random-phase), while costing 20 vectors instead of 800 states. The exact run of that
-single check took ~25 min; the random-phase sweep over five disorders at the larger
-$L=50$ ($N=5000$) takes ~4 min (≈46 s per disorder, `OMP_NUM_THREADS=32`).
+In `fig_dp.png`, panel (a) contrasts coherent precession around the clean Rashba
+field ($W = 0$) with Dyakonov–Perel relaxation under scalar disorder ($W = 6$).
+Panel (b) contrasts out-of-plane $S_z$ with in-plane $S_x$ at $W = 6$, showing that
+the in-plane spin outlives the out-of-plane spin.
 
 ![Elliott-Yafet rate law from the random-phase trace: 1/T1 vs spin-flip disorder, with the golden-rule slope-2 reference](fig_ey_ratelaw.png)
 
-**Against theory.** The Elliott-Yafet golden rule predicts $1/T_1\propto\Delta_{\rm
-sf}^2$. Over $\Delta_{\rm sf}\in[0.04,0.14]\,t$ the random-phase data give a fitted
-slope $\approx 1.3$ — it *trends* toward the $\Delta_{\rm sf}^2$ law but does not reach
-it: this disorder range is not yet deep in the weak-scattering (Born) regime, and the
-single-shot rate extraction degrades once the decay is fast (at $\Delta_{\rm sf}=0.12$
-both the exact and random-phase fits return the same spurious slow tail — a fitting
-artifact, identical in both, not a stochastic-trace error). Recovering the clean
-exponent needs weaker disorder with finer time/energy resolution — now affordable
-because the trace is no longer $O(N)$.
+`fig_ey_ratelaw.png` plots the random-phase ($N_r = 20$, $L = 50$) relaxation rate
+$1/T_1$ against $\Delta_{\rm sf}$ alongside the Fermi golden-rule $\Delta_{\rm sf}^2$
+slope.
 
-> **Entry point.** Projected real-time evolution runs through the unified run-file
-> engine (`python -m lsquant run ../../runs/goldens/tutorial06.json`, or `lsqrelax.py`
-> and `rp_spin.py` which invoke `lsquant.runfile.execute_runfile` on the words
-> `Tr[P:PZ U(t)^+ SZ U(t) delta(E-H) P:PZ]` and `Tr[P:PZ U(t)^+ 1 U(t) delta(E-H) P:PZ]`).
+## Output files and figures
 
-## References and links
+| File | Description |
+|---|---|
+| `meanTimeProj{SZ,1}-PZey_L20_D{0.05,0.07,0.1}*EF2.000000JACKSON.dat` | Elliott–Yafet numerator and denominator curves at $E = 2t$ |
+| `meanTimeProj{SZ,1}-PZrashba_L20_l0.2_W{0,6}*EF2.000000JACKSON.dat` | Dyakonov–Perel out-of-plane $S_z$ numerator and denominator curves |
+| `meanTimeProj{SX,1}-PXrashba_L20_l0.2_W6*EF2.000000JACKSON.dat` | Dyakonov–Perel in-plane $S_x$ numerator and denominator curves |
+| `ey_ratelaw.dat` | Random-phase Elliott–Yafet relaxation rate $1/T_1$ vs. $\Delta_{\rm sf}$ ($L = 50$, $N_r = 20$) |
+| `run.resolved.json` | Resolved run configuration and file manifest |
+| `fig_ey.png` | Elliott–Yafet exponential spin decay (panel a) and $\Delta_{\rm sf}$ sweep (panel b) |
+| `fig_dp.png` | Dyakonov–Perel clean precession vs. disordered relaxation (panel a) and spin anisotropy (panel b) |
+| `fig_ey_ratelaw.png` | Log–log Elliott–Yafet rate law $1/T_1(\Delta_{\rm sf})$ from the stochastic trace |
 
-- LSQUANT source and documentation: https://github.com/adamecius/lsquant
-- Methodology: Z. Fan, J. H. García, A. W. Cummings et al., *Linear Scaling
-  Quantum Transport Methodologies*, arXiv:1811.07387.
-- Installation: see the main README of the repository.
+## What to take away
 
-## Further reading
+- Spin relaxation comes in two mechanisms: Elliott–Yafet (spin-flip at each
+  collision) and Dyakonov–Perel (precession between collisions, randomized by
+  scattering).
+- Energy-resolved projected real-time evolution `Tr[P U(t)^+ S_a U(t) delta(E-H) P]`
+  captures both coherent spin precession and irreversible spin relaxation.
+- Replacing the exact $O(N)$ trace with $N_r \ll N$ random-phase vectors scales the
+  same calculation to large disordered lattices.
 
-- A. W. Cummings, J. H. García, J. Fabian, S. Roche, *Giant Spin Lifetime
-  Anisotropy in Graphene*, Phys. Rev. Lett. **119**, 206601 (2017).
+## References
+
+- Z. Fan, J. H. García, A. W. Cummings et al., *Linear scaling quantum transport
+  methodologies*, Phys. Rep. **893**, 1–123 (2021) ([arXiv:1811.07387](https://arxiv.org/abs/1811.07387)).
+- A. W. Cummings, J. H. García, J. Fabian, and S. Roche, *Giant spin lifetime
+  anisotropy in graphene*, Phys. Rev. Lett. **119**, 206601 (2017).

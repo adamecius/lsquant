@@ -148,14 +148,21 @@ PYBIND11_MODULE(_core, m) {
   m.attr("build_profile") = BuildProfileName();
   // Configure once before execution, never while an engine is running.
   m.def("ConfigurePerformance", [](Index threshold, int batch) {
-    if (threshold < 0 || batch < 0) throw std::invalid_argument("ConfigurePerformance: negative setting");
+    if (threshold < 0 || batch < 0) {
+      throw std::invalid_argument(
+          "ConfigurePerformance: expected non-negative threshold and batch, got threshold=" +
+          std::to_string(threshold) + " batch=" + std::to_string(batch));
+    }
     SpmvThresholdSetting() = threshold;
     KernelBatchSetting() = batch;
-  }, py::arg("spmv_min_nnz") = 16384, py::arg("kernel_batch") = 0);
+  }, py::arg("spmv_min_nnz") = kDefaultSpmvThreshold, py::arg("kernel_batch") = 0);
 
   m.def("FftMomentContraction", [](const py::array_t<Scalar, py::array::c_style>& moments,
                                     Index points) {
-    if (moments.ndim() != 2) throw std::invalid_argument("FftMomentContraction: expected rank 2");
+    if (moments.ndim() != 2) {
+      throw std::invalid_argument("FftMomentContraction: expected 2D moments array, got ndim=" +
+                                  std::to_string(moments.ndim()));
+    }
     const auto values = FftMomentContraction(moments.data(), moments.shape(0), moments.shape(1), points);
     py::array_t<Scalar> out({py::ssize_t(2), static_cast<py::ssize_t>(points)});
     std::copy(values.begin(), values.end(), out.mutable_data());

@@ -29,136 +29,81 @@ gap the Hall conductivity is quantized,
 
 $$ \sigma_{xy} = C\,\frac{e^2}{h}, $$
 
-a bulk topological response that LSQUANT reads from the velocity-velocity Chebyshev
-moments through the Kubo-Bastin route.
+a bulk topological response that LSQUANT evaluates from the 2D Chebyshev moments of
+`Tr[VX delta(E-H) VY dG-(E)/dE]` through the Kubo–Bastin formula.
 
-The Kubo-Bastin conductivity splits into a Fermi-surface part, built from states
+The Kubo–Bastin conductivity splits into a Fermi-surface part, built from states
 at the Fermi level, and a Fermi-sea part, built from every filled state below it:
 
 $$ \sigma_{xy} = \sigma^{\mathrm{surface}} + \sigma^{\mathrm{sea}}. $$
 
-The Kubo-Greenwood conductivity is a pure Fermi-surface quantity, so it gives the
-longitudinal $\sigma_{xx}$ and stays zero wherever the Fermi level sits in a gap.
-Here is the result the tutorial turns on: inside the gap the Fermi surface is
-empty, so $\sigma^{\mathrm{surface}}$ vanishes and the entire quantized plateau is
-carried by the Fermi sea. That is why a topological insulator can pass a Hall
-current while passing no longitudinal current at all.
-
-The starting point is the spectrum itself: the Haldane model is an insulator with a
-clean gap at the neutrality point, and that gap is what carries the quantized Hall
-current.
+The Kubo–Greenwood conductivity (`Tr[VX delta(E-H) VX delta(E-H)]`) is a pure
+Fermi-surface quantity, so it gives the longitudinal $\sigma_{xx}$ and stays zero
+wherever the Fermi level sits in a gap. Inside the gap the Fermi surface is empty,
+so $\sigma^{\mathrm{surface}}$ vanishes and the entire quantized plateau is
+carried by the Fermi sea.
 
 ![The Haldane density of states has a gap at the neutrality point, an insulator that still carries a Hall current](fig_bands.png)
 
-## Step 1: stage the operators
+## Step 1: evaluate the Hall and longitudinal words
 
-The committed Haldane operators are the verified $C = +1$ model. Stage them into
-this folder with the descriptor and an exact-trace state set:
+[`run_haldane.json`](run_haldane.json) evaluates both 2D words
+(`Tr[VX delta(E-H) VY dG-(E)/dE]` and `Tr[VX delta(E-H) VX delta(E-H)]`) on the
+$N = 512$ honeycomb supercell with $M = 128$ Chebyshev moments per axis and exact
+trace, then reconstructs the total Kubo–Bastin (`bastin`), Fermi-sea (`sea`),
+Fermi-surface (`surf`), and longitudinal Kubo–Greenwood (`greenwood`) curves at
+$\eta = 10\ \mathrm{meV}$:
 
 ```bash
-python make_haldane.py
+python3 -m lsquant run examples/03_haldane_hall/run_haldane.json --out /tmp/tut03
 ```
 
-This writes the Hamiltonian and its two velocity operators, the sidecar carrying
-the spectral bounds $[-4.5, 4.5]$ that enclose the spectrum $(|E|_{\max}\approx 3)$,
-and a state set that evaluates $\mathrm{Tr}[\cdots]/\dim$ over the full basis, so
-the moments are deterministic. Confirm the run before computing:
+To stage the operators (`operators/haldane.{HAM,VX,VY}.CSR` and `.desc`) into the
+local directory for inspection:
 
 ```bash
-lsquant inspect operators/haldane.HAM.desc
+python3 examples/03_haldane_hall/make_haldane.py
+python3 -m lsquant inspect /tmp/tut03
 ```
 
-This prints the observable, the units, the provenance, and the bounds that
-`lsquant compute` reads straight from the descriptor, so the run needs no separate
-bounds file.
+## Step 2: the plateau belongs to the Fermi sea
 
-## Step 2: the velocity-velocity moments
-
-The Hall response is the off-diagonal correlation $V_X$-$V_Y$; the longitudinal
-response is the diagonal $V_X$-$V_X$. Each is a small `run.json` fed to the one
-`lsquant` binary:
+Generate all three tutorial figures from the run output directory:
 
 ```bash
-cat > run_hall.json <<'JSON'
-{ "label": "haldane", "operator_right": "VX", "operator_left": "VY",
-  "num_moments": 128, "kernel": "jackson", "state": "exact" }
-JSON
-cat > run_long.json <<'JSON'
-{ "label": "haldane", "operator_right": "VX", "operator_left": "VX",
-  "num_moments": 128, "kernel": "jackson", "state": "exact" }
-JSON
-lsquant compute --config run_hall.json
-lsquant compute --config run_long.json
-```
-
-Each call runs the two-operator Chebyshev recursion with $128$ moments per
-direction and writes a `NonEqOp...chebmom2D` moment file.
-
-> **Unified alternative.** Because both responses live on the *same system*, one
-> `lsquant run` config computes them together and writes a single
-> `haldane.results.json` (thin-grid $\sigma_{xy}$ and $\sigma_{xx}$ plus timing,
-> peak memory, and the system fingerprint):
->
-> ```json
-> { "system":   { "label": "haldane", "operators_dir": "operators" },
->   "numerics": { "num_moments": 128, "broadening_meV": 10, "state": "exact" },
->   "observables": [ { "kind": "conductivity", "component": "xy" },
->                    { "kind": "conductivity", "component": "xx" } ] }
-> ```
-> ```bash
-> lsquant run --config run.json
-> python ../../utilities/python/lsquant_report.py haldane.results.json   # table + HTML
-> ```
->
-> The step-by-step `compute`/`reconstruct` path below is kept because it also
-> splits the Fermi-sea and Fermi-surface parts, which is the point of this tutorial.
-
-## Step 3: the plateau belongs to the Fermi sea
-
-Reconstruct the total Hall conductivity, then the same response split into its
-Fermi-sea and Fermi-surface parts, and the longitudinal conductivity:
-
-```bash
-python -m lsquant reconstruct NonEqOpVX-VYhaldane*.chebmom2D --formula bastin --broadening-meV 10     # sigma_xy total
-python -m lsquant reconstruct NonEqOpVX-VYhaldane*.chebmom2D --formula sea --broadening-meV 10        # Fermi sea
-python -m lsquant reconstruct NonEqOpVX-VYhaldane*.chebmom2D --formula surf --broadening-meV 10       # Fermi surface
-python -m lsquant reconstruct NonEqOpVX-VXhaldane*.chebmom2D --formula greenwood --broadening-meV 10  # sigma_xx
-python lsqhall.py
+python3 examples/03_haldane_hall/plot.py /tmp/tut03
 ```
 
 ![The Hall conductivity is a flat plateau at one e^2/h through the gap carried entirely by the Fermi sea, while the longitudinal conductivity is zero in the gap and finite in the bands](fig_haldane_hall.png)
 
-The top panel reads the Hall conductivity in units of $e^2/h$. The total
-Kubo-Bastin curve sits on a flat plateau at $1$ through the gap, so the Chern
-number reads $C = (\text{plateau}/A)\,2\pi = +1$ with cell area
-$A_{\mathrm{cell}} = 3\sqrt{3}/2$. The Fermi-sea curve carries the whole plateau;
-the Fermi-surface curve stays pinned at zero in the gap and only turns on once the
-Fermi level enters the bands. The quantized plateau is a Fermi-sea property, not a
-Fermi-surface one.
-
-The bottom panel reads the longitudinal $\sigma_{xx}$ from Kubo-Greenwood. It sits
-at zero through the gap and rises inside the bands where states are available at
-the Fermi level. So the same gap carries a quantized Hall current and a vanishing
-longitudinal current at once: the defining signature of a topological insulator.
-
-## Step 4: the plateau value is a k-space invariant
-
-The plateau is not a transport accident; it equals the Chern number of the filled
-band, a bulk invariant of the Bloch Hamiltonian. The companion script builds the
-two-band $k$-space model, reads the Chern number off a $k$-grid, and sweeps the
-sublattice mass:
-
-```bash
-python haldane_kspace.py
-```
+In `fig_haldane_hall.png`, panel (a) shows $\sigma_{xy}$ in units of $e^2/h$. The
+total Kubo–Bastin curve sits on a flat plateau at $+1$ through the gap, giving
+$C = (\text{plateau}/A)\,2\pi = +1$ with cell area $A_{\mathrm{cell}} = 3\sqrt{3}/2$.
+The Fermi-sea curve carries the entire plateau, while the Fermi-surface curve stays
+pinned at zero in the gap. Panel (b) shows the longitudinal $\sigma_{xx}$ from
+Kubo–Greenwood, which vanishes in the gap and rises inside the bands.
 
 ![Sweeping the sublattice mass closes the gap and drops the Chern number from one to zero, the same transition the real-space Hall plateau follows](fig_phase_diagram.png)
 
-It reports $C = +1$ at the model parameters and $C = 0$ once the flux is removed.
-Raising $M$ closes the gap at $M = 3\sqrt{3}\,t_2\sin\phi \approx 0.78\ \mathrm{eV}$,
-where the Chern number drops from $+1$ to $0$. Past that point the real-space
-$\sigma_{xy}$ plateau disappears too: the bulk invariant and the transport plateau
-move together, because they are the same integer.
+`fig_phase_diagram.png` compares the real-space plateau with the $k$-space
+Fukui–Hatsugai Chern number across sublattice mass $M$: raising $M$ closes the gap
+at $M_c = 3\sqrt{3}\,t_2\sin\phi \approx 0.78\ \mathrm{eV}$, where $C$ drops from
+$+1$ to $0$.
+
+## Output files and figures
+
+| File | Description |
+|---|---|
+| `NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom2D` | Off-diagonal ($V_x, V_y$) 2D Chebyshev moment matrix ($128 \times 128$) |
+| `NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom2D` | Diagonal ($V_x, V_x$) 2D Chebyshev moment matrix ($128 \times 128$) |
+| `KuboBastin_NonEqOpVX-VYhaldane*.dat` | Total Kubo–Bastin Hall conductivity $\sigma_{xy}(E)$ |
+| `KuboBastinSea_NonEqOpVX-VYhaldane*.dat` | Fermi-sea contribution $\sigma^{\mathrm{sea}}_{xy}(E)$ |
+| `KuboBastinSurf_NonEqOpVX-VYhaldane*.dat` | Fermi-surface contribution $\sigma^{\mathrm{surf}}_{xy}(E)$ |
+| `KuboGreenWood_NonEqOpVX-VXhaldane*.dat` | Longitudinal Kubo–Greenwood conductivity $\sigma_{xx}(E)$ |
+| `run.resolved.json` | Resolved run configuration and file manifest |
+| `fig_bands.png` | Two-band $k$-space DOS of the Haldane model highlighting the topological gap |
+| `fig_haldane_hall.png` | $\sigma_{xy}$ (total, sea, surface) and $\sigma_{xx}$ in units of $e^2/h$ |
+| `fig_phase_diagram.png` | Topological phase transition $C(M)$ vs. sublattice mass $M$ |
 
 ## What to take away
 
@@ -166,24 +111,14 @@ move together, because they are the same integer.
   no magnetic field and no Landau levels.
 - The plateau comes entirely from the Fermi sea; the Fermi-surface part of
   $\sigma_{xy}$ stays at zero through the gap.
-- The longitudinal $\sigma_{xx}$ from Kubo-Greenwood vanishes in the gap and turns
-  on in the bands, the insulator-then-metal crossover.
+- The longitudinal $\sigma_{xx}$ from Kubo–Greenwood vanishes in the gap and turns
+  on in the bands.
 - The transport plateau equals the $k$-space Chern number, and both follow the
   same topological transition as the gap closes.
 
-These same velocity-velocity moments, split by the Fermi-sea and Fermi-surface
-routes, carry over directly to disordered and large-scale Chern systems, where the
-$k$-space invariant of Step 4 is no longer available and the real-space response
-is the only handle left.
-
-## References and links
-
-- LSQUANT source and documentation: https://github.com/adamecius/lsquant
-- Methodology: Z. Fan, J. H. García, A. W. Cummings et al., *Linear Scaling
-  Quantum Transport Methodologies*, arXiv:1811.07387.
-- Installation: see the main README of the repository.
-
-## Further reading
+## References
 
 - F. D. M. Haldane, *Model for a quantum Hall effect without Landau levels*,
   Phys. Rev. Lett. **61**, 2015 (1988).
+- Z. Fan, J. H. García, A. W. Cummings et al., *Linear scaling quantum transport
+  methodologies*, Phys. Rep. **893**, 1–123 (2021) ([arXiv:1811.07387](https://arxiv.org/abs/1811.07387)).

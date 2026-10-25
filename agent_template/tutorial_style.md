@@ -13,7 +13,7 @@ is a discipline with consequences for every paragraph.
 Lead with the phenomenon, not the tool. The reader should feel a small puzzle
 before they ever see a command. "A finite chain has $N$ levels, yet we draw a
 smooth curve; where did the curve come from?" earns attention. "This tutorial
-computes the DOS with `inline_compute-kpm-spectralOp`" does not.
+computes the DOS with `python -m lsquant run`" does not.
 
 Carry one idea. A tutorial is not a tour of features. It is the unfolding of a
 single physical lesson, and every step exists to advance that one lesson. If a
@@ -81,11 +81,11 @@ what they are about to learn. "Plot the moments" tells them nothing.
 
 Figures are the argument, so make them carry it.
 
-Ship a small script with each tutorial that produces every embedded PNG, either
-by calling the compiled kernels through `lsqplot.py` or, where the physics has a
+Ship a small script (`plot.py`) with each tutorial that produces every embedded PNG
+from the output directory of `python -m lsquant run` or, where the physics has a
 closed form, by computing it directly. The two agree to machine precision when
 the moments come from an exact trace, so a closed-form figure is faithful, not a
-mock-up. Commit the PNGs next to the README so the page renders offline.
+mock-up.
 
 Name figures for their content: `fig_levels.png`, `fig_moments.png`,
 `fig_dos.png`. Keep one idea per figure or per panel. A two panel figure should
@@ -97,9 +97,9 @@ the legend, so the figure is readable on its own.
 
 Keep labels and file patterns consistent across tutorials, because readers paste
 commands and expect the output names to match. Tutorial 1 uses `chain1d_N<N>`
-for the system label, operator label `1` for the identity, and the moment file
-pattern `SpectralOp<op><label>KPM_M<M>_state<state>.chebmom1D`. When you add a
-system, extend the convention rather than inventing a new one.
+for the system label, `run_dos.json` for the run configuration, and writes
+outputs into `out/`. When you add a system, extend the convention rather than
+inventing a new one.
 
 ## References
 

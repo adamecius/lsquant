@@ -708,11 +708,10 @@ class RealBasis:
     def window(self, pad: float = 0.10) -> _core.SpectralWindow:
         """Return the Gershgorin :class:`~lsquant._core.SpectralWindow` for this Hamiltonian.
 
-        Kept on Gershgorin only as the stage-1-compatible real-space default;
-        on Wannier models with long-range hoppings, Gershgorin bounds are
-        several times wider than the true spectrum and waste Chebyshev moments,
-        so :class:`BlochBasis` and :class:`EigenBasis` use the block eigenvalue
-        range instead.
+        Kept on Gershgorin as the real-space default; on Wannier models with
+        long-range hoppings, Gershgorin bounds are several times wider than the
+        true spectrum and waste Chebyshev moments, so :class:`BlochBasis` and
+        :class:`EigenBasis` use the block eigenvalue range instead.
         """
         win = window_from_gershgorin(self._h_csr, pad=float(pad))
         if self.disorder_w > 0.0:
@@ -1076,7 +1075,7 @@ class EigenBasis:
 
         Computes ``(1 / N_k) sum_{k, n} g(E - eps_n(k); eta)`` where the
         Gaussian ``g(x; eta) = exp(-x^2 / (2 * eta^2)) / (sqrt(2 * pi) * eta)``
-        is evaluated via the stage-2 SymPy
+        is evaluated via the SymPy
         :data:`~lsquant.spectral_functions.GaussianDelta`
         :class:`~lsquant.spectral_functions.SpectralFunction`.
 
@@ -1112,7 +1111,7 @@ class EigenBasis:
         """Evaluate the exact Gaussian Kubo-Greenwood conductivity ``sigma_xx(E)``.
 
         Computes ``pi * sum_{k, n, m} |v_{x, nm}(k)|^2 g(E - eps_n(k); eta) g(E - eps_m(k); eta)``
-        with the same normalisation as stage-3 :func:`~lsquant.reconstruct.kubo_greenwood`
+        with the same normalisation as :func:`~lsquant.reconstruct.kubo_greenwood`
         so that the two curves are directly comparable (multiply by
         ``2 * pi / (A_cell * N_k)`` to convert to ``hr_exactdiag.py``'s
         ``e^2 / h`` per-area convention).

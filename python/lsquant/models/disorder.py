@@ -27,14 +27,16 @@ def checked_csr(matrix, *, name, tolerance=1e-10):
 def anderson_potential(overlap, values):
     """metric_forms.anderson_forms: V_ij=(w_i+w_j)*S_ij/2 as CSR.
 
-    The RNG/layout is stage 5's make_anderson_disorder: one draw per real
+    The RNG/layout matches make_anderson_disorder: one draw per real
     coefficient (including spin), n1 fastest, then orbital/spinor index.
     A scalar w gives w*S; using diag(w) alone would give the wrong identity.
     """
     S = checked_csr(overlap, name="Anderson overlap")
     w = np.asarray(values)
     if w.shape != (S.shape[0],) or not np.all(np.isfinite(w)) or np.any(w.imag != 0):
-        raise ValueError("Anderson values must be a finite real vector of overlap dimension")
+        raise ValueError(
+            f"Expected finite real Anderson values of shape {(S.shape[0],)}, got shape {w.shape}"
+        )
     diagonal = sparse.diags(w.real, format="csr")
     return checked_csr(0.5*(diagonal @ S+S @ diagonal), name="Anderson potential")
 
@@ -42,7 +44,7 @@ def anderson_potential(overlap, values):
 def supercell_csr(model, supercell, matrices, *, derivative=None, cell=False):
     """Assemble M[(c,i),(c+R,j)] += M_ij(R), c+R modulo N.
 
-    ``iR=n1+N1*n2+N1*N2*n3`` matches the stage-5 transform. Derivatives
+    ``iR=n1+N1*n2+N1*N2*n3`` matches the BlochTransform cell ordering. Derivatives
     multiply by i*(R.lat+tau_j-tau_i)_a BEFORE wrapping, or i*R_a for
     the bare rung. Together with the midpoint dipole this implements the
     covering-lattice position commutator (theory.md eq. 3), not a commutator

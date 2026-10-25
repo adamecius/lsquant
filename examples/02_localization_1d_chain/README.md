@@ -30,7 +30,7 @@ disorder gives
 
 $$ \xi(E) \approx \frac{24\,(4 - E^2)}{W^2}. $$
 
-Two places in the band break this form. At the centre the Kappus-Wegner anomaly
+Two places in the band break this form. At the centre the Kappus–Wegner anomaly
 lifts the value to $\xi(0) \approx 105/W^2$, above the Born estimate $96/W^2$.
 Near the edges $E \to \pm 2$ the Lyapunov exponent follows a separate
 $\gamma \sim W^{2/3}$ law, so the Born curve gives way there.
@@ -39,116 +39,72 @@ The single idea that makes this measurable: a localized state cannot let a
 wavepacket spread past its own size. The clean chain spreads ballistically,
 $\mathrm{MSD}(E,t)\sim t^2$; disorder bends that growth over and parks it on a
 plateau whose height is set by $\xi(E)$, so $\sqrt{\mathrm{MSD}_{\mathrm{plateau}}}$
-tracks the localization length. The moments of that spreading come from the same
-Chebyshev recursion that gave the density of states.
-
-The effect is already visible in a single eigenstate: a band-centre state fills the
-whole clean chain, but a little disorder pins it to a handful of sites.
+tracks the localization length. LSQUANT evaluates the mean-square displacement word
+`Tr[[X, U(t)]^+ delta(E-H) [X, U(t)]]` using the Bessel–Chebyshev expansion of
+$U(t)$ and the Chebyshev expansion of $\delta(E-H)$.
 
 ![A band-centre state is extended in the clean chain but exponentially localized once disorder is added](fig_anderson.png)
 
-## Step 1: build a disordered chain
+## Step 1: run the localization ensemble
 
-Onsite disorder sits on the diagonal, so the velocity operator stays the clean
-one and the band edges widen to $\pm(2 + W/2)$:
-
-```bash
-python make_disordered_chain.py 512 1.0 1
-```
-
-This writes, for label `chain1d_dis_N512_W1`, the disordered Hamiltonian and its
-velocity operator, the widened spectral bounds, and a sidecar that records the
-disorder strength $W$ and the seed, so a result stays traceable to the exact
-sample that produced it. The next step reads them.
-
-## Step 2: the spreading carries the localization length
-
-Run the time-dependent recursion to get the spreading moments, then reconstruct
-$\mathrm{MSD}(E,t)$ at a Fermi energy:
+[`run_localization.json`](run_localization.json) invokes
+[`make_disordered_chain.py`](make_disordered_chain.py) across $N = 256, 1024, 4096$
+and $16$ disorder realisations at $W = 1.0\ \mathrm{eV}$, evaluates $M = 256$
+Chebyshev moments of `Tr[[X, U(t)]^+ delta(E-H) [X, U(t)]]` over $128$ time steps
+up to $t_{\max} = 600\ \mathrm{fs}$, and reconstructs $\mathrm{MSD}(E, t)$ at
+$E = 0, \pm 1, 1.9\ \mathrm{eV}$ ($\eta = 10\ \mathrm{meV}$):
 
 ```bash
-cat > run_msd.json <<'JSON'
-{ "model": { "kind": "csr", "dir": "operators", "label": "chain1d_dis_N512_W1", "operators": ["VX"] },
-  "word": "Tr[[X, U(t)]^+ delta(E-H) [X, U(t)]]",
-  "expansion": { "moments": 256, "window": [-2.5, 2.5], "trace": "random_phase", "states": 1, "seed": 12345 },
-  "time": { "steps": 128, "tmax": 600.0, "bessel": "legacy" },
-  "reconstruction": { "kernel": "jackson", "broadening_meV": 10.0, "fermi_energies": [0.0], "formulas": ["time_correlation"], "legacy_text_round_trip": true },
-  "output": { "dir": "." } }
-JSON
-python -m lsquant run run_msd.json
+python3 -m lsquant run examples/02_localization_1d_chain/run_localization.json --out /tmp/tut02
 ```
 
-This evaluates the velocity-velocity correlation over $128$ time steps out to
-$t = 600$ and writes a time-dependent moment file, then a two-column curve of
-time against $\mathrm{MSD}(E,t)$:
-
-```
-mean...EF0.000000...JACKSON.dat
-```
-
-The window has to reach $t = 600$ for a physical reason. At $W = 1$ the interior
-localization length is $\xi \approx 70$ to $100$ sites, so the wavepacket spreads
-ballistically up to $\xi$ and only then settles; a short window stops while the
-$\mathrm{MSD}$ is still climbing, far below its plateau, and reports a localization
-length that is too small. A random vector seeds the trace, so $\mathtt{KPM\_SEED}$
-makes each run reproducible, and one realisation per sample keeps the disorder
-average honest.
-
-## Step 3: the localization length follows the band
-
-A single realisation is noisy, so the study averages $\mathrm{MSD}(E,t)$ over
-disorder samples, reads $\sqrt{\mathrm{MSD}_{\mathrm{plateau}}}$ at each energy,
-and fixes one overall constant against the clean ballistic reference:
+To build a single disordered chain on disk directly:
 
 ```bash
-python lsqloc.py
+python3 examples/02_localization_1d_chain/make_disordered_chain.py 512 1.0 1
+```
+
+## Step 2: the localization length follows the band
+
+Generate the tutorial figures from the run output directory:
+
+```bash
+python3 examples/02_localization_1d_chain/plot.py /tmp/tut02
 ```
 
 ![The localization length follows the Born 4-E^2 law in the band interior and departs near the edge; a finite chain reaches the theory once it is a few localization lengths long](fig_localization.png)
 
-The top panel reads the localization length across the band against the Born
-curve. Through the interior the largest sample follows $\xi(E)\approx 24(4-E^2)/W^2$:
-the $E=\pm1$ points land on the curve and agree with each other, confirming the
-symmetry of the clean dispersion, while the centre approaches the Born value as
-the size and the averaging grow. The near-edge point $E = 1.9$ leaves the curve,
-where the $W^{2/3}$ edge law takes over. The centre carries the longest $\xi$, so
-a small sample falls below the curve there first. The Kappus-Wegner enhancement
-at the very centre, a few percent above Born, sits inside the disorder noise of
-this study, so the centre point lands on the Born curve rather than visibly above
-it.
+In `fig_localization.png`, panel (a) compares $\xi(E)$ extracted from
+$\sqrt{\mathrm{MSD}_{\mathrm{plateau}}}$ against the Born curve
+$\xi(E) \approx 24(4-E^2)/W^2$: for $N = 4096$ the interior points $E = 0, \pm 1\ \mathrm{eV}$
+land on the Born curve, while $E = 1.9\ \mathrm{eV}$ departs near the band edge
+where the $W^{2/3}$ law takes over. Panel (b) shows finite-size scaling with $N$:
+each curve rises while $N \lesssim \xi(E)$ and saturates once the chain exceeds a
+few localization lengths.
 
-The bottom panel is the trap named plainly. Each curve rises with the chain
-length $N$ while the sample is shorter than $\xi$, then settles on the
-disorder-limited value once $N$ passes a few $\xi$. The near-edge energy, with the
-shortest $\xi$, plateaus first; the centre, with the longest $\xi$, needs the
-largest $N$. Reaching the theory therefore asks for two things at once: a sample
-longer than the state it must hold, and a disorder strong enough to keep $\xi$
-inside reachable $N$ while staying weak enough for the Born formula to apply.
+## Output files and figures
+
+| File | Description |
+|---|---|
+| `mean*chain1d_dis_N512_W1*EF0.000000*JACKSON.dat` | Single-realisation $\mathrm{MSD}(E=0, t)$ curve for $N = 512$ |
+| `r01..r16/mean*chain1d_dis_N{256,1024,4096}_W1*EF*.dat` | Per-realisation $\mathrm{MSD}(E, t)$ curves across sizes and Fermi energies |
+| `run.resolved.json` | Resolved run configuration and file manifest |
+| `fig_anderson.png` | Band-centre eigenstate density $|\psi_i|^2$ for clean ($W=0$) vs. disordered ($W=4$) chain |
+| `fig_localization.png` | Extracted localization length $\xi(E)$ vs. Born theory (panel a) and vs. chain size $N$ (panel b) |
 
 ## What to take away
 
 - Disorder localizes every state in one dimension, so the chain is an insulator
   across the whole band, no matter how weak the disorder.
 - The localization length follows $\xi(E)\approx 24(4-E^2)/W^2$ in the band
-  interior and changes law near the edges, with a small Kappus-Wegner
-  enhancement at the centre that only heavy averaging resolves.
+  interior and changes law near the edges.
 - The mean-square-displacement plateau is a direct localization-length proxy: its
-  $1/W^2$ and $(4-E^2)$ trends read straight off the spreading, so halving $W$
-  roughly quadruples $\xi$.
-- A finite sample recovers the theory only once its length passes a few $\xi$,
-  which sets how large $N$ and how strong $W$ the study needs.
+  $1/W^2$ and $(4-E^2)$ trends read straight off the spreading.
+- A finite sample recovers the theory only once its length passes a few $\xi$.
 
-The next tutorial keeps the velocity operator but moves to two dimensions and a
-topological band, where the same Chebyshev moments give a quantized Hall plateau.
+## References
 
-## References and links
-
-- LSQUANT source and documentation: https://github.com/adamecius/lsquant
-- Methodology: Z. Fan, J. H. García, A. W. Cummings et al., *Linear Scaling
-  Quantum Transport Methodologies*, arXiv:1811.07387.
-- Installation: see the main README of the repository.
-
-## Further reading
-
-- Localization-length anomalies of the 1D Anderson model (weak-disorder Born
-  result and the band-centre and band-edge anomalies), arXiv:cond-mat/9801226.
+- Z. Fan, J. H. García, A. W. Cummings et al., *Linear scaling quantum transport
+  methodologies*, Phys. Rep. **893**, 1–123 (2021) ([arXiv:1811.07387](https://arxiv.org/abs/1811.07387)).
+- B. Derrida and E. Gardner, *Lyapunov exponent of the one dimensional Anderson
+  model: weak disorder expansions*, J. Phys. (Paris) **45**, 1283 (1984).

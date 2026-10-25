@@ -21,7 +21,7 @@ bounds under the field names the .desc reader parses (`spectral_min`,
 `spectral_max`), so `lsquant inspect` reports them. The mean-square-displacement
 driver reads its bounds from the BOUNDS file, so this script writes BOUNDS too.
 
-The functions are importable (the lsqloc wrapper calls build_chain with a fresh
+The functions are importable (the tutorial driver calls build_chain with a fresh
 seed per disorder realisation). The CLI builds one labelled set in place.
 
     python make_disordered_chain.py <N> <W> [seed]

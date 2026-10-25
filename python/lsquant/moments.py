@@ -47,7 +47,7 @@ def time_evolution_series(
 ) -> tuple[npt.NDArray[np.complex128], complex]:
     """Compute Bessel series coefficients and band-center phase for ``U(dt)``.
 
-    Reproduces the ``MomentsTD::Evolve`` parameters verbatim:
+    Reproduces the legacy Bessel time-evolution parameters verbatim:
     ``x = dt * (BandWidth / 2.0 / 1.0 / HBAR)``,
     ``exp0 = exp(-i * (BandCenter / HBAR) * dt)``.
     """
@@ -181,9 +181,8 @@ def kubo_plan(
 
     Notes
     -----
-    Pitfall: In legacy ``inline_compute-kpm-nonEqOp <label> <OP_R> <OP_L> <M>``,
-    the first CLI operator seeds the bra recursion (``left_index``) and the
-    second is applied to the ket batch (``right_index``).
+    In ``Tr[OP_L delta(E-H) OP_R delta(E-H)]``, ``left_index`` seeds the bra
+    recursion and ``right_index`` is applied to the ket batch.
     """
     if num_moments <= 0:
         raise ValueError("kubo_plan: num_moments must be positive")
@@ -217,7 +216,7 @@ def msd_plan(
 
     Solves the problem of evaluating ``Tr[[X, U(t)]^+ delta(E - H) [X, U(t)]]``
     via the coupled ``(Ket = MSDWF, Aux = PhiR)`` time-evolution recursion of
-    legacy ``MeanSquareDisplacement`` and ``MomentsTD::MSD_Evolve``:
+    the legacy ballistic mean-square-displacement algorithm:
 
     - Seed preparation: ``ApplySeries([])`` zeros ``seed[Ket]`` (``MSDWF``) while
       ``seed[Aux]`` starts as ``|r>``, followed by ``MirrorToBra()``. An empty
