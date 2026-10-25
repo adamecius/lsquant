@@ -31,7 +31,6 @@ target_link_libraries(lsquant_core
         Eigen3::Eigen
         OpenMP::OpenMP_CXX
         PkgConfig::FFTW3
-        ${FFTW3_OMP_LIBRARY}
     PRIVATE
         lsquant_warnings
 )

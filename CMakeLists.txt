@@ -64,7 +64,7 @@ if(NOT OpenMP_CXX_FOUND)
         "OpenMP for C++ not found. Install libomp-dev / gcc OpenMP support or pass -DOpenMP_CXX_FLAGS=...")
 endif()
 
-# FFTW3 (double precision, plus libfftw3_omp when present).
+# FFTW3 (double precision).
 find_package(PkgConfig QUIET)
 if(NOT PkgConfig_FOUND)
     message(FATAL_ERROR "pkg-config not found; required to locate FFTW3.")
@@ -74,23 +74,14 @@ if(NOT FFTW3_FOUND)
     message(FATAL_ERROR
         "FFTW3 (double precision, 'fftw3') not found via pkg-config. Install libfftw3-dev.")
 endif()
-find_library(FFTW3_OMP_LIBRARY fftw3_omp)
-if(FFTW3_OMP_LIBRARY)
-    message(STATUS "Found FFTW3 OpenMP library: ${FFTW3_OMP_LIBRARY}")
-else()
-    message(STATUS "libfftw3_omp not found; building without threaded FFTW")
-    set(FFTW3_OMP_LIBRARY "")
-endif()
 
-# GSL (used only by lsquant/compat/legacy_kernels.cpp when building lsquant._core).
-find_package(GSL QUIET)
-if(NOT GSL_FOUND)
-    message(FATAL_ERROR
-        "GSL (GNU Scientific Library) not found. Install libgsl-dev or pass -DGSL_ROOT_DIR=/path/to/gsl.")
-endif()
-
-# pybind11 (required when LSQUANT_BUILD_PYTHON=ON).
+# GSL and pybind11 (required when LSQUANT_BUILD_PYTHON=ON; GSL is used only by compat/).
 if(LSQUANT_BUILD_PYTHON)
+    find_package(GSL QUIET)
+    if(NOT GSL_FOUND)
+        message(FATAL_ERROR
+            "GSL (GNU Scientific Library) not found. Install libgsl-dev or pass -DGSL_ROOT_DIR=/path/to/gsl.")
+    endif()
     if(NOT pybind11_DIR)
         find_program(LSQUANT_PYTHON_EXECUTABLE NAMES python3 python)
         if(LSQUANT_PYTHON_EXECUTABLE)
