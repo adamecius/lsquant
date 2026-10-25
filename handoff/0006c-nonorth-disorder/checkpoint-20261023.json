@@ -1,0 +1,32 @@
+{
+  "purpose": "Unmerged work-in-progress checkpoint requested by the maintainer. Existing artifacts preserved; no numerical closure is implied.",
+  "base_commit": "b2ab659af4bba4e64fecded4c3d579c28023b8c3",
+  "source_checkout": "C:\\Users\\adame\\LSQUANT\\lsquant",
+  "raw_local_snapshot": "C:\\Users\\adame\\LSQUANT\\checkpoints\\20261023\\local-uncommitted.tar.gz",
+  "files": [
+    {
+      "path": "handoff/0006c-nonorth-disorder/tests.md",
+      "sha256": "c8119cf8b00374c60fc1425bb6835ee377a9e9faa3ed25191b86c27ce10d28f7",
+      "original_source_sha256": "1205ab17f47adda39c274ee53339bd40280959132ccdbb7c7fb767543967d927"
+    },
+    {
+      "path": "handoff/0006c-nonorth-disorder/checkpoint-gate-stage3.log",
+      "sha256": "a01238e7c722e853ba23cce3bade8f7a70bc831687f867fb63cb4c86d910de03"
+    }
+  ],
+  "sha256_convention": "SHA-256 of bytes stored in Git, after configured text line-ending normalization. original_source_sha256 records the original local snapshot bytes.",
+  "validation": {
+    "branch": "handoff/0006c-dev",
+    "commit": "b2ab659af4bba4e64fecded4c3d579c28023b8c3",
+    "step": "golden-stage3",
+    "returncode": 0,
+    "seconds": 921.4415357112885,
+    "log": "handoff/0006c-nonorth-disorder/checkpoint-gate-stage3.log",
+    "seed": 12345,
+    "hostname": "fatnode-tacn",
+    "utc": "2026-10-23T13:47:15.743194Z",
+    "execution": "concurrent correctness gates; not performance measurements",
+    "summary": "GATE PASS (stage 3)",
+    "totals": "== 47 files compared; failures: 0"
+  }
+}
