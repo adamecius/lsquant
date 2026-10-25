@@ -19,7 +19,7 @@ from collections.abc import Sequence
 from types import ModuleType
 
 from .. import _core
-from ..moments import dos_plan, run_plan, window_from_gershgorin
+from ..moments import run_plan, window_from_gershgorin
 from ..reconstruct import dos_curve
 from ..words import compile as compile_word
 

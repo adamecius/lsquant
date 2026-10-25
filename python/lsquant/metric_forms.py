@@ -1,4 +1,4 @@
-"""Symbolic source of the three metric forms (brief sections 3 and 12).
+"""Symbolic source of the three metric forms for non-orthogonal tight-binding models.
 
 X=S^-1, Y=S^-1/2, Z=S^1/2. Physical matrices O are Hermitian; their
 coefficient representation XO is S-Hermitian, not generally Euclidean
@@ -219,7 +219,7 @@ def anderson_forms():
 
 
 def disorder_velocity_forms(mode="covariant"):
-    """Insert H+V into the SAME position/velocity ladder as stage 6b.
+    """Insert H+V into the non-orthogonal position/velocity ladder.
 
     The periodic derivative is the derivation delta(M)_ij=i*d_ij*M_ij
     before wrapping hopping translations. D commutes with the orbital
@@ -265,12 +265,12 @@ def periodic_position_velocity_proof():
     return dict(position=R, commutator=commutator,
                 residual=normal_form(expanded-velocity_forms("covariant")["physical"]))
 def spectral_projection_forms():
-    """Derive stage-6d forms in a complete S-normalised eigenframe.
+    """Derive spectral-projection forms in a complete S-normalised eigenframe.
 
     C^+ S C=I, C C^+=X, H=S C D C^+ S. W is the diagonal
     0/1 window mask, D_s agrees with D on W and clips its complement.
     O denotes a PHYSICAL matrix; its coefficient action is X O.
-    Thus the brief's S P O_c P is P^+ O P, not S P O P.
+    Thus S P O_c P equals P^+ O P, not S P O P.
     No derivative of the modified H is substituted for a projected velocity.
     """
     C, Cd, D, W, Ds, O = sp.symbols("C C_dagger D W D_shift O", commutative=False)
@@ -293,7 +293,6 @@ def spectral_projection_proof():
     Reduce NC words with completeness C C^+=X and C^+ S C=I.
     The sole diagonal identity needed for retained eigenpairs is
     D_s W=D W; W D=D W and W^2=W express spectral selection.
-    The tester executes these reductions before running numerical checks.
     """
     forms = spectral_projection_forms()
     C, Cd, D, W, Ds, O = (forms["symbols"][n] for n in ("C", "Cd", "D", "W", "Ds", "O"))
@@ -353,7 +352,7 @@ def spectral_projection_proof():
 
 
 def orthogonal_projection_forms():
-    """Polar reduced-coordinate forms and the Fourier convention of 6d.
+    """Polar reduced-coordinate forms and the cell-gauge Fourier convention.
 
     C_W^+ S C_W=I, U unitary => Q=C_W U, Q^+ S Q=I.
     H_W=U^+ diag(E_W) U, O_W=Q^+ O Q. The retained metric is

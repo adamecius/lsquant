@@ -1,12 +1,11 @@
-"""Item 4: set affinity defaults before loading OpenMP or NumPy.
-
-The tester measures occupancy and numa_maps at 24/48/96 threads, with one process
-across sockets and one per socket. Explicit environment settings always win.
-"""
+"""CPU affinity and kernel tuning defaults applied before loading OpenMP or NumPy."""
 from __future__ import annotations
 
 import os
 from pathlib import Path
+
+DEFAULT_SPMV_MIN_NNZ = "16384"
+DEFAULT_KERNEL_BATCH = "0"
 
 
 def physical_core_count() -> int:
@@ -37,5 +36,7 @@ def configure_threads() -> None:
 def configure_kernels(core) -> None:
     """Send numeric tuning settings once; the engine never reads the environment."""
     if core.build_profile == "native":
-        core.ConfigurePerformance(int(os.environ.get("LSQUANT_SPMV_MIN_NNZ", "16384")),
-                                  int(os.environ.get("LSQUANT_KERNEL_BATCH", "0")))
+        core.ConfigurePerformance(
+            int(os.environ.get("LSQUANT_SPMV_MIN_NNZ", DEFAULT_SPMV_MIN_NNZ)),
+            int(os.environ.get("LSQUANT_KERNEL_BATCH", DEFAULT_KERNEL_BATCH)),
+        )

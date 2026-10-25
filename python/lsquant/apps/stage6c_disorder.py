@@ -1,8 +1,7 @@
-"""Stage-6c run-file executor: nonorthogonal Anderson disorder in two layouts.
+"""SIESTA disordered non-orthogonal run-file executor in Bloch and real-space layouts.
 
 The physical DOS/SHC words and all reconstruction stay in the existing
-catalogue. Receipts include phase wall times and the disorder hash. Material
-measurements and plateau comparisons belong to the tester on Aron.
+catalogue. Receipts include phase wall times and the disorder hash.
 """
 from __future__ import annotations
 
@@ -52,39 +51,55 @@ class PhaseReceipt:
 
 
 def execute_disorder_runfile(rf, out_dir):
-    """Run both physical words through the same compiler and stage-6b sampler.
+    """Run physical DOS and SHC words across disordered Bloch or real-space bases.
 
     ``model.params.nonorthogonal_disorder=true`` opts W=0 Bloch files into
     this executor too. Real-space SIESTA or W>0 also selects it. The basis
     choice and metric route are independent; the per-k metric stays exact
-    for Bloch, while the CSR reference uses stage-6 exact/Chebyshev appliers.
+    for Bloch, while the CSR reference uses exact or Chebyshev appliers.
     """
     if rf.basis["name"] not in ("real", "bloch"):
-        raise ValueError("stage6c supports real/bloch; disorder has no per-k eigenbasis")
+        raise ValueError(
+            f"Expected basis.name in ('real', 'bloch') for disordered SIESTA run, got {rf.basis['name']!r}"
+        )
     if rf.metric["policy"] != "nonorthogonal" or rf.metric["route"] not in ("lowdin", "generalised"):
-        raise ValueError("stage6c needs nonorthogonal lowdin or generalised metric")
+        raise ValueError(
+            f"Expected nonorthogonal lowdin or generalised metric, "
+            f"got policy={rf.metric['policy']!r} route={rf.metric['route']!r}"
+        )
     if rf.basis["name"] == "bloch" and rf.metric["applier"] != "exact":
-        raise ValueError("stage6c Bloch metric is exact per block")
+        raise ValueError(
+            f"Expected metric.applier='exact' for Bloch basis, got {rf.metric['applier']!r}"
+        )
     if rf.basis["name"] == "real" and rf.metric["applier"] not in ("exact", "chebyshev"):
-        raise ValueError("stage6c real metric must use exact or chebyshev appliers")
+        raise ValueError(
+            f"Expected metric.applier in ('exact', 'chebyshev') for real basis, got {rf.metric['applier']!r}"
+        )
     params = rf.model["params"]
     if params.get("oracle", False):
-        raise ValueError("a per-k oracle is invalid for disorder; run the real-space reference")
+        raise ValueError("Per-k oracle is invalid for disordered runs; use the real-space reference")
     supported = {parse_word(DOS_WORD).canonical(), parse_word(SHC_WORD).canonical()}
     if any(parse_word(word).canonical() not in supported for word in rf.words):
-        raise ValueError("stage6c supports the identity DOS and JXSZ/VY spin Hall words")
+        raise ValueError(
+            f"Expected DOS ({DOS_WORD!r}) or SHC ({SHC_WORD!r}) words, got {rf.words!r}"
+        )
     if not set(rf.reconstruction["formulas"] or []) <= {"dos", "dos_curve", "shc"}:
-        raise ValueError("stage6c reconstruction supports dos and shc")
+        raise ValueError(
+            f"Expected reconstruction.formulas subset of {{'dos', 'dos_curve', 'shc'}}, "
+            f"got {rf.reconstruction['formulas']!r}"
+        )
     if rf.reconstruction["targets"]:
-        raise ValueError("stage6c does not accept legacy tutorial targets")
+        raise ValueError(
+            f"Expected empty reconstruction.targets for SIESTA run, got {rf.reconstruction['targets']!r}"
+        )
     broadening = rf.reconstruction["broadening_meV"]
     if broadening is None or not np.isfinite(broadening) or broadening <= 0:
-        raise ValueError("stage6c needs positive reconstruction.broadening_meV")
+        raise ValueError(f"Expected positive finite reconstruction.broadening_meV, got {broadening!r}")
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
     resolved = rf.to_resolved_dict()
     resolved["output"]["dir"] = str(out)
-    # Mark resolved W=0 files so a replay cannot dispatch them to stage 6b.
+    # Mark resolved W=0 files so a replay dispatches them to this executor.
     resolved["model"]["params"]["nonorthogonal_disorder"] = True
     timing = PhaseReceipt(out/"run.resolved.json", resolved)
     started = perf_counter()
@@ -107,7 +122,7 @@ def execute_disorder_runfile(rf, out_dir):
                                           tol=rf.metric["tol"])
     spec = rf.expansion["window"]
     if spec == "gershgorin":
-        raise ValueError("stage6c uses the clean spectrum plus disorder norm enclosure, not Gershgorin")
+        raise ValueError("Expected expansion.window='eigen' or explicit [lo, hi] for SIESTA disorder, got 'gershgorin'")
     window = basis.window() if spec == "eigen" else _core.SpectralWindow(*spec)
     enclosure = basis.window(pad=0.)
     if window.lower > enclosure.lower or window.upper < enclosure.upper:

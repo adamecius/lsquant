@@ -18,7 +18,9 @@ def origin_directory():
     """Locate the vendored tools in a source checkout; never fetch a substitute."""
     directory = Path(__file__).resolve().parents[3]/"tools"/"downfold_origin"
     if not (directory/"downfold.py").is_file():
-        raise FileNotFoundError("stage6d origin helpers require the source checkout's tools/downfold_origin")
+        raise FileNotFoundError(
+            f"Expected downfold.py under {str(directory)!r}; origin helpers require tools/downfold_origin"
+        )
     return directory
 
 

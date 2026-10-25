@@ -20,7 +20,7 @@ from .bases import (
     make_basis,
     validate_w2s_csr_dir,
 )
-from .models.wannier import WannierModel, load_wannier_model
+from .models.wannier import load_wannier_model
 from .moments import run_plan, window_from_gershgorin
 from .reconstruct import (
     dos_curve,
@@ -248,8 +248,8 @@ ALLOWED_OUTPUT_KEYS: frozenset[str] = frozenset(
 def default_window_for_basis(basis_name: str) -> str:
     """Return the default spectral window mode for ``basis_name``.
 
-    Defaults to ``"eigen"`` on ``"bloch"`` and ``"eigen"`` bases (Stage 5,
-    review 1) and to ``"gershgorin"`` only on ``"real"``.
+    Defaults to ``"eigen"`` on ``"bloch"`` and ``"eigen"`` bases and to
+    ``"gershgorin"`` only on ``"real"``.
     """
     if basis_name in ("bloch", "eigen"):
         return "eigen"
@@ -350,8 +350,7 @@ def validate_runfile_dict(raw: Mapping[str, Any]) -> None:
 
     _check_keys("top-level", raw, ALLOWED_TOP_KEYS)
     projection = resolve_projection(raw.get("projection"))
-    # Item 3: a resolved receipt cannot silently select a different binary profile.
-    # Tester: replay matching receipts and verify mismatched profiles fail before work.
+    # Ensure a resolved receipt cannot silently select a different binary profile.
     if "build_profile" in raw and raw["build_profile"] != _core.build_profile:
         raise ValueError(
             f"Run file build_profile={raw['build_profile']!r} differs from "
@@ -369,11 +368,11 @@ def validate_runfile_dict(raw: Mapping[str, Any]) -> None:
     kind = str(_get_or(model, "kind", "csr"))
     reference = raw.get("reference")
     if reference is not None and not isinstance(reference, bool):
-        raise ValueError("reference must be a boolean when supplied")
+        raise ValueError(f"Expected boolean for 'reference', got {type(reference).__name__}")
     if reference is not None and kind != "siesta":
-        raise ValueError("reference is supported only for SIESTA stage6b runs")
+        raise ValueError(f"Expected model.kind='siesta' when 'reference' is set, got {kind!r}")
     if projection["kind"] != "none" and kind != "siesta":
-        raise ValueError("stage6d run-file projection requires a SIESTA model")
+        raise ValueError(f"Expected model.kind='siesta' when projection is enabled, got {kind!r}")
     if kind not in ("csr", "wannier", "siesta", "generator"):
         raise ValueError(
             f"Unknown model.kind '{kind}'; expected 'csr', 'wannier', 'siesta', or 'generator'"
@@ -664,7 +663,7 @@ def validate_runfile_dict(raw: Mapping[str, Any]) -> None:
 
 @dataclass
 class RunFile:
-    """Validated and defaults-resolved Stage-7 run configuration."""
+    """Validated and defaults-resolved LSQUANT run configuration."""
 
     model: dict[str, Any]
     basis: dict[str, Any]
@@ -886,8 +885,7 @@ class RunFile:
         """Return the fully resolved run-file dictionary written to ``run.resolved.json``."""
         out: dict[str, Any] = {
             "build_profile": _core.build_profile,
-            # Item 6: record effective launch choices, never use receipt values
-            # to override the caller's environment. Tester archives with timings.
+            # Record effective launch choices without overriding the caller's environment.
             "runtime": {key: os.environ.get(key) for key in (
                 "OMP_NUM_THREADS", "OMP_PROC_BIND", "OMP_PLACES", "OMP_DYNAMIC",
                 "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS", "LSQUANT_SPMV_MIN_NNZ",

@@ -20,8 +20,8 @@ import scipy.sparse as sp
 def hermitian_fold(matrix: sp.csr_matrix) -> sp.csr_matrix:
     """Return ``0.5 * (M + M^+)`` in canonical sorted CSR layout.
 
-    Reproduces ``lsquant::SparseMatrix::HermitianFold`` (and legacy
-    ``SparseMatrixType::ConvertFromCSR``) so that operators read in Python match
+    Reproduces ``lsquant::SparseMatrix::HermitianFold`` (and the legacy
+    CSR reader convention) so that operators read in Python match
     the C++ ``ReadCsrText`` representation down to IEEE-754 rounding.
 
     Parameters

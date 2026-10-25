@@ -3,8 +3,8 @@
  * @brief Readers and writers for the unified `.chebmom` format and legacy `.chebmom1D`/`.chebmom2D` files.
  *
  * Implements the rank-generic `.chebmom` v1 format (with full metadata and 17-digit precision)
- * alongside byte-exact writers for legacy `Moments1D::saveIn` and `Moments2D::saveIn` outputs,
- * plus an auto-detecting reader that loads all three formats into `ChebyshevMoments`.
+ * alongside byte-exact writers for legacy 1D and 2D moment outputs,
+ * plus an auto-detecting reader that loads all formats into `ChebyshevMoments`.
  */
 #ifndef LSQUANT_IO_CHEBMOM_FILE_HPP_
 #define LSQUANT_IO_CHEBMOM_FILE_HPP_
@@ -57,7 +57,7 @@ ChebyshevMoments ReadChebmom(const std::string& filename);
 /**
  * @brief Write a rank-1 `ChebyshevMoments` tensor in the byte-exact legacy `.chebmom1D` layout.
  *
- * Reproduces `chebyshev::Moments1D::saveIn` verbatim: sets stream precision to
+ * Reproduces the legacy 1D moment writer verbatim: sets stream precision to
  * `std::numeric_limits<double>::digits10`, writes `systemSize " " bandwidth " " center "\n"`,
  * writes `Dims()[0] "\n"`, and writes each moment as `re " " im "\n"`.
  *
@@ -68,14 +68,14 @@ ChebyshevMoments ReadChebmom(const std::string& filename);
  *          if the file cannot be opened.
  * @par Pitfall
  *      `bandwidth` and `center` are computed as `(upper - lower) * 1.0` and
- *      `(upper + lower) * 0.5` to match legacy `compute.cpp`.
+ *      `(upper + lower) * 0.5` to match the legacy header convention.
  */
 void WriteLegacyChebmom1D(const std::string& filename, const ChebyshevMoments& moments);
 
 /**
  * @brief Write a rank-2 `ChebyshevMoments` tensor in the byte-exact legacy `.chebmom2D` layout.
  *
- * Reproduces `chebyshev::Moments2D::saveIn` verbatim: sets stream precision to
+ * Reproduces the legacy 2D moment writer verbatim: sets stream precision to
  * `std::numeric_limits<double>::digits10`, writes `systemSize " " bandwidth "  " center "\n"`
  * (with two spaces before `center`), writes `Dims()[0] " " Dims()[1] " \n"` (with a trailing
  * space before the newline), and writes each row-major moment as `re " " im "\n"`.
@@ -94,7 +94,7 @@ void WriteLegacyChebmom2D(const std::string& filename, const ChebyshevMoments& m
 /**
  * @brief Write a rank-2 time-dependent `ChebyshevMoments` tensor in the byte-exact legacy `.chebmomTD` layout.
  *
- * Reproduces `chebyshev::MomentsTD::saveIn` verbatim: sets stream precision to
+ * Reproduces the legacy time-dependent moment writer verbatim: sets stream precision to
  * `std::numeric_limits<double>::digits10`, writes
  * `systemSize " " bandwidth " " center " " maxTimeStep " " timeDiff " \n"` (with a trailing
  * space before the newline), writes `numMoms " " maxTimeStep " \n"` (with a trailing space
@@ -107,8 +107,8 @@ void WriteLegacyChebmom2D(const std::string& filename, const ChebyshevMoments& m
  * @warning Throws `std::invalid_argument` if `moments.Rank() != 2` and `std::runtime_error`
  *          if the file cannot be opened.
  * @par Pitfall
- *      Both header lines carry a single trailing space before the newline in legacy
- *      `MomentsTD::saveIn`; omitting either breaks byte-for-byte comparison with G6/G7 goldens.
+ *      Both header lines carry a single trailing space before the newline in the legacy
+ *      writer; omitting either breaks byte-for-byte comparison with G6/G7 goldens.
  */
 void WriteLegacyChebmomTD(const std::string& filename, const ChebyshevMoments& moments);
 

@@ -36,8 +36,7 @@ BlockDiagonalOperator::BlockDiagonalOperator(Index numBlocks, Index blockSize,
   const std::size_t w = static_cast<std::size_t>(blockSize_);
   const std::size_t w2 = w * w;
 #ifdef LSQUANT_NATIVE_BUILD
-  // Item 4: initialize contiguous block groups with the same static owners as
-  // Multiply. Tester: compare per-node resident pages and socket recipes.
+  // First-touch contiguous block groups on the same static OpenMP partition as Multiply.
   std::vector<Scalar> placed(blocks_.size());
   DiscardInteriorPages(placed.data(), placed.size() * sizeof(Scalar));
 #pragma omp parallel for schedule(static)
@@ -164,18 +163,20 @@ void BlockDiagonalOperator::MultiplyBatch(Scalar a, const std::vector<Vector>& x
   }
   for (std::size_t j = 0; j < x.size(); ++j) {
     if (static_cast<Index>(x[j].size()) != Dimension() || x[j].size() != y[j].size()) {
-      throw std::invalid_argument("BlockDiagonalOperator::MultiplyBatch: dimension mismatch");
+      throw std::invalid_argument(
+          "BlockDiagonalOperator::MultiplyBatch: expected vector length " +
+          std::to_string(Dimension()) + ", got x=" + std::to_string(x[j].size()) +
+          " and y=" + std::to_string(y[j].size()));
     }
   }
 #ifdef LSQUANT_NATIVE_BUILD
   if (x.empty() || blockSize_ == 0) return;
   using Dense = Eigen::Matrix<Scalar, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
-  // Item 5d: fixed microbatch geometry, one GEMM per block/group, no team-dependent
-  // reduction tree. 16*(W^2+2*W*B) <= half L2; each static owner visits adjacent
-  // blocks. Tester measures W=72, B sweep, throughput and thread-count byte identity.
-  const Index budget = 512 * 1024 / (2 * sizeof(Scalar));
+  // Fixed microbatch geometry: one GEMM per block and microbatch, with no team-dependent
+  // reduction tree. Bounds per-core working set by half of a 512 KiB L2 cache.
+  constexpr Index kHalfL2Scalars = (512 * 1024) / (2 * sizeof(Scalar));
   const int candidate = static_cast<int>(std::max<Index>(1, std::min<Index>(
-      static_cast<Index>(x.size()), (budget - blockSize_ * blockSize_) / (2 * blockSize_))));
+      static_cast<Index>(x.size()), (kHalfL2Scalars - blockSize_ * blockSize_) / (2 * blockSize_))));
   const int width = KernelBatchSetting() > 0 ? KernelBatchOverride(static_cast<int>(x.size())) : candidate;
 #pragma omp parallel
   {

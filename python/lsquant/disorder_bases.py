@@ -1,4 +1,4 @@
-"""Stage-6c adapters: FFT disorder with block metric, and direct CSR reference.
+"""Disordered non-orthogonal basis adapters: FFT disorder with block metric and direct CSR reference.
 
 All physical matrices enter the existing word compiler before the metric.
 Only LinearOperators and StateGenerators enter the C++ engine. In particular
@@ -50,14 +50,14 @@ def _velocity(H, X, dH, dS, A=None):
 
 
 def _bind_metric_trace(basis, plan, operators, trace_mode):
-    """Same dual bra as 6b review 2, for FULL-system seeds on both routes.
+    """Prepare dual-metric bra states for full-system seeds on both routes.
 
     K=Y on the generalised route, K=I on Lowdin; the copied original r is
     prepared on BOTH sides. The compiler's asymmetric bra then carries
     S*T_m*X*A*K*r. Never use independent bra phases or block-local seeds.
     """
     if trace_mode not in ("random", "exact"):
-        raise ValueError("trace must be random or exact")
+        raise ValueError(f"Expected trace_mode in ('random', 'exact'), got {trace_mode!r}")
     operators = list(operators)
     K = basis.metric.inverse_sqrt_overlap if basis.route == "generalised" else basis.identity
     dual = basis.overlap() if basis.route == "generalised" else basis.identity
@@ -107,15 +107,14 @@ def _window(clean_bounds, overlap_bounds, values, pad):
 class DisorderedBlochMetricBasis(BlochMetricBasis):
     """H(k)+{B D B^+,S(k)}/2 with the unchanged exact per-block metric.
 
-    Here B is stage 5's RealToBloch transform. The brief writes the
-    real-directed transform as B and thus calls the same map B^+ D B.
-    No N_supercell by N_supercell sparse or dense matrix is allocated.
+    Here B is the RealToBloch Fourier transform. No N_supercell by N_supercell
+    sparse or dense matrix is allocated.
     """
 
     def __init__(self, model, supercell, *, disorder_w=0., disorder_seed=7,
                  disorder=None, velocity_mode="covariant", route="lowdin", seed=12345):
         if route not in ("lowdin", "generalised"):
-            raise ValueError("stage6c requires lowdin or generalised metric")
+            raise ValueError(f"Expected route in ('lowdin', 'generalised'), got {route!r}")
         super().__init__(model, supercell, velocity_mode=velocity_mode, route=route, seed=seed)
         self.disorder_w, self.disorder_seed = float(disorder_w), int(disorder_seed)
         self.disorder_values = _values(self.dimension, self.disorder_w, self.disorder_seed, disorder)
@@ -123,8 +122,8 @@ class DisorderedBlochMetricBasis(BlochMetricBasis):
         self.transform = _transform(model, self.supercell)
         self.identity = _core.IdentityOperator(self.dimension)
         self._D = _core.SandwichOperator(self.transform, _core.DiagonalOperator(self.disorder_values))
-        # Exact identity only: preserve stage 5's operation order in its
-        # orthogonal limit, rather than accumulating two half-potentials.
+        # Exact identity only: preserve the orthogonal BlochBasis operation order
+        # in the orthogonal limit, rather than accumulating two half-potentials.
         self._orthogonal_overlap = np.array_equal(
             self.sk_array, np.broadcast_to(np.eye(self.num_wann), self.sk_array.shape))
         self._potential = (self._D if self._orthogonal_overlap else
@@ -174,22 +173,24 @@ class DisorderedBlochMetricBasis(BlochMetricBasis):
                 self._disordered_ops[key] = _triple(self.operator("V"+key[1]), self.metric.inverse_overlap,
                                                     self.operator("S"+key[3]))
             else:
-                raise ValueError(f"unknown stage6c operator {name!r}")
+                raise ValueError(f"Unknown disordered Bloch operator {name!r}")
         return self._disordered_ops[key]
 
     def operator_blocks(self, name):
         """Only S/spin stay block diagonal; never return clean disorder operators."""
         key = name.upper()
         if self.has_disorder and key not in ("S", "SX", "SY", "SZ"):
-            raise ValueError("disordered H, velocity and spin current have no per-k blocks; use operator()")
+            raise ValueError(
+                f"Disordered operator {key!r} has no per-k blocks; use operator()"
+            )
         return super().operator_blocks(key)
 
     def states(self, trace_mode="random", num_states=None, seed=None):
-        """Whole-layout orbital Bloch phases, as in 6b review 2."""
+        """Whole-layout orthonormal orbital Bloch phases."""
         return _states(self, trace_mode, num_states, seed)
 
     def bind_eigen_trace(self, plan, operators, trace_mode="random"):
-        """Keep the 6b prepare_moments interface; there is no per-k eigentrace."""
+        """Bind dual-metric bra states; disordered Hamiltonians have no per-k eigentrace."""
         if self._orthogonal_overlap and self.route == "lowdin":
             return plan, operators
         return _bind_metric_trace(self, plan, operators, trace_mode)
@@ -198,11 +199,11 @@ class DisorderedBlochMetricBasis(BlochMetricBasis):
         return _window(self._clean_bounds, self.overlap_bounds, self.disorder_values, pad)
 
     def eigenbasis(self):
-        raise ValueError("stage6c uses the real-space reference; a disordered eigenbasis is not per-k")
+        raise ValueError("Disordered Bloch basis has no per-k eigenbasis; use the real-space reference")
 
 
 class RealSpaceMetricBasis:
-    """Direct SIESTA supercell CSR reference with stage-6 overlap appliers.
+    """Direct SIESTA supercell CSR reference with exact or Chebyshev overlap appliers.
 
     H,S,dH,dS,A and spin are assembled from real-space blocks. Velocities
     and spin currents remain compositions: S^-1 is generally dense, so
@@ -216,9 +217,14 @@ class RealSpaceMetricBasis:
                  velocity_mode="covariant", route="lowdin", seed=12345,
                  applier="exact", order=256, coeff_tol=1e-14, max_dim=4096, tol=1e-11):
         if route not in ("lowdin", "generalised") or applier not in ("exact", "chebyshev"):
-            raise ValueError("stage6c needs lowdin/generalised and exact/chebyshev")
+            raise ValueError(
+                f"Expected route in ('lowdin', 'generalised') and applier in ('exact', 'chebyshev'), "
+                f"got route={route!r} applier={applier!r}"
+            )
         if velocity_mode not in ("bare", "berry_connection", "covariant"):
-            raise ValueError("unknown velocity mode")
+            raise ValueError(
+                f"Expected velocity_mode in ('bare', 'berry_connection', 'covariant'), got {velocity_mode!r}"
+            )
         if velocity_mode == "covariant" and model.dipoles is None:
             raise ValueError("covariant velocity requires SIESTA dipoles")
         self.model, self.supercell = model, tuple(supercell)
@@ -287,8 +293,7 @@ class RealSpaceMetricBasis:
         return _core.SparseMatrixOperator(mat)
 
     def _metric_diagnostics(self):
-        # Deterministic probes diagnose truncation but do not certify an
-        # operator norm. The tester must compare exact/Chebyshev moments.
+        # Deterministic probes diagnose truncation order on a fixed unit vector.
         r = np.random.default_rng(12345).normal(size=self.dimension).astype(complex)
         r /= np.linalg.norm(r)
         X, Y = self.metric.inverse_overlap, self.metric.inverse_sqrt_overlap
@@ -344,7 +349,7 @@ class RealSpaceMetricBasis:
                 self._op_cache[key] = _triple(self.operator("V"+key[1]), self.metric.inverse_overlap,
                                              self.operator("S"+key[3]))
             else:
-                raise ValueError(f"unknown stage6c operator {name!r}")
+                raise ValueError(f"Unknown real-space operator {name!r}")
         return self._op_cache[key]
 
     def states(self, trace_mode="random", num_states=None, seed=None):

@@ -72,8 +72,8 @@ def jackson_damping_2d(
     """Compute the 2D Jackson damping matrix ``g(m0, M0) * g(m1, M1)``.
 
     Solves the problem of damping a truncated ``M0 x M1`` rank-2 Chebyshev
-    moment tensor in the exact floating-point operation order of legacy
-    ``chebyshev::Moments2D::ApplyJacksonKernel``, where the two ``double``
+    moment tensor in the exact floating-point operation order of the legacy 2D
+    Jackson damping loop, where the two ``double``
     damping weights ``g(m0, M0)`` and ``g(m1, M1)`` are multiplied together
     before scaling the complex moment ``mu[m0, m1]``. Complexity is
     ``O(num_moments_0 * num_moments_1)`` time and space.

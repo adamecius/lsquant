@@ -15,9 +15,8 @@ namespace lsquant {
 namespace {
 
 #ifdef LSQUANT_NATIVE_BUILD
-// Item 5c: (mu B) by GEMM, then diagonal A^T(mu B). Fixed groups of 32 points
-// keep every reduction independent of OpenMP team size. No nested Eigen teams.
-// Tester: wall time, residual to scalar tables, bytes across thread counts.
+// Evaluate (mu * B) by GEMM, then the diagonal of A^T * (mu * B). Fixed groups of
+// 32 energy points keep every reduction independent of the OpenMP team size.
 template <typename A, typename B>
 void GemmContract(const Scalar* moments, Index m0, Index m1, const A* tableA,
                    const B* tableB, Index points, double* values, bool imaginary) {
@@ -25,10 +24,10 @@ void GemmContract(const Scalar* moments, Index m0, Index m1, const A* tableA,
   using TableB = Eigen::Matrix<B, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
   Eigen::Map<const Dense> mu(moments, m0, m1);
   Eigen::Map<const TableB> b(tableB, m1, points);
-  constexpr Index tile = 32;
+  constexpr Index kPointTileSize = 32;
 #pragma omp parallel for schedule(static)
-  for (Index first = 0; first < points; first += tile) {
-    const Index count = std::min(tile, points - first);
+  for (Index first = 0; first < points; first += kPointTileSize) {
+    const Index count = std::min(kPointTileSize, points - first);
     Dense partial(m0, count);
     partial.noalias() = mu * b.middleCols(first, count).template cast<Scalar>();
     for (Index j = 0; j < count; ++j) {

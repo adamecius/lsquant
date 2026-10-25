@@ -539,12 +539,12 @@ class WannierModel:
         return dhk_blocks(self.r_cart, self.tau, self.hoppings, k_points, direction)
 
     def velocity_blocks(self, k_points, direction, mode="berry_connection"):
-        """Build Wannier velocity with the established stage-5 minus sign.
+        """Build Wannier velocity with the Wannier90 velocity sign convention.
 
         ``V=-dH`` in the bare/cell or centre/atom convention. Covariant mode
         implements ``V=-dH_cell-i[H,A_full]``, with folded, weighted A loaded
-        before the commutator. This preserves the historical Wannier sign;
-        SIESTA uses the explicit +dH convention of brief section 3. A Hall
+        before the commutator. This preserves the Wannier90 sign convention;
+        SIESTA uses the explicit +dH convention. A Hall
         word has two velocities, so their simultaneous reversal cancels.
         """
         from .bloch import bloch_sum

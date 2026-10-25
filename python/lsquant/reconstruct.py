@@ -124,7 +124,7 @@ def _truncate_and_damp_2d(
     b0_meV: float,
     b1_meV: float,
 ) -> tuple[npt.NDArray[np.complex128], int, int]:
-    """Truncate and apply 2D Jackson damping as ``Moments2D::ApplyJacksonKernel`` does."""
+    """Truncate and apply 2D Jackson damping to ``mu_matrix``."""
     if moments.rank != 2:
         raise ValueError("rank-2 reconstruction requires moments.rank == 2")
     if b0_meV <= 0.0 or b1_meV <= 0.0:
@@ -584,8 +584,7 @@ def kubo_fft_grid(
     ``shift``; although algebraically equal, they differ by 1 ULP for general
     bandwidths.
     """
-    # Item 5c: opt-in FFT polynomial contraction; same nodes and Python factors.
-    # Tester compares tables (native GEMM/golden scalar) and FFT on identical inputs.
+    # Opt-in FFT polynomial contraction on the same Chebyshev nodes and Python factors.
     backend = backend or os.environ.get("LSQUANT_FFT_BACKEND", "tables")
     if backend not in ("tables", "fft"):
         raise ValueError("kubo_fft_grid: backend must be 'tables' or 'fft'")
@@ -733,7 +732,7 @@ def shc(moments, broadening_meV, num_cells, cell_area, *, backend="tables"):
     """Return sigma^z_xy in ``e^2/h, sigma_z Pauli`` from a Bastin tensor.
 
     Symbolic source: metric_forms.spin_hall_normalisation.
-    ``sigma=2*pi*KuboBastin(mu)/(N_k*A_cell)``. The stage-3 reconstruction
+    ``sigma=2*pi*KuboBastin(mu)/(N_k*A_cell)``. The Kubo-Bastin reconstruction
     already multiplies the normalised moments by the Hilbert-space size;
     divide by the number of cells and area, not by the number of orbitals.
     The physical word is Tr[JXSZ delta VY dG-/dE], with J in Pauli units.

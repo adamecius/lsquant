@@ -1,9 +1,12 @@
+/**
+ * @file build_profile.hpp
+ * @brief Compile-time build profile identifier ("golden" or "native").
+ */
 #ifndef LSQUANT_CORE_ALGEBRA_BUILD_PROFILE_HPP_
 #define LSQUANT_CORE_ALGEBRA_BUILD_PROFILE_HPP_
 
 namespace lsquant {
-// Item 3: provenance without changing the golden compiler command line.
-// Tester: native headers/receipts must be tagged; untagged historical files are golden.
+
 inline const char* BuildProfileName() {
 #ifdef LSQUANT_NATIVE_BUILD
   return "native";
@@ -11,5 +14,7 @@ inline const char* BuildProfileName() {
   return "golden";
 #endif
 }
+
 }  // namespace lsquant
-#endif
+
+#endif  // LSQUANT_CORE_ALGEBRA_BUILD_PROFILE_HPP_

@@ -1,4 +1,4 @@
-"""Stage-6d spectral selection tools; the nonorthogonal overlap is preserved."""
+"""Spectral window projection and orthogonal downfolding tools."""
 from .spectral import (SpectralProjection, spectral_projection, resolve_projection,
                        word_trace, word_error)
 

@@ -1,3 +1,7 @@
+/**
+ * @file memory_placement.hpp
+ * @brief NUMA-aware page placement helpers for native builds.
+ */
 #ifndef LSQUANT_CORE_ALGEBRA_MEMORY_PLACEMENT_HPP_
 #define LSQUANT_CORE_ALGEBRA_MEMORY_PLACEMENT_HPP_
 
@@ -11,14 +15,14 @@
 #endif
 
 namespace lsquant {
-// Item 4: std::vector value-initializes serially. Discard only complete interior
-// pages of a newly owned buffer BEFORE filling it; the static owner then faults
-// them locally. Never call on live data or shared/borrowed buffers. If madvise is
-// unavailable, correctness is unchanged, placement is best effort. Tester must
-// inspect numa_maps/numastat as well as timings; rewriting live pages is not a fix.
+
+constexpr std::size_t kMinPageDiscardBytes = 1024 * 1024;
+
+// Discard complete interior pages of a newly allocated buffer before parallel first-touch
+// initialization so each OpenMP thread faults its slice on its local NUMA node.
 inline void DiscardInteriorPages(void* data, std::size_t bytes) {
 #ifdef __linux__
-  if (!data || bytes < 1024 * 1024) return;
+  if (!data || bytes < kMinPageDiscardBytes) return;
   const long pageQuery = sysconf(_SC_PAGESIZE);
   if (pageQuery <= 0) return;
   const auto page = static_cast<std::uintptr_t>(pageQuery);
@@ -41,6 +45,7 @@ inline Vector MakeZeroVector(Index size) {
   for (Index i = 0; i < size; ++i) result[static_cast<std::size_t>(i)] = Scalar(0.0, 0.0);
   return result;
 }
+
 }  // namespace lsquant
 #endif
-#endif
+#endif  // LSQUANT_CORE_ALGEBRA_MEMORY_PLACEMENT_HPP_

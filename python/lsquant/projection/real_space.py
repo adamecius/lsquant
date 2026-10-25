@@ -12,7 +12,7 @@ import numpy as np
 from scipy import sparse
 
 from .origin import origin_module
-from .spectral import adjoint, physical_blocks
+from .spectral import physical_blocks
 
 
 def cell_gauge(blocks, k_points, centres):
@@ -97,8 +97,8 @@ class LocalMatrix:
     def supercell_csr(self, supercell=None):
         """Periodic cell-gauge CSR, i fastest, orbital index inside each cell.
 
-        This exposes local physical matrices to the 6c supercell/disorder
-        route without assuming a diagonal disorder operator or changing S.
+        Exposes local physical matrices to the supercell/disorder route
+        without assuming a diagonal disorder operator or changing S.
         WS images wrapping to the same entry are summed by COO -> CSR.
         """
         supplied = np.asarray(self.supercell if supercell is None else supercell)

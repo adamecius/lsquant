@@ -47,7 +47,7 @@ def time_evolution_series(
 ) -> tuple[npt.NDArray[np.complex128], complex]:
     """Compute Bessel series coefficients and band-center phase for ``U(dt)``.
 
-    Reproduces the ``MomentsTD::Evolve`` parameters verbatim:
+    Reproduces the legacy Bessel time-evolution parameters verbatim:
     ``x = dt * (BandWidth / 2.0 / 1.0 / HBAR)``,
     ``exp0 = exp(-i * (BandCenter / HBAR) * dt)``.
     """
@@ -216,7 +216,7 @@ def msd_plan(
 
     Solves the problem of evaluating ``Tr[[X, U(t)]^+ delta(E - H) [X, U(t)]]``
     via the coupled ``(Ket = MSDWF, Aux = PhiR)`` time-evolution recursion of
-    legacy ``MeanSquareDisplacement`` and ``MomentsTD::MSD_Evolve``:
+    the legacy ballistic mean-square-displacement algorithm:
 
     - Seed preparation: ``ApplySeries([])`` zeros ``seed[Ket]`` (``MSDWF``) while
       ``seed[Aux]`` starts as ``|r>``, followed by ``MirrorToBra()``. An empty
