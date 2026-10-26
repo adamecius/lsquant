@@ -19,10 +19,12 @@ LSQUANT computes spectral and quantum transport properties of large tight-bindin
 ## How-to guides
 
 - [Write a JSON run file](how-to/run-json-file.md)
+- [Performance notes](how-to/performance-notes.md)
 
 ## Reference
 
 - [Observable Catalogue](reference/observable-words.md)
+- [Bases and metrics](reference/bases-and-metrics.md)
 
 ## Explanation
 
