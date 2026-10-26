@@ -1,10 +1,14 @@
 # Getting Started
 
-This tutorial shows how to build LSQUANT and compute the density of states of a simple 1D chain.
+This tutorial shows how to build LSQUANT and compute the density of states of a simple 1D tight-binding chain.
 
 ## Prerequisites
 
-You need a C++17 compiler, CMake ≥ 3.16, Eigen3, FFTW3, OpenMP, and Python ≥ 3.10 with numpy, scipy, sympy, and pybind11.
+You need:
+- A C++17 compiler (g++ ≥ 11 or clang++ ≥ 14)
+- CMake ≥ 3.16
+- Eigen3, FFTW3, OpenMP
+- Python ≥ 3.10 with numpy, scipy, sympy, and pybind11
 
 On Ubuntu/Debian:
 
@@ -18,18 +22,22 @@ pip install numpy scipy sympy pybind11 matplotlib
 ```bash
 git clone https://github.com/adamecius/lsquant.git
 cd lsquant
-cmake --preset golden
-cmake --build --preset golden
-export PYTHONPATH="$PWD/build/golden/lsquant_core:$PWD/python"
+cmake --preset default
+cmake --build --preset default
+export PYTHONPATH="$PWD/build/default/lsquant_core:$PWD/python"
 ```
 
-## Run a DOS calculation
+## Run a density of states calculation
 
 ```bash
 python3 -m lsquant run examples/01_dos_1d_chain/run_dos.json --out /tmp/chain_dos
 python3 -m lsquant inspect /tmp/chain_dos
 ```
 
-You should see a density of states with the expected van Hove singularities of a 1D tight-binding chain.
+You should obtain the density of states of a 1D tight-binding chain, showing the expected van Hove singularities.
 
-Next: see the [Haldane Hall tutorial](haldane-hall.md) or the [JSON run file how-to](../how-to/run-json-file.md).
+## Next steps
+
+- Try the Haldane model Hall conductivity example: `examples/03_haldane_hall/`
+- See how to write your own calculation: [JSON run file guide](../how-to/run-json-file.md) (coming soon)
+- Load a SIESTA Hamiltonian for spin Hall calculations
