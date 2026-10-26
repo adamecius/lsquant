@@ -1,15 +1,17 @@
-# Observable Word Catalogue
+# Observable Catalogue
 
-Every spectral or transport quantity in LSQUANT is expressed as a trace of an ordered word of operators and spectral functions.
+LSQUANT can compute the following physical quantities. Each one is specified by a short expression (an “observable word”) that describes the operators and spectral functions involved.
 
-| Shape ID | Canonical word | Rank | Typical use |
-|----------|----------------|------|-------------|
-| `dos_identity` | `Tr[delta(E-H)]` | 1 | Density of states |
-| `dos_operator` | `Tr[A delta(E-H)]` | 1 | Projected or operator-weighted DOS |
-| `kubo_greenwood` | `Tr[VX delta(E-H) VX delta(E-H)]` | 2 | Longitudinal conductivity |
-| `kubo_bastin` | `Tr[VX delta(E-H) VY dG-(E)/dE]` | 2 | Hall conductivity, spin Hall |
-| `msd` | `Tr[[X,U(t)]^+ delta(E-H) [X,U(t)]]` | 1 | Mean-square displacement |
-| `projected_evolution` | `Tr[P U(t)^+ SX U(t) delta(E-H) P]` | 1 | Spin precession / relaxation |
-| `time_correlation` | `Tr[A delta(E-H) U(t)^+ B U(t)]` | 1 | General time correlations |
+| Quantity | Expression | Typical use |
+|----------|------------|-------------|
+| Density of states | `Tr[delta(E-H)]` | Total DOS |
+| Projected DOS | `Tr[A delta(E-H)]` | Orbital- or spin-projected DOS |
+| Longitudinal conductivity | `Tr[VX delta(E-H) VX delta(E-H)]` | $\sigma_{xx}(E)$ (Kubo–Greenwood) |
+| Hall / spin Hall conductivity | `Tr[VX delta(E-H) VY dG-(E)/dE]` | $\sigma_{xy}(E)$, spin Hall (with spin current) |
+| Mean-square displacement | `Tr[[X,U(t)]^+ delta(E-H) [X,U(t)]]` | Diffusion, localization length |
+| Spin dynamics | `Tr[P U(t)^+ S U(t) delta(E-H) P]` | Spin precession, relaxation |
+| Time correlation | `Tr[A delta(E-H) U(t)^+ B U(t)]` | General dynamical correlations |
 
-See the [unifying idea](../explanation/unifying-idea.md) for the conceptual background.
+All of these are available for real-space models, Bloch Hamiltonians, and non-orthogonal bases (including SIESTA).
+
+For the complete list of supported operators and functions see the examples in the `examples/` directory.

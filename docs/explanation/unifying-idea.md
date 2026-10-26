@@ -1,20 +1,20 @@
-# The Unifying Idea
+# How LSQUANT Works
 
-LSQUANT computes spectral and transport observables without diagonalizing the Hamiltonian. Every quantity is written as the trace of an ordered product of static operators and spectral functions of the Hamiltonian:
+LSQUANT calculates spectral and transport properties of large systems without diagonalizing the Hamiltonian. Instead of finding all eigenvalues and eigenvectors, it expands the desired physical quantity in Chebyshev polynomials and evaluates the expansion using matrix–vector multiplications. The computational cost therefore grows linearly with the number of atoms (or orbitals).
+
+Any spectral or transport observable can be written as a trace of the form
 
 $$
 C = \mathrm{Tr}\bigl[ A_0\, f_1(H)\, A_1\, f_2(H)\, \cdots\, f_p(H)\, A_p \bigr]
 $$
 
-The library parses this “observable word”, compiles it into a short bytecode plan, executes the plan with the Kernel Polynomial Method on any linear operator, and reconstructs the physical curve from the resulting Chebyshev moments.
+where the $A_i$ are static operators (velocity, spin, projectors, etc.) and the $f_i(H)$ are functions of the Hamiltonian (delta functions, energy derivatives of the Green function, time evolution, etc.).
 
-This single abstraction covers:
-- Density of states
-- Longitudinal and Hall conductivities
-- Spin Hall conductivity
-- Real-time dynamics and mean-square displacement
-- Calculations on real-space, Bloch, and eigen bases
-- Orthogonal and non-orthogonal metrics
-- First-principles SIESTA models
+The library:
+1. Parses the expression (the “observable word”),
+2. Executes the necessary Chebyshev expansions,
+3. Reconstructs the physical curve (density of states, conductivity, etc.).
 
-The same word language and engine work for all of these cases.
+This approach is used for density of states, longitudinal and Hall conductivities, spin Hall conductivity, real-time spin dynamics, and mean-square displacement, on both tight-binding and first-principles (SIESTA) models.
+
+For small systems the same quantities can also be computed by exact diagonalization to validate the results.
