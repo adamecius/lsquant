@@ -2,14 +2,28 @@
 
 Welcome to the LSQUANT documentation.
 
-LSQUANT is a library for large-scale spectral and quantum transport calculations using the Kernel Polynomial Method.
+LSQUANT computes spectral and quantum transport properties of large tight-binding and first-principles models at linear cost, without diagonalizing the Hamiltonian.
 
 ## Start here
 
-- **[Getting Started](tutorials/getting-started.md)** — build the library and run your first calculation.
-- **[Unifying Idea](explanation/unifying-idea.md)** — the core concept behind all observables.
-- **[Observable Word Catalogue](reference/observable-words.md)** — list of supported quantities.
+- **[Getting Started](tutorials/getting-started.md)** — install and run your first density-of-states calculation.
+- **[How it works](explanation/unifying-idea.md)** — the Kernel Polynomial Method and observable words.
+- **[Observable Catalogue](reference/observable-words.md)** — densities of states, conductivities, spin dynamics, etc.
 
-## Full structure
+## Tutorials
 
-See [docs_structure.md](docs_structure.md) for the complete Diátaxis layout (tutorials, how-to, reference, explanation).
+- [Getting Started](tutorials/getting-started.md)
+- [Haldane Hall conductivity](tutorials/haldane-hall.md)
+- [Spin Hall from SIESTA](tutorials/spin-hall-siesta.md)
+
+## How-to guides
+
+- [Write a JSON run file](how-to/run-json-file.md)
+
+## Reference
+
+- [Observable Catalogue](reference/observable-words.md)
+
+## Explanation
+
+- [How LSQUANT works](explanation/unifying-idea.md)
