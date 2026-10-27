@@ -133,7 +133,11 @@ usage() { echo "usage: scripts/check_goldens.sh <stage> [build_dir]"; exit 2; }
 [ $# -ge 1 ] || usage
 STAGE="$1"
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-BUILD="$(cd "${2:-$REPO/build}" 2>/dev/null && pwd)" || { echo "ERROR: build dir '${2:-build}' not found"; exit 2; }
+# Default build directory: $REPO/build when it holds lsquant_core, else the "golden" preset
+# directory $REPO/build/golden (CMakePresets.json).
+DEFBUILD="$REPO/build"
+[ -d "$DEFBUILD/lsquant_core" ] || [ ! -d "$REPO/build/golden/lsquant_core" ] || DEFBUILD="$REPO/build/golden"
+BUILD="$(cd "${2:-$DEFBUILD}" 2>/dev/null && pwd)" || { echo "ERROR: build dir '${2:-$DEFBUILD}' not found"; exit 2; }
 GOLD="$REPO/goldens/stage0"
 export KPM_SEED=12345
 [ -d "$GOLD" ] || { echo "ERROR: $GOLD missing"; exit 2; }
@@ -1481,14 +1485,17 @@ stage7_deleted() {
   n="$(git -C "$REPO" ls-files 'examples/*.sh' 'examples/**/*.sh' | wc -l)"; [ "$n" -eq 0 ]; s7chk $? "legacy shell scripts under examples/: $n"
   n="$(git -C "$REPO" ls-files legacy | wc -l)"; [ "$n" -eq 0 ]; s7chk $? "git ls-files legacy: $n files"
   # inline_* (legacy driver names): allowed only under goldens/stage0/**/legacy_defects and in
-  # goldens/stage0/PROVENANCE.md. Reported but not counted: handoff/ (the project's record),
-  # figures/out/**/*.log (recorded build and run logs) and the stage-0 harness, which must name the
+  # goldens/stage0/PROVENANCE.md. Reported but not counted: handoff/, AGENTS.md and CLAUDE.md
+  # (the project's record),
+  # figures/out/**/*.log (recorded build and run logs), figures/out/final/legacy_vs_new_on_aron.txt
+  # (the recorded legacy-vs-new comparison, which names the legacy driver as the provenance of G4c)
+  # and the stage-0 harness, which must name the
   # legacy drivers to rebuild the goldens from legacy-final (scripts/check_goldens.sh stage 0,
   # figures/stage_0.py). Everything else (code, documentation) fails the check.
   local all ex bad
   all="$(git -C "$REPO" grep -l 'inline_[A-Za-z]' -- . ':!goldens/stage0/PROVENANCE.md' | grep -v '^goldens/stage0/\(.*/\)\?legacy_defects/')"
-  ex="$(printf '%s\n' "$all" | grep -E '^(handoff/|figures/out/.*\.log$|scripts/check_goldens\.sh$|figures/stage_0\.py$)')"
-  bad="$(printf '%s\n' "$all" | grep -vE '^(handoff/|figures/out/.*\.log$|scripts/check_goldens\.sh$|figures/stage_0\.py$)' | grep -v '^$')"
+  ex="$(printf '%s\n' "$all" | grep -E '^(handoff/|AGENTS\.md$|CLAUDE\.md$|figures/out/.*\.log$|figures/out/final/legacy_vs_new_on_aron\.txt$|scripts/check_goldens\.sh$|figures/stage_0\.py$)')"
+  bad="$(printf '%s\n' "$all" | grep -vE '^(handoff/|AGENTS\.md$|CLAUDE\.md$|figures/out/.*\.log$|figures/out/final/legacy_vs_new_on_aron\.txt$|scripts/check_goldens\.sh$|figures/stage_0\.py$)' | grep -v '^$')"
   [ -z "$bad" ]; s7chk $? "no inline_* mention outside goldens/stage0/**/legacy_defects and PROVENANCE.md (code and documentation): $(printf '%s\n' "$bad" | grep -c .) files$( [ -n "$bad" ] && echo ": $(echo $bad)")"
   [ -n "$bad" ] && for f in $bad; do git -C "$REPO" grep -n 'inline_[A-Za-z]' -- "$f" | head -3 | sed 's/^/          /'; done
   echo "INFO      inline_* in the record and the stage-0 harness (not counted): $(printf '%s\n' "$ex" | grep -c .) files: $(echo $ex | cut -c1-600)"
