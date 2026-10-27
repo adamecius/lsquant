@@ -1487,13 +1487,15 @@ stage7_deleted() {
   # inline_* (legacy driver names): allowed only under goldens/stage0/**/legacy_defects and in
   # goldens/stage0/PROVENANCE.md. Reported but not counted: handoff/, AGENTS.md and CLAUDE.md
   # (the project's record),
-  # figures/out/**/*.log (recorded build and run logs) and the stage-0 harness, which must name the
+  # figures/out/**/*.log (recorded build and run logs), figures/out/final/legacy_vs_new_on_aron.txt
+  # (the recorded legacy-vs-new comparison, which names the legacy driver as the provenance of G4c)
+  # and the stage-0 harness, which must name the
   # legacy drivers to rebuild the goldens from legacy-final (scripts/check_goldens.sh stage 0,
   # figures/stage_0.py). Everything else (code, documentation) fails the check.
   local all ex bad
   all="$(git -C "$REPO" grep -l 'inline_[A-Za-z]' -- . ':!goldens/stage0/PROVENANCE.md' | grep -v '^goldens/stage0/\(.*/\)\?legacy_defects/')"
-  ex="$(printf '%s\n' "$all" | grep -E '^(handoff/|AGENTS\.md$|CLAUDE\.md$|figures/out/.*\.log$|scripts/check_goldens\.sh$|figures/stage_0\.py$)')"
-  bad="$(printf '%s\n' "$all" | grep -vE '^(handoff/|AGENTS\.md$|CLAUDE\.md$|figures/out/.*\.log$|scripts/check_goldens\.sh$|figures/stage_0\.py$)' | grep -v '^$')"
+  ex="$(printf '%s\n' "$all" | grep -E '^(handoff/|AGENTS\.md$|CLAUDE\.md$|figures/out/.*\.log$|figures/out/final/legacy_vs_new_on_aron\.txt$|scripts/check_goldens\.sh$|figures/stage_0\.py$)')"
+  bad="$(printf '%s\n' "$all" | grep -vE '^(handoff/|AGENTS\.md$|CLAUDE\.md$|figures/out/.*\.log$|figures/out/final/legacy_vs_new_on_aron\.txt$|scripts/check_goldens\.sh$|figures/stage_0\.py$)' | grep -v '^$')"
   [ -z "$bad" ]; s7chk $? "no inline_* mention outside goldens/stage0/**/legacy_defects and PROVENANCE.md (code and documentation): $(printf '%s\n' "$bad" | grep -c .) files$( [ -n "$bad" ] && echo ": $(echo $bad)")"
   [ -n "$bad" ] && for f in $bad; do git -C "$REPO" grep -n 'inline_[A-Za-z]' -- "$f" | head -3 | sed 's/^/          /'; done
   echo "INFO      inline_* in the record and the stage-0 harness (not counted): $(printf '%s\n' "$ex" | grep -c .) files: $(echo $ex | cut -c1-600)"
