@@ -1,0 +1,14 @@
+$ PYTHONPATH=build/lsquant_core:python OMP_NUM_THREADS=16 python3 -u tests/dev/stage_4_check.py
+(a) G7 chain1d_mag Gershgorin window = [-2.31, 2.31], BandWidth = 4.62
+(a) G7 TimeProjSX-PX array_equal vs golden: True
+(a) G7 TimeProjSY-PX array_equal vs golden: True
+(a) G7 TimeProjSZ-PX array_equal vs golden: True
+(b) G6 CorrelationVXchain1d array_equal vs golden: True
+(b) G6 EF=+0.0 curve differing lines: 0 (total lines: 64)
+(b) G6 EF=+0.5 curve differing lines: 0 (total lines: 64)
+(b) G6 EF=+1.0 curve differing lines: 0 (total lines: 64)
+(b) G6 EF=+1.5 curve differing lines: 0 (total lines: 64)
+(c) compat GSL Bessel vs SciPy jv max_abs_diff = 5.551115e-16
+(d) time_correlation_plan chain1d VX-VX (M=64, steps=16, tmax=5, exact) array_equal vs inline_compute-kpm-CorrOp: True
+wall 655.12 s
+exit: 0

@@ -1,0 +1,106 @@
+== stage 1: /home/ICN2/jgarcia/lsquant-save-20261023/build-6c/lsquant_core/stage1_moments vs goldens/stage0/chain1d (KPM_SEED=12345)
+IDENTICAL [T=1] chain1d/SpectralOp1chain1dKPM_M64_stateexact.chebmom1D (G1)
+IDENTICAL [T=1] chain1d/NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D (G2)
+IDENTICAL [T=8] chain1d/SpectralOp1chain1dKPM_M64_stateexact.chebmom1D (G1)
+IDENTICAL [T=8] chain1d/NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D (G2)
+IDENTICAL [T=64] chain1d/SpectralOp1chain1dKPM_M64_stateexact.chebmom1D (G1)
+IDENTICAL [T=64] chain1d/NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D (G2)
+IDENTICAL [T=8, batch 16] chain1d/NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D (G2, batched)
+IDENTICAL [random, run2 vs run1] NonEqOpVX-VXchain1dKPM_M64x64_statedefault.chebmom
+IDENTICAL [random, run2 vs run1] NonEqOpVX-VXchain1dKPM_M64x64_statedefault.chebmom2D
+IDENTICAL [random, run2 vs run1] SpectralOp1chain1dKPM_M64_statedefault.chebmom
+IDENTICAL [random, run2 vs run1] SpectralOp1chain1dKPM_M64_statedefault.chebmom1D
+GREP      grep -rn "basis\|std::cout\|getenv" lsquant/core: empty
+== stage 2: python3 -m lsquant.apps.stage2_dos, PYTHONPATH=/home/ICN2/jgarcia/lsquant-save-20261023/build-6c/lsquant_core:python, vs goldens/stage0/chain1d (KPM_SEED=12345)
+          [T=1] (a) printed: meanSpectralOp1chain1dKPM_M64_stateexactJACKSON.dat
+IDENTICAL [T=1] (a) --moments G1 -> chain1d/meanSpectralOp1chain1dKPM_M64_stateexactJACKSON.dat (G3)
+          [T=1] (b) printed: ReadCsrText: /home/ICN2/jgarcia/lsquant-save-20261023/gate-6c/goldens/stage0/chain1d/operators/chain1d.HAM.CSR anti_hermitian_norm=0 relative=0 legacy_fold=0
+          [T=1] (b) printed: SpectralOp1chain1dKPM_M64_stateexact.chebmom1D
+          [T=1] (b) printed: meanSpectralOp1chain1dKPM_M64_stateexactJACKSON.dat
+IDENTICAL [T=1] (b) --operators -> chain1d/SpectralOp1chain1dKPM_M64_stateexact.chebmom1D (G1)
+IDENTICAL [T=1] (b) --operators -> chain1d/meanSpectralOp1chain1dKPM_M64_stateexactJACKSON.dat (G3)
+          [T=16] (a) printed: meanSpectralOp1chain1dKPM_M64_stateexactJACKSON.dat
+IDENTICAL [T=16] (a) --moments G1 -> chain1d/meanSpectralOp1chain1dKPM_M64_stateexactJACKSON.dat (G3)
+          [T=16] (b) printed: ReadCsrText: /home/ICN2/jgarcia/lsquant-save-20261023/gate-6c/goldens/stage0/chain1d/operators/chain1d.HAM.CSR anti_hermitian_norm=0 relative=0 legacy_fold=0
+          [T=16] (b) printed: SpectralOp1chain1dKPM_M64_stateexact.chebmom1D
+          [T=16] (b) printed: meanSpectralOp1chain1dKPM_M64_stateexactJACKSON.dat
+IDENTICAL [T=16] (b) --operators -> chain1d/SpectralOp1chain1dKPM_M64_stateexact.chebmom1D (G1)
+IDENTICAL [T=16] (b) --operators -> chain1d/meanSpectralOp1chain1dKPM_M64_stateexactJACKSON.dat (G3)
+GREP      grep -rn "delta\|DOS\|Kubo\|basis\|std::cout\|getenv" lsquant/core lsquant/io, code lines: empty
+          excluded comment line: lsquant/core/chebyshev/chebyshev_moments.hpp:27: * recording whether the `(2 - delta_{m0})` KPM weights (`kpmWeighted`) and Hermitian
+          excluded comment line: lsquant/core/chebyshev/chebyshev_moments.hpp:32: *      Never apply KPM `(2 - delta_{m0})` weights or symmetrisation twice; check
+          excluded comment line: lsquant/core/chebyshev/chebyshev_moments.hpp:160: * @brief Apply the legacy rank-2 KPM `(2 - delta_{m0})` weights and optional Hermitian symmetrisation.
+          excluded comment line: lsquant/core/algebra/metric_policy.hpp:34: *      both be applied on the bra side of rank-2 Kubo words (`S T_m(S^-1 H~) S^-1 V S^-1 |r>`)
+          excluded comment line: lsquant/core/algebra/composite_operators.hpp:531: *      which is why the generalised Kubo bra path requires explicit `S^{-1}` and `S`
+== stage 3: python3 -m lsquant.apps.stage3_kubo, PYTHONPATH=/home/ICN2/jgarcia/lsquant-save-20261023/build-6c/lsquant_core:python, vs goldens/stage0/{haldane,graphene}
+          [T=16] G5 VX-VY moments printed: NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom2D
+          [T=16] G5 VX-VY moments printed: NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom
+          [T=16] G5 VX-VX moments printed: NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom2D
+          [T=16] G5 VX-VX moments printed: NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom
+IDENTICAL [T=16] haldane/NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom2D (G5 moments)
+IDENTICAL [T=16] haldane/NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom2D (G5 moments)
+          [T=16] G5 bastin printed: KuboBastin_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat
+          [T=16] G5 sea printed: KuboBastinSea_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat
+          [T=16] G5 surf printed: KuboBastinSurf_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat
+          [T=16] G5 greenwood printed: KuboGreenWood_NonEqOpVX-VXhaldaneKPM_M128x128_stateexactJACKSON.dat
+IDENTICAL [T=16] haldane/KuboBastin_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat (G5 curve)
+IDENTICAL [T=16] haldane/KuboBastinSea_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat (G5 curve)
+IDENTICAL [T=16] haldane/KuboBastinSurf_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat (G5 curve)
+IDENTICAL [T=16] haldane/KuboGreenWood_NonEqOpVX-VXhaldaneKPM_M128x128_stateexactJACKSON.dat (G5 curve)
+          [T=16] G4 VX-VX moments printed: NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefault.chebmom2D
+          [T=16] G4 VX-VX moments printed: NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefault.chebmom
+IDENTICAL [T=16] graphene/NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefault.chebmom2D (G4 moments)
+          [T=16] G4 bastin 64 meV printed: KuboBastin_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON.dat
+          [T=16] G4 sea 10 meV printed: KuboBastinSea_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON.dat
+          [T=16] G4 surf 10 meV printed: KuboBastinSurf_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON.dat
+          [T=16] G4 greenwood_fft 10 meV printed: KuboGreenWood_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON_FFTgrid.dat
+          [T=16] G4 bastin_fft 10 meV printed: KuboBastin_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON_FFTgrid.dat
+IDENTICAL [T=16] graphene/KuboBastin_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON.dat (G4 curve, 64 meV)
+IDENTICAL [T=16] graphene/sea_surf/KuboBastinSea_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON.dat (G4 curve, 10 meV)
+IDENTICAL [T=16] graphene/sea_surf/KuboBastinSurf_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON.dat (G4 curve, 10 meV)
+IDENTICAL [T=16] graphene/fft_grid/KuboGreenWood_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON_FFTgrid.dat (G4 curve, 10 meV)
+IDENTICAL [T=16] graphene/fft_grid/KuboBastin_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON_FFTgrid.dat (G4 curve, 10 meV)
+          [T=16] G4c offcentre_enclosing VX-VY moments printed: NonEqOpVX-VYgraphene_goldenKPM_M128x128_stateexact.chebmom2D
+          [T=16] G4c offcentre_enclosing VX-VY moments printed: NonEqOpVX-VYgraphene_goldenKPM_M128x128_stateexact.chebmom
+IDENTICAL [T=16] graphene/offcentre_enclosing/NonEqOpVX-VYgraphene_goldenKPM_M128x128_stateexact.chebmom2D (G4c moments)
+          [T=16] G4c offcentre_enclosing bastin (golden moments) printed: KuboBastin_NonEqOpVX-VYgraphene_goldenKPM_M128x128_stateexactJACKSON.dat
+          [T=16] G4c offcentre_enclosing bastin (new moments) printed: KuboBastin_NonEqOpVX-VYgraphene_goldenKPM_M128x128_stateexactJACKSON.dat
+IDENTICAL [T=16] graphene/offcentre_enclosing/KuboBastin_NonEqOpVX-VYgraphene_goldenKPM_M128x128_stateexactJACKSON.dat (G4c curve, 10 meV, from golden moments)
+IDENTICAL [T=16] graphene/offcentre_enclosing/KuboBastin_NonEqOpVX-VYgraphene_goldenKPM_M128x128_stateexactJACKSON.dat (G4c curve, 10 meV, from new moments)
+          [T=1] G5 VX-VY moments printed: NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom2D
+          [T=1] G5 VX-VY moments printed: NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom
+          [T=1] G5 VX-VX moments printed: NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom2D
+          [T=1] G5 VX-VX moments printed: NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom
+IDENTICAL [T=1] haldane/NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom2D (G5 moments)
+IDENTICAL [T=1] haldane/NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom2D (G5 moments)
+          [T=1] G5 bastin printed: KuboBastin_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat
+          [T=1] G5 sea printed: KuboBastinSea_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat
+          [T=1] G5 surf printed: KuboBastinSurf_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat
+          [T=1] G5 greenwood printed: KuboGreenWood_NonEqOpVX-VXhaldaneKPM_M128x128_stateexactJACKSON.dat
+IDENTICAL [T=1] haldane/KuboBastin_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat (G5 curve)
+IDENTICAL [T=1] haldane/KuboBastinSea_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat (G5 curve)
+IDENTICAL [T=1] haldane/KuboBastinSurf_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat (G5 curve)
+IDENTICAL [T=1] haldane/KuboGreenWood_NonEqOpVX-VXhaldaneKPM_M128x128_stateexactJACKSON.dat (G5 curve)
+          [T=1] G4 VX-VX moments printed: NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefault.chebmom2D
+          [T=1] G4 VX-VX moments printed: NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefault.chebmom
+IDENTICAL [T=1] graphene/NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefault.chebmom2D (G4 moments)
+          [T=1] G4 bastin 64 meV printed: KuboBastin_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON.dat
+          [T=1] G4 sea 10 meV printed: KuboBastinSea_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON.dat
+          [T=1] G4 surf 10 meV printed: KuboBastinSurf_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON.dat
+          [T=1] G4 greenwood_fft 10 meV printed: KuboGreenWood_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON_FFTgrid.dat
+          [T=1] G4 bastin_fft 10 meV printed: KuboBastin_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON_FFTgrid.dat
+IDENTICAL [T=1] graphene/KuboBastin_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON.dat (G4 curve, 64 meV)
+IDENTICAL [T=1] graphene/sea_surf/KuboBastinSea_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON.dat (G4 curve, 10 meV)
+IDENTICAL [T=1] graphene/sea_surf/KuboBastinSurf_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON.dat (G4 curve, 10 meV)
+IDENTICAL [T=1] graphene/fft_grid/KuboGreenWood_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON_FFTgrid.dat (G4 curve, 10 meV)
+IDENTICAL [T=1] graphene/fft_grid/KuboBastin_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON_FFTgrid.dat (G4 curve, 10 meV)
+          [T=1] G4c offcentre_enclosing VX-VY moments printed: NonEqOpVX-VYgraphene_goldenKPM_M128x128_stateexact.chebmom2D
+          [T=1] G4c offcentre_enclosing VX-VY moments printed: NonEqOpVX-VYgraphene_goldenKPM_M128x128_stateexact.chebmom
+IDENTICAL [T=1] graphene/offcentre_enclosing/NonEqOpVX-VYgraphene_goldenKPM_M128x128_stateexact.chebmom2D (G4c moments)
+          [T=1] G4c offcentre_enclosing bastin (golden moments) printed: KuboBastin_NonEqOpVX-VYgraphene_goldenKPM_M128x128_stateexactJACKSON.dat
+          [T=1] G4c offcentre_enclosing bastin (new moments) printed: KuboBastin_NonEqOpVX-VYgraphene_goldenKPM_M128x128_stateexactJACKSON.dat
+IDENTICAL [T=1] graphene/offcentre_enclosing/KuboBastin_NonEqOpVX-VYgraphene_goldenKPM_M128x128_stateexactJACKSON.dat (G4c curve, 10 meV, from golden moments)
+IDENTICAL [T=1] graphene/offcentre_enclosing/KuboBastin_NonEqOpVX-VYgraphene_goldenKPM_M128x128_stateexactJACKSON.dat (G4c curve, 10 meV, from new moments)
+GREP      grep -rn "compat/" lsquant/core lsquant/io: empty
+== 47 files compared; failures: 0
+GATE PASS (stage 3)

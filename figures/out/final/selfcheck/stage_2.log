@@ -1,0 +1,4 @@
+(a) dos_plan array_equal vs G1:  True
+(a) kubo_plan array_equal vs G2: True
+(b) DeltaFunction.table vs legacy_delta_table max_abs_diff = 2.220446e-16
+(c) dos_curve vs G3 differing lines: 0 (total lines: 1590)

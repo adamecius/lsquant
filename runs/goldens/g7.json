@@ -1,0 +1,36 @@
+{
+  "model": {
+    "kind": "csr",
+    "dir": "goldens/stage0/chain1d_mag/operators",
+    "label": "chain1d_mag",
+    "operators": ["SX", "SY", "SZ", "PX"]
+  },
+  "basis": {
+    "name": "real"
+  },
+  "metric": {
+    "policy": "orthogonal"
+  },
+  "word": "Tr[P:PX U(t)^+ SX U(t) delta(E-H) P:PX]",
+  "words": [
+    "Tr[P:PX U(t)^+ SX U(t) delta(E-H) P:PX]",
+    "Tr[P:PX U(t)^+ SY U(t) delta(E-H) P:PX]",
+    "Tr[P:PX U(t)^+ SZ U(t) delta(E-H) P:PX]"
+  ],
+  "expansion": {
+    "moments": 32,
+    "window": "gershgorin",
+    "trace": "exact",
+    "states": 128
+  },
+  "time": {
+    "steps": 96,
+    "tmax": 95.0,
+    "bessel": "legacy"
+  },
+  "output": {
+    "dir": "out/g7",
+    "legacy_names": true,
+    "legacy_layout": true
+  }
+}

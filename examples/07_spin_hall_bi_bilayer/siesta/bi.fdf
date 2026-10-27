@@ -1,0 +1,57 @@
+SystemName  Bi(111) bilayer, free-standing, SOC
+SystemLabel bi
+
+NumberOfAtoms   2
+NumberOfSpecies 1
+%block ChemicalSpeciesLabel
+ 1 83 Bi
+%endblock ChemicalSpeciesLabel
+
+LatticeConstant 1.0 Ang
+%block LatticeVectors
+  4.340000000   0.000000000   0.000000000
+  2.170000000   3.758553186   0.000000000
+  0.000000000   0.000000000  22.000000000
+%endblock LatticeVectors
+
+AtomicCoordinatesFormat Ang
+%block AtomicCoordinatesAndAtomicSpecies
+  0.000000000   0.000000000   0.000000000  1
+  2.170000000   1.252851062   1.700000000  1
+%endblock AtomicCoordinatesAndAtomicSpecies
+
+PAO.BasisSize    DZP
+PAO.EnergyShift  150 meV
+
+XC.functional   GGA
+XC.authors      PBE
+Spin            spin-orbit
+
+MeshCutoff      350. Ry
+ElectronicTemperature 5 meV
+SolutionMethod  diagon
+Diag.ParallelOverK true
+
+%block kgrid.MonkhorstPack
+  24  0  0  0.0
+   0 24  0  0.0
+   0  0  1  0.0
+%endblock kgrid.MonkhorstPack
+
+SCF.DM.Tolerance    1.0E-5
+MaxSCFIterations    300
+DM.MixingWeight     0.05
+DM.NumberPulay      6
+DM.UseSaveDM        T
+
+SaveHS      true
+TS.HS.Save  true
+WriteForces T
+
+%block BandLines
+  1  0.0000 0.0000 0.0000  \Gamma
+ 40  0.5000 0.0000 0.0000  M
+ 40  0.3333 0.3333 0.0000  K
+ 40  0.0000 0.0000 0.0000  \Gamma
+%endblock BandLines
+BandLinesScale ReciprocalLatticeVectors

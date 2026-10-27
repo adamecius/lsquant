@@ -1,0 +1,8 @@
+(a) G7 chain1d_mag Gershgorin window = [-2.31, 2.31], BandWidth = 4.62
+(a) G7 TimeProjSX-PX array_equal vs golden: False
+Traceback (most recent call last):
+  File "/home/jgarcia/lsquant-final2/tests/dev/stage_4_check.py", line 331, in <module>
+    sys.exit(main())
+  File "/home/jgarcia/lsquant-final2/tests/dev/stage_4_check.py", line 164, in main
+    assert g7_equal, f"G7 TimeProj{op_name}-PX moments do not equal golden"
+AssertionError: G7 TimeProjSX-PX moments do not equal golden

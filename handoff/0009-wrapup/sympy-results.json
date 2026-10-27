@@ -1,0 +1,271 @@
+{
+  "chebyshev_product_all_angles": {
+    "residual": "0",
+    "scope": "For all real angles; substitute a=m theta,b=n theta and x=cos(theta)."
+  },
+  "dos_even_1": {
+    "residual": "0",
+    "scope": "Polynomial corroboration; same-seed Hermitian identity-DOS shortcut."
+  },
+  "dos_odd_1": {
+    "residual": "0",
+    "scope": "Polynomial corroboration; raw unweighted moments only."
+  },
+  "dos_even_2": {
+    "residual": "0",
+    "scope": "Polynomial corroboration; same-seed Hermitian identity-DOS shortcut."
+  },
+  "dos_odd_2": {
+    "residual": "0",
+    "scope": "Polynomial corroboration; raw unweighted moments only."
+  },
+  "dos_even_3": {
+    "residual": "0",
+    "scope": "Polynomial corroboration; same-seed Hermitian identity-DOS shortcut."
+  },
+  "dos_odd_3": {
+    "residual": "0",
+    "scope": "Polynomial corroboration; raw unweighted moments only."
+  },
+  "dos_even_4": {
+    "residual": "0",
+    "scope": "Polynomial corroboration; same-seed Hermitian identity-DOS shortcut."
+  },
+  "dos_odd_4": {
+    "residual": "0",
+    "scope": "Polynomial corroboration; raw unweighted moments only."
+  },
+  "dos_even_5": {
+    "residual": "0",
+    "scope": "Polynomial corroboration; same-seed Hermitian identity-DOS shortcut."
+  },
+  "dos_odd_5": {
+    "residual": "0",
+    "scope": "Polynomial corroboration; raw unweighted moments only."
+  },
+  "dos_even_6": {
+    "residual": "0",
+    "scope": "Polynomial corroboration; same-seed Hermitian identity-DOS shortcut."
+  },
+  "dos_odd_6": {
+    "residual": "0",
+    "scope": "Polynomial corroboration; raw unweighted moments only."
+  },
+  "dos_even_7": {
+    "residual": "0",
+    "scope": "Polynomial corroboration; same-seed Hermitian identity-DOS shortcut."
+  },
+  "dos_odd_7": {
+    "residual": "0",
+    "scope": "Polynomial corroboration; raw unweighted moments only."
+  },
+  "dos_even_8": {
+    "residual": "0",
+    "scope": "Polynomial corroboration; same-seed Hermitian identity-DOS shortcut."
+  },
+  "dos_odd_8": {
+    "residual": "0",
+    "scope": "Polynomial corroboration; raw unweighted moments only."
+  },
+  "dos_even_9": {
+    "residual": "0",
+    "scope": "Polynomial corroboration; same-seed Hermitian identity-DOS shortcut."
+  },
+  "dos_odd_9": {
+    "residual": "0",
+    "scope": "Polynomial corroboration; raw unweighted moments only."
+  },
+  "dos_even_10": {
+    "residual": "0",
+    "scope": "Polynomial corroboration; same-seed Hermitian identity-DOS shortcut."
+  },
+  "dos_odd_10": {
+    "residual": "0",
+    "scope": "Polynomial corroboration; raw unweighted moments only."
+  },
+  "dos_even_11": {
+    "residual": "0",
+    "scope": "Polynomial corroboration; same-seed Hermitian identity-DOS shortcut."
+  },
+  "dos_odd_11": {
+    "residual": "0",
+    "scope": "Polynomial corroboration; raw unweighted moments only."
+  },
+  "dos_even_12": {
+    "residual": "0",
+    "scope": "Polynomial corroboration; same-seed Hermitian identity-DOS shortcut."
+  },
+  "dos_odd_12": {
+    "residual": "0",
+    "scope": "Polynomial corroboration; raw unweighted moments only."
+  },
+  "trace_adjoint_exchange": {
+    "residual": "0",
+    "scope": "A,B,F_m,F_n Hermitian; conjugation reverses factors, trace is cyclic."
+  },
+  "equal_static_trace_real": {
+    "residual": "0",
+    "scope": "Equal Hermitian statics: exact-trace moments are real; not generic SHC."
+  },
+  "stochastic_triangle_counterexample": {
+    "A": "Matrix([[1, 1], [1, 1]])",
+    "B": "Matrix([[1, -I], [I, 1]])",
+    "H": "Matrix([[1/2, 0], [0, -1/2]])",
+    "r": "Matrix([[sqrt(2)/2], [sqrt(2)*I/2]])",
+    "mu01_minus_conjugate_mu10": "-I",
+    "implication": "Exact trace Hermiticity is not a per-vector identity. Mirroring one sampled triangle changes the estimator."
+  },
+  "illegal_rank2_collapse": {
+    "residual": "-1",
+    "implication": "Do not merge Chebyshev factors across a static operator that does not commute with H."
+  },
+  "retarded_derivative": {
+    "residual": "0",
+    "scope": "0<theta<pi; d/dx=-(1/sin(theta))*d/dtheta."
+  },
+  "folded_frequency_identity": {
+    "residual": "0",
+    "scope": "All real a,b: combines frequencies n-m and n+m."
+  },
+  "folded_imaginary_numerator": {
+    "residual": "0",
+    "scope": "q=sqrt(1-x^2); divide by pi*q^4. Arbitrary complex moments."
+  },
+  "U_to_T_0": {
+    "residual": "0",
+    "scope": "Finite-degree corroboration of parity-tail U-to-T conversion."
+  },
+  "U_to_T_1": {
+    "residual": "0",
+    "scope": "Finite-degree corroboration of parity-tail U-to-T conversion."
+  },
+  "U_to_T_2": {
+    "residual": "0",
+    "scope": "Finite-degree corroboration of parity-tail U-to-T conversion."
+  },
+  "U_to_T_3": {
+    "residual": "0",
+    "scope": "Finite-degree corroboration of parity-tail U-to-T conversion."
+  },
+  "U_to_T_4": {
+    "residual": "0",
+    "scope": "Finite-degree corroboration of parity-tail U-to-T conversion."
+  },
+  "U_to_T_5": {
+    "residual": "0",
+    "scope": "Finite-degree corroboration of parity-tail U-to-T conversion."
+  },
+  "U_to_T_6": {
+    "residual": "0",
+    "scope": "Finite-degree corroboration of parity-tail U-to-T conversion."
+  },
+  "U_to_T_7": {
+    "residual": "0",
+    "scope": "Finite-degree corroboration of parity-tail U-to-T conversion."
+  },
+  "U_to_T_8": {
+    "residual": "0",
+    "scope": "Finite-degree corroboration of parity-tail U-to-T conversion."
+  },
+  "U_to_T_9": {
+    "residual": "0",
+    "scope": "Finite-degree corroboration of parity-tail U-to-T conversion."
+  },
+  "U_to_T_10": {
+    "residual": "0",
+    "scope": "Finite-degree corroboration of parity-tail U-to-T conversion."
+  },
+  "U_to_T_11": {
+    "residual": "0",
+    "scope": "Finite-degree corroboration of parity-tail U-to-T conversion."
+  },
+  "U_to_T_12": {
+    "residual": "0",
+    "scope": "Finite-degree corroboration of parity-tail U-to-T conversion."
+  },
+  "U_to_T_inductive_step": {
+    "residual": "0",
+    "scope": "General induction step U_n=2*T_n+U_(n-2); bases U_0=T_0,U_1=2*T_1."
+  },
+  "folded_source_sha256": "9954c1d3861a23e662e7cdaad4e225ed1fe9f60c80c264b746f2ac68da511b13",
+  "actual_folded_numeric_corroboration": [
+    {
+      "shape": [
+        1,
+        1
+      ],
+      "max_abs": 2.6645352591003757e-15,
+      "relative_to_peak": 3.4419462341688577e-16
+    },
+    {
+      "shape": [
+        3,
+        5
+      ],
+      "max_abs": 2.842170943040401e-14,
+      "relative_to_peak": 2.9966952045386987e-16
+    },
+    {
+      "shape": [
+        5,
+        3
+      ],
+      "max_abs": 5.684341886080802e-14,
+      "relative_to_peak": 7.143113518743565e-16
+    },
+    {
+      "shape": [
+        8,
+        8
+      ],
+      "max_abs": 2.8421709430404007e-13,
+      "relative_to_peak": 1.0772346351441323e-15
+    }
+  ],
+  "projected_trace_compression": {
+    "residual": "0",
+    "scope": "Generic retained 2x2 block embedded in 3x3; proof generalizes by block multiplication. Independent complement functions cancel."
+  },
+  "projected_identity_compression": {
+    "residual": "0",
+    "scope": "Explicit projected identity required; unprojected DOS includes fc."
+  },
+  "mapped_sample_compression": {
+    "residual": "0",
+    "scope": "Same mapped vector, no renormalization or fresh random stream; original trace prefactor unchanged."
+  },
+  "projected_spin_current_missing_term": "Matrix([[o2*v6/2 + o6*v2/2, o2*v7/2 + o7*v2/2, 0], [o5*v6/2 + o6*v5/2, o5*v7/2 + o7*v5/2, 0], [0, 0, 0]])",
+  "disorder_commutator_counterexample": "Matrix([[0, 0, 1], [0, 0, 0], [-1, 0, 0]])",
+  "existing_metric_trace_proof": {
+    "hamiltonian_similarity": "True",
+    "dos": "{'generalised': F0, 'lowdin_after_similarity': Z*F0*Y, 'trace_residual': 0, 'equal': True}",
+    "spectral_operator": "{'generalised': X*O0*F0, 'lowdin_after_similarity': Y*O0*Y*Z*F0*Y, 'trace_residual': 0, 'equal': True}",
+    "greenwood": "{'generalised': X*O0*F0*X*O1*F1, 'lowdin_after_similarity': Y*O0*Y*Z*F0*Y**2*O1*Y*Z*F1*Y, 'trace_residual': 0, 'equal': True}",
+    "bastin": "{'generalised': X*O0*F0*X*O1*F1, 'lowdin_after_similarity': Y*O0*Y*Z*F0*Y**2*O1*Y*Z*F1*Y, 'trace_residual': 0, 'equal': True}",
+    "time_correlation": "{'generalised': X*O0*F0*X*O1*F1*F2, 'lowdin_after_similarity': Y*O0*Y*Z*F0*Y**2*O1*Y*Z*F1*Y*Z*F2*Y, 'trace_residual': 0, 'equal': True}",
+    "projected_evolution": "{'generalised': X*O0*F0*X*O1*F1*X*O2*F2, 'lowdin_after_similarity': Y*O0*Y*Z*F0*Y**2*O1*Y*Z*F1*Y**2*O2*Y*Z*F2*Y, 'trace_residual': 0, 'equal': True}",
+    "msd_expanded_term": "{'generalised': X*O0*F0*X*O1*F1*F2, 'lowdin_after_similarity': Y*O0*Y*Z*F0*Y**2*O1*Y*Z*F1*Y*Z*F2*Y, 'trace_residual': 0, 'equal': True}",
+    "anticommutator": "{'single_operator_equal': True, 'pair_residual': A*B*X**2/4 - A*X*B*X/2 + A*X**2*B/4, 'generic_products_equal': False, 'sufficient_exact_condition': '[S,H]=0 and [S,O_i]=0 for every static slot', 'classification': 'approximation for DOS, Bastin, Greenwood and TD in general'}"
+  },
+  "existing_spectral_projection_proof": {
+    "idempotent": "0",
+    "s_self_adjoint": "0",
+    "hard_retained_eigenpairs": "0",
+    "shift_retained_eigenpairs": "0",
+    "hard_complement_zero": "0",
+    "physical_operator_equals_coefficient_form": "0",
+    "projected_identity": "0",
+    "hard_from_coefficient_hamiltonian": "0",
+    "shift_as_update": "0",
+    "hard_physical_hermitian": "0",
+    "shift_physical_hermitian": "0",
+    "projected_physical_hermitian": "0"
+  },
+  "exact_eigen_pair_factorization": {
+    "residual": "0",
+    "scope": "mu_mn=sum_ij A_ij B_ji T_m(e_j) T_n(e_i); no stochastic estimator required for this exact block route."
+  },
+  "sympy_version": "1.14.0",
+  "audit_sha256": "9c70d7bbb7138f725423a2d58a0ca0cb9a00cd152305d9345b7072dad382d982",
+  "scope": "Symbolic audit plus small deterministic corroborations; not a golden gate or performance measurement."
+}

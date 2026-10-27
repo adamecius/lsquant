@@ -1,0 +1,3 @@
+figure data vs goldens/stage0/tutorials/04: 4 IDENTICAL, 0 DIFFERS
+png fig_precession.png IDENTICAL
+png fig_zeeman.png IDENTICAL

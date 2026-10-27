@@ -1,0 +1,31 @@
+BUILD_OK
+T16 loop done after 7001 s
+T1 all done after 7001 s
+IDENTICAL chain1d_complex_dos_generalised_chebyshev
+IDENTICAL chain1d_complex_dos_generalised_exact
+IDENTICAL chain1d_complex_dos_generalised_ischo
+IDENTICAL chain1d_complex_dos_lowdin_chebyshev
+DIFFERS   chain1d_complex_dos_lowdin_exact  first-diff line 4 m=1 re, new=-2.99646375420681e-17 golden=-2.5207700510288e-17; max abs diff 6.870e-16 at line 66 m=63 re; max rel diff 1.722e+00 at line 31 m=28 im; DEFECT level (>= 1e-12)
+IDENTICAL chain1d_complex_dos_naive_exact
+IDENTICAL chain1d_complex_kubo_generalised_chebyshev
+IDENTICAL chain1d_complex_kubo_generalised_exact
+IDENTICAL chain1d_complex_kubo_generalised_ischo
+IDENTICAL chain1d_complex_kubo_lowdin_chebyshev
+DIFFERS   chain1d_complex_kubo_lowdin_exact  first-diff line 4 (m,n)=(0,1) re, new=1.8243734431142e-16 golden=2.00909438825142e-16; max abs diff 1.021e-14 at line 68 (m,n)=(1,1) re; max rel diff 1.992e+00 at line 3136 (m,n)=(48,61) im; DEFECT level (>= 1e-12)
+IDENTICAL chain1d_complex_kubo_naive_exact
+IDENTICAL chain1d_real_dos_generalised_chebyshev
+IDENTICAL chain1d_real_dos_generalised_exact
+IDENTICAL chain1d_real_dos_generalised_ischo
+IDENTICAL chain1d_real_dos_lowdin_chebyshev
+DIFFERS   chain1d_real_dos_lowdin_exact  first-diff line 4 m=1 re, new=5.22151766269019e-16 golden=5.23317283604441e-16; max abs diff 3.075e-16 at line 66 m=63 re; max rel diff 4.453e-03 at line 6 m=3 re; DEFECT level (>= 1e-12)
+IDENTICAL chain1d_real_dos_naive_exact
+IDENTICAL chain1d_real_kubo_generalised_chebyshev
+IDENTICAL chain1d_real_kubo_generalised_exact
+IDENTICAL chain1d_real_kubo_generalised_ischo
+IDENTICAL chain1d_real_kubo_lowdin_chebyshev
+DIFFERS   chain1d_real_kubo_lowdin_exact  first-diff line 4 (m,n)=(0,1) re, new=9.17329905612829e-16 golden=9.19247588205413e-16; max abs diff 1.021e-14 at line 3255 (m,n)=(50,52) re; max rel diff 1.994e+00 at line 476 (m,n)=(7,25) re; DEFECT level (>= 1e-12)
+IDENTICAL chain1d_real_kubo_naive_exact
+ARON_DONE
+85046a7 check_goldens.sh: stage 6only (stage-6 part alone)
+gcc (Ubuntu 9.4.0-1ubuntu1~20.04.2) 9.4.0
+  (EIGEN_MAJOR_VERSION > x ||           \

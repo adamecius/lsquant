@@ -1,0 +1,38 @@
+{
+  "model": {
+    "kind": "csr",
+    "dir": "goldens/stage0/chain1d_ballistic/operators",
+    "label": "chain1d",
+    "operators": ["VX"]
+  },
+  "basis": {
+    "name": "real"
+  },
+  "metric": {
+    "policy": "orthogonal"
+  },
+  "word": "Tr[[X,U(t)]^+ delta(E-H) [X,U(t)]]",
+  "expansion": {
+    "moments": 256,
+    "window": [-2.0, 2.0],
+    "trace": "exact",
+    "states": 256
+  },
+  "time": {
+    "steps": 64,
+    "tmax": 20.0,
+    "bessel": "legacy"
+  },
+  "reconstruction": {
+    "kernel": "jackson",
+    "broadening_meV": 10.0,
+    "fermi_energies": [0.0, 0.5, 1.0, 1.5],
+    "formulas": ["time_correlation"],
+    "legacy_text_round_trip": true
+  },
+  "output": {
+    "dir": "out/g6",
+    "legacy_names": true,
+    "legacy_layout": true
+  }
+}

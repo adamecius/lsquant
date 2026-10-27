@@ -1,0 +1,43 @@
+{
+  "model": {
+    "kind": "siesta",
+    "dir": "~/from_fatnode/shc_bi/run",
+    "label": "bi",
+    "params": {"nonorthogonal_disorder": true, "velocity_mode": "covariant"}
+  },
+  "basis": {
+    "name": "bloch",
+    "supercell": [24, 24, 1],
+    "disorder": {"W": 0.3, "seed": 7}
+  },
+  "metric": {
+    "policy": "nonorthogonal",
+    "route": "generalised",
+    "applier": "exact",
+    "order": 1024,
+    "coeff_tol": 1e-14,
+    "tol": 1e-10,
+    "max_dim": 4096
+  },
+  "word": "Tr[delta(E-H)]",
+  "words": ["Tr[delta(E-H)]", "Tr[JXSZ delta(E-H) VY dG-(E)/dE]"],
+  "expansion": {
+    "moments": 1024,
+    "window": "eigen",
+    "trace": "random",
+    "states": 16,
+    "seed": 12345,
+    "batch": 128
+  },
+  "reconstruction": {
+    "kernel": "jackson",
+    "broadening_meV": 10.0,
+    "formulas": ["dos", "shc"],
+    "fermi_energies": [0.0]
+  },
+  "output": {
+    "dir": "out/stage6c/bi_covariant_bloch_generalised_W0p3",
+    "write_chebmom": true,
+    "legacy_layout": true
+  }
+}

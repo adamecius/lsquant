@@ -1,0 +1,15 @@
+{
+  "model": {
+    "kind": "siesta",
+    "dir": "~/from_fatnode/shc_bi/run",
+    "label": "bi",
+    "params": {"velocity_mode": "berry_connection", "oracle_degeneracy_tolerance": 0.000001}
+  },
+  "basis": {"name": "eigen", "supercell": [24, 24, 1]},
+  "metric": {"policy": "nonorthogonal", "route": "lowdin", "applier": "exact"},
+  "projection": {"kind": "shift", "window": [-3, 3]},
+  "word": "Tr[JXSZ delta(E-H) VY dG-(E)/dE]",
+  "expansion": {"moments": 256, "window": "eigen", "trace": "random", "states": 16, "seed": 12345},
+  "reconstruction": {"formulas": ["shc"], "broadening_meV": 10, "energies": [-0.05, 0, 0.05]},
+  "output": {"dir": "out/stage6d/bi_shift_3_24_M256", "legacy_layout": false}
+}

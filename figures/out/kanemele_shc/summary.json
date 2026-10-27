@@ -1,0 +1,22 @@
+{
+ "model": {
+  "t1": -1.0,
+  "lambda_SO": 0.15,
+  "mass": 0.0,
+  "supercell": 60,
+  "dim": 14400
+ },
+ "kpm": {
+  "moments": 512,
+  "random_states": 16,
+  "broadening_meV": 30.0
+ },
+ "plateau_|E|<0.25": {
+  "sigma^z_xy KPM total": 1.9957085201903357,
+  "sigma^z_xy KPM sea": 1.995708528303591,
+  "sigma^z_xy KPM surf": 1.0500059950992059e-12,
+  "sigma_xy charge KPM total": -0.0018234600526542183,
+  "sigma^z_xy exact diag (2 pi x natural)": -2.000000000000025,
+  "sigma^z_xy exact diag |.|": 2.000000000000025
+ }
+}

@@ -1,0 +1,68 @@
+Internal ctest changing into directory: /home/ICN2/jgarcia/lsquant-unified/build
+Test project /home/ICN2/jgarcia/lsquant-unified/build
+      Start  1: chain1d_analytic
+ 1/31 Test  #1: chain1d_analytic .................   Passed    0.01 sec
+      Start  2: chain1d_dos
+ 2/31 Test  #2: chain1d_dos ......................   Passed    0.00 sec
+      Start  3: dos_reconstructed
+ 3/31 Test  #3: dos_reconstructed ................   Passed    0.01 sec
+      Start  4: chain1d_reproducible
+ 4/31 Test  #4: chain1d_reproducible .............   Passed   24.94 sec
+      Start  5: spin_algebra
+ 5/31 Test  #5: spin_algebra .....................   Passed    0.01 sec
+      Start  6: graphene_regression
+ 6/31 Test  #6: graphene_regression ..............   Passed    0.11 sec
+      Start  7: reconstruction_nan_guard
+ 7/31 Test  #7: reconstruction_nan_guard .........   Passed    0.50 sec
+      Start  8: msd_ballistic
+ 8/31 Test  #8: msd_ballistic ....................   Passed   23.04 sec
+      Start  9: hall_haldane
+ 9/31 Test  #9: hall_haldane .....................   Passed   11.26 sec
+      Start 10: spin_precession
+10/31 Test #10: spin_precession ..................   Passed    8.09 sec
+      Start 11: recon_kernel_oracle
+11/31 Test #11: recon_kernel_oracle ..............   Passed    0.20 sec
+      Start 12: spmv_threaded_bitexact
+12/31 Test #12: spmv_threaded_bitexact ...........   Passed    0.01 sec
+      Start 13: spmm_batchmultiply_equiv
+13/31 Test #13: spmm_batchmultiply_equiv .........   Passed    0.01 sec
+      Start 14: greenwood_regression
+14/31 Test #14: greenwood_regression .............   Passed    0.07 sec
+      Start 15: safety_factors_guard
+15/31 Test #15: safety_factors_guard .............   Passed    0.55 sec
+      Start 16: descriptor_conformance
+16/31 Test #16: descriptor_conformance ...........   Passed    0.00 sec
+      Start 17: descriptor_bounds
+17/31 Test #17: descriptor_bounds ................   Passed    0.15 sec
+      Start 18: tb_descriptor
+18/31 Test #18: tb_descriptor ....................   Passed    0.00 sec
+      Start 19: config_equivalence
+19/31 Test #19: config_equivalence ...............   Passed    0.23 sec
+      Start 20: corrop_state_honored
+20/31 Test #20: corrop_state_honored .............   Passed    2.27 sec
+      Start 21: fft_grid_regression
+21/31 Test #21: fft_grid_regression ..............   Passed    0.10 sec
+      Start 22: sea_surf_regression
+22/31 Test #22: sea_surf_regression ..............   Passed    0.59 sec
+      Start 23: jackson_kernel
+23/31 Test #23: jackson_kernel ...................   Passed    0.00 sec
+      Start 24: jackson_g_scalar
+24/31 Test #24: jackson_g_scalar .................   Passed    0.00 sec
+      Start 25: phase6_wired
+25/31 Test #25: phase6_wired .....................   Passed    0.00 sec
+      Start 26: single_binary
+26/31 Test #26: single_binary ....................   Passed    1.01 sec
+      Start 27: reporting_smoke
+27/31 Test #27: reporting_smoke ..................   Passed    0.12 sec
+      Start 28: unified_io_smoke
+28/31 Test #28: unified_io_smoke .................   Passed    0.25 sec
+      Start 29: example_dos_smoke
+29/31 Test #29: example_dos_smoke ................   Passed    0.09 sec
+      Start 30: example_localization_smoke
+30/31 Test #30: example_localization_smoke .......   Passed    0.35 sec
+      Start 31: example_haldane_smoke
+31/31 Test #31: example_haldane_smoke ............   Passed   17.58 sec
+
+100% tests passed, 0 tests failed out of 31
+
+Total Test time (real) =  91.56 sec

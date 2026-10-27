@@ -17,8 +17,8 @@ of the spread. Gershgorin puts the spectrum inside |E| <= 4t + W/2, so
 BOUNDS = ( -(4 + W/2), +(4 + W/2) ); the descriptor records the same.
 
 Operators are written under operators/ at run time (nothing is committed). The
-functions are importable: lsqtransport.py calls build_square with a fresh seed per
-disorder realisation.
+functions are importable: the tutorial driver calls build_square with a fresh
+seed per disorder realisation.
 
     python make_square.py <L> <W> [seed]
 """

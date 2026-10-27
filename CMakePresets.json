@@ -1,0 +1,50 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 21,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "golden",
+      "displayName": "Golden (portable IEEE)",
+      "description": "Portable IEEE build profile without machine-specific or fast-math flags",
+      "generator": "Unix Makefiles",
+      "binaryDir": "${sourceDir}/build/golden",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "LSQUANT_BUILD_PROFILE": "golden",
+        "LSQUANT_BUILD_PYTHON": "ON",
+        "LSQUANT_BUILD_DEV_CHECKS": "ON",
+        "LSQUANT_BUILD_BENCHMARKS": "OFF"
+      }
+    },
+    {
+      "name": "native",
+      "displayName": "Native (SIMD + NUMA + cache-blocked)",
+      "description": "Host-tuned build profile (-O3 -march=native -mtune=native -fno-math-errno, LSQUANT_NATIVE_BUILD=1)",
+      "generator": "Unix Makefiles",
+      "binaryDir": "${sourceDir}/build/native",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "LSQUANT_BUILD_PROFILE": "native",
+        "LSQUANT_BUILD_PYTHON": "ON",
+        "LSQUANT_BUILD_DEV_CHECKS": "ON",
+        "LSQUANT_BUILD_BENCHMARKS": "OFF"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "golden",
+      "configurePreset": "golden",
+      "jobs": 8
+    },
+    {
+      "name": "native",
+      "configurePreset": "native",
+      "jobs": 8
+    }
+  ]
+}

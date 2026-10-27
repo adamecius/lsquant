@@ -1,0 +1,4 @@
+figure data vs goldens/stage0/tutorials/06: 281 IDENTICAL, 0 DIFFERS
+png fig_dp.png IDENTICAL
+png fig_ey.png IDENTICAL
+png fig_ey_ratelaw.png IDENTICAL

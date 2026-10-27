@@ -1,0 +1,28 @@
+{
+  "engine_profile": "golden",
+  "source_profile": "golden",
+  "formula": "greenwood",
+  "broadening_meV": 10.0,
+  "backends": {
+    "tables": {
+      "wall_seconds": [
+        0.01993495598435402,
+        0.01753954216837883,
+        0.01763784885406494
+      ],
+      "curve_sha256": "3d6e968cd4331b927f9ca6d853c985c90449842b2b2fc7ae83fa4d6aec444095"
+    },
+    "fft": {
+      "wall_seconds": [
+        0.013345066457986832,
+        0.013299856334924698,
+        0.01335737481713295
+      ],
+      "curve_sha256": "849980a772b592d55fe1305a125b2b604fce6b76a1f1fb937231173669eb4ffc"
+    }
+  },
+  "grid_identical": true,
+  "max_absolute_difference": 1.6613246173144503e-09,
+  "relative_to_max_norm": 1.3030653123859393e-12,
+  "max_pointwise_relative_difference": 0.00041264080637498955
+}

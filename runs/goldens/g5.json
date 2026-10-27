@@ -1,0 +1,36 @@
+{
+  "model": {
+    "kind": "csr",
+    "dir": "goldens/stage0/haldane/operators",
+    "label": "haldane",
+    "operators": ["VX", "VY"]
+  },
+  "basis": {
+    "name": "real"
+  },
+  "metric": {
+    "policy": "orthogonal"
+  },
+  "word": "Tr[VX delta(E-H) VY dG-(E)/dE]",
+  "words": [
+    "Tr[VX delta(E-H) VY dG-(E)/dE]",
+    "Tr[VX delta(E-H) VX delta(E-H)]"
+  ],
+  "expansion": {
+    "moments": 128,
+    "window": [-4.5, 4.5],
+    "trace": "exact",
+    "states": 512
+  },
+  "reconstruction": {
+    "kernel": "jackson",
+    "broadening_meV": 10.0,
+    "formulas": ["bastin", "sea", "surf", "greenwood"],
+    "legacy_text_round_trip": true
+  },
+  "output": {
+    "dir": "out/g5",
+    "legacy_names": true,
+    "legacy_layout": true
+  }
+}

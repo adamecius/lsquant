@@ -1,0 +1,18 @@
+$ PYTHONPATH=build/lsquant_core:python OMP_NUM_THREADS=16 python3 tests/dev/stage_3_check.py
+(0) SparseMatrix.from_csr (scipy) dos array_equal vs ReadCsrText: True
+(a) Haldane VX-VY array_equal vs G5: True
+(a) Haldane VX-VX array_equal vs G5: True
+(b) Graphene Gershgorin BandWidth = 15.0366847652085, array_equal vs G4: True
+(c) GreenRetarded.table vs compat max_abs_diff           = 1.148853e-14
+(c) GreenRetardedDerivative.table vs compat max_abs_diff = 2.702165e-13 (max_rel_diff = 7.173405e-15)
+(d) G5 Bastin (10 meV)           differing lines: 0 (total lines: 3839)
+(d) G5 Sea (10 meV)              differing lines: 0 (total lines: 3839)
+(d) G5 Surf (10 meV)             differing lines: 0 (total lines: 3839)
+(d) G5 Greenwood (10 meV)        differing lines: 0 (total lines: 127)
+(d) G4 Bastin (64 meV)           differing lines: 0 (total lines: 1919)
+(d) G4 Sea (10 meV)              differing lines: 0 (total lines: 1919)
+(d) G4 Surf (10 meV)             differing lines: 0 (total lines: 1919)
+(d) G4 Bastin FFTgrid (10 meV)   differing lines: 0 (total lines: 63)
+(d) G4 Greenwood FFTgrid (10 meV) differing lines: 0 (total lines: 63)
+wall 27.42 s
+exit: 0

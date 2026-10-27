@@ -1,0 +1,25 @@
+{
+  "model": {
+    "kind": "csr",
+    "dir": "goldens/stage0/chain1d/operators",
+    "label": "chain1d"
+  },
+  "basis": {
+    "name": "real"
+  },
+  "metric": {
+    "policy": "orthogonal"
+  },
+  "word": "Tr[delta(E-H)]",
+  "expansion": {
+    "moments": 64,
+    "window": [-2.0, 2.0],
+    "trace": "exact",
+    "states": 2048
+  },
+  "output": {
+    "dir": "out/g1",
+    "legacy_names": true,
+    "legacy_layout": true
+  }
+}

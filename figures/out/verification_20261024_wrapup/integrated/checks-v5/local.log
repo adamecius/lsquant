@@ -1,0 +1,368 @@
+{'route': 'lowdin', 'kind': 'hard', 'radius': None, 'word': 'Tr[1 delta(E-H)]', 'max_absolute_moment_difference': 5.629779158265427e-16, 'limit': 1e-10, 'passed': True}
+{'route': 'lowdin', 'kind': 'hard', 'radius': None, 'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]', 'max_absolute_moment_difference': 2.3346691088852925e-15, 'limit': 1e-10, 'passed': True}
+stage6b: metric build started {}
+stage6b: metric build completed wall_seconds=0.001757 {}
+stage6b: spectral projection started {}
+stage6b: spectral projection completed wall_seconds=0.001625 {}
+stage6b: local CSR and metric build started {}
+stage6b: local CSR and metric build completed wall_seconds=0.020274 {}
+stage6b: operators started {}
+stage6b: operators completed wall_seconds=0.017248 {}
+stage6b: projection diagnostics started {}
+stage6b: projection diagnostics completed wall_seconds=0.017438 {}
+stage6b: oracle started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: oracle completed wall_seconds=0.000452 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: moments started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: moments completed wall_seconds=0.002675 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: reconstruction started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: reconstruction completed wall_seconds=0.011886 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: oracle started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: oracle completed wall_seconds=0.004116 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: moments started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: moments completed wall_seconds=0.012115 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: reconstruction started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: reconstruction completed wall_seconds=0.004851 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: metric build started {}
+stage6b: metric build completed wall_seconds=0.001722 {}
+stage6b: spectral projection started {}
+stage6b: spectral projection completed wall_seconds=0.001640 {}
+stage6b: local CSR and metric build started {}
+stage6b: local CSR and metric build completed wall_seconds=0.019272 {}
+stage6b: operators started {}
+stage6b: operators completed wall_seconds=0.016635 {}
+stage6b: projection diagnostics started {}
+stage6b: projection diagnostics completed wall_seconds=0.017269 {}
+stage6b: oracle started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: oracle completed wall_seconds=0.000437 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: moments started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: moments completed wall_seconds=0.003416 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: reconstruction started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: reconstruction completed wall_seconds=0.011859 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: oracle started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: oracle completed wall_seconds=0.003930 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: moments started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: moments completed wall_seconds=0.012243 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: reconstruction started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: reconstruction completed wall_seconds=0.004685 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+{'route': 'lowdin', 'kind': 'hard', 'radius': 1.2, 'word': 'Tr[1 delta(E-H)]', 'max_absolute_moment_difference': 6.106325198476751e-16, 'limit': 1e-10, 'passed': True}
+{'route': 'lowdin', 'kind': 'hard', 'radius': 1.2, 'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]', 'max_absolute_moment_difference': 2.3818015120446382e-15, 'limit': 1e-10, 'passed': True}
+stage6b: metric build started {}
+stage6b: metric build completed wall_seconds=0.001662 {}
+stage6b: spectral projection started {}
+stage6b: spectral projection completed wall_seconds=0.003431 {}
+stage6b: local CSR and metric build started {}
+stage6b: local CSR and metric build completed wall_seconds=0.015623 {}
+stage6b: operators started {}
+stage6b: operators completed wall_seconds=0.011522 {}
+stage6b: projection diagnostics started {}
+stage6b: projection diagnostics completed wall_seconds=0.036841 {}
+stage6b: oracle started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: oracle completed wall_seconds=0.000413 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: moments started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: moments completed wall_seconds=0.002168 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: reconstruction started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: reconstruction completed wall_seconds=0.011491 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: oracle started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: oracle completed wall_seconds=0.003897 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: moments started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: moments completed wall_seconds=0.009051 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: reconstruction started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: reconstruction completed wall_seconds=0.004643 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: metric build started {}
+stage6b: metric build completed wall_seconds=0.001636 {}
+stage6b: spectral projection started {}
+stage6b: spectral projection completed wall_seconds=0.003340 {}
+stage6b: local CSR and metric build started {}
+stage6b: local CSR and metric build completed wall_seconds=0.015751 {}
+stage6b: operators started {}
+stage6b: operators completed wall_seconds=0.011583 {}
+stage6b: projection diagnostics started {}
+stage6b: projection diagnostics completed wall_seconds=0.036933 {}
+stage6b: oracle started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: oracle completed wall_seconds=0.000395 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: moments started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: moments completed wall_seconds=0.002121 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: reconstruction started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: reconstruction completed wall_seconds=0.011507 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: oracle started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: oracle completed wall_seconds=0.003857 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: moments started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: moments completed wall_seconds=0.008569 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: reconstruction started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: reconstruction completed wall_seconds=0.004696 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+{'route': 'lowdin', 'kind': 'shift', 'radius': None, 'word': 'Tr[1 delta(E-H)]', 'max_absolute_moment_difference': 7.307048087616824e-16, 'limit': 1e-10, 'passed': True}
+{'route': 'lowdin', 'kind': 'shift', 'radius': None, 'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]', 'max_absolute_moment_difference': 2.3668850885147743e-15, 'limit': 1e-10, 'passed': True}
+stage6b: metric build started {}
+stage6b: metric build completed wall_seconds=0.001701 {}
+stage6b: spectral projection started {}
+stage6b: spectral projection completed wall_seconds=0.001660 {}
+stage6b: local CSR and metric build started {}
+stage6b: local CSR and metric build completed wall_seconds=0.018983 {}
+stage6b: operators started {}
+stage6b: operators completed wall_seconds=0.016734 {}
+stage6b: projection diagnostics started {}
+stage6b: projection diagnostics completed wall_seconds=0.017166 {}
+stage6b: oracle started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: oracle completed wall_seconds=0.000410 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: moments started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: moments completed wall_seconds=0.003443 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: reconstruction started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: reconstruction completed wall_seconds=0.011821 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: oracle started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: oracle completed wall_seconds=0.003936 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: moments started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: moments completed wall_seconds=0.011841 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: reconstruction started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: reconstruction completed wall_seconds=0.004714 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: metric build started {}
+stage6b: metric build completed wall_seconds=0.001749 {}
+stage6b: spectral projection started {}
+stage6b: spectral projection completed wall_seconds=0.001602 {}
+stage6b: local CSR and metric build started {}
+stage6b: local CSR and metric build completed wall_seconds=0.018953 {}
+stage6b: operators started {}
+stage6b: operators completed wall_seconds=0.016619 {}
+stage6b: projection diagnostics started {}
+stage6b: projection diagnostics completed wall_seconds=0.017251 {}
+stage6b: oracle started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: oracle completed wall_seconds=0.000399 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: moments started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: moments completed wall_seconds=0.003410 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: reconstruction started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: reconstruction completed wall_seconds=0.011814 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: oracle started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: oracle completed wall_seconds=0.003858 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: moments started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: moments completed wall_seconds=0.011857 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: reconstruction started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: reconstruction completed wall_seconds=0.004621 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+{'route': 'lowdin', 'kind': 'shift', 'radius': 1.2, 'word': 'Tr[1 delta(E-H)]', 'max_absolute_moment_difference': 6.542899160650294e-16, 'limit': 1e-10, 'passed': True}
+{'route': 'lowdin', 'kind': 'shift', 'radius': 1.2, 'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]', 'max_absolute_moment_difference': 2.3314780421529558e-15, 'limit': 1e-10, 'passed': True}
+stage6b: metric build started {}
+stage6b: metric build completed wall_seconds=0.001683 {}
+stage6b: spectral projection started {}
+stage6b: spectral projection completed wall_seconds=0.003349 {}
+stage6b: local CSR and metric build started {}
+stage6b: local CSR and metric build completed wall_seconds=0.015830 {}
+stage6b: operators started {}
+stage6b: operators completed wall_seconds=0.011548 {}
+stage6b: projection diagnostics started {}
+stage6b: projection diagnostics completed wall_seconds=0.036443 {}
+stage6b: oracle started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: oracle completed wall_seconds=0.000407 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: moments started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: moments completed wall_seconds=0.002191 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: reconstruction started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: reconstruction completed wall_seconds=0.011701 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: oracle started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: oracle completed wall_seconds=0.003845 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: moments started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: moments completed wall_seconds=0.008861 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: reconstruction started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: reconstruction completed wall_seconds=0.004738 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: metric build started {}
+stage6b: metric build completed wall_seconds=0.001645 {}
+stage6b: spectral projection started {}
+stage6b: spectral projection completed wall_seconds=0.003317 {}
+stage6b: local CSR and metric build started {}
+stage6b: local CSR and metric build completed wall_seconds=0.021874 {}
+stage6b: operators started {}
+stage6b: operators completed wall_seconds=0.013208 {}
+stage6b: projection diagnostics started {}
+stage6b: projection diagnostics completed wall_seconds=0.037010 {}
+stage6b: oracle started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: oracle completed wall_seconds=0.000452 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: moments started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: moments completed wall_seconds=0.002099 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: reconstruction started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: reconstruction completed wall_seconds=0.012256 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: oracle started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: oracle completed wall_seconds=0.004074 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: moments started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: moments completed wall_seconds=0.007320 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: reconstruction started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: reconstruction completed wall_seconds=0.004784 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+{'route': 'generalised', 'kind': 'hard', 'radius': None, 'word': 'Tr[1 delta(E-H)]', 'max_absolute_moment_difference': 4.454935405609523e-16, 'limit': 1e-10, 'passed': True}
+{'route': 'generalised', 'kind': 'hard', 'radius': None, 'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]', 'max_absolute_moment_difference': 1.2722186292132596e-15, 'limit': 1e-10, 'passed': True}
+stage6b: metric build started {}
+stage6b: metric build completed wall_seconds=0.001684 {}
+stage6b: spectral projection started {}
+stage6b: spectral projection completed wall_seconds=0.001689 {}
+stage6b: local CSR and metric build started {}
+stage6b: local CSR and metric build completed wall_seconds=0.019424 {}
+stage6b: operators started {}
+stage6b: operators completed wall_seconds=0.016591 {}
+stage6b: projection diagnostics started {}
+stage6b: projection diagnostics completed wall_seconds=0.017238 {}
+stage6b: oracle started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: oracle completed wall_seconds=0.000425 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: moments started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: moments completed wall_seconds=0.002603 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: reconstruction started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: reconstruction completed wall_seconds=0.011772 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: oracle started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: oracle completed wall_seconds=0.003927 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: moments started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: moments completed wall_seconds=0.009792 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: reconstruction started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: reconstruction completed wall_seconds=0.004714 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: metric build started {}
+stage6b: metric build completed wall_seconds=0.001688 {}
+stage6b: spectral projection started {}
+stage6b: spectral projection completed wall_seconds=0.001654 {}
+stage6b: local CSR and metric build started {}
+stage6b: local CSR and metric build completed wall_seconds=0.019106 {}
+stage6b: operators started {}
+stage6b: operators completed wall_seconds=0.016426 {}
+stage6b: projection diagnostics started {}
+stage6b: projection diagnostics completed wall_seconds=0.017031 {}
+stage6b: oracle started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: oracle completed wall_seconds=0.000402 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: moments started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: moments completed wall_seconds=0.001965 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: reconstruction started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: reconstruction completed wall_seconds=0.011825 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: oracle started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: oracle completed wall_seconds=0.003903 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: moments started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: moments completed wall_seconds=0.008536 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: reconstruction started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: reconstruction completed wall_seconds=0.004669 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+{'route': 'generalised', 'kind': 'hard', 'radius': 1.2, 'word': 'Tr[1 delta(E-H)]', 'max_absolute_moment_difference': 7.079393540718771e-16, 'limit': 1e-10, 'passed': True}
+{'route': 'generalised', 'kind': 'hard', 'radius': 1.2, 'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]', 'max_absolute_moment_difference': 8.761558169759963e-16, 'limit': 1e-10, 'passed': True}
+stage6b: metric build started {}
+stage6b: metric build completed wall_seconds=0.001663 {}
+stage6b: spectral projection started {}
+stage6b: spectral projection completed wall_seconds=0.003316 {}
+stage6b: local CSR and metric build started {}
+stage6b: local CSR and metric build completed wall_seconds=0.015934 {}
+stage6b: operators started {}
+stage6b: operators completed wall_seconds=0.011540 {}
+stage6b: projection diagnostics started {}
+stage6b: projection diagnostics completed wall_seconds=0.036728 {}
+stage6b: oracle started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: oracle completed wall_seconds=0.000412 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: moments started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: moments completed wall_seconds=0.001442 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: reconstruction started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: reconstruction completed wall_seconds=0.011686 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: oracle started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: oracle completed wall_seconds=0.003812 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: moments started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: moments completed wall_seconds=0.006424 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: reconstruction started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: reconstruction completed wall_seconds=0.004689 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: metric build started {}
+stage6b: metric build completed wall_seconds=0.001645 {}
+stage6b: spectral projection started {}
+stage6b: spectral projection completed wall_seconds=0.003332 {}
+stage6b: local CSR and metric build started {}
+stage6b: local CSR and metric build completed wall_seconds=0.015651 {}
+stage6b: operators started {}
+stage6b: operators completed wall_seconds=0.011484 {}
+stage6b: projection diagnostics started {}
+stage6b: projection diagnostics completed wall_seconds=0.036522 {}
+stage6b: oracle started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: oracle completed wall_seconds=0.000414 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: moments started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: moments completed wall_seconds=0.001426 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: reconstruction started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: reconstruction completed wall_seconds=0.011610 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: oracle started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: oracle completed wall_seconds=0.003932 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: moments started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: moments completed wall_seconds=0.006230 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: reconstruction started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: reconstruction completed wall_seconds=0.004680 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+{'route': 'generalised', 'kind': 'shift', 'radius': None, 'word': 'Tr[1 delta(E-H)]', 'max_absolute_moment_difference': 5.274764690851165e-16, 'limit': 1e-10, 'passed': True}
+{'route': 'generalised', 'kind': 'shift', 'radius': None, 'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]', 'max_absolute_moment_difference': 1.1607879812187582e-15, 'limit': 1e-10, 'passed': True}
+stage6b: metric build started {}
+stage6b: metric build completed wall_seconds=0.001737 {}
+stage6b: spectral projection started {}
+stage6b: spectral projection completed wall_seconds=0.001610 {}
+stage6b: local CSR and metric build started {}
+stage6b: local CSR and metric build completed wall_seconds=0.019067 {}
+stage6b: operators started {}
+stage6b: operators completed wall_seconds=0.016699 {}
+stage6b: projection diagnostics started {}
+stage6b: projection diagnostics completed wall_seconds=0.017113 {}
+stage6b: oracle started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: oracle completed wall_seconds=0.000404 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: moments started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: moments completed wall_seconds=0.001975 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: reconstruction started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: reconstruction completed wall_seconds=0.011701 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: oracle started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: oracle completed wall_seconds=0.003866 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: moments started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: moments completed wall_seconds=0.009301 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: reconstruction started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: reconstruction completed wall_seconds=0.004702 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: metric build started {}
+stage6b: metric build completed wall_seconds=0.001782 {}
+stage6b: spectral projection started {}
+stage6b: spectral projection completed wall_seconds=0.001618 {}
+stage6b: local CSR and metric build started {}
+stage6b: local CSR and metric build completed wall_seconds=0.019256 {}
+stage6b: operators started {}
+stage6b: operators completed wall_seconds=0.016646 {}
+stage6b: projection diagnostics started {}
+stage6b: projection diagnostics completed wall_seconds=0.017009 {}
+stage6b: oracle started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: oracle completed wall_seconds=0.000415 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: moments started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: moments completed wall_seconds=0.002657 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: reconstruction started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: reconstruction completed wall_seconds=0.011643 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: oracle started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: oracle completed wall_seconds=0.003847 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: moments started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: moments completed wall_seconds=0.009780 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: reconstruction started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: reconstruction completed wall_seconds=0.004714 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+{'route': 'generalised', 'kind': 'shift', 'radius': 1.2, 'word': 'Tr[1 delta(E-H)]', 'max_absolute_moment_difference': 6.051302876929975e-16, 'limit': 1e-10, 'passed': True}
+{'route': 'generalised', 'kind': 'shift', 'radius': 1.2, 'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]', 'max_absolute_moment_difference': 9.581956755997207e-16, 'limit': 1e-10, 'passed': True}
+stage6b: metric build started {}
+stage6b: metric build completed wall_seconds=0.001677 {}
+stage6b: spectral projection started {}
+stage6b: spectral projection completed wall_seconds=0.003315 {}
+stage6b: local CSR and metric build started {}
+stage6b: local CSR and metric build completed wall_seconds=0.015865 {}
+stage6b: operators started {}
+stage6b: operators completed wall_seconds=0.011604 {}
+stage6b: projection diagnostics started {}
+stage6b: projection diagnostics completed wall_seconds=0.036871 {}
+stage6b: oracle started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: oracle completed wall_seconds=0.000395 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: moments started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: moments completed wall_seconds=0.001631 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: reconstruction started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: reconstruction completed wall_seconds=0.011641 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: oracle started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: oracle completed wall_seconds=0.003832 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: moments started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: moments completed wall_seconds=0.006401 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: reconstruction started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: reconstruction completed wall_seconds=0.004770 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: metric build started {}
+stage6b: metric build completed wall_seconds=0.001661 {}
+stage6b: spectral projection started {}
+stage6b: spectral projection completed wall_seconds=0.003301 {}
+stage6b: local CSR and metric build started {}
+stage6b: local CSR and metric build completed wall_seconds=0.015982 {}
+stage6b: operators started {}
+stage6b: operators completed wall_seconds=0.011583 {}
+stage6b: projection diagnostics started {}
+stage6b: projection diagnostics completed wall_seconds=0.036805 {}
+stage6b: oracle started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: oracle completed wall_seconds=0.000404 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: moments started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: moments completed wall_seconds=0.001476 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: reconstruction started {'word': 'Tr[1 delta(E-H)]'}
+stage6b: reconstruction completed wall_seconds=0.011856 {'word': 'Tr[1 delta(E-H)]'}
+stage6b: oracle started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: oracle completed wall_seconds=0.003811 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: moments started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: moments completed wall_seconds=0.006235 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: reconstruction started {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}
+stage6b: reconstruction completed wall_seconds=0.004714 {'word': 'Tr[JXSZ delta(E-H) VY dG-(E)/dE]'}

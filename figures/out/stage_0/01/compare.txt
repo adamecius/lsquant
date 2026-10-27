@@ -1,0 +1,4 @@
+figure data vs goldens/stage0/tutorials/01: 24 IDENTICAL, 0 DIFFERS
+png fig_dos.png IDENTICAL
+png fig_levels.png IDENTICAL
+png fig_moments.png IDENTICAL

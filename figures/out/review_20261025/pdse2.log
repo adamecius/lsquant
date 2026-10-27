@@ -1,0 +1,8 @@
+{"material": "pdse2", "phase": "load frozen SIESTA reference", "wall_seconds": 0.26259269192814827}
+{"material": "pdse2", "phase": "clean mesh prepared", "wall_seconds": 37.35875506326556}
+{"material": "pdse2", "phase": "DOS complete; spin Hall oracle starting", "wall_seconds": 74.04812154173851}
+{"material": "pdse2", "phase": "spin Hall oracle complete; charge conductivity starting", "wall_seconds": 126.60490952432156}
+{"material": "pdse2", "phase": "charge conductivity complete; valence spin sectors starting", "wall_seconds": 131.73933239653707}
+{"material": "pdse2", "phase": "valence spin sectors complete; band path starting", "wall_seconds": 135.1242578290403}
+{"material": "pdse2", "phase": "numerical data saved", "wall_seconds": 141.7702973857522}
+{"material": "pdse2", "phase": "figure exported", "wall_seconds": 144.85211058333516}

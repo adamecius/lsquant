@@ -1,0 +1,151 @@
+== stage 7 MCP: python -m lsquant.mcp_server --root /home/jgarcia/fv2/tmp/check_goldens.7FtldG/s7mcp (copies of the chain1d and haldane golden operators), OMP_NUM_THREADS=16
+          (server stderr: 1 lines; first error line: Tool 'run' failed: "Error executing tool run: Access denied: path '/etc' resolves to '/etc' outside configured root '/home/jgarcia/fv2/tmp/check_goldens.7FtldG/s7mcp'")
+          MCP <- list_tools: ["words_describe", "run", "status", "reconstruct", "inspect"]
+          MCP -> call_tool: {"tool": "run", "arguments": {"runfile_json": "{\"model\": {\"kind\": \"csr\", \"dir\": \"goldens/stage0/chain1d/operators\", \"label\": \"chain1d\"}, \"basis\": {\"name\": \"real\"}, \"metric\": {\"policy\": \"orthogonal\"}, \"word\": \"Tr[delta(E-H)]\", \"expansion\": {\"moments\": 64, \"window\": [-2.0, 2.0], \"trace\": \"exact\", \"states\": 2048}, \"output\": {\"dir\": \"out/g1\", \"legacy_names\": true, \"legacy_layout\": true}}"}}
+          MCP <- run (isError=False, returned in 0.045 s): {"run_id": "54d4258894d4", "log": "$TMP/s7mcp/out/g1/run_54d4258894d4.log", "output_dir": "$TMP/s7mcp/out/g1"}
+          MCP -> call_tool: {"tool": "status", "arguments": {"run_id": "54d4258894d4"}}
+          MCP <- status (isError=False, returned in 0.004 s): {"run_id": "54d4258894d4", "status": "running", "returncode": null, "log": "$TMP/s7mcp/out/g1/run_54d4258894d4.log", "output_dir": "$TMP/s7mcp/out/g1"}
+          MCP <- status poll 5 (final): {"run_id": "54d4258894d4", "status": "succeeded", "returncode": 0, "log": "$TMP/s7mcp/out/g1/run_54d4258894d4.log", "output_dir": "$TMP/s7mcp/out/g1"}
+          MCP RESULT g1: succeeded
+          MCP -> call_tool: {"tool": "run", "arguments": {"runfile_json": "{\"model\": {\"kind\": \"csr\", \"dir\": \"goldens/stage0/haldane/operators\", \"label\": \"haldane\", \"operators\": [\"VX\", \"VY\"]}, \"basis\": {\"name\": \"real\"}, \"metric\": {\"policy\": \"orthogonal\"}, \"word\": \"Tr[VX delta(E-H) VY dG-(E)/dE]\", \"words\": [\"Tr[VX delta(E-H) VY dG-(E)/dE]\", \"Tr[VX delta(E-H) VX delta(E-H)]\"], \"expansion\": {\"moments\": 128, \"window\": [-4.5, 4.5], \"trace\": \"exact\", \"states\": 512}, \"reconstruction\": {\"kernel\": \"jackson\", \"broadening_meV\": 10.0, \"formulas\": [\"bastin\", \"sea\", \"surf\", \"greenwood\"], \"legacy_text_round_trip\": true}, \"output\": {\"dir\": \"out/g5\", \"legacy_names\": true, \"legacy_layout\": true}}"}}
+          MCP <- run (isError=False, returned in 0.006 s): {"run_id": "16b788980da6", "log": "$TMP/s7mcp/out/g5/run_16b788980da6.log", "output_dir": "$TMP/s7mcp/out/g5"}
+          MCP -> call_tool: {"tool": "status", "arguments": {"run_id": "16b788980da6"}}
+          MCP <- status (isError=False, returned in 0.002 s): {"run_id": "16b788980da6", "status": "running", "returncode": null, "log": "$TMP/s7mcp/out/g5/run_16b788980da6.log", "output_dir": "$TMP/s7mcp/out/g5"}
+          MCP <- status poll 11 (final): {"run_id": "16b788980da6", "status": "succeeded", "returncode": 0, "log": "$TMP/s7mcp/out/g5/run_16b788980da6.log", "output_dir": "$TMP/s7mcp/out/g5"}
+          MCP RESULT g5: succeeded
+          MCP -> call_tool: {"tool": "run", "arguments": {"runfile_json": "{\"model\": {\"kind\": \"csr\", \"dir\": \"/etc\", \"label\": \"chain1d\"}, \"basis\": {\"name\": \"real\"}, \"metric\": {\"policy\": \"orthogonal\"}, \"word\": \"Tr[delta(E-H)]\", \"expansion\": {\"moments\": 64, \"window\": [-2.0, 2.0], \"trace\": \"exact\", \"states\": 2048}, \"output\": {\"dir\": \"out/outside\", \"legacy_names\": true, \"legacy_layout\": true}}"}}
+          MCP <- run (isError=True, returned in 0.003 s): "Error executing tool run: Access denied: path '/etc' resolves to '/etc' outside configured root '$TMP/s7mcp'"
+          MCP RESULT confinement (model.dir=/etc): refused (isError=True)
+          MCP RESULT out dir created: False
+IDENTICAL [MCP] g1.json -> chain1d/SpectralOp1chain1dKPM_M64_stateexact.chebmom1D (G1)
+TOLPASS   [MCP] g5.json -> haldane/NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom2D (G5)
+          tolerance: moments: max|d|/max|gold| = 6.701e-15 (<= 1e-12 required), max|d| = 1.998e-14 at moment 14584, max|gold| = 2.982e+00, header identical
+          golden_diff.py: first-diff line 5 (m,n)=(0,2) re, new=1.21972744404619e-18 golden=1.38857263361214e-18; max abs diff 1.998e-14 at line 14587 (m,n)=(113,120) im; max rel diff 1.998e+00 at line 3020 (m,n)=(23,73) re; DEFECT level (>= 1e-12)
+TOLPASS   [MCP] g5.json -> haldane/NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom2D (G5)
+          tolerance: moments: max|d|/max|gold| = 6.910e-15 (<= 1e-12 required), max|d| = 3.020e-14 at moment 2322, max|gold| = 4.370e+00, header identical
+          golden_diff.py: first-diff line 4 (m,n)=(0,1) im, new=1.21972744404619e-19 golden=-1.76182853028894e-19; max abs diff 3.020e-14 at line 2325 (m,n)=(18,18) re; max rel diff 1.972e+00 at line 6101 (m,n)=(47,82) im; DEFECT level (>= 1e-12)
+DIFFERS   [MCP] g5.json -> haldane/KuboBastin_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat (G5)
+          tolerance: curve: 80 values differ, 9 beyond one unit, max 2 units of the last printed digit (P = 6 significant digits; <= 1 required) at line 3806 col 2 new=9.71587e-07 golden=9.71585e-07, max|d| = 1.000e-10, max|d|/max|gold| = 9.285e-13 (informative)
+          golden_diff.py: first-diff line 2 col 2, new=4.48808e-08 golden=4.48807e-08; max abs diff 1.000e-10 at line 3447 col 2; max rel diff 8.205e-06 at line 41 col 2; DEFECT level (>= 1e-12)
+DIFFERS   [MCP] g5.json -> haldane/KuboBastinSea_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat (G5)
+          tolerance: curve: 91 values differ, 9 beyond one unit, max 4.61e+04 units of the last printed digit (P = 6 significant digits; <= 1 required) at line 3839 col 2 new=-3.40545e-13 golden=-3.8669e-13, max|d| = 1.000e-10, max|d|/max|gold| = 9.285e-13 (informative)
+          golden_diff.py: first-diff line 2 col 2, new=4.60744e-08 golden=4.60743e-08; max abs diff 1.000e-10 at line 416 col 2; max rel diff 1.193e-01 at line 3839 col 2; DEFECT level (>= 1e-12)
+DIFFERS   [MCP] g5.json -> haldane/KuboBastinSurf_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat (G5)
+          tolerance: curve: 3839 values differ, 3839 beyond one unit, max 1.84e+06 units of the last printed digit (P = 6 significant digits; <= 1 required) at line 1751 col 2 new=-8.56147e-16 golden=9.78893e-16, max|d| = 1.722e-14, max|d|/max|gold| = 2.990e-01 (informative)
+          golden_diff.py: first-diff line 1 col 2, new=3.92757e-16 golden=-1.27634e-14; max abs diff 1.722e-14 at line 85 col 2; max rel diff 1.972e+00 at line 1749 col 2; DEFECT level (>= 1e-12)
+DIFFERS   [MCP] g5.json -> haldane/KuboGreenWood_NonEqOpVX-VXhaldaneKPM_M128x128_stateexactJACKSON.dat (G5)
+          tolerance: curve: 13 values differ, 7 beyond one unit, max 31 units of the last printed digit (P = 6 significant digits; <= 1 required) at line 1 col 2 new=5.06051e-08 golden=5.06082e-08, max|d| = 1.000e-11, max|d|/max|gold| = 7.565e-15 (informative)
+          golden_diff.py: first-diff line 1 col 2, new=5.06051e-08 golden=5.06082e-08; max abs diff 1.000e-11 at line 11 col 2; max rel diff 6.125e-05 at line 1 col 2; DEFECT level (>= 1e-12)
+== stage 7 refusals through the CLI (python -m lsquant run <bad>.json --out <dir>; the dir must not appear)
+REFUSED   [unknown_operator] exit 1, stderr: lsquant error: Unknown operator 'FOO' in word 'Tr[FOO delta(E-H)]' (registered operators: ['1', 'A', 'B', 'O', 'P', 'PX', 'PY', 'PZ', 'SX', 'SY', 'SZ', 'VX', 'VXSX', 'VXSY', 'VXSZ', 'VY', 'VYSX', 'VYSY', 'VYSZ', 'VZ', 'VZSX', 'VZSY', 'VZSZ'])
+REFUSED   [rank_3] exit 1, stderr: lsquant error: Unsupported word 'Tr[VX delta(E-H) VY delta(E-H) VZ delta(E-H)]' of rank 3 (3 expanded spectral slots): rank >= 3 moment tensors are out of scope; nearest recognised shape is 'Tr[VX delta(E-H) VX delta(E-H)]' (kubo_greenwood)
+REFUSED   [mixed_basis] exit 1, stderr: lsquant error: Mixed basis without explicit transform: operator 'VX@bloch' is in 'bloch' basis while calculation/active basis is 'real' (insert explicit B^+ ... B or U^+ ... U transform)
+REFUSED   [ut_without_time] exit 1, stderr: lsquant error: Word 'Tr[VX delta(E-H) U(t)^+ VX U(t)]' contains time evolution U(t) without 'time' parameters (steps and tmax required)
+REFUSED   [unknown_key_top] exit 1, stderr: lsquant error: Unknown key 'unknown_extra_key' in run file (top-level); allowed keys are ['basis', 'expansion', 'metric', 'model', 'output', 'reconstruction', 'time', 'word', 'words']
+REFUSED   [unknown_key_nested] exit 1, stderr: lsquant error: Unknown key 'windw' in run file (expansion); allowed keys are ['batch', 'moments', 'seed', 'state_label', 'states', 'trace', 'window']
+REFUSED   [g_plus] exit 1, stderr: lsquant error: Unrecognised word shape 'Tr[VX delta(E-H) VY G+(E)]'; nearest recognised shape is 'Tr[VX delta(E-H) VY dG-(E)/dE]' (kubo_bastin)
+REFUSED   [g_minus] exit 1, stderr: lsquant error: Unrecognised word shape 'Tr[VX delta(E-H) VY G-(E)]'; nearest recognised shape is 'Tr[VX delta(E-H) VY dG-(E)/dE]' (kubo_bastin)
+REFUSED   [dg_plus] exit 1, stderr: lsquant error: Unrecognised word shape 'Tr[VX delta(E-H) VY dG+(E)/dE]'; nearest recognised shape is 'Tr[VX delta(E-H) VY dG-(E)/dE]' (kubo_bastin)
+REFUSED   [window_eigen_csr] exit 1, stderr: lsquant error: expansion.window='eigen' is not supported for model.kind='csr' (no k blocks; use gershgorin or an explicit window)
+REFUSED   [formula_unmatched] exit 1, stderr: lsquant error: Reconstruction formula 'bastin' in reconstruction.formulas does not match any word in ['Tr[delta(E-H)]'] (allowed formulas for given word(s): ['dos', 'dos_curve'])
+REFUSED   [csr_empty] exit 1, stderr: lsquant error: RealBasis: csr_dir '/home/jgarcia/fv2/tmp/check_goldens.7FtldG/s7ref/csr_empty' lacks 'graphene.HAM.CSR' for supercell (48, 48, 1); generate it with: wannier2sparse graphene 48 48 1 VX -p /home/jgarcia/lsquant-final2/goldens/stage0/bases/graphene/model -o /home/jgarcia/fv2/tmp/check_goldens.7FtldG/s7ref/csr_empty
+REFUSED   [csr_mismatch] exit 1, stderr: lsquant error: RealBasis: receipt '/home/jgarcia/fv2/tmp/check_goldens.7FtldG/s7ref/csr_6x4/graphene.out' in csr_dir '/home/jgarcia/fv2/tmp/check_goldens.7FtldG/s7ref/csr_6x4' supercell (6, 4, 1) does not match requested supercell (48, 48, 1); generate it with: wannier2sparse graphene 48 48 1 VX -p /home/jgarcia/lsquant-final2/goldens/stage0/bases/graphene/model -o /home/jgarcia/fv2/tmp/check_goldens.7FtldG/s7ref/csr_6x4
+PASS      csr_empty: message names the directory and the command 'wannier2sparse graphene 48 48 1 ...'; csr_empty still empty (0 files)
+PASS      csr_mismatch: message names the directory, the supercell mismatch and the command; csr_6x4 unchanged
+INFO      words describe "Tr[FOO delta(E-H)]": exit 1, lsquant error: Unknown operator 'FOO' in word 'Tr[FOO delta(E-H)]' (registered operators: ['1', 'A', 'B', 'O', 'P', 'PX', 'PY', 'PZ', 'SX', 'SY', 'SZ', 'VX', 'VXSX', 'VXSY', 'VXSZ', 'VY', 'VYSX', 'VYSY', 'VYSZ', 'VZ', 'VZSX', 'VZSY', 'VZSZ'])
+INFO      words describe "Tr[VX delta(E-H) VY delta(E-H) VZ delta(E-H)]": exit 1, lsquant error: Unsupported word 'Tr[VX delta(E-H) VY delta(E-H) VZ delta(E-H)]' of rank 3 (3 expanded spectral slots): rank >= 3 moment tensors are out of scope; nearest recognised shape is 'Tr[VX delta(E-H) VX delta(E-H)]' (kubo_greenwood)
+INFO      words describe "Tr[VX@bloch delta(E-H)]": exit 1, lsquant error: Mixed basis without explicit transform: operator 'VX@bloch' is in 'bloch' basis while calculation/active basis is 'real' (insert explicit B^+ ... B or U^+ ... U transform)
+INFO      words describe "Tr[VX delta(E-H) U(t)^+ VX U(t)]": exit 0, ACCEPTED as time_correlation formulas ['time_correlation'] engine word 'VX delta U(t)^+ VX U(t)'
+INFO      words describe "Tr[VX delta(E-H) VY G+(E)]": exit 1, lsquant error: Unrecognised word shape 'Tr[VX delta(E-H) VY G+(E)]'; nearest recognised shape is 'Tr[VX delta(E-H) VY dG-(E)/dE]' (kubo_bastin)
+INFO      words describe "Tr[VX delta(E-H) VY dG+(E)/dE]": exit 1, lsquant error: Unrecognised word shape 'Tr[VX delta(E-H) VY dG+(E)/dE]'; nearest recognised shape is 'Tr[VX delta(E-H) VY dG-(E)/dE]' (kubo_bastin)
+INFO      words describe "Tr[VX delta(E-H) VY G-(E)]": exit 1, lsquant error: Unrecognised word shape 'Tr[VX delta(E-H) VY G-(E)]'; nearest recognised shape is 'Tr[VX delta(E-H) VY dG-(E)/dE]' (kubo_bastin)
+INFO      words describe "Tr[VX G+(E) VY delta(E-H)]": exit 1, lsquant error: Unrecognised word shape 'Tr[VX G+(E) VY delta(E-H)]'; nearest recognised shape is 'Tr[VX delta(E-H) VY dG-(E)/dE]' (kubo_bastin)
+== stage 7 totals per golden (IDENTICAL or PASS / DIFFERS or FAIL)
+   MCP                           3 pass (   1 byte-identical,    2 tolerance-PASS)     4 differ
+GREP      grep -rn "basis\|std::cout\|getenv" lsquant/core: empty
+GREP      grep -rn "delta\|DOS\|Kubo\|basis\|std::cout\|getenv" lsquant/core lsquant/io, code lines: empty
+          excluded comment line: lsquant/core/algebra/composite_operators.hpp:531: *      which is why the generalised Kubo bra path requires explicit `S^{-1}` and `S`
+          excluded comment line: lsquant/core/algebra/metric_policy.hpp:34: *      both be applied on the bra side of rank-2 Kubo words (`S T_m(S^-1 H~) S^-1 V S^-1 |r>`)
+          excluded comment line: lsquant/core/chebyshev/chebyshev_moments.hpp:27: * recording whether the `(2 - delta_{m0})` KPM weights (`kpmWeighted`) and Hermitian
+          excluded comment line: lsquant/core/chebyshev/chebyshev_moments.hpp:32: *      Never apply KPM `(2 - delta_{m0})` weights or symmetrisation twice; check
+          excluded comment line: lsquant/core/chebyshev/chebyshev_moments.hpp:160: * @brief Apply the legacy rank-2 KPM `(2 - delta_{m0})` weights and optional Hermitian symmetrisation.
+GREP      grep -rn "compat/" lsquant/core lsquant/io: empty
+GREP      grep -rnwE "time|velocity|spin|projector|bessel|gsl" lsquant/core lsquant/io, code lines: empty
+          excluded comment line: lsquant/core/algebra/overlap_appliers.hpp:51: * `O(N^3)` time and `O(N^2)` memory; each `Multiply` costs `O(N^2)` time.
+          excluded comment line: lsquant/core/algebra/overlap_appliers.hpp:114: * exact appliers stay exact). Construction costs `O(N^3)` time and `O(N^2)` memory; each
+          excluded comment line: lsquant/core/algebra/overlap_appliers.hpp:115: * `Multiply` costs `O(N^2)` time.
+          excluded comment line: lsquant/core/algebra/composite_operators.hpp:28: * Implements `y = a * x + b * y` in `O(N)` time and reports `IsIdentity() == true` so
+          excluded comment line: lsquant/core/algebra/composite_operators.hpp:91: * disorder `V`) or diagonal eigenvalue tables `eps_n(k)` in `O(N)` time and memory
+          excluded comment line: lsquant/core/algebra/metric_policy.hpp:48:   * already an orthonormal set. Runs in `O(1)` time.
+          excluded comment line: lsquant/core/algebra/linear_operator.hpp:42:   * Queries the square dimension `N` of the linear map `C^N -> C^N` in `O(1)` time.
+          excluded comment line: lsquant/core/algebra/linear_operator.hpp:95:   * Allows callers to elide redundant operator applications in `O(1)` time when a slot in an
+          excluded comment line: lsquant/core/algebra/sparse_matrix.hpp:28: * Hamiltonians, eV*Angstrom for velocity matrices) or dimensionless units after rescaling.
+          excluded comment line: lsquant/core/algebra/sparse_matrix.hpp:116:   * @return Number of rows (equal to number of columns) in `O(1)` time.
+          excluded comment line: lsquant/core/algebra/sparse_matrix.hpp:127:   * @return Count of compressed non-zero elements in `O(1)` time.
+          excluded comment line: lsquant/core/algebra/sparse_matrix.hpp:208:   *      purely imaginary velocity operators (`VX`), shifting signed zeros in moment outputs.
+          excluded comment line: lsquant/core/algebra/sparse_matrix.hpp:216:   * in `O(dim + nnz)` time.
+          excluded comment line: lsquant/core/algebra/sparse_matrix.hpp:247: * copying matrix data. Caches Hermiticity at construction time in `O(dim + nnz)` so subsequent
+          excluded comment line: lsquant/core/algebra/block_diagonal_operator.hpp:22: * Solves the problem of applying k-local operators (`H(k)`, velocity `dH/dk`,
+          excluded comment line: lsquant/core/algebra/block_diagonal_operator.hpp:23: * or per-k unitary rotations `U(k)`) in `O(N_k * W^2)` time with contiguous
+          excluded comment line: lsquant/core/algebra/block_diagonal_operator.hpp:52:   *      Hermiticity is evaluated and cached once at construction time within
+          excluded comment line: lsquant/core/algebra/linalg.hpp:21: * `O(N)` time.
+          excluded comment line: lsquant/core/algebra/linalg.hpp:36: * Maps `x` as an Eigen vector and multiplies every entry by `a` in `O(N)` time.
+          excluded comment line: lsquant/core/algebra/linalg.hpp:52: * Maps `x` and `y` as Eigen vectors and assigns `eig_y = eig_x` in `O(N)` time, matching
+          excluded comment line: lsquant/core/algebra/linalg.hpp:69: * time, matching legacy `linalg::vdot(x, y)` bit for bit.
+          excluded comment line: lsquant/core/algebra/linalg.hpp:85: * Evaluates `Eigen::Map(x).squaredNorm()` in `O(N)` time, matching legacy `linalg::nrm2`.
+          excluded comment line: lsquant/core/algebra/bloch_transform.hpp:33: * coordinates and Bloch k-space coordinates in `O(N_k * W * log N_k)` time
+          excluded comment line: lsquant/core/algebra/state_generator.hpp:27: * Solves the problem of streaming source states `|r>` one at a time into the moment engine
+          excluded comment line: lsquant/core/chebyshev/contraction.hpp:54: * for each grid index `i in 0 .. N - 1`. Complexity is `O(M * N)` time and `O(N)` output space.
+          excluded comment line: lsquant/core/chebyshev/contraction.hpp:97: * is `O(M0 * M1 * numPoints)` time and `O(1)` auxiliary space.
+          excluded comment line: lsquant/core/chebyshev/contraction.hpp:145: * is `O(M0 * M1 * numPoints)` time and `O(1)` auxiliary space.
+          excluded comment line: lsquant/core/chebyshev/contraction.hpp:191: * is `O(M0 * M1 * numPoints)` time and `O(1)` auxiliary space.
+          excluded comment line: lsquant/core/chebyshev/rescaled_operator.hpp:110: * `O(dim + nnz(H') + nnz(S'))` time and space; each `Multiply` takes
+          excluded comment line: lsquant/core/chebyshev/rescaled_operator.hpp:111: * `O(nnz(H' + S') + cost(S^{-1}))` time.
+          excluded comment line: lsquant/io/chebmom_file.hpp:95: * @brief Write a rank-2 time-dependent `ChebyshevMoments` tensor in the byte-exact legacy `.chebmomTD` layout.
+          excluded comment line: lsquant/io/csr_text.hpp:25: * to `+0.0`). Complexity is `O(dim + nnz)` in time and memory.
+GREP      grep -rni "fftw" lsquant/core/chebyshev lsquant/io: empty
+GREP      grep -rnE "catalogue|runfile|grammar|Tr\[|mcp" lsquant/core lsquant/io, code lines: empty
+          excluded comment line: lsquant/core/algebra/state_generator.hpp:232: * accumulated trace by `NumberOfStates()` produces `(1 / (N_k * W)) Tr[...]`, identical
+GREP      grep -rnE "eval(|exec(|literal_eval|exec_module" python/lsquant/{words,runfile.py,cli.py,mcp_server.py}: empty
+INFO      exec_module elsewhere in python/lsquant (tutorial generators imported by path):
+          python/lsquant/apps/tutorial02.py:55:    spec.loader.exec_module(module)
+          python/lsquant/apps/tutorial03.py:68:    spec.loader.exec_module(module)
+          python/lsquant/apps/tutorial01.py:56:    spec.loader.exec_module(module)
+          python/lsquant/apps/tutorial05.py:57:    spec.loader.exec_module(module)
+          python/lsquant/apps/tutorial06.py:53:    spec_ey.loader.exec_module(mod_ey)
+          python/lsquant/apps/tutorial06.py:59:    spec_ra.loader.exec_module(mod_ra)
+== stage 7 section 2.5: deleted legacy tree (HEAD ff1ad437)
+PASS      src/ absent from the working tree
+PASS      include/ absent from the working tree
+PASS      test/ absent from the working tree
+PASS      git ls-files src include test: 0 files
+PASS      build /home/jgarcia/lsquant-final2-build configured from this tree (/home/jgarcia/lsquant-final2)
+PASS      CMakeLists.txt: 0 legacy target lines
+PASS      scripts/regenerate_goldens.sh removed
+PASS      legacy shell scripts under examples/: 0
+PASS      git ls-files legacy: 0 files
+FAIL      no inline_* mention outside goldens/stage0/**/legacy_defects and PROVENANCE.md (code and documentation): 6 files: AGENTS.md README.md agent_template/tutorial_style.md agent_template/tutorial_template.md python/lsquant/moments.py tests/dev/stage_4_check.py
+          AGENTS.md:59:| `inline_compute-kpm-spectralOp`, `Moments1D` | `Tr[A delta(E-H)]` | 1 | 1 |
+          AGENTS.md:60:| `inline_compute-kpm-nonEqOp`, `Moments2D`, Kubo-Greenwood | `Tr[VX delta(E-H) VX delta(E-H)]` | 2 | 2 |
+          AGENTS.md:63:| `inline_compute-kpm-CorrOp`, `MomentsTD` | `Tr[A delta(E-H) U(t)^+ B U(t)]` | 3 | 1 |
+          README.md:162:(`inline_compute-kpm-*`, `*FromChebmom`) remain in `build/` and give
+          agent_template/tutorial_style.md:16:computes the DOS with `inline_compute-kpm-spectralOp`" does not.
+          agent_template/tutorial_template.md:76:[[inline_compute-kpm-spectralOp <label> <op> <M> <state>]]
+          python/lsquant/moments.py:184:    Pitfall: In legacy ``inline_compute-kpm-nonEqOp <label> <OP_R> <OP_L> <M>``,
+          tests/dev/stage_4_check.py:18:      against the legacy ``inline_compute-kpm-CorrOp chain1d VX VX 64 16 5 exact``
+          tests/dev/stage_4_check.py:82:# legacy-final inline_compute-kpm-CorrOp chain1d VX VX 64 16 5 exact.
+          tests/dev/stage_4_check.py:89:    """Locate ``inline_compute-kpm-CorrOp`` in ``~/lsquant-unified/build`` or local build if present."""
+INFO      inline_* in the record and the stage-0 harness (not counted): 30 files: figures/out/stage_2/build.log figures/out/stage_3/build.log figures/out/stage_3/build_run1_c01b026.log figures/out/stage_3/build_run2_0774db7.log figures/out/stage_4/build.log figures/out/stage_4/build_run1_be54b79.log figures/out/stage_4/g4c_generation.log figures/out/stage_4/stage_4_check.log figures/out/stage_4/stage_4_check_run1_be54b79.log figures/out/stage_5/build.log figures/out/stage_5/build_run1.log figures/out/stage_6/build.log figures/out/stage_6/build_run1_a5108e3.log figures/stage_0.py handoff/0000-goldens/tests.md handoff/0001-core-algebra-and-chebyshev/codex.md handoff/0001-core
+PASS      tag legacy-final exists (05e2f655dba742b967b4ecff403951a3a3b2e17a)
+PASS      legacy-final holds the legacy tree (187 files under src include test)
+PASS      legacy-final is an ancestor of HEAD
+PASS      git worktree add /home/jgarcia/fv2/legacy_wt legacy-final
+FAIL      legacy-final: cmake -DLSQUANT_BUILD_NEW_CORE=OFF -DLSQUANT_BUILD_INPUT_TOOLS=ON && cmake --build (exit 2; make: *** [Makefile:101: all] Error 2)
+FAIL      legacy binary inline_compute-kpm-nonEqOp built
+FAIL      legacy binary inline_compute-kpm-spectralOp built
+FAIL      legacy binary inline_kuboBastinFromChebmom built
+FAIL      legacy binary inline_kuboBastinSeaFromChebmom built
+FAIL      legacy binary inline_kuboBastinSurfFromChebmom built
+FAIL      legacy binary inline_kuboGreenwoodFromChebmom built
+   legacy provenance: the stage-0 pipelines with the legacy-final build (G1, G2 at 16, 1, 64 threads; G5 at 16)
+ERROR: legacy driver /home/jgarcia/fv2/legacy_wt/build/inline_compute-kpm-nonEqOp missing (build with the legacy tree)

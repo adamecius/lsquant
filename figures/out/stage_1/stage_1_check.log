@@ -1,0 +1,10 @@
+### OMP_NUM_THREADS=1 build/lsquant_core/stage_1_check
+dos max_abs_error: 2.47025e-15
+kubo max_abs_error: 1.13687e-13
+OMP_NUM_THREADS=1 vs 8 bit-identical: YES
+exit=0
+### OMP_NUM_THREADS=8 build/lsquant_core/stage_1_check
+dos max_abs_error: 2.47025e-15
+kubo max_abs_error: 1.13687e-13
+OMP_NUM_THREADS=1 vs 8 bit-identical: YES
+exit=0

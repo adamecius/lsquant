@@ -1,0 +1,24 @@
+=== Stage 6 Self-Check: Rotated chain1d (N = 2048) ===
+[1] real: max |eigvalsh(H', S') - eigvalsh(H)| = 1.154632e-14
+[4] real: max ||S^-1_cheb v - S^-1_exact v|| / ||S^-1_exact v|| (M_S=60) = 1.452447e-12
+[2] real route=lowdin      applier=exact     applier_res=2.687185e-14 max|mu - G1|=7.959603e-13 max|mu - delta_m0|=7.959603e-13
+[2] real route=generalised applier=exact     applier_res=3.918055e-16 max|mu - G1|=4.664319e-16 max|mu - delta_m0|=4.664319e-16
+[3] real route=lowdin      applier=chebyshev (M_S=12, eff_order=12) applier_res=7.094662e-05 max|mu - delta_m0|=5.308428e-04
+[3] real route=generalised applier=chebyshev (M_S=12, eff_order=12) applier_res=2.580411e-04 max|mu - delta_m0|=1.859680e-03
+[3] real route=lowdin      applier=chebyshev (M_S=60, eff_order=38) applier_res=1.781045e-12 max|mu - delta_m0|=9.506879e-12
+[3] real route=generalised applier=chebyshev (M_S=60, eff_order=41) applier_res=1.687868e-12 max|mu - delta_m0|=1.517385e-12
+[3] real route=generalised applier=ischo     (tol=1e-06) applier_res=5.071275e-07 max|mu - delta_m0|=1.675476e-08
+[3] real route=generalised applier=ischo     (tol=1e-13) applier_res=1.345871e-16 max|mu - delta_m0|=2.737152e-15
+[1] complex: max |eigvalsh(H', S') - eigvalsh(H)| = 7.993606e-15
+[4] complex: max ||S^-1_cheb v - S^-1_exact v|| / ||S^-1_exact v|| (M_S=60) = 9.664000e-13
+[2] complex route=lowdin      applier=exact     applier_res=3.004363e-14 max|mu - G1|=6.202940e-13 max|mu - delta_m0|=6.202940e-13
+[2] complex route=generalised applier=exact     applier_res=4.162287e-16 max|mu - G1|=1.022115e-15 max|mu - delta_m0|=1.022115e-15
+[3] complex route=lowdin      applier=chebyshev (M_S=60, eff_order=33) applier_res=1.782907e-12 max|mu - delta_m0|=9.336730e-13
+[3] complex route=generalised applier=chebyshev (M_S=60, eff_order=36) applier_res=1.138146e-12 max|mu - delta_m0|=2.915651e-12
+[3] complex route=generalised applier=ischo     (tol=1e-13) applier_res=1.491737e-16 max|mu - delta_m0|=2.860823e-15
+=== Stage 6 Self-Check PASSED ===
+
+real	47m24.880s
+user	604m56.349s
+sys	3m17.711s
+selfcheck exit 0

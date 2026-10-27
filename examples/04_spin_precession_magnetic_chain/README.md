@@ -12,7 +12,6 @@ We prepare a spin pointing along $x$, let it evolve under a chain with a Zeeman
 field along $z$, and read back the three spin components in time. The lesson here
 is that a clean magnetic field makes every spin precess at one Larmor frequency,
 $\omega = 2J_{\rm ex}/\hbar$, the same at every energy, coherent and reversible.
-The next tutorial breaks that coherence with disorder.
 
 ## The physics
 
@@ -26,86 +25,67 @@ chain band shifted into two exchange-split copies filling $[-2.1, 2.1]\ \mathrm{
 
 A spin prepared along $+x$ is an equal superposition of the two $\sigma_z$
 eigenstates, which acquire a relative phase $2J_{\rm ex}\,t/\hbar$ as they evolve.
-That phase rotates the spin in the $x$-$y$ plane: it precesses. The single result
-the tutorial turns on is that the precession frequency is the level splitting over
-$\hbar$ and nothing else,
+That phase rotates the spin in the $x$–$y$ plane: it precesses. The precession
+frequency is the level splitting over $\hbar$ and nothing else,
 
 $$ \langle S_x(t)\rangle = \cos\omega t, \quad \langle S_y(t)\rangle = -\sin\omega t, \quad \langle S_z(t)\rangle = 0, \qquad \omega = \frac{2J_{\rm ex}}{\hbar}, $$
 
-independent of the Fermi energy. In LSQUANT's physical units, $\hbar = 0.658\ \mathrm{eV\,fs}$
-and time is in fs, so $\omega = 0.304\ \mathrm{rad/fs}$ and the period is
-$2\pi/\omega = 20.7\ \mathrm{fs}$. LSQUANT obtains this by evolving the spin operator
-in time with a Chebyshev expansion of $U(t) = e^{-iHt/\hbar}$, never diagonalizing
-$H$.
-
-The whole effect starts from the band structure: the exchange field splits the two
-spin channels, and a spin built from both of them precesses at the splitting
-frequency.
+independent of the Fermi energy. In LSQUANT's physical units, $\hbar = 0.6582\ \mathrm{eV\,fs}$
+and time is in fs, so $\omega = 0.3039\ \mathrm{rad/fs}$ and the period is
+$2\pi/\omega = 20.68\ \mathrm{fs}$. LSQUANT obtains this by evaluating the
+projected time-evolution words `Tr[P:PX U(t)^+ S_a U(t) delta(E-H) P:PX]` with a
+Bessel–Chebyshev expansion of $U(t) = e^{-iHt/\hbar}$, never diagonalizing $H$.
 
 ![The exchange field splits the up and down spin bands by 2 J_ex, the splitting that sets the precession frequency](fig_zeeman.png)
 
-## Step 1: stage the operators
+## Step 1: evolve the spin
 
-The operators are produced by [wannier2sparse](https://github.com/adamecius/wannier2sparse)
-from the magnetic-chain model and shipped here, staged under `operators/`:
-
-```bash
-ls operators
-```
-
-Five operators carry the run: `chain1d_mag.HAM.CSR` is the chain with its Zeeman
-field; `SX`, `SY`, `SZ` are the spin components we measure; and `PX` is the
-projector $P_x = \tfrac12(\mathbb{1} + S_x)$ that prepares the initial $+x$-polarised
-spin. Each carries a `.desc` sidecar recording what it physically is. See the
-wannier2sparse site for the file format; here we only read them.
-
-## Step 2: evolve the spin
-
-For the spin started along $+x$ (the `PX` projector), evolve the state and record
-each spin component over a 95 fs window, about four and a half precession periods:
+[`run_spin.json`](run_spin.json) evaluates the three projected time-evolution words
+`Tr[P:PX U(t)^+ SX U(t) delta(E-H) P:PX]`, `Tr[P:PX U(t)^+ SY U(t) delta(E-H) P:PX]`,
+and `Tr[P:PX U(t)^+ SZ U(t) delta(E-H) P:PX]` on `chain1d_mag` ($N = 128$ spin
+orbitals, $M = 32$ Chebyshev moments, $96$ time steps up to $t_{\max} = 95\ \mathrm{fs}$,
+exact trace):
 
 ```bash
-for OP in SX SY SZ; do
-  inline_compute-kpm-TimeEvProjetedOp chain1d_mag $OP PX 32 96 95 exact   # (soon: a unified `lsquant compute` time-evolution mode)
-done
+python3 -m lsquant run examples/04_spin_precession_magnetic_chain/run_spin.json --out /tmp/tut04
 ```
 
-> **Entry points.** Projected real-time evolution has no `lsquant compute` mode
-> yet, so this tutorial uses the `inline_compute-kpm-TimeEvProjetedOp` driver; a
-> unified time-evolution verb is planned and will replace it.
-
-This realises $|\phi(t)\rangle = U(t)\,P_x|\phi_r\rangle$ and records
-$\langle\phi(t)|S_\alpha|\phi(t)\rangle$ over 96 time steps with 32 Chebyshev
-moments, by exact trace over the full basis (deterministic, no random vectors). It
-writes one time-dependent moment file per component:
-
-```
-TimeProjSX-PXchain1d_magKPM_M32_stateexact.chebmomTD
-```
-
-Because the precession is energy-independent, the energy-integrated spin is just
-the $m=0$ Chebyshev moment, so no energy reconstruction is needed: the $m=0$ row
-of each file is the spin component in time.
-
-## Step 3: the spin keeps Larmor time
-
-Read the three components back, normalise by $\langle S_x(0)\rangle$, and compare
-to the analytic precession:
+To stage the operators (`operators/chain1d_mag.{HAM,SX,SY,SZ,PX}.CSR`) into the
+local directory directly:
 
 ```bash
-python lsqspin.py
+python3 examples/04_spin_precession_magnetic_chain/make_chain_mag.py
+```
+
+Because the Larmor frequency is energy-independent, the energy-integrated spin is
+just the $m = 0$ Chebyshev moment of each `.chebmomTD` file.
+
+## Step 2: the spin keeps Larmor time
+
+Generate both tutorial figures from the run output directory:
+
+```bash
+python3 examples/04_spin_precession_magnetic_chain/plot.py /tmp/tut04
 ```
 
 ![The spin traces cos and minus-sine in the x-y plane at the Larmor frequency while S_z stays zero, KPM points on the analytic curves](fig_precession.png)
 
 The $\langle S_x\rangle$ points follow $\cos\omega t$ and $\langle S_y\rangle$
-follow $-\sin\omega t$: the spin sweeps a full circle in the $x$-$y$ plane every
-20.7 fs, while $\langle S_z\rangle$ stays pinned at zero, because the field is
-along $z$ and cannot torque the $z$-component. The KPM points sit on the analytic
-curves to machine precision, since the exact trace evaluates the time evolution
-without statistical noise. Nothing damps: the amplitude stays at one for every
-period. This is a clean clock, and its rate is set entirely by $2J_{\rm ex}$, the
-same whatever the electron's energy.
+follow $-\sin\omega t$: the spin sweeps a full circle in the $x$–$y$ plane every
+$20.7\ \mathrm{fs}$, while $\langle S_z\rangle$ stays pinned at zero, because the
+field is along $z$ and cannot torque the $z$-component. The KPM points sit on the
+analytic curves to machine precision ($< 4 \times 10^{-15}$).
+
+## Output files and figures
+
+| File | Description |
+|---|---|
+| `TimeProjSX-PXchain1d_magKPM_M32_stateexact.chebmomTD` | Time-dependent Chebyshev moments ($M = 32$, $N_t = 96$) for $S_x(t)$ |
+| `TimeProjSY-PXchain1d_magKPM_M32_stateexact.chebmomTD` | Time-dependent Chebyshev moments ($M = 32$, $N_t = 96$) for $S_y(t)$ |
+| `TimeProjSZ-PXchain1d_magKPM_M32_stateexact.chebmomTD` | Time-dependent Chebyshev moments ($M = 32$, $N_t = 96$) for $S_z(t)$ |
+| `run.resolved.json` | Resolved run configuration and file manifest |
+| `fig_zeeman.png` | Exchange-split 1D bands $E_{\uparrow,\downarrow}(k) = -2\gamma\cos(ka) \mp J_{\rm ex}$ |
+| `fig_precession.png` | Normalised spin expectations $\langle S_\alpha(t)\rangle / \langle S_x(0)\rangle$ vs. analytic Larmor curves |
 
 ## What to take away
 
@@ -113,23 +93,14 @@ same whatever the electron's energy.
   $\omega = 2J_{\rm ex}/\hbar$, fixed by the field alone.
 - In a clean system the precession is coherent and reversible: the amplitude never
   decays, so the spin keeps perfect time.
-- The frequency is energy-independent, so the energy-integrated spin (the $m=0$
-  moment) already carries the full precession, with no reconstruction step.
-- LSQUANT evolves the spin operator through a Chebyshev expansion of $e^{-iHt/\hbar}$,
-  so the clock runs without ever diagonalizing $H$.
+- The frequency is energy-independent, so the $m=0$ Chebyshev moment already
+  carries the full precession without energy reconstruction.
+- LSQUANT evolves the spin operator through a Bessel–Chebyshev expansion of
+  $e^{-iHt/\hbar}$, so the clock runs without diagonalizing $H$.
 
-The next tutorial keeps this magnetic chain but adds disorder, which dephases the
-two spin channels and turns this coherent precession into irreversible spin
-relaxation over a time $\tau_s$.
+## References
 
-## References and links
-
-- LSQUANT source and documentation: https://github.com/adamecius/lsquant
-- Methodology: Z. Fan, J. H. García, A. W. Cummings et al., *Linear Scaling
-  Quantum Transport Methodologies*, arXiv:1811.07387.
-- Installation: see the main README of the repository.
-
-## Further reading
-
-- A. W. Cummings, J. H. García, J. Fabian, S. Roche, *Giant Spin Lifetime
-  Anisotropy in Graphene*, Phys. Rev. Lett. **119**, 206601 (2017).
+- Z. Fan, J. H. García, A. W. Cummings et al., *Linear scaling quantum transport
+  methodologies*, Phys. Rep. **893**, 1–123 (2021) ([arXiv:1811.07387](https://arxiv.org/abs/1811.07387)).
+- A. W. Cummings, J. H. García, J. Fabian, and S. Roche, *Giant spin lifetime
+  anisotropy in graphene*, Phys. Rev. Lett. **119**, 206601 (2017).

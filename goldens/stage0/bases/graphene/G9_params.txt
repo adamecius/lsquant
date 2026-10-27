@@ -1,0 +1,9 @@
+mesh gamma_centred_k=n/N
+nk 48
+eta_eV 0.040
+emin -3.6
+emax 3.6
+ngrid 2881
+finite_size_mesh shifted_k=(n+1/2)/N
+finite_size_nk 240
+sigma_area_hr_A2 |a1_x*a2_y|

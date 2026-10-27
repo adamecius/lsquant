@@ -1,0 +1,19 @@
+[check a] BlochTransform unitarity (8,8,1) graphene: max|B B^+ x - x| = 6.206e-17, max|B^+ B x - x| = 5.004e-17
+[check b] (graphene 8x8x1) max_x ||H_k x - B H_csr B^+ x||_inf = 7.109e-16
+[check c] (graphene 8x8x1) max_x ||v_x x - B VX_csr B^+ x||_inf = 7.109e-16
+[check b] (haldane 8x8x1) max_x ||H_k x - B H_csr B^+ x||_inf = 5.496e-16
+[check c] (haldane 8x8x1) max_x ||v_x x - B VX_csr B^+ x||_inf = 6.474e-16
+[check d] Anderson disorder W=1.0 (seed=12345): max|mu_real - mu_bloch| DOS(64) = 4.680e-16, VX-VX(64x64) = 5.761e-14
+[check e] (16,16,1) real vs bloch: DOS max|d_mu|=8.105e-15, max_rel|d_curve|=6.915e-15; KuboXX max|d_mu|=5.898e-13, max|d_curve/N|=5.313e-14, max_rel|d_curve|=1.655e-14
+[check e] (16,16,1) real vs eigen: DOS max|d_mu|=7.883e-15, max_rel|d_curve|=6.825e-15; KuboXX max|d_mu|=6.040e-13, max|d_curve/N|=4.588e-14, max_rel|d_curve|=1.429e-14
+[check e] (16,16,1) bloch vs eigen: DOS max|d_mu|=1.222e-15, max_rel|d_curve|=1.203e-15; KuboXX max|d_mu|=1.279e-13, max|d_curve/N|=7.256e-15, max_rel|d_curve|=2.260e-15
+[check e] Jackson KPM (M=128) vs Gaussian exact-diag: rel_L2(DOS)=2.130e-02, rel_L2(KuboXX)=4.250e-02
+[check f] G1 chain1d DOS byte-identical to golden: PASS
+[check f] G4 graphene Kubo byte-identical to golden: PASS
+[check f] G7 chain1d_mag spin precession byte-identical to golden: PASS
+stage_5_check: ALL CHECKS PASSED
+
+real	2m48.152s
+user	24m37.237s
+sys	0m22.247s
+EXIT:0

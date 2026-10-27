@@ -1,0 +1,120 @@
+== stage 7 (run files only): S7_SET=list S7_LIST=g10_chain1d_complex_generalised g10_chain1d_complex_lowdin g10_chain1d_real_generalised_chebyshev g10_chain1d_real_generalised_ischo g10_chain1d_real_generalised g10_chain1d_real_lowdin_chebyshev g10_chain1d_real_lowdin g10_haldane_complex_generalised g10_haldane_complex_lowdin g10_haldane_real_generalised g10_haldane_real_lowdin , threads: 16
+          [T=16] python -m lsquant run runs/goldens/g10_chain1d_complex_generalised.json wall    81.54 s,    7 files written
+          [T=16] python -m lsquant run runs/goldens/g10_chain1d_complex_lowdin.json      wall  1302.71 s,    7 files written
+          [T=16] python -m lsquant run runs/goldens/g10_chain1d_real_generalised.json    wall    64.91 s,    7 files written
+          [T=16] python -m lsquant run runs/goldens/g10_chain1d_real_generalised_chebyshev.json wall   665.38 s,    7 files written
+          [T=16] python -m lsquant run runs/goldens/g10_chain1d_real_generalised_ischo.json wall   111.39 s,    7 files written
+          [T=16] python -m lsquant run runs/goldens/g10_chain1d_real_lowdin.json         wall  1176.33 s,    7 files written
+          [T=16] python -m lsquant run runs/goldens/g10_chain1d_real_lowdin_chebyshev.json wall  1362.51 s,    7 files written
+          [T=16] python -m lsquant run runs/goldens/g10_haldane_complex_generalised.json wall    42.63 s,    9 files written
+          [T=16] python -m lsquant run runs/goldens/g10_haldane_complex_lowdin.json      wall    58.61 s,    9 files written
+          [T=16] python -m lsquant run runs/goldens/g10_haldane_real_generalised.json    wall    40.82 s,    9 files written
+          [T=16] python -m lsquant run runs/goldens/g10_haldane_real_lowdin.json         wall    71.58 s,    9 files written
+   [T=16] per-golden comparison
+INFO      [T=16] figures/stage_5_table.py skipped (S7_SET=list: the table needs all six G9 configurations of both models)
+PASS      [T=16] g10_chain1d_complex_generalised.json: reference arguments equal the run's resolved metric (stage6_nonorth --route generalised --applier exact --order 60 --coeff-tol 1e-12 --tol 1e-13 --max-iter 200 --max-dim 4096)
+IDENTICAL [T=16] g10_chain1d_complex_generalised.json -> stage6_nonorth NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom (G10)
+IDENTICAL [T=16] g10_chain1d_complex_generalised.json -> stage6_nonorth NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D (G10)
+IDENTICAL [T=16] g10_chain1d_complex_generalised.json -> stage6_nonorth SpectralOp1chain1dKPM_M64_stateexact.chebmom (G10)
+IDENTICAL [T=16] g10_chain1d_complex_generalised.json -> stage6_nonorth SpectralOp1chain1dKPM_M64_stateexact.chebmom1D (G10)
+PASS      [T=16] g10_chain1d_complex_generalised.json SpectralOp1chain1dKPM_M64_stateexact.chebmom1D vs G1  max rel diff 8.180e-16 <= 1e-10
+PASS      [T=16] g10_chain1d_complex_generalised.json NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D vs G2  max rel diff 2.554e-15 <= 1e-10
+INFO      [T=16] g10_chain1d_complex_generalised.json meanSpectralOp1chain1dKPM_M64_stateexactJACKSON.dat vs G3 (curve, 6 digits)  max rel diff 0
+PASS      [T=16] g10_chain1d_complex_lowdin.json: reference arguments equal the run's resolved metric (stage6_nonorth --route lowdin --applier exact --order 60 --coeff-tol 1e-12 --tol 1e-13 --max-iter 200 --max-dim 4096)
+IDENTICAL [T=16] g10_chain1d_complex_lowdin.json -> stage6_nonorth NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom (G10)
+IDENTICAL [T=16] g10_chain1d_complex_lowdin.json -> stage6_nonorth NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D (G10)
+IDENTICAL [T=16] g10_chain1d_complex_lowdin.json -> stage6_nonorth SpectralOp1chain1dKPM_M64_stateexact.chebmom (G10)
+IDENTICAL [T=16] g10_chain1d_complex_lowdin.json -> stage6_nonorth SpectralOp1chain1dKPM_M64_stateexact.chebmom1D (G10)
+PASS      [T=16] g10_chain1d_complex_lowdin.json SpectralOp1chain1dKPM_M64_stateexact.chebmom1D vs G1  max rel diff 7.088e-13 <= 1e-10
+PASS      [T=16] g10_chain1d_complex_lowdin.json NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D vs G2  max rel diff 1.243e-14 <= 1e-10
+INFO      [T=16] g10_chain1d_complex_lowdin.json meanSpectralOp1chain1dKPM_M64_stateexactJACKSON.dat vs G3 (curve, 6 digits)  max rel diff 0
+PASS      [T=16] g10_chain1d_real_generalised.json: reference arguments equal the run's resolved metric (stage6_nonorth --route generalised --applier exact --order 60 --coeff-tol 1e-12 --tol 1e-13 --max-iter 200 --max-dim 4096)
+IDENTICAL [T=16] g10_chain1d_real_generalised.json -> stage6_nonorth NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom (G10)
+IDENTICAL [T=16] g10_chain1d_real_generalised.json -> stage6_nonorth NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D (G10)
+IDENTICAL [T=16] g10_chain1d_real_generalised.json -> stage6_nonorth SpectralOp1chain1dKPM_M64_stateexact.chebmom (G10)
+IDENTICAL [T=16] g10_chain1d_real_generalised.json -> stage6_nonorth SpectralOp1chain1dKPM_M64_stateexact.chebmom1D (G10)
+PASS      [T=16] g10_chain1d_real_generalised.json SpectralOp1chain1dKPM_M64_stateexact.chebmom1D vs G1  max rel diff 3.347e-16 <= 1e-10
+PASS      [T=16] g10_chain1d_real_generalised.json NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D vs G2  max rel diff 2.442e-15 <= 1e-10
+INFO      [T=16] g10_chain1d_real_generalised.json meanSpectralOp1chain1dKPM_M64_stateexactJACKSON.dat vs G3 (curve, 6 digits)  max rel diff 0
+PASS      [T=16] g10_chain1d_real_generalised_chebyshev.json: reference arguments equal the run's resolved metric (stage6_nonorth --route generalised --applier chebyshev --order 60 --coeff-tol 1e-12 --tol 1e-13 --max-iter 200 --max-dim 4096)
+IDENTICAL [T=16] g10_chain1d_real_generalised_chebyshev.json -> stage6_nonorth NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom (G10)
+IDENTICAL [T=16] g10_chain1d_real_generalised_chebyshev.json -> stage6_nonorth NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D (G10)
+IDENTICAL [T=16] g10_chain1d_real_generalised_chebyshev.json -> stage6_nonorth SpectralOp1chain1dKPM_M64_stateexact.chebmom (G10)
+IDENTICAL [T=16] g10_chain1d_real_generalised_chebyshev.json -> stage6_nonorth SpectralOp1chain1dKPM_M64_stateexact.chebmom1D (G10)
+PASS      [T=16] g10_chain1d_real_generalised_chebyshev.json SpectralOp1chain1dKPM_M64_stateexact.chebmom1D vs G1  max rel diff 1.506e-12 <= 1e-8
+PASS      [T=16] g10_chain1d_real_generalised_chebyshev.json NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D vs G2  max rel diff 1.026e-13 <= 1e-8
+INFO      [T=16] g10_chain1d_real_generalised_chebyshev.json meanSpectralOp1chain1dKPM_M64_stateexactJACKSON.dat vs G3 (curve, 6 digits)  max rel diff 0
+PASS      [T=16] g10_chain1d_real_generalised_ischo.json: reference arguments equal the run's resolved metric (stage6_nonorth --route generalised --applier ischo --order 60 --coeff-tol 1e-12 --tol 1e-13 --max-iter 200 --max-dim 4096)
+IDENTICAL [T=16] g10_chain1d_real_generalised_ischo.json -> stage6_nonorth NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom (G10)
+IDENTICAL [T=16] g10_chain1d_real_generalised_ischo.json -> stage6_nonorth NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D (G10)
+IDENTICAL [T=16] g10_chain1d_real_generalised_ischo.json -> stage6_nonorth SpectralOp1chain1dKPM_M64_stateexact.chebmom (G10)
+IDENTICAL [T=16] g10_chain1d_real_generalised_ischo.json -> stage6_nonorth SpectralOp1chain1dKPM_M64_stateexact.chebmom1D (G10)
+PASS      [T=16] g10_chain1d_real_generalised_ischo.json SpectralOp1chain1dKPM_M64_stateexact.chebmom1D vs G1  max rel diff 2.726e-15 <= 1e-9
+PASS      [T=16] g10_chain1d_real_generalised_ischo.json NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D vs G2  max rel diff 2.442e-15 <= 1e-9
+INFO      [T=16] g10_chain1d_real_generalised_ischo.json meanSpectralOp1chain1dKPM_M64_stateexactJACKSON.dat vs G3 (curve, 6 digits)  max rel diff 0
+PASS      [T=16] g10_chain1d_real_lowdin.json: reference arguments equal the run's resolved metric (stage6_nonorth --route lowdin --applier exact --order 60 --coeff-tol 1e-12 --tol 1e-13 --max-iter 200 --max-dim 4096)
+IDENTICAL [T=16] g10_chain1d_real_lowdin.json -> stage6_nonorth NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom (G10)
+IDENTICAL [T=16] g10_chain1d_real_lowdin.json -> stage6_nonorth NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D (G10)
+IDENTICAL [T=16] g10_chain1d_real_lowdin.json -> stage6_nonorth SpectralOp1chain1dKPM_M64_stateexact.chebmom (G10)
+IDENTICAL [T=16] g10_chain1d_real_lowdin.json -> stage6_nonorth SpectralOp1chain1dKPM_M64_stateexact.chebmom1D (G10)
+PASS      [T=16] g10_chain1d_real_lowdin.json SpectralOp1chain1dKPM_M64_stateexact.chebmom1D vs G1  max rel diff 6.757e-13 <= 1e-10
+PASS      [T=16] g10_chain1d_real_lowdin.json NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D vs G2  max rel diff 1.243e-14 <= 1e-10
+INFO      [T=16] g10_chain1d_real_lowdin.json meanSpectralOp1chain1dKPM_M64_stateexactJACKSON.dat vs G3 (curve, 6 digits)  max rel diff 0
+PASS      [T=16] g10_chain1d_real_lowdin_chebyshev.json: reference arguments equal the run's resolved metric (stage6_nonorth --route lowdin --applier chebyshev --order 60 --coeff-tol 1e-12 --tol 1e-13 --max-iter 200 --max-dim 4096)
+IDENTICAL [T=16] g10_chain1d_real_lowdin_chebyshev.json -> stage6_nonorth NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom (G10)
+IDENTICAL [T=16] g10_chain1d_real_lowdin_chebyshev.json -> stage6_nonorth NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D (G10)
+IDENTICAL [T=16] g10_chain1d_real_lowdin_chebyshev.json -> stage6_nonorth SpectralOp1chain1dKPM_M64_stateexact.chebmom (G10)
+IDENTICAL [T=16] g10_chain1d_real_lowdin_chebyshev.json -> stage6_nonorth SpectralOp1chain1dKPM_M64_stateexact.chebmom1D (G10)
+PASS      [T=16] g10_chain1d_real_lowdin_chebyshev.json SpectralOp1chain1dKPM_M64_stateexact.chebmom1D vs G1  max rel diff 9.383e-12 <= 1e-8
+PASS      [T=16] g10_chain1d_real_lowdin_chebyshev.json NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D vs G2  max rel diff 1.650e-13 <= 1e-8
+INFO      [T=16] g10_chain1d_real_lowdin_chebyshev.json meanSpectralOp1chain1dKPM_M64_stateexactJACKSON.dat vs G3 (curve, 6 digits)  max rel diff 0
+PASS      [T=16] g10_haldane_complex_generalised.json: reference arguments equal the run's resolved metric (stage6_nonorth --route generalised --applier exact --order 60 --coeff-tol 1e-12 --tol 1e-13 --max-iter 200 --max-dim 4096)
+IDENTICAL [T=16] g10_haldane_complex_generalised.json -> stage6_nonorth NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom (G10)
+IDENTICAL [T=16] g10_haldane_complex_generalised.json -> stage6_nonorth NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom2D (G10)
+IDENTICAL [T=16] g10_haldane_complex_generalised.json -> stage6_nonorth NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom (G10)
+IDENTICAL [T=16] g10_haldane_complex_generalised.json -> stage6_nonorth NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom2D (G10)
+PASS      [T=16] g10_haldane_complex_generalised.json NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom2D vs G5  max rel diff 1.340e-14 <= 1e-10
+PASS      [T=16] g10_haldane_complex_generalised.json NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom2D vs G5  max rel diff 1.148e-14 <= 1e-10
+INFO      [T=16] g10_haldane_complex_generalised.json KuboBastin_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat vs G5 (curve, 6 digits)  max rel diff 9.285e-11
+INFO      [T=16] g10_haldane_complex_generalised.json KuboBastinSea_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat vs G5 (curve, 6 digits)  max rel diff 9.285e-12
+INFO      [T=16] g10_haldane_complex_generalised.json KuboBastinSurf_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat vs G5 (curve, 6 digits)  max rel diff 1.427e+00
+INFO      [T=16] g10_haldane_complex_generalised.json KuboGreenWood_NonEqOpVX-VXhaldaneKPM_M128x128_stateexactJACKSON.dat vs G5 (curve, 6 digits)  max rel diff 9.078e-15
+PASS      [T=16] g10_haldane_complex_lowdin.json: reference arguments equal the run's resolved metric (stage6_nonorth --route lowdin --applier exact --order 60 --coeff-tol 1e-12 --tol 1e-13 --max-iter 200 --max-dim 4096)
+IDENTICAL [T=16] g10_haldane_complex_lowdin.json -> stage6_nonorth NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom (G10)
+IDENTICAL [T=16] g10_haldane_complex_lowdin.json -> stage6_nonorth NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom2D (G10)
+IDENTICAL [T=16] g10_haldane_complex_lowdin.json -> stage6_nonorth NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom (G10)
+IDENTICAL [T=16] g10_haldane_complex_lowdin.json -> stage6_nonorth NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom2D (G10)
+PASS      [T=16] g10_haldane_complex_lowdin.json NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom2D vs G5  max rel diff 4.035e-14 <= 1e-10
+PASS      [T=16] g10_haldane_complex_lowdin.json NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom2D vs G5  max rel diff 5.584e-14 <= 1e-10
+INFO      [T=16] g10_haldane_complex_lowdin.json KuboBastin_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat vs G5 (curve, 6 digits)  max rel diff 9.285e-11
+INFO      [T=16] g10_haldane_complex_lowdin.json KuboBastinSea_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat vs G5 (curve, 6 digits)  max rel diff 9.285e-12
+INFO      [T=16] g10_haldane_complex_lowdin.json KuboBastinSurf_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat vs G5 (curve, 6 digits)  max rel diff 9.239e+01
+INFO      [T=16] g10_haldane_complex_lowdin.json KuboGreenWood_NonEqOpVX-VXhaldaneKPM_M128x128_stateexactJACKSON.dat vs G5 (curve, 6 digits)  max rel diff 1.006e-14
+PASS      [T=16] g10_haldane_real_generalised.json: reference arguments equal the run's resolved metric (stage6_nonorth --route generalised --applier exact --order 60 --coeff-tol 1e-12 --tol 1e-13 --max-iter 200 --max-dim 4096)
+IDENTICAL [T=16] g10_haldane_real_generalised.json -> stage6_nonorth NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom (G10)
+IDENTICAL [T=16] g10_haldane_real_generalised.json -> stage6_nonorth NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom2D (G10)
+IDENTICAL [T=16] g10_haldane_real_generalised.json -> stage6_nonorth NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom (G10)
+IDENTICAL [T=16] g10_haldane_real_generalised.json -> stage6_nonorth NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom2D (G10)
+PASS      [T=16] g10_haldane_real_generalised.json NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom2D vs G5  max rel diff 1.340e-14 <= 1e-10
+PASS      [T=16] g10_haldane_real_generalised.json NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom2D vs G5  max rel diff 1.148e-14 <= 1e-10
+INFO      [T=16] g10_haldane_real_generalised.json KuboBastin_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat vs G5 (curve, 6 digits)  max rel diff 9.285e-11
+INFO      [T=16] g10_haldane_real_generalised.json KuboBastinSea_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat vs G5 (curve, 6 digits)  max rel diff 9.285e-12
+INFO      [T=16] g10_haldane_real_generalised.json KuboBastinSurf_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat vs G5 (curve, 6 digits)  max rel diff 1.369e+00
+INFO      [T=16] g10_haldane_real_generalised.json KuboGreenWood_NonEqOpVX-VXhaldaneKPM_M128x128_stateexactJACKSON.dat vs G5 (curve, 6 digits)  max rel diff 8.473e-15
+PASS      [T=16] g10_haldane_real_lowdin.json: reference arguments equal the run's resolved metric (stage6_nonorth --route lowdin --applier exact --order 60 --coeff-tol 1e-12 --tol 1e-13 --max-iter 200 --max-dim 4096)
+IDENTICAL [T=16] g10_haldane_real_lowdin.json -> stage6_nonorth NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom (G10)
+IDENTICAL [T=16] g10_haldane_real_lowdin.json -> stage6_nonorth NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom2D (G10)
+IDENTICAL [T=16] g10_haldane_real_lowdin.json -> stage6_nonorth NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom (G10)
+IDENTICAL [T=16] g10_haldane_real_lowdin.json -> stage6_nonorth NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom2D (G10)
+PASS      [T=16] g10_haldane_real_lowdin.json NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom2D vs G5  max rel diff 4.706e-14 <= 1e-10
+PASS      [T=16] g10_haldane_real_lowdin.json NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom2D vs G5  max rel diff 7.002e-14 <= 1e-10
+INFO      [T=16] g10_haldane_real_lowdin.json KuboBastin_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat vs G5 (curve, 6 digits)  max rel diff 9.285e-11
+INFO      [T=16] g10_haldane_real_lowdin.json KuboBastinSea_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat vs G5 (curve, 6 digits)  max rel diff 9.285e-12
+INFO      [T=16] g10_haldane_real_lowdin.json KuboBastinSurf_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat vs G5 (curve, 6 digits)  max rel diff 8.611e+01
+INFO      [T=16] g10_haldane_real_lowdin.json KuboGreenWood_NonEqOpVX-VXhaldaneKPM_M128x128_stateexactJACKSON.dat vs G5 (curve, 6 digits)  max rel diff 8.624e-15
+== stage 7 totals per golden (IDENTICAL or PASS / DIFFERS or FAIL)
+   T16 G10                      44 pass (  44 byte-identical,    0 tolerance-PASS)     0 differ
+   T16 G10 vs G1/G2/G5          22 pass (   0 byte-identical,    0 tolerance-PASS)     0 differ
+== 77 files compared; failures: 0
+== tolerance mode (GOLDEN_TOL=1): 44 byte-identical, 0 tolerance-PASS (compare() and index.tsv rows)
+GATE PASS (stage 7runs)

@@ -1,0 +1,46 @@
+{
+  "model": {
+    "kind": "siesta",
+    "dir": "examples/08_spin_hall_pdse2_monolayer/siesta",
+    "label": "pdse2",
+    "params": {
+      "velocity_mode": "bare",
+      "oracle": true
+    }
+  },
+  "basis": {
+    "name": "eigen",
+    "supercell": [
+      48,
+      48,
+      1
+    ]
+  },
+  "metric": {
+    "policy": "nonorthogonal",
+    "route": "anticommutator",
+    "applier": "exact"
+  },
+  "word": "Tr[JXSZ delta(E-H) VY dG-(E)/dE]",
+  "expansion": {
+    "moments": 1024,
+    "window": "eigen",
+    "trace": "exact",
+    "seed": 12345
+  },
+  "reconstruction": {
+    "kernel": "jackson",
+    "broadening_meV": 10.0,
+    "formulas": [
+      "shc"
+    ],
+    "fermi_energies": [
+      0.0
+    ]
+  },
+  "output": {
+    "dir": "out/g11_pdse2_bare_anticommutator_shc",
+    "legacy_layout": true,
+    "write_chebmom": true
+  }
+}

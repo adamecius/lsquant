@@ -1,0 +1,14 @@
+source	C	verdict
+golden_G5	1.017017	REF
+haldane_complex_kuboxy_generalised_chebyshev	1.017017	PASS
+haldane_complex_kuboxy_generalised_exact	1.017017	PASS
+haldane_complex_kuboxy_generalised_ischo	1.017017	PASS
+haldane_complex_kuboxy_lowdin_chebyshev	1.017017	PASS
+haldane_complex_kuboxy_lowdin_exact	1.017017	PASS
+haldane_complex_kuboxy_naive_exact	1.193531	EVIDENCE(FAIL)
+haldane_real_kuboxy_generalised_chebyshev	1.017017	PASS
+haldane_real_kuboxy_generalised_exact	1.017017	PASS
+haldane_real_kuboxy_generalised_ischo	1.017017	PASS
+haldane_real_kuboxy_lowdin_chebyshev	1.017017	PASS
+haldane_real_kuboxy_lowdin_exact	1.017017	PASS
+haldane_real_kuboxy_naive_exact	1.197943	EVIDENCE(FAIL)

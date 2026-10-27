@@ -1,0 +1,183 @@
+$ OMP_NUM_THREADS=16 bash scripts/check_goldens.sh 4 build
+== stage 1: /home/ICN2/jgarcia/lsquant-unified/build/lsquant_core/stage1_moments vs goldens/stage0/chain1d (KPM_SEED=12345)
+IDENTICAL [T=1] chain1d/SpectralOp1chain1dKPM_M64_stateexact.chebmom1D (G1)
+IDENTICAL [T=1] chain1d/NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D (G2)
+IDENTICAL [T=8] chain1d/SpectralOp1chain1dKPM_M64_stateexact.chebmom1D (G1)
+IDENTICAL [T=8] chain1d/NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D (G2)
+IDENTICAL [T=64] chain1d/SpectralOp1chain1dKPM_M64_stateexact.chebmom1D (G1)
+IDENTICAL [T=64] chain1d/NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D (G2)
+IDENTICAL [T=8, batch 16] chain1d/NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D (G2, batched)
+IDENTICAL [random, run2 vs run1] NonEqOpVX-VXchain1dKPM_M64x64_statedefault.chebmom
+IDENTICAL [random, run2 vs run1] NonEqOpVX-VXchain1dKPM_M64x64_statedefault.chebmom2D
+IDENTICAL [random, run2 vs run1] SpectralOp1chain1dKPM_M64_statedefault.chebmom
+IDENTICAL [random, run2 vs run1] SpectralOp1chain1dKPM_M64_statedefault.chebmom1D
+GREP      grep -rn "basis\|std::cout\|getenv" lsquant/core: empty
+== stage 2: python3 -m lsquant.apps.stage2_dos, PYTHONPATH=/home/ICN2/jgarcia/lsquant-unified/build/lsquant_core:python, vs goldens/stage0/chain1d (KPM_SEED=12345)
+          [T=1] (a) printed: meanSpectralOp1chain1dKPM_M64_stateexactJACKSON.dat
+IDENTICAL [T=1] (a) --moments G1 -> chain1d/meanSpectralOp1chain1dKPM_M64_stateexactJACKSON.dat (G3)
+          [T=1] (b) printed: SpectralOp1chain1dKPM_M64_stateexact.chebmom1D
+          [T=1] (b) printed: meanSpectralOp1chain1dKPM_M64_stateexactJACKSON.dat
+IDENTICAL [T=1] (b) --operators -> chain1d/SpectralOp1chain1dKPM_M64_stateexact.chebmom1D (G1)
+IDENTICAL [T=1] (b) --operators -> chain1d/meanSpectralOp1chain1dKPM_M64_stateexactJACKSON.dat (G3)
+          [T=16] (a) printed: meanSpectralOp1chain1dKPM_M64_stateexactJACKSON.dat
+IDENTICAL [T=16] (a) --moments G1 -> chain1d/meanSpectralOp1chain1dKPM_M64_stateexactJACKSON.dat (G3)
+          [T=16] (b) printed: SpectralOp1chain1dKPM_M64_stateexact.chebmom1D
+          [T=16] (b) printed: meanSpectralOp1chain1dKPM_M64_stateexactJACKSON.dat
+IDENTICAL [T=16] (b) --operators -> chain1d/SpectralOp1chain1dKPM_M64_stateexact.chebmom1D (G1)
+IDENTICAL [T=16] (b) --operators -> chain1d/meanSpectralOp1chain1dKPM_M64_stateexactJACKSON.dat (G3)
+GREP      grep -rn "delta\|DOS\|Kubo\|basis\|std::cout\|getenv" lsquant/core lsquant/io, code lines: empty
+          excluded comment line: lsquant/core/chebyshev/chebyshev_moments.hpp:27: * recording whether the `(2 - delta_{m0})` KPM weights (`kpmWeighted`) and Hermitian
+          excluded comment line: lsquant/core/chebyshev/chebyshev_moments.hpp:32: *      Never apply KPM `(2 - delta_{m0})` weights or symmetrisation twice; check
+          excluded comment line: lsquant/core/chebyshev/chebyshev_moments.hpp:160: * @brief Apply the legacy rank-2 KPM `(2 - delta_{m0})` weights and optional Hermitian symmetrisation.
+== stage 3: python3 -m lsquant.apps.stage3_kubo, PYTHONPATH=/home/ICN2/jgarcia/lsquant-unified/build/lsquant_core:python, vs goldens/stage0/{haldane,graphene}
+          [T=16] G5 VX-VY moments printed: NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom2D
+          [T=16] G5 VX-VY moments printed: NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom
+          [T=16] G5 VX-VX moments printed: NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom2D
+          [T=16] G5 VX-VX moments printed: NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom
+IDENTICAL [T=16] haldane/NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom2D (G5 moments)
+IDENTICAL [T=16] haldane/NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom2D (G5 moments)
+          [T=16] G5 bastin printed: KuboBastin_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat
+          [T=16] G5 sea printed: KuboBastinSea_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat
+          [T=16] G5 surf printed: KuboBastinSurf_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat
+          [T=16] G5 greenwood printed: KuboGreenWood_NonEqOpVX-VXhaldaneKPM_M128x128_stateexactJACKSON.dat
+IDENTICAL [T=16] haldane/KuboBastin_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat (G5 curve)
+IDENTICAL [T=16] haldane/KuboBastinSea_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat (G5 curve)
+IDENTICAL [T=16] haldane/KuboBastinSurf_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat (G5 curve)
+IDENTICAL [T=16] haldane/KuboGreenWood_NonEqOpVX-VXhaldaneKPM_M128x128_stateexactJACKSON.dat (G5 curve)
+          [T=16] G4 VX-VX moments printed: NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefault.chebmom2D
+          [T=16] G4 VX-VX moments printed: NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefault.chebmom
+IDENTICAL [T=16] graphene/NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefault.chebmom2D (G4 moments)
+          [T=16] G4 bastin 64 meV printed: KuboBastin_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON.dat
+          [T=16] G4 sea 10 meV printed: KuboBastinSea_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON.dat
+          [T=16] G4 surf 10 meV printed: KuboBastinSurf_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON.dat
+          [T=16] G4 greenwood_fft 10 meV printed: KuboGreenWood_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON_FFTgrid.dat
+          [T=16] G4 bastin_fft 10 meV printed: KuboBastin_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON_FFTgrid.dat
+IDENTICAL [T=16] graphene/KuboBastin_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON.dat (G4 curve, 64 meV)
+IDENTICAL [T=16] graphene/sea_surf/KuboBastinSea_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON.dat (G4 curve, 10 meV)
+IDENTICAL [T=16] graphene/sea_surf/KuboBastinSurf_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON.dat (G4 curve, 10 meV)
+IDENTICAL [T=16] graphene/fft_grid/KuboGreenWood_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON_FFTgrid.dat (G4 curve, 10 meV)
+IDENTICAL [T=16] graphene/fft_grid/KuboBastin_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON_FFTgrid.dat (G4 curve, 10 meV)
+          [T=1] G5 VX-VY moments printed: NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom2D
+          [T=1] G5 VX-VY moments printed: NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom
+          [T=1] G5 VX-VX moments printed: NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom2D
+          [T=1] G5 VX-VX moments printed: NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom
+IDENTICAL [T=1] haldane/NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom2D (G5 moments)
+IDENTICAL [T=1] haldane/NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom2D (G5 moments)
+          [T=1] G5 bastin printed: KuboBastin_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat
+          [T=1] G5 sea printed: KuboBastinSea_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat
+          [T=1] G5 surf printed: KuboBastinSurf_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat
+          [T=1] G5 greenwood printed: KuboGreenWood_NonEqOpVX-VXhaldaneKPM_M128x128_stateexactJACKSON.dat
+IDENTICAL [T=1] haldane/KuboBastin_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat (G5 curve)
+IDENTICAL [T=1] haldane/KuboBastinSea_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat (G5 curve)
+IDENTICAL [T=1] haldane/KuboBastinSurf_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat (G5 curve)
+IDENTICAL [T=1] haldane/KuboGreenWood_NonEqOpVX-VXhaldaneKPM_M128x128_stateexactJACKSON.dat (G5 curve)
+          [T=1] G4 VX-VX moments printed: NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefault.chebmom2D
+          [T=1] G4 VX-VX moments printed: NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefault.chebmom
+IDENTICAL [T=1] graphene/NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefault.chebmom2D (G4 moments)
+          [T=1] G4 bastin 64 meV printed: KuboBastin_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON.dat
+          [T=1] G4 sea 10 meV printed: KuboBastinSea_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON.dat
+          [T=1] G4 surf 10 meV printed: KuboBastinSurf_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON.dat
+          [T=1] G4 greenwood_fft 10 meV printed: KuboGreenWood_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON_FFTgrid.dat
+          [T=1] G4 bastin_fft 10 meV printed: KuboBastin_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON_FFTgrid.dat
+IDENTICAL [T=1] graphene/KuboBastin_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON.dat (G4 curve, 64 meV)
+IDENTICAL [T=1] graphene/sea_surf/KuboBastinSea_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON.dat (G4 curve, 10 meV)
+IDENTICAL [T=1] graphene/sea_surf/KuboBastinSurf_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON.dat (G4 curve, 10 meV)
+IDENTICAL [T=1] graphene/fft_grid/KuboGreenWood_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON_FFTgrid.dat (G4 curve, 10 meV)
+IDENTICAL [T=1] graphene/fft_grid/KuboBastin_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON_FFTgrid.dat (G4 curve, 10 meV)
+GREP      grep -rn "compat/" lsquant/core lsquant/io: empty
+== stage 4: python3 -m lsquant.apps.stage4_time, PYTHONPATH=/home/ICN2/jgarcia/lsquant-unified/build/lsquant_core:python, vs goldens/stage0/{chain1d_ballistic,chain1d_mag}
+          [T=16] G6 msd moments printed: CorrelationVXchain1dKPM_M256_state20exact.chebmomTD
+          [T=16] G6 msd moments printed: CorrelationVXchain1dKPM_M256_state20exact.chebmom
+          [T=16] G6 msd moments wall 140 s
+IDENTICAL [T=16] chain1d_ballistic/CorrelationVXchain1dKPM_M256_state20exact.chebmomTD (G6 moments)
+          [T=16] G6 curves (golden moments) printed: meanCorrelationVXchain1dKPM_M256_state20exactEF0.000000JACKSON.dat
+          [T=16] G6 curves (golden moments) printed: meanCorrelationVXchain1dKPM_M256_state20exactEF0.500000JACKSON.dat
+          [T=16] G6 curves (golden moments) printed: meanCorrelationVXchain1dKPM_M256_state20exactEF1.000000JACKSON.dat
+          [T=16] G6 curves (golden moments) printed: meanCorrelationVXchain1dKPM_M256_state20exactEF1.500000JACKSON.dat
+IDENTICAL [T=16] chain1d_ballistic/meanCorrelationVXchain1dKPM_M256_state20exactEF0.000000JACKSON.dat (G6 curve from golden moments)
+IDENTICAL [T=16] chain1d_ballistic/meanCorrelationVXchain1dKPM_M256_state20exactEF0.500000JACKSON.dat (G6 curve from golden moments)
+IDENTICAL [T=16] chain1d_ballistic/meanCorrelationVXchain1dKPM_M256_state20exactEF1.000000JACKSON.dat (G6 curve from golden moments)
+IDENTICAL [T=16] chain1d_ballistic/meanCorrelationVXchain1dKPM_M256_state20exactEF1.500000JACKSON.dat (G6 curve from golden moments)
+          [T=16] G6 curves (new moments) printed: meanCorrelationVXchain1dKPM_M256_state20exactEF0.000000JACKSON.dat
+          [T=16] G6 curves (new moments) printed: meanCorrelationVXchain1dKPM_M256_state20exactEF0.500000JACKSON.dat
+          [T=16] G6 curves (new moments) printed: meanCorrelationVXchain1dKPM_M256_state20exactEF1.000000JACKSON.dat
+          [T=16] G6 curves (new moments) printed: meanCorrelationVXchain1dKPM_M256_state20exactEF1.500000JACKSON.dat
+IDENTICAL [T=16] chain1d_ballistic/meanCorrelationVXchain1dKPM_M256_state20exactEF0.000000JACKSON.dat (G6 curve from new moments)
+IDENTICAL [T=16] chain1d_ballistic/meanCorrelationVXchain1dKPM_M256_state20exactEF0.500000JACKSON.dat (G6 curve from new moments)
+IDENTICAL [T=16] chain1d_ballistic/meanCorrelationVXchain1dKPM_M256_state20exactEF1.000000JACKSON.dat (G6 curve from new moments)
+IDENTICAL [T=16] chain1d_ballistic/meanCorrelationVXchain1dKPM_M256_state20exactEF1.500000JACKSON.dat (G6 curve from new moments)
+          [T=16] G7 SX-PX moments printed: TimeProjSX-PXchain1d_magKPM_M32_stateexact.chebmomTD
+          [T=16] G7 SX-PX moments printed: TimeProjSX-PXchain1d_magKPM_M32_stateexact.chebmom
+          [T=16] G7 SX-PX moments wall 45 s
+          [T=16] G7 SY-PX moments printed: TimeProjSY-PXchain1d_magKPM_M32_stateexact.chebmomTD
+          [T=16] G7 SY-PX moments printed: TimeProjSY-PXchain1d_magKPM_M32_stateexact.chebmom
+          [T=16] G7 SY-PX moments wall 52 s
+          [T=16] G7 SZ-PX moments printed: TimeProjSZ-PXchain1d_magKPM_M32_stateexact.chebmomTD
+          [T=16] G7 SZ-PX moments printed: TimeProjSZ-PXchain1d_magKPM_M32_stateexact.chebmom
+          [T=16] G7 SZ-PX moments wall 36 s
+IDENTICAL [T=16] chain1d_mag/TimeProjSX-PXchain1d_magKPM_M32_stateexact.chebmomTD (G7 moments)
+IDENTICAL [T=16] chain1d_mag/TimeProjSY-PXchain1d_magKPM_M32_stateexact.chebmomTD (G7 moments)
+IDENTICAL [T=16] chain1d_mag/TimeProjSZ-PXchain1d_magKPM_M32_stateexact.chebmomTD (G7 moments)
+          [T=1] G6 msd moments printed: CorrelationVXchain1dKPM_M256_state20exact.chebmomTD
+          [T=1] G6 msd moments printed: CorrelationVXchain1dKPM_M256_state20exact.chebmom
+          [T=1] G6 msd moments wall 23 s
+IDENTICAL [T=1] chain1d_ballistic/CorrelationVXchain1dKPM_M256_state20exact.chebmomTD (G6 moments)
+          [T=1] G6 curves (golden moments) printed: meanCorrelationVXchain1dKPM_M256_state20exactEF0.000000JACKSON.dat
+          [T=1] G6 curves (golden moments) printed: meanCorrelationVXchain1dKPM_M256_state20exactEF0.500000JACKSON.dat
+          [T=1] G6 curves (golden moments) printed: meanCorrelationVXchain1dKPM_M256_state20exactEF1.000000JACKSON.dat
+          [T=1] G6 curves (golden moments) printed: meanCorrelationVXchain1dKPM_M256_state20exactEF1.500000JACKSON.dat
+IDENTICAL [T=1] chain1d_ballistic/meanCorrelationVXchain1dKPM_M256_state20exactEF0.000000JACKSON.dat (G6 curve from golden moments)
+IDENTICAL [T=1] chain1d_ballistic/meanCorrelationVXchain1dKPM_M256_state20exactEF0.500000JACKSON.dat (G6 curve from golden moments)
+IDENTICAL [T=1] chain1d_ballistic/meanCorrelationVXchain1dKPM_M256_state20exactEF1.000000JACKSON.dat (G6 curve from golden moments)
+IDENTICAL [T=1] chain1d_ballistic/meanCorrelationVXchain1dKPM_M256_state20exactEF1.500000JACKSON.dat (G6 curve from golden moments)
+          [T=1] G6 curves (new moments) printed: meanCorrelationVXchain1dKPM_M256_state20exactEF0.000000JACKSON.dat
+          [T=1] G6 curves (new moments) printed: meanCorrelationVXchain1dKPM_M256_state20exactEF0.500000JACKSON.dat
+          [T=1] G6 curves (new moments) printed: meanCorrelationVXchain1dKPM_M256_state20exactEF1.000000JACKSON.dat
+          [T=1] G6 curves (new moments) printed: meanCorrelationVXchain1dKPM_M256_state20exactEF1.500000JACKSON.dat
+IDENTICAL [T=1] chain1d_ballistic/meanCorrelationVXchain1dKPM_M256_state20exactEF0.000000JACKSON.dat (G6 curve from new moments)
+IDENTICAL [T=1] chain1d_ballistic/meanCorrelationVXchain1dKPM_M256_state20exactEF0.500000JACKSON.dat (G6 curve from new moments)
+IDENTICAL [T=1] chain1d_ballistic/meanCorrelationVXchain1dKPM_M256_state20exactEF1.000000JACKSON.dat (G6 curve from new moments)
+IDENTICAL [T=1] chain1d_ballistic/meanCorrelationVXchain1dKPM_M256_state20exactEF1.500000JACKSON.dat (G6 curve from new moments)
+          [T=1] G7 SX-PX moments printed: TimeProjSX-PXchain1d_magKPM_M32_stateexact.chebmomTD
+          [T=1] G7 SX-PX moments printed: TimeProjSX-PXchain1d_magKPM_M32_stateexact.chebmom
+          [T=1] G7 SX-PX moments wall 4 s
+          [T=1] G7 SY-PX moments printed: TimeProjSY-PXchain1d_magKPM_M32_stateexact.chebmomTD
+          [T=1] G7 SY-PX moments printed: TimeProjSY-PXchain1d_magKPM_M32_stateexact.chebmom
+          [T=1] G7 SY-PX moments wall 4 s
+          [T=1] G7 SZ-PX moments printed: TimeProjSZ-PXchain1d_magKPM_M32_stateexact.chebmomTD
+          [T=1] G7 SZ-PX moments printed: TimeProjSZ-PXchain1d_magKPM_M32_stateexact.chebmom
+          [T=1] G7 SZ-PX moments wall 4 s
+IDENTICAL [T=1] chain1d_mag/TimeProjSX-PXchain1d_magKPM_M32_stateexact.chebmomTD (G7 moments)
+IDENTICAL [T=1] chain1d_mag/TimeProjSY-PXchain1d_magKPM_M32_stateexact.chebmomTD (G7 moments)
+IDENTICAL [T=1] chain1d_mag/TimeProjSZ-PXchain1d_magKPM_M32_stateexact.chebmomTD (G7 moments)
+GREP      grep -rnwE "time|velocity|spin|projector|bessel|gsl" lsquant/core lsquant/io, code lines: empty
+          excluded comment line: lsquant/core/chebyshev/plan.hpp:7: * register identifiers, time-evolution step descriptors, and `Plan` container
+          excluded comment line: lsquant/core/chebyshev/plan.hpp:26: * seed register used by coupled time-evolution recursions such as mean-square
+          excluded comment line: lsquant/core/chebyshev/plan.hpp:153: * @brief Instruction opening a trailing time axis of length `numSteps` on the moment tensor.
+          excluded comment line: lsquant/core/chebyshev/contraction.hpp:54: * for each grid index `i in 0 .. N - 1`. Complexity is `O(M * N)` time and `O(N)` output space.
+          excluded comment line: lsquant/core/chebyshev/contraction.hpp:97: * is `O(M0 * M1 * numPoints)` time and `O(1)` auxiliary space.
+          excluded comment line: lsquant/core/chebyshev/contraction.hpp:145: * is `O(M0 * M1 * numPoints)` time and `O(1)` auxiliary space.
+          excluded comment line: lsquant/core/chebyshev/contraction.hpp:191: * is `O(M0 * M1 * numPoints)` time and `O(1)` auxiliary space.
+          excluded comment line: lsquant/core/chebyshev/rescaled_operator.hpp:24: * `H.Rescaled(window.Scale(), window.Shift())`. Construction takes `O(dim + nnz)` time and
+          excluded comment line: lsquant/core/chebyshev/rescaled_operator.hpp:25: * space; each `Multiply` takes `O(nnz)` time.
+          excluded comment line: lsquant/core/algebra/sparse_matrix.hpp:28: * Hamiltonians, eV*Angstrom for velocity matrices) or dimensionless units after rescaling.
+          excluded comment line: lsquant/core/algebra/sparse_matrix.hpp:116:   * @return Number of rows (equal to number of columns) in `O(1)` time.
+          excluded comment line: lsquant/core/algebra/sparse_matrix.hpp:127:   * @return Count of compressed non-zero elements in `O(1)` time.
+          excluded comment line: lsquant/core/algebra/sparse_matrix.hpp:208:   *      purely imaginary velocity operators (`VX`), shifting signed zeros in moment outputs.
+          excluded comment line: lsquant/core/algebra/sparse_matrix.hpp:216:   * in `O(dim + nnz)` time.
+          excluded comment line: lsquant/core/algebra/sparse_matrix.hpp:247: * copying matrix data. Caches Hermiticity at construction time in `O(dim + nnz)` so subsequent
+          excluded comment line: lsquant/core/algebra/linalg.hpp:21: * `O(N)` time.
+          excluded comment line: lsquant/core/algebra/linalg.hpp:36: * Maps `x` as an Eigen vector and multiplies every entry by `a` in `O(N)` time.
+          excluded comment line: lsquant/core/algebra/linalg.hpp:52: * Maps `x` and `y` as Eigen vectors and assigns `eig_y = eig_x` in `O(N)` time, matching
+          excluded comment line: lsquant/core/algebra/linalg.hpp:69: * time, matching legacy `linalg::vdot(x, y)` bit for bit.
+          excluded comment line: lsquant/core/algebra/linalg.hpp:85: * Evaluates `Eigen::Map(x).squaredNorm()` in `O(N)` time, matching legacy `linalg::nrm2`.
+          excluded comment line: lsquant/core/algebra/composite_operators.hpp:24: * Implements `y = a * x + b * y` in `O(N)` time and reports `IsIdentity() == true` so
+          excluded comment line: lsquant/core/algebra/composite_operators.hpp:259: *      memory and construction time; construct `AdjointOperator` outside inner loops.
+          excluded comment line: lsquant/core/algebra/linear_operator.hpp:42:   * Queries the square dimension `N` of the linear map `C^N -> C^N` in `O(1)` time.
+          excluded comment line: lsquant/core/algebra/linear_operator.hpp:95:   * Allows callers to elide redundant operator applications in `O(1)` time when a slot in an
+          excluded comment line: lsquant/core/algebra/state_generator.hpp:24: * Solves the problem of streaming source states `|r>` one at a time into the moment engine
+          excluded comment line: lsquant/io/csr_text.hpp:25: * to `+0.0`). Complexity is `O(dim + nnz)` in time and memory.
+          excluded comment line: lsquant/io/chebmom_file.hpp:95: * @brief Write a rank-2 time-dependent `ChebyshevMoments` tensor in the byte-exact legacy `.chebmomTD` layout.
+== 65 files compared; failures: 0
+GATE PASS (stage 4)
+gate exit: 0 (wall 2458 s)

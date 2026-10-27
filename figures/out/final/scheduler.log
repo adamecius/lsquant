@@ -1,0 +1,174 @@
+2026-10-22T15:38:01Z START cap=90 jobs=86 scheduler pid 494201
+2026-10-22T15:38:01Z START gate7_b pid 494208 weight 48 (load 48)
+2026-10-22T15:38:01Z START gate6only pid 494211 weight 16 (load 64)
+2026-10-22T15:38:16Z START selfcheck pid 494590 weight 16 (load 80)
+2026-10-22T15:38:16Z START t1_tutorial06 pid 494594 weight 1 (load 81)
+2026-10-22T15:38:16Z START t1_g10_chain1d_complex_lowdin pid 494600 weight 1 (load 82)
+2026-10-22T15:38:16Z START t1_g10_chain1d_real_lowdin pid 494621 weight 1 (load 83)
+2026-10-22T15:38:16Z START t1_g10_chain1d_real_lowdin_chebyshev pid 494625 weight 1 (load 84)
+2026-10-22T15:38:16Z START t1_g10_chain1d_real_generalised_chebyshev pid 494635 weight 1 (load 85)
+2026-10-22T15:38:16Z START t1_g10_chain1d_complex_generalised pid 494651 weight 1 (load 86)
+2026-10-22T15:38:16Z START t1_g10_chain1d_real_generalised_ischo pid 494656 weight 1 (load 87)
+2026-10-22T15:38:16Z START t1_g10_chain1d_real_generalised pid 494661 weight 1 (load 88)
+2026-10-22T15:38:16Z START t1_g10_haldane_complex_generalised pid 494672 weight 1 (load 89)
+2026-10-22T15:38:16Z START t1_g10_haldane_complex_lowdin pid 494677 weight 1 (load 90)
+2026-10-22T15:40:34Z END t1_g10_chain1d_real_generalised_ischo pid 494656 rc=0
+2026-10-22T15:40:34Z START t1_g10_haldane_real_generalised pid 495633 weight 1 (load 90)
+2026-10-22T15:40:50Z END t1_g10_chain1d_real_generalised pid 494661 rc=0
+2026-10-22T15:40:50Z START t1_g10_haldane_real_lowdin pid 495773 weight 1 (load 90)
+2026-10-22T15:41:05Z END t1_g10_chain1d_complex_generalised pid 494651 rc=0
+2026-10-22T15:41:05Z START t1_g1 pid 495854 weight 1 (load 90)
+2026-10-22T15:41:21Z END t1_g1 pid 495854 rc=0
+2026-10-22T15:41:21Z START t1_g2 pid 495932 weight 1 (load 90)
+2026-10-22T15:41:52Z END t1_g2 pid 495932 rc=0
+2026-10-22T15:41:52Z START t1_g3 pid 496078 weight 1 (load 90)
+2026-10-22T15:42:07Z END t1_g3 pid 496078 rc=0
+2026-10-22T15:42:07Z START t1_g4c pid 496155 weight 1 (load 90)
+2026-10-22T15:42:22Z END t1_g10_haldane_complex_generalised pid 494672 rc=0
+2026-10-22T15:42:22Z END t1_g4c pid 496155 rc=0
+2026-10-22T15:42:22Z START t1_g4 pid 496231 weight 1 (load 89)
+2026-10-22T15:42:22Z START t1_g5 pid 496234 weight 1 (load 90)
+2026-10-22T15:42:38Z END t1_g4 pid 496231 rc=0
+2026-10-22T15:42:38Z START t1_g6 pid 496312 weight 1 (load 90)
+2026-10-22T15:42:53Z END t1_g5 pid 496234 rc=0
+2026-10-22T15:42:53Z START t1_g7 pid 496385 weight 1 (load 90)
+2026-10-22T15:43:08Z END t1_g6 pid 496312 rc=0
+2026-10-22T15:43:08Z END t1_g7 pid 496385 rc=0
+2026-10-22T15:43:08Z START t1_g7_sx pid 496459 weight 1 (load 89)
+2026-10-22T15:43:08Z START t1_g7_sy pid 496466 weight 1 (load 90)
+2026-10-22T15:43:24Z END t1_g7_sx pid 496459 rc=0
+2026-10-22T15:43:24Z END t1_g7_sy pid 496466 rc=0
+2026-10-22T15:43:24Z START t1_g7_sz pid 496537 weight 1 (load 89)
+2026-10-22T15:43:24Z START t1_g9_graphene_bloch_exact pid 496543 weight 1 (load 90)
+2026-10-22T15:43:39Z END t1_g7_sz pid 496537 rc=0
+2026-10-22T15:43:39Z END t1_g9_graphene_bloch_exact pid 496543 rc=0
+2026-10-22T15:43:39Z START t1_g9_graphene_bloch pid 496614 weight 1 (load 89)
+2026-10-22T15:43:39Z START t1_g9_graphene_bloch_w1 pid 496621 weight 1 (load 90)
+2026-10-22T15:44:09Z END t1_g9_graphene_bloch_w1 pid 496621 rc=0
+2026-10-22T15:44:09Z START t1_g9_graphene_eigen pid 496836 weight 1 (load 90)
+2026-10-22T15:44:25Z END t1_g9_graphene_bloch pid 496614 rc=0
+2026-10-22T15:44:25Z END t1_g9_graphene_eigen pid 496836 rc=0
+2026-10-22T15:44:25Z START t1_g9_graphene_real pid 496946 weight 1 (load 89)
+2026-10-22T15:44:25Z START t1_g9_graphene_real_w1 pid 496949 weight 1 (load 90)
+2026-10-22T15:44:55Z END t1_g10_haldane_real_generalised pid 495633 rc=0
+2026-10-22T15:44:55Z END t1_g9_graphene_real pid 496946 rc=0
+2026-10-22T15:44:55Z END t1_g9_graphene_real_w1 pid 496949 rc=0
+2026-10-22T15:44:55Z START t1_g9_haldane_bloch_exact pid 497072 weight 1 (load 88)
+2026-10-22T15:44:55Z START t1_g9_haldane_bloch pid 497076 weight 1 (load 89)
+2026-10-22T15:44:55Z START t1_g9_haldane_bloch_w1 pid 497086 weight 1 (load 90)
+2026-10-22T15:45:10Z END t1_g10_haldane_complex_lowdin pid 494677 rc=0
+2026-10-22T15:45:10Z END t1_g9_haldane_bloch_exact pid 497072 rc=0
+2026-10-22T15:45:11Z START t1_g9_haldane_eigen pid 497149 weight 1 (load 89)
+2026-10-22T15:45:11Z START t1_g9_haldane_real pid 497155 weight 1 (load 90)
+2026-10-22T15:45:26Z END t1_g9_haldane_bloch pid 497076 rc=0
+2026-10-22T15:45:26Z END t1_g9_haldane_bloch_w1 pid 497086 rc=0
+2026-10-22T15:45:26Z END t1_g9_haldane_eigen pid 497149 rc=0
+2026-10-22T15:45:26Z START t1_g9_haldane_real_w1 pid 497216 weight 1 (load 88)
+2026-10-22T15:45:26Z START t1_tutorial01 pid 497223 weight 1 (load 89)
+2026-10-22T15:45:26Z START t1_tutorial02 pid 497228 weight 1 (load 90)
+2026-10-22T15:45:41Z END t1_g9_haldane_real pid 497155 rc=0
+2026-10-22T15:45:41Z START t1_tutorial03 pid 497285 weight 1 (load 90)
+2026-10-22T15:45:56Z END t1_g9_haldane_real_w1 pid 497216 rc=0
+2026-10-22T15:45:56Z START t1_tutorial04 pid 497337 weight 1 (load 90)
+2026-10-22T15:46:11Z END t1_tutorial03 pid 497285 rc=0
+2026-10-22T15:46:11Z END t1_tutorial04 pid 497337 rc=0
+2026-10-22T15:46:11Z START t1_tutorial05 pid 497392 weight 1 (load 89)
+2026-10-22T15:46:42Z END t1_tutorial02 pid 497228 rc=0
+2026-10-22T15:47:12Z END t1_tutorial01 pid 497223 rc=0
+2026-10-22T15:47:58Z END t1_g10_haldane_real_lowdin pid 495773 rc=0
+2026-10-22T15:49:14Z END t1_tutorial05 pid 497392 rc=0
+2026-10-22T15:50:00Z END t1_g10_chain1d_real_generalised_chebyshev pid 494635 rc=0
+2026-10-22T15:59:09Z END t1_g10_chain1d_real_lowdin_chebyshev pid 494625 rc=0
+2026-10-22T16:06:45Z MANUAL: scheduler 494201 and gate7_b tree (503086
+503085
+494210 494208) stopped by me; item 1 restarted at 16 threads (node shared with ccoruh 2x24 threads: g2 took 835 s at 48 threads)
+2026-10-22T16:07:34Z START cap=51 jobs=44 scheduler pid 506829
+2026-10-22T16:07:34Z START gate7_b pid 506835 weight 16 (load 51)
+2026-10-22T16:19:32Z MANUAL: scheduler2 stopped by me to raise the cap to 90 (ccoruh's jobs ended); running jobs kept
+2026-10-22T16:19:32Z START cap=90 jobs=43 scheduler pid 515065
+2026-10-22T16:19:32Z START gate7_a pid 515071 weight 16 (load 67)
+2026-10-22T16:19:32Z START gate7_c pid 515074 weight 16 (load 83)
+2026-10-22T16:21:48Z START t16_tutorial06 pid 517733 weight 16 (load 83)
+2026-10-22T16:26:50Z START t16_g10_chain1d_complex_lowdin pid 518864 weight 16 (load 83)
+2026-10-22T16:29:59Z MANUAL START gate7_b2 pid 519921 weight 16 (rerun of gate7_b with W2S_TOOLS for figures/stage_5_table.py)
+2026-10-22T16:48:49Z END t16_g10_chain1d_complex_lowdin pid 518864 rc=0
+2026-10-22T16:48:49Z START t16_g10_chain1d_real_lowdin pid 529359 weight 16 (load 82)
+2026-10-22T17:08:13Z END t16_g10_chain1d_real_lowdin pid 529359 rc=0
+2026-10-22T17:08:13Z START t16_g10_chain1d_real_lowdin_chebyshev pid 533624 weight 16 (load 82)
+2026-10-22T17:27:06Z END t16_tutorial06 pid 517733 rc=0
+2026-10-22T17:27:06Z START t16_g10_chain1d_real_generalised_chebyshev pid 537565 weight 16 (load 82)
+2026-10-22T17:27:21Z END gate7_a pid 515071 rc=1
+2026-10-22T17:27:21Z START t16_g10_chain1d_complex_generalised pid 538819 weight 16 (load 82)
+2026-10-22T17:28:37Z END t16_g10_chain1d_complex_generalised pid 538819 rc=0
+2026-10-22T17:28:37Z START t16_g10_chain1d_real_generalised_ischo pid 539181 weight 16 (load 82)
+2026-10-22T17:30:37Z END t16_g10_chain1d_real_generalised_ischo pid 539181 rc=0
+2026-10-22T17:30:37Z START t16_g10_chain1d_real_generalised pid 539752 weight 16 (load 82)
+2026-10-22T17:32:53Z END t16_g10_chain1d_real_generalised pid 539752 rc=0
+2026-10-22T17:32:53Z START t16_g10_haldane_complex_generalised pid 540208 weight 16 (load 82)
+2026-10-22T17:33:54Z END t16_g10_haldane_complex_generalised pid 540208 rc=0
+2026-10-22T17:33:54Z START t16_g10_haldane_complex_lowdin pid 540495 weight 16 (load 82)
+2026-10-22T17:34:54Z END t16_g10_haldane_complex_lowdin pid 540495 rc=0
+2026-10-22T17:34:54Z START t16_g10_haldane_real_generalised pid 540724 weight 16 (load 82)
+2026-10-22T17:35:09Z END t16_g10_chain1d_real_lowdin_chebyshev pid 533624 rc=0
+2026-10-22T17:35:09Z START t16_g10_haldane_real_lowdin pid 540794 weight 16 (load 82)
+2026-10-22T17:35:39Z END t16_g10_haldane_real_generalised pid 540724 rc=0
+2026-10-22T17:35:39Z START t16_g1 pid 540896 weight 16 (load 82)
+2026-10-22T17:35:54Z END t16_g1 pid 540896 rc=0
+2026-10-22T17:35:54Z START t16_g2 pid 540966 weight 16 (load 82)
+2026-10-22T17:36:25Z END t16_g10_haldane_real_lowdin pid 540794 rc=0
+2026-10-22T17:36:25Z END t16_g2 pid 540966 rc=0
+2026-10-22T17:36:25Z START t16_g3 pid 541063 weight 16 (load 66)
+2026-10-22T17:36:25Z START t16_g4c pid 541068 weight 16 (load 82)
+2026-10-22T17:36:40Z END t16_g3 pid 541063 rc=0
+2026-10-22T17:36:40Z END t16_g4c pid 541068 rc=0
+2026-10-22T17:36:40Z START t16_g4 pid 541166 weight 16 (load 66)
+2026-10-22T17:36:40Z START t16_g5 pid 541170 weight 16 (load 82)
+2026-10-22T17:36:55Z END t16_g10_chain1d_real_generalised_chebyshev pid 537565 rc=0
+2026-10-22T17:36:55Z END t16_g4 pid 541166 rc=0
+2026-10-22T17:36:55Z START t16_g6 pid 541314 weight 16 (load 66)
+2026-10-22T17:36:55Z START t16_g7 pid 541317 weight 16 (load 82)
+2026-10-22T17:37:40Z END t16_g5 pid 541170 rc=0
+2026-10-22T17:37:40Z START t16_g7_sx pid 541562 weight 16 (load 82)
+2026-10-22T17:37:55Z END t16_g7_sx pid 541562 rc=0
+2026-10-22T17:37:55Z START t16_g7_sy pid 541684 weight 16 (load 82)
+2026-10-22T17:38:25Z END t16_g7_sy pid 541684 rc=0
+2026-10-22T17:38:25Z START t16_g7_sz pid 541764 weight 16 (load 82)
+2026-10-22T17:38:40Z END t16_g6 pid 541314 rc=0
+2026-10-22T17:38:40Z END t16_g7 pid 541317 rc=0
+2026-10-22T17:38:40Z START t16_g9_graphene_bloch_exact pid 541823 weight 16 (load 66)
+2026-10-22T17:38:40Z START t16_g9_graphene_bloch pid 541828 weight 16 (load 82)
+2026-10-22T17:38:55Z END t16_g7_sz pid 541764 rc=0
+2026-10-22T17:38:55Z END t16_g9_graphene_bloch_exact pid 541823 rc=0
+2026-10-22T17:38:55Z START t16_g9_graphene_bloch_w1 pid 541923 weight 16 (load 66)
+2026-10-22T17:38:55Z START t16_g9_graphene_eigen pid 541928 weight 16 (load 82)
+2026-10-22T17:39:10Z END t16_g9_graphene_bloch pid 541828 rc=0
+2026-10-22T17:39:10Z END t16_g9_graphene_eigen pid 541928 rc=0
+2026-10-22T17:39:10Z START t16_g9_graphene_real pid 542180 weight 16 (load 66)
+2026-10-22T17:39:10Z START t16_g9_graphene_real_w1 pid 542185 weight 16 (load 82)
+2026-10-22T17:39:26Z END t16_g9_graphene_bloch_w1 pid 541923 rc=0
+2026-10-22T17:39:26Z START t16_g9_haldane_bloch_exact pid 542313 weight 16 (load 82)
+2026-10-22T17:39:41Z END t16_g9_graphene_real pid 542180 rc=0
+2026-10-22T17:39:41Z END t16_g9_graphene_real_w1 pid 542185 rc=0
+2026-10-22T17:39:41Z END t16_g9_haldane_bloch_exact pid 542313 rc=0
+2026-10-22T17:39:41Z START t16_g9_haldane_bloch pid 542414 weight 16 (load 50)
+2026-10-22T17:39:41Z START t16_g9_haldane_bloch_w1 pid 542420 weight 16 (load 66)
+2026-10-22T17:39:41Z START t16_g9_haldane_eigen pid 542427 weight 16 (load 82)
+2026-10-22T17:39:56Z END t16_g9_haldane_eigen pid 542427 rc=0
+2026-10-22T17:39:56Z START t16_g9_haldane_real pid 542535 weight 16 (load 82)
+2026-10-22T17:40:11Z END t16_g9_haldane_bloch pid 542414 rc=0
+2026-10-22T17:40:11Z END t16_g9_haldane_bloch_w1 pid 542420 rc=0
+2026-10-22T17:40:11Z START t16_g9_haldane_real_w1 pid 542586 weight 16 (load 66)
+2026-10-22T17:40:11Z START t16_tutorial01 pid 542590 weight 16 (load 82)
+2026-10-22T17:40:26Z END t16_g9_haldane_real pid 542535 rc=0
+2026-10-22T17:40:26Z START t16_tutorial02 pid 542667 weight 16 (load 82)
+2026-10-22T17:40:41Z END t16_g9_haldane_real_w1 pid 542586 rc=0
+2026-10-22T17:40:41Z START t16_tutorial03 pid 542818 weight 16 (load 82)
+2026-10-22T17:41:11Z END t16_tutorial03 pid 542818 rc=0
+2026-10-22T17:41:11Z START t16_tutorial04 pid 542912 weight 16 (load 82)
+2026-10-22T17:41:26Z END t16_tutorial01 pid 542590 rc=0
+2026-10-22T17:41:26Z END t16_tutorial02 pid 542667 rc=0
+2026-10-22T17:41:26Z START t16_tutorial05 pid 543070 weight 16 (load 66)
+2026-10-22T17:42:11Z END t16_tutorial04 pid 542912 rc=0
+2026-10-22T17:42:26Z END t16_tutorial05 pid 543070 rc=0
+2026-10-22T18:28:30Z MANUAL: scheduler3 515065 stopped by me (only gate7_tail pending, its done: precondition named gate7_b of the earlier scheduler); gate7_tail started by hand
+2026-10-22T18:28:30Z MANUAL START gate7_tail pid 555488

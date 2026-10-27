@@ -1,0 +1,22 @@
+{
+  "model": "chain1d",
+  "variant": "complex",
+  "dimension": 2048,
+  "seed": 12345,
+  "alpha": 0.55,
+  "window": [
+    -2.0,
+    2.0
+  ],
+  "lambda_min(S')": 0.36043374446001014,
+  "lambda_max(S')": 2.020634828262849,
+  "cond(S')": 5.606120013235988,
+  "nnz(S')": 10240,
+  "nnz(H')": 14336,
+  "max |eigvalsh(H', S') - eigvalsh(H)|": 9.547918011776346e-15,
+  "sha256": {
+    "chain1d.S.CSR": "9fdf01b77af35045515ef4184369f80426f9eeee1240cbbdd592a5e67e36caed",
+    "chain1d.HAM.CSR": "e6a2f29b3bcecd1266d488a022b45da073e973c7cfacc9325d1597eea597db31",
+    "chain1d.VX.CSR": "9c232ef939e11f27ca84d0411168f189c6dd000115921caeb7ce6047811b2b02"
+  }
+}

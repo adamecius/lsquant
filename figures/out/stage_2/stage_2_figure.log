@@ -1,0 +1,39 @@
+tutorial01 printed (12 lines):
+  <tmp>/SpectralOp1chain1d_N256KPM_M512_stateexact_chain1d_N256.chebmom1D
+  <tmp>/moments_chain1d_N256_M512.chebmom1D
+  <tmp>/SpectralOp1chain1d_N1024KPM_M512_stateexact_chain1d_N1024.chebmom1D
+  <tmp>/moments_chain1d_N1024_M512.chebmom1D
+  <tmp>/SpectralOp1chain1d_N4096KPM_M512_stateexact_chain1d_N4096.chebmom1D
+  <tmp>/moments_chain1d_N4096_M512.chebmom1D
+  <tmp>/eta20/meanmoments_chain1d_N256_M512JACKSON.dat
+  <tmp>/eta20/meanmoments_chain1d_N1024_M512JACKSON.dat
+  <tmp>/eta20/meanmoments_chain1d_N4096_M512JACKSON.dat
+  <tmp>/eta80/meanmoments_chain1d_N256_M512JACKSON.dat
+  <tmp>/eta24/meanmoments_chain1d_N256_M512JACKSON.dat
+  <tmp>/eta10/meanmoments_chain1d_N256_M512JACKSON.dat
+cmp list:
+  SpectralOp1chain1d_N256KPM_M512_stateexact_chain1d_N256.chebmom1D vs captured/0000_SpectralOp1chain1d_N256KPM_M512_stateexact_chain1d_N256.chebmom1D: IDENTICAL
+  moments_chain1d_N256_M512.chebmom1D vs captured/0001_moments_chain1d_N256_M512.chebmom1D: IDENTICAL
+  SpectralOp1chain1d_N1024KPM_M512_stateexact_chain1d_N1024.chebmom1D vs captured/0002_SpectralOp1chain1d_N1024KPM_M512_stateexact_chain1d_N1024.chebmom1D: IDENTICAL
+  moments_chain1d_N1024_M512.chebmom1D vs captured/0003_moments_chain1d_N1024_M512.chebmom1D: IDENTICAL
+  SpectralOp1chain1d_N4096KPM_M512_stateexact_chain1d_N4096.chebmom1D vs captured/0004_SpectralOp1chain1d_N4096KPM_M512_stateexact_chain1d_N4096.chebmom1D: IDENTICAL
+  moments_chain1d_N4096_M512.chebmom1D vs captured/0005_moments_chain1d_N4096_M512.chebmom1D: IDENTICAL
+  SpectralOp1chain1d_N256KPM_M512_stateexact_chain1d_N256.chebmom1D vs captured/0006_SpectralOp1chain1d_N256KPM_M512_stateexact_chain1d_N256.chebmom1D: IDENTICAL
+  moments_chain1d_N256_M512.chebmom1D vs captured/0007_moments_chain1d_N256_M512.chebmom1D: IDENTICAL
+  SpectralOp1chain1d_N1024KPM_M512_stateexact_chain1d_N1024.chebmom1D vs captured/0008_SpectralOp1chain1d_N1024KPM_M512_stateexact_chain1d_N1024.chebmom1D: IDENTICAL
+  moments_chain1d_N1024_M512.chebmom1D vs captured/0009_moments_chain1d_N1024_M512.chebmom1D: IDENTICAL
+  SpectralOp1chain1d_N4096KPM_M512_stateexact_chain1d_N4096.chebmom1D vs captured/0010_SpectralOp1chain1d_N4096KPM_M512_stateexact_chain1d_N4096.chebmom1D: IDENTICAL
+  moments_chain1d_N4096_M512.chebmom1D vs captured/0011_moments_chain1d_N4096_M512.chebmom1D: IDENTICAL
+  SpectralOp1chain1d_N256KPM_M512_stateexact_chain1d_N256.chebmom1D vs captured/0012_SpectralOp1chain1d_N256KPM_M512_stateexact_chain1d_N256.chebmom1D: IDENTICAL
+  SpectralOp1chain1d_N1024KPM_M512_stateexact_chain1d_N1024.chebmom1D vs captured/0014_SpectralOp1chain1d_N1024KPM_M512_stateexact_chain1d_N1024.chebmom1D: IDENTICAL
+  SpectralOp1chain1d_N4096KPM_M512_stateexact_chain1d_N4096.chebmom1D vs captured/0016_SpectralOp1chain1d_N4096KPM_M512_stateexact_chain1d_N4096.chebmom1D: IDENTICAL
+  SpectralOp1chain1d_N256KPM_M512_stateexact_chain1d_N256.chebmom1D vs captured/0018_SpectralOp1chain1d_N256KPM_M512_stateexact_chain1d_N256.chebmom1D: IDENTICAL
+  eta20/meanmoments_chain1d_N256_M512JACKSON.dat vs captured/0013_meanmoments_chain1d_N256_M512JACKSON.dat: IDENTICAL
+  eta20/meanmoments_chain1d_N1024_M512JACKSON.dat vs captured/0015_meanmoments_chain1d_N1024_M512JACKSON.dat: IDENTICAL
+  eta20/meanmoments_chain1d_N4096_M512JACKSON.dat vs captured/0017_meanmoments_chain1d_N4096_M512JACKSON.dat: IDENTICAL
+  eta80/meanmoments_chain1d_N256_M512JACKSON.dat vs captured/0019_meanmoments_chain1d_N256_M512JACKSON.dat: IDENTICAL
+  eta24/meanmoments_chain1d_N256_M512JACKSON.dat vs captured/0020_meanmoments_chain1d_N256_M512JACKSON.dat: IDENTICAL
+  eta10/meanmoments_chain1d_N256_M512JACKSON.dat vs captured/0021_meanmoments_chain1d_N256_M512JACKSON.dat: IDENTICAL
+wrote /home/ICN2/jgarcia/lsquant-unified/figures/out/stage_2/fig_stage_2.png
+FIG. 2. Stage 2 (handoff 0002): tutorial 01, the density of states of the periodic nearest-neighbour chain (t = -1 eV), reproduced from Python by python3 -m lsquant.apps.tutorial01 (lsquant package over the pybind11 module lsquant._core, OMP_NUM_THREADS = 16): N = 256, 1024, 4096 sites, window [-2, 2] eV, exact trace over all N site states, M = 512 Chebyshev moments, Jackson kernel, reconstruction on 30*M_eff points over |x| <= 0.95, per-site DOS rho(E) = value / N. (a) N = 256, 1024, 4096 at eta = 20 meV (M_eff = 315): new as lines, the stage-0 golden (goldens/stage0/tutorials/01/captured 0013, 0015, 0017) as open markers (48 evenly spaced points per curve), the analytic bulk DOS 1/(pi sqrt(4 - E^2)) as the thin grey line; residual new - golden below. (b) N = 256 at eta = 80, 24, 10 meV (M_eff = 79, 262, 512; captured 0019, 0020, 0021), same encoding. Max |new - golden| over all six curves: 0.0e+00 per site, max energy-axis difference 0.0e+00 eV. Byte comparison with the captured goldens (cmp criterion), 22 of 22 IDENTICAL: SpectralOp1chain1d_N256KPM_M512_stateexact_chain1d_N256.chebmom1D vs captured/0000_SpectralOp1chain1d_N256KPM_M512_stateexact_chain1d_N256.chebmom1D: IDENTICAL; moments_chain1d_N256_M512.chebmom1D vs captured/0001_moments_chain1d_N256_M512.chebmom1D: IDENTICAL; SpectralOp1chain1d_N1024KPM_M512_stateexact_chain1d_N1024.chebmom1D vs captured/0002_SpectralOp1chain1d_N1024KPM_M512_stateexact_chain1d_N1024.chebmom1D: IDENTICAL; moments_chain1d_N1024_M512.chebmom1D vs captured/0003_moments_chain1d_N1024_M512.chebmom1D: IDENTICAL; SpectralOp1chain1d_N4096KPM_M512_stateexact_chain1d_N4096.chebmom1D vs captured/0004_SpectralOp1chain1d_N4096KPM_M512_stateexact_chain1d_N4096.chebmom1D: IDENTICAL; moments_chain1d_N4096_M512.chebmom1D vs captured/0005_moments_chain1d_N4096_M512.chebmom1D: IDENTICAL; SpectralOp1chain1d_N256KPM_M512_stateexact_chain1d_N256.chebmom1D vs captured/0006_SpectralOp1chain1d_N256KPM_M512_stateexact_chain1d_N256.chebmom1D: IDENTICAL; moments_chain1d_N256_M512.chebmom1D vs captured/0007_moments_chain1d_N256_M512.chebmom1D: IDENTICAL; SpectralOp1chain1d_N1024KPM_M512_stateexact_chain1d_N1024.chebmom1D vs captured/0008_SpectralOp1chain1d_N1024KPM_M512_stateexact_chain1d_N1024.chebmom1D: IDENTICAL; moments_chain1d_N1024_M512.chebmom1D vs captured/0009_moments_chain1d_N1024_M512.chebmom1D: IDENTICAL; SpectralOp1chain1d_N4096KPM_M512_stateexact_chain1d_N4096.chebmom1D vs captured/0010_SpectralOp1chain1d_N4096KPM_M512_stateexact_chain1d_N4096.chebmom1D: IDENTICAL; moments_chain1d_N4096_M512.chebmom1D vs captured/0011_moments_chain1d_N4096_M512.chebmom1D: IDENTICAL; SpectralOp1chain1d_N256KPM_M512_stateexact_chain1d_N256.chebmom1D vs captured/0012_SpectralOp1chain1d_N256KPM_M512_stateexact_chain1d_N256.chebmom1D: IDENTICAL; SpectralOp1chain1d_N1024KPM_M512_stateexact_chain1d_N1024.chebmom1D vs captured/0014_SpectralOp1chain1d_N1024KPM_M512_stateexact_chain1d_N1024.chebmom1D: IDENTICAL; SpectralOp1chain1d_N4096KPM_M512_stateexact_chain1d_N4096.chebmom1D vs captured/0016_SpectralOp1chain1d_N4096KPM_M512_stateexact_chain1d_N4096.chebmom1D: IDENTICAL; SpectralOp1chain1d_N256KPM_M512_stateexact_chain1d_N256.chebmom1D vs captured/0018_SpectralOp1chain1d_N256KPM_M512_stateexact_chain1d_N256.chebmom1D: IDENTICAL; eta20/meanmoments_chain1d_N256_M512JACKSON.dat vs captured/0013_meanmoments_chain1d_N256_M512JACKSON.dat: IDENTICAL; eta20/meanmoments_chain1d_N1024_M512JACKSON.dat vs captured/0015_meanmoments_chain1d_N1024_M512JACKSON.dat: IDENTICAL; eta20/meanmoments_chain1d_N4096_M512JACKSON.dat vs captured/0017_meanmoments_chain1d_N4096_M512JACKSON.dat: IDENTICAL; eta80/meanmoments_chain1d_N256_M512JACKSON.dat vs captured/0019_meanmoments_chain1d_N256_M512JACKSON.dat: IDENTICAL; eta24/meanmoments_chain1d_N256_M512JACKSON.dat vs captured/0020_meanmoments_chain1d_N256_M512JACKSON.dat: IDENTICAL; eta10/meanmoments_chain1d_N256_M512JACKSON.dat vs captured/0021_meanmoments_chain1d_N256_M512JACKSON.dat: IDENTICAL. All files IDENTICAL.
+FIG_EXIT=0

@@ -1,32 +1,30 @@
 #!/usr/bin/env python3
-"""Stage the committed Haldane operators for this tutorial.
+"""Stage the committed Haldane operators for Tutorial 03.
 
-The Haldane operators are not generated here: they are the verified Chern-insulator
-model committed under test/golden/haldane (t1 = -1, t2 = 0.15, phi = pi/2, C = +1). This
-script copies them into the example folder and writes the two sidecar files the run needs:
+Copies the verified Chern-insulator model (t1 = -1, t2 = 0.15, phi = pi/2, C = +1)
+committed under goldens/stage0/haldane/operators into <outdir>/operators and writes
+the operator descriptor sidecar and exact-trace state file:
 
-    operators/haldane.HAM.CSR   the sparse Hamiltonian (copied from the golden)
-    operators/haldane.VX.CSR    the x velocity operator (copied)
-    operators/haldane.VY.CSR    the y velocity operator (copied)
-    operators/haldane.HAM.desc  the physical sidecar (identity + spectral bounds)
-    exact                       the exact-trace state set (one local state per basis vector)
+    operators/haldane.HAM.CSR   sparse Hamiltonian
+    operators/haldane.VX.CSR    x-velocity operator
+    operators/haldane.VY.CSR    y-velocity operator
+    operators/haldane.HAM.desc  operator descriptor sidecar (identity + spectral bounds)
+    exact                       exact-trace state set
 
-The descriptor carries the spectral bounds under the field names the .desc reader parses
-(spectral_min, spectral_max), so `lsquant compute` and `lsquant inspect` read them straight
-from the sidecar -- this run needs no BOUNDS file. The golden set ships no .desc, so this
-script writes it.
-
+Usage:
     python make_haldane.py
 """
 
 import os
 import shutil
 
-
-GOLDEN = os.path.join("..", "..", "test", "golden", "haldane", "operators")
+_REPO_ROOT = os.path.dirname(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+)
+GOLDEN = os.path.join(_REPO_ROOT, "goldens", "stage0", "haldane", "operators")
 LABEL = "haldane"
-SPECTRAL_MIN, SPECTRAL_MAX = -4.5, 4.5      # enclose the spectrum (|E|max ~ 3)
-PHI = 1.5707963267948966                    # pi / 2
+SPECTRAL_MIN, SPECTRAL_MAX = -4.5, 4.5
+PHI = 1.5707963267948966
 
 
 def _write_desc(path):
@@ -42,11 +40,11 @@ def _write_desc(path):
         f.write("hopping_t2_eV: 0.15\n")
         f.write(f"phase_phi: {PHI}\n")
         f.write("has_bounds: true\n")
-        f.write(f"spectral_min: {SPECTRAL_MIN:g}\n")    # field names the .desc reader parses
+        f.write(f"spectral_min: {SPECTRAL_MIN:g}\n")
         f.write(f"spectral_max: {SPECTRAL_MAX:g}\n")
         f.write("basis_tags: honeycomb:AB\n")
         f.write("spin: spinless\n")
-        f.write("provenance: test/golden/haldane (committed Chern-insulator operators, C=+1); "
+        f.write("provenance: goldens/stage0/haldane (committed Chern-insulator operators, C=+1); "
                 "bounds enclose |E|max~3\n")
 
 

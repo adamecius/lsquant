@@ -1,0 +1,46 @@
+{
+  "model": {
+    "kind": "siesta",
+    "dir": "examples/07_spin_hall_bi_bilayer/siesta",
+    "label": "bi",
+    "params": {
+      "velocity_mode": "covariant",
+      "oracle": true
+    }
+  },
+  "basis": {
+    "name": "eigen",
+    "supercell": [
+      48,
+      48,
+      1
+    ]
+  },
+  "metric": {
+    "policy": "nonorthogonal",
+    "route": "anticommutator",
+    "applier": "exact"
+  },
+  "word": "Tr[JXSZ delta(E-H) VY dG-(E)/dE]",
+  "expansion": {
+    "moments": 1024,
+    "window": "eigen",
+    "trace": "exact",
+    "seed": 12345
+  },
+  "reconstruction": {
+    "kernel": "jackson",
+    "broadening_meV": 10.0,
+    "formulas": [
+      "shc"
+    ],
+    "fermi_energies": [
+      0.0
+    ]
+  },
+  "output": {
+    "dir": "out/g11_bi_covariant_anticommutator_shc",
+    "legacy_layout": true,
+    "write_chebmom": true
+  }
+}

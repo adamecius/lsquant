@@ -1,0 +1,633 @@
+-- The CXX compiler identification is GNU 11.4.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found OpenMP_CXX: -fopenmp (found version "4.5") 
+-- Found OpenMP: TRUE (found version "4.5")  
+-- Found PkgConfig: /usr/bin/pkg-config (found version "0.29.2") 
+-- Found GSL: /usr/include (found version "2.7.1") 
+-- Looking for C++ include pthread.h
+-- Looking for C++ include pthread.h - found
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE  
+-- Checking for module 'fftw3'
+--   Found fftw3, version 3.3.8
+-- Found PythonInterp: /usr/bin/python3 (found suitable version "3.10.12", minimum required is "3.9") 
+-- Found PythonLibs: /usr/lib/x86_64-linux-gnu/libpython3.10.so
+-- Performing Test HAS_FLTO_AUTO
+-- Performing Test HAS_FLTO_AUTO - Success
+-- Found pybind11: /home/ICN2/jgarcia/.local/lib/python3.10/site-packages/pybind11/include (found version "3.1.0")
+-- wannier2sparse: /home/ICN2/jgarcia/lsquant-unified/.cache/wannier2sparse/build/wannier2sparse
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/ICN2/jgarcia/lsquant-unified/build6
+[  1%] Building CXX object lsquant_core/CMakeFiles/lsquant_core.dir/core/algebra/state_generator.cpp.o
+[  3%] Building CXX object test/CMakeFiles/spin_algebra_test.dir/spin_algebra_test.cpp.o
+[  3%] Building CXX object test/CMakeFiles/dos_reconstructed_test.dir/dos_reconstructed_test.cpp.o
+[  4%] Building CXX object test/CMakeFiles/chain1d_analytic_test.dir/chain1d_analytic_test.cpp.o
+[  5%] Building CXX object lsquant_core/CMakeFiles/lsquant_core.dir/core/algebra/linalg.cpp.o
+[  6%] Building CXX object lsquant_core/CMakeFiles/lsquant_core.dir/core/algebra/composite_operators.cpp.o
+[  7%] Building CXX object test/CMakeFiles/tb_descriptor_test.dir/tb_descriptor_test.cpp.o
+[  9%] Building CXX object lsquant_core/CMakeFiles/lsquant_core.dir/core/algebra/spectral_bounds.cpp.o
+[  9%] Building CXX object lsquant_core/CMakeFiles/lsquant_core.dir/core/algebra/overlap_appliers.cpp.o
+[  9%] Building CXX object lsquant_core/CMakeFiles/lsquant_core.dir/core/algebra/sparse_matrix.cpp.o
+[  9%] Building CXX object test/CMakeFiles/chain1d_dos_test.dir/chain1d_dos_test.cpp.o
+[ 10%] Building CXX object lsquant_core/CMakeFiles/lsquant_core.dir/core/chebyshev/contraction.cpp.o
+[ 11%] Building CXX object lsquant_core/CMakeFiles/lsquant_core.dir/core/chebyshev/rescaled_operator.cpp.o
+[ 12%] Building CXX object test/CMakeFiles/tb_descriptor_test.dir/__/src/operator_descriptor.cpp.o
+[ 12%] Building CXX object lsquant_core/CMakeFiles/lsquant_core.dir/core/chebyshev/chebyshev_moments.cpp.o
+[ 14%] Building CXX object lsquant_core/CMakeFiles/lsquant_core.dir/core/chebyshev/moment_engine.cpp.o
+[ 14%] Building CXX object lsquant_core/CMakeFiles/lsquant_core.dir/core/chebyshev/chebyshev_vectors.cpp.o
+[ 16%] Building CXX object test/CMakeFiles/descriptor_conformance_test.dir/__/src/operator_descriptor.cpp.o
+[ 17%] Building CXX object test/CMakeFiles/descriptor_conformance_test.dir/descriptor_conformance_test.cpp.o
+[ 18%] Building CXX object test/CMakeFiles/chebmom_compare.dir/chebmom_compare.cpp.o
+[ 18%] Building CXX object src/CMakeFiles/kpm_lib.dir/chebyshev_solver.cpp.o
+[ 19%] Building CXX object lsquant_core/CMakeFiles/lsquant_core.dir/core/chebyshev/chebyshev_recursion.cpp.o
+[ 19%] Building CXX object lsquant_core/CMakeFiles/lsquant_core.dir/io/csr_text.cpp.o
+[ 20%] Building CXX object lsquant_core/CMakeFiles/lsquant_core.dir/core/algebra/metric_policy.cpp.o
+[ 21%] Building CXX object src/CMakeFiles/kpm_lib.dir/quantum_states.cpp.o
+[ 22%] Linking CXX executable ../dos_reconstructed_test
+[ 23%] Building CXX object src/CMakeFiles/kpm_lib.dir/chebyshev_vectors.cpp.o
+[ 24%] Linking CXX executable ../chain1d_dos_test
+[ 25%] Linking CXX executable ../chain1d_analytic_test
+[ 26%] Building CXX object lsquant_core/CMakeFiles/lsquant_core.dir/io/chebmom_file.cpp.o
+[ 27%] Linking CXX executable ../chebmom_compare
+[ 27%] Built target dos_reconstructed_test
+[ 28%] Building CXX object src/CMakeFiles/kpm_lib.dir/chebyshev_moments.cpp.o
+[ 28%] Building CXX object lsquant_core/CMakeFiles/lsquant_core.dir/io/curve_text.cpp.o
+[ 28%] Built target chain1d_analytic_test
+[ 28%] Built target chain1d_dos_test
+[ 29%] Building CXX object src/CMakeFiles/kpm_lib.dir/chebyshev_moments2D.cpp.o
+[ 30%] Building CXX object src/CMakeFiles/kpm_lib.dir/chebyshev_moments1D.cpp.o
+[ 30%] Building CXX object src/CMakeFiles/kpm_lib.dir/chebyshev_momentsAC.cpp.o
+[ 31%] Building CXX object src/CMakeFiles/kpm_lib.dir/chebyshev_momentsTD.cpp.o
+[ 31%] Built target chebmom_compare
+[ 32%] Building CXX object src/CMakeFiles/kpm_lib.dir/chebyshev_momentsLocal.cpp.o
+[ 32%] Linking CXX executable ../descriptor_conformance_test
+[ 33%] Linking CXX executable ../spin_algebra_test
+[ 34%] Building CXX object src/CMakeFiles/kpm_lib.dir/sparse_matrix.cpp.o
+[ 35%] Linking CXX executable ../tb_descriptor_test
+[ 35%] Built target descriptor_conformance_test
+[ 36%] Building CXX object src/CMakeFiles/kpm_lib.dir/operator_descriptor.cpp.o
+[ 36%] Built target spin_algebra_test
+[ 36%] Building CXX object src/CMakeFiles/kpm_lib.dir/run_config.cpp.o
+[ 36%] Built target tb_descriptor_test
+[ 37%] Building CXX object src/CMakeFiles/kpm_lib.dir/inspect.cpp.o
+[ 38%] Building CXX object src/CMakeFiles/kpm_lib.dir/compute.cpp.o
+[ 39%] Building CXX object src/CMakeFiles/kpm_lib.dir/reconstruction.cpp.o
+[ 40%] Building CXX object src/CMakeFiles/kpm_lib.dir/special_functions.cpp.o
+[ 41%] Building CXX object src/CMakeFiles/kpm_lib.dir/Kubo_solver_FFT.cpp.o
+In file included from /home/ICN2/jgarcia/lsquant-unified/src/inspect.cpp:8:
+/home/ICN2/jgarcia/lsquant-unified/include/units.hpp:16:9: warning: inline variables are only available with ‘-std=c++17’ or ‘-std=gnu++17’
+   16 |         inline constexpr double HBAR = 0.6582119624; // eV*fs
+      |         ^~~~~~
+[ 41%] Building CXX object src/CMakeFiles/kpm_lib.dir/Kubo_solver_FFT_postProcess.cpp.o
+[ 42%] Building CXX object src/CMakeFiles/kpm_lib.dir/Greenwood_FFTs.cpp.o
+[ 43%] Building CXX object src/CMakeFiles/kpm_lib.dir/Bastin_FFTs.cpp.o
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:35,
+                 from /home/ICN2/jgarcia/lsquant-unified/src/chebyshev_vectors.cpp:1:
+/home/ICN2/jgarcia/lsquant-unified/include/units.hpp:16:9: warning: inline variables are only available with ‘-std=c++17’ or ‘-std=gnu++17’
+   16 |         inline constexpr double HBAR = 0.6582119624; // eV*fs
+      |         ^~~~~~
+In file included from /home/ICN2/jgarcia/lsquant-unified/src/chebyshev_vectors.cpp:1:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp: In constructor ‘chebyshev::Moments2D::Moments2D(chebyshev::Moments2D, size_t, size_t)’:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:32: warning: narrowing conversion of ‘(size_t)m0’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                ^~
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:35: warning: narrowing conversion of ‘(size_t)m1’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                   ^~
+[ 44%] Building CXX object src/CMakeFiles/kpm_lib.dir/Device/Device.cpp.o
+[ 45%] Building CXX object src/CMakeFiles/kpm_lib.dir/Device/Graphene_KaneMele.cpp.o
+[ 46%] Building CXX object src/CMakeFiles/kpm_lib.dir/eigen_sparse_matrix.cpp.o
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:35,
+                 from /home/ICN2/jgarcia/lsquant-unified/src/chebyshev_moments2D.cpp:1:
+/home/ICN2/jgarcia/lsquant-unified/include/units.hpp:16:9: warning: inline variables are only available with ‘-std=c++17’ or ‘-std=gnu++17’
+   16 |         inline constexpr double HBAR = 0.6582119624; // eV*fs
+      |         ^~~~~~
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:35,
+                 from /home/ICN2/jgarcia/lsquant-unified/src/chebyshev_momentsAC.cpp:1:
+/home/ICN2/jgarcia/lsquant-unified/include/units.hpp:16:9: warning: inline variables are only available with ‘-std=c++17’ or ‘-std=gnu++17’
+   16 |         inline constexpr double HBAR = 0.6582119624; // eV*fs
+      |         ^~~~~~
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:35,
+                 from /home/ICN2/jgarcia/lsquant-unified/src/chebyshev_moments1D.cpp:1:
+/home/ICN2/jgarcia/lsquant-unified/include/units.hpp:16:9: warning: inline variables are only available with ‘-std=c++17’ or ‘-std=gnu++17’
+   16 |         inline constexpr double HBAR = 0.6582119624; // eV*fs
+      |         ^~~~~~
+In file included from /home/ICN2/jgarcia/lsquant-unified/src/chebyshev_moments2D.cpp:1:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp: In constructor ‘chebyshev::Moments2D::Moments2D(chebyshev::Moments2D, size_t, size_t)’:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:32: warning: narrowing conversion of ‘(size_t)m0’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                ^~
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:35: warning: narrowing conversion of ‘(size_t)m1’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                   ^~
+In file included from /home/ICN2/jgarcia/lsquant-unified/src/chebyshev_momentsAC.cpp:1:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp: In constructor ‘chebyshev::Moments2D::Moments2D(chebyshev::Moments2D, size_t, size_t)’:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:32: warning: narrowing conversion of ‘(size_t)m0’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                ^~
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:35: warning: narrowing conversion of ‘(size_t)m1’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                   ^~
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:35,
+                 from /home/ICN2/jgarcia/lsquant-unified/include/chebyshev_solver.hpp:29,
+                 from /home/ICN2/jgarcia/lsquant-unified/src/chebyshev_solver.cpp:2:
+/home/ICN2/jgarcia/lsquant-unified/include/units.hpp:16:9: warning: inline variables are only available with ‘-std=c++17’ or ‘-std=gnu++17’
+   16 |         inline constexpr double HBAR = 0.6582119624; // eV*fs
+      |         ^~~~~~
+In file included from /home/ICN2/jgarcia/lsquant-unified/src/chebyshev_moments1D.cpp:1:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp: In constructor ‘chebyshev::Moments2D::Moments2D(chebyshev::Moments2D, size_t, size_t)’:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:32: warning: narrowing conversion of ‘(size_t)m0’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                ^~
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:35: warning: narrowing conversion of ‘(size_t)m1’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                   ^~
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/chebyshev_solver.hpp:29,
+                 from /home/ICN2/jgarcia/lsquant-unified/src/chebyshev_solver.cpp:2:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp: In constructor ‘chebyshev::Moments2D::Moments2D(chebyshev::Moments2D, size_t, size_t)’:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:32: warning: narrowing conversion of ‘(size_t)m0’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                ^~
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:35: warning: narrowing conversion of ‘(size_t)m1’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                   ^~
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:35,
+                 from /home/ICN2/jgarcia/lsquant-unified/src/chebyshev_moments.cpp:1:
+/home/ICN2/jgarcia/lsquant-unified/include/units.hpp:16:9: warning: inline variables are only available with ‘-std=c++17’ or ‘-std=gnu++17’
+   16 |         inline constexpr double HBAR = 0.6582119624; // eV*fs
+      |         ^~~~~~
+In file included from /home/ICN2/jgarcia/lsquant-unified/src/chebyshev_moments.cpp:1:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp: In constructor ‘chebyshev::Moments2D::Moments2D(chebyshev::Moments2D, size_t, size_t)’:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:32: warning: narrowing conversion of ‘(size_t)m0’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                ^~
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:35: warning: narrowing conversion of ‘(size_t)m1’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                   ^~
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:35,
+                 from /home/ICN2/jgarcia/lsquant-unified/src/chebyshev_momentsTD.cpp:1:
+/home/ICN2/jgarcia/lsquant-unified/include/units.hpp:16:9: warning: inline variables are only available with ‘-std=c++17’ or ‘-std=gnu++17’
+   16 |         inline constexpr double HBAR = 0.6582119624; // eV*fs
+      |         ^~~~~~
+In file included from /home/ICN2/jgarcia/lsquant-unified/src/chebyshev_momentsTD.cpp:1:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp: In constructor ‘chebyshev::Moments2D::Moments2D(chebyshev::Moments2D, size_t, size_t)’:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:32: warning: narrowing conversion of ‘(size_t)m0’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                ^~
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:35: warning: narrowing conversion of ‘(size_t)m1’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                   ^~
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:35,
+                 from /home/ICN2/jgarcia/lsquant-unified/src/chebyshev_momentsLocal.cpp:1:
+/home/ICN2/jgarcia/lsquant-unified/include/units.hpp:16:9: warning: inline variables are only available with ‘-std=c++17’ or ‘-std=gnu++17’
+   16 |         inline constexpr double HBAR = 0.6582119624; // eV*fs
+      |         ^~~~~~
+In file included from /home/ICN2/jgarcia/lsquant-unified/src/chebyshev_momentsLocal.cpp:1:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp: In constructor ‘chebyshev::Moments2D::Moments2D(chebyshev::Moments2D, size_t, size_t)’:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:32: warning: narrowing conversion of ‘(size_t)m0’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                ^~
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:35: warning: narrowing conversion of ‘(size_t)m1’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                   ^~
+[ 46%] Building CXX object src/CMakeFiles/kpm_lib.dir/eigen_linear_algebra.cpp.o
+[ 47%] Building CXX object src/CMakeFiles/kpm_lib.dir/util/log.cpp.o
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:35,
+                 from /home/ICN2/jgarcia/lsquant-unified/src/compute.cpp:8:
+/home/ICN2/jgarcia/lsquant-unified/include/units.hpp:16:9: warning: inline variables are only available with ‘-std=c++17’ or ‘-std=gnu++17’
+   16 |         inline constexpr double HBAR = 0.6582119624; // eV*fs
+      |         ^~~~~~
+In file included from /home/ICN2/jgarcia/lsquant-unified/src/compute.cpp:8:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp: In constructor ‘chebyshev::Moments2D::Moments2D(chebyshev::Moments2D, size_t, size_t)’:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:32: warning: narrowing conversion of ‘(size_t)m0’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                ^~
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:35: warning: narrowing conversion of ‘(size_t)m1’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                   ^~
+/home/ICN2/jgarcia/lsquant-unified/src/chebyshev_momentsLocal.cpp: In constructor ‘chebyshev::MomentsLocal::MomentsLocal(std::string, bool)’:
+/home/ICN2/jgarcia/lsquant-unified/src/chebyshev_momentsLocal.cpp:107:14: warning: ignoring return value of ‘size_t fread(void*, size_t, size_t, FILE*)’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
+  107 |         fread(&tbuff,sizeof(size_t),1,momfile); this->SystemSize(tbuff);
+      |         ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/ICN2/jgarcia/lsquant-unified/src/chebyshev_momentsLocal.cpp:108:14: warning: ignoring return value of ‘size_t fread(void*, size_t, size_t, FILE*)’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
+  108 |         fread(&dbuff,sizeof(double),1,momfile); this->BandWidth(dbuff);
+      |         ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/ICN2/jgarcia/lsquant-unified/src/chebyshev_momentsLocal.cpp:109:14: warning: ignoring return value of ‘size_t fread(void*, size_t, size_t, FILE*)’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
+  109 |         fread(&dbuff,sizeof(double),1,momfile); this->BandCenter(dbuff);
+      |         ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/ICN2/jgarcia/lsquant-unified/src/chebyshev_momentsLocal.cpp:110:14: warning: ignoring return value of ‘size_t fread(void*, size_t, size_t, FILE*)’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
+  110 |         fread(&tbuff,sizeof(size_t),1,momfile); this->NumberOfOrbitals(tbuff);
+      |         ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/ICN2/jgarcia/lsquant-unified/src/chebyshev_momentsLocal.cpp:111:14: warning: ignoring return value of ‘size_t fread(void*, size_t, size_t, FILE*)’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
+  111 |         fread(&tbuff,sizeof(size_t),1,momfile); _numMoms=tbuff;
+      |         ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/ICN2/jgarcia/lsquant-unified/src/chebyshev_momentsLocal.cpp:112:14: warning: ignoring return value of ‘size_t fread(void*, size_t, size_t, FILE*)’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
+  112 |         fread(&tbuff,sizeof(size_t),1,momfile); _Norb=tbuff;
+      |         ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/ICN2/jgarcia/lsquant-unified/src/chebyshev_momentsLocal.cpp:117:22: warning: ignoring return value of ‘size_t fread(void*, size_t, size_t, FILE*)’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
+  117 |                 fread(MomentVector().data(),sizeof(value_t),nvalues,momfile);
+      |                 ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[ 48%] Building CXX object src/CMakeFiles/kpm_lib.dir/util/timer.cpp.o
+[ 49%] Building CXX object src/CMakeFiles/kpm_lib.dir/util/resource.cpp.o
+[ 50%] Building CXX object src/CMakeFiles/kpm_lib.dir/util/report.cpp.o
+[ 50%] Building CXX object src/CMakeFiles/kpm_lib.dir/io/json.cpp.o
+[ 51%] Building CXX object src/CMakeFiles/kpm_lib.dir/io/fingerprint.cpp.o
+[ 52%] Building CXX object src/CMakeFiles/kpm_lib.dir/io/results.cpp.o
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:35,
+                 from /home/ICN2/jgarcia/lsquant-unified/include/observable.hpp:7,
+                 from /home/ICN2/jgarcia/lsquant-unified/src/reconstruction.cpp:1:
+/home/ICN2/jgarcia/lsquant-unified/include/units.hpp:16:9: warning: inline variables are only available with ‘-std=c++17’ or ‘-std=gnu++17’
+   16 |         inline constexpr double HBAR = 0.6582119624; // eV*fs
+      |         ^~~~~~
+[ 53%] Building CXX object src/CMakeFiles/kpm_lib.dir/io/config.cpp.o
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/observable.hpp:7,
+                 from /home/ICN2/jgarcia/lsquant-unified/src/reconstruction.cpp:1:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp: In constructor ‘chebyshev::Moments2D::Moments2D(chebyshev::Moments2D, size_t, size_t)’:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:32: warning: narrowing conversion of ‘(size_t)m0’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                ^~
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:35: warning: narrowing conversion of ‘(size_t)m1’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                   ^~
+[ 54%] Building CXX object src/CMakeFiles/kpm_lib.dir/util/resource_linux.cpp.o
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:35,
+                 from /home/ICN2/jgarcia/lsquant-unified/include/Kubo_solver_FFT.hpp:18,
+                 from /home/ICN2/jgarcia/lsquant-unified/src/Kubo_solver_FFT.cpp:1:
+/home/ICN2/jgarcia/lsquant-unified/include/units.hpp:16:9: warning: inline variables are only available with ‘-std=c++17’ or ‘-std=gnu++17’
+   16 |         inline constexpr double HBAR = 0.6582119624; // eV*fs
+      |         ^~~~~~
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/Kubo_solver_FFT.hpp:18,
+                 from /home/ICN2/jgarcia/lsquant-unified/src/Kubo_solver_FFT.cpp:1:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp: In constructor ‘chebyshev::Moments2D::Moments2D(chebyshev::Moments2D, size_t, size_t)’:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:32: warning: narrowing conversion of ‘(size_t)m0’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                ^~
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:35: warning: narrowing conversion of ‘(size_t)m1’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                   ^~
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:35,
+                 from /home/ICN2/jgarcia/lsquant-unified/include/Kubo_solver_FFT.hpp:18,
+                 from /home/ICN2/jgarcia/lsquant-unified/src/Kubo_solver_FFT_postProcess.cpp:1:
+/home/ICN2/jgarcia/lsquant-unified/include/units.hpp:16:9: warning: inline variables are only available with ‘-std=c++17’ or ‘-std=gnu++17’
+   16 |         inline constexpr double HBAR = 0.6582119624; // eV*fs
+      |         ^~~~~~
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/Kubo_solver_FFT.hpp:18,
+                 from /home/ICN2/jgarcia/lsquant-unified/src/Kubo_solver_FFT_postProcess.cpp:1:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp: In constructor ‘chebyshev::Moments2D::Moments2D(chebyshev::Moments2D, size_t, size_t)’:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:32: warning: narrowing conversion of ‘(size_t)m0’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                ^~
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:35: warning: narrowing conversion of ‘(size_t)m1’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                   ^~
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:35,
+                 from /home/ICN2/jgarcia/lsquant-unified/include/Kubo_solver_FFT.hpp:18,
+                 from /home/ICN2/jgarcia/lsquant-unified/src/Greenwood_FFTs.cpp:2:
+/home/ICN2/jgarcia/lsquant-unified/include/units.hpp:16:9: warning: inline variables are only available with ‘-std=c++17’ or ‘-std=gnu++17’
+   16 |         inline constexpr double HBAR = 0.6582119624; // eV*fs
+      |         ^~~~~~
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/Kubo_solver_FFT.hpp:18,
+                 from /home/ICN2/jgarcia/lsquant-unified/src/Greenwood_FFTs.cpp:2:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp: In constructor ‘chebyshev::Moments2D::Moments2D(chebyshev::Moments2D, size_t, size_t)’:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:32: warning: narrowing conversion of ‘(size_t)m0’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                ^~
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:35: warning: narrowing conversion of ‘(size_t)m1’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                   ^~
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:35,
+                 from /home/ICN2/jgarcia/lsquant-unified/include/Kubo_solver_FFT.hpp:18,
+                 from /home/ICN2/jgarcia/lsquant-unified/src/Bastin_FFTs.cpp:2:
+/home/ICN2/jgarcia/lsquant-unified/include/units.hpp:16:9: warning: inline variables are only available with ‘-std=c++17’ or ‘-std=gnu++17’
+   16 |         inline constexpr double HBAR = 0.6582119624; // eV*fs
+      |         ^~~~~~
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/Kubo_solver_FFT.hpp:18,
+                 from /home/ICN2/jgarcia/lsquant-unified/src/Bastin_FFTs.cpp:2:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp: In constructor ‘chebyshev::Moments2D::Moments2D(chebyshev::Moments2D, size_t, size_t)’:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:32: warning: narrowing conversion of ‘(size_t)m0’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                ^~
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:35: warning: narrowing conversion of ‘(size_t)m1’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                   ^~
+[ 55%] Linking CXX static library ../lib/libkpm_lib.a
+[ 55%] Built target kpm_lib
+[ 57%] Building CXX object src/CMakeFiles/inline_compute-kpm-spectralOp.dir/inline_compute-kpm-spectralOp.cpp.o
+[ 57%] Building CXX object src/CMakeFiles/inline_compute-kpm-nonEqOp.dir/inline_compute-kpm-nonEqOp.cpp.o
+[ 57%] Building CXX object src/CMakeFiles/inline_timeCorrelationsFromChebmom.dir/timeCorrelationsFromChebmom.cpp.o
+[ 59%] Building CXX object src/CMakeFiles/inline_spectralFunctionFromChebmom.dir/spectralFunctionFromChebmom.cpp.o
+[ 59%] Building CXX object src/CMakeFiles/inline_compute-kpm-CorrOp.dir/inline_compute-kpm-CorrOp.cpp.o
+[ 60%] Building CXX object src/CMakeFiles/inline_kuboBastinFromChebmom.dir/kuboBastinFromChebmom.cpp.o
+[ 61%] Building CXX object src/CMakeFiles/inline_kpm-DOS-standalone.dir/inline_kpm-DOS-standalone.cpp.o
+[ 63%] Building CXX object src/CMakeFiles/lsquant_inspect.dir/lsquant_inspect.cpp.o
+[ 63%] Building CXX object src/CMakeFiles/inline_kuboBastinSeaFromChebmom.dir/kuboBastinSeaFromChebmom.cpp.o
+[ 64%] Building CXX object src/CMakeFiles/inline_kuboGreenwoodFromChebmom_FFTgrid.dir/kuboGreenwoodFromChebmom_FFTgrid.cpp.o
+[ 64%] Building CXX object src/CMakeFiles/inline_kuboGreenwoodFromChebmom.dir/kuboGreenwoodFromChebmom.cpp.o
+[ 65%] Building CXX object test/CMakeFiles/spmm_batchmultiply_equiv_test.dir/spmm_batchmultiply_equiv_test.cpp.o
+[ 66%] Building CXX object src/CMakeFiles/inline_kuboBastinSurfFromChebmom.dir/kuboBastinSurfFromChebmom.cpp.o
+[ 67%] Building CXX object src/CMakeFiles/inline_compute-kpm-TimeEvProjetedOp.dir/inline_compute-kpm-TimeEvProjetedOp.cpp.o
+[ 68%] Building CXX object test/CMakeFiles/phase6_wired_test.dir/phase6_wired_test.cpp.o
+[ 69%] Building CXX object test/CMakeFiles/jackson_kernel_test.dir/jackson_kernel_test.cpp.o
+[ 69%] Building CXX object test/CMakeFiles/recon_kernel_oracle_test.dir/recon_kernel_oracle_test.cpp.o
+[ 70%] Building CXX object test/CMakeFiles/spmv_threaded_bitexact_test.dir/spmv_threaded_bitexact_test.cpp.o
+[ 71%] Building CXX object src/CMakeFiles/inline_kuboBastinFromChebmom_FFTgrid.dir/kuboBastinFromChebmom_FFTgrid.cpp.o
+[ 72%] Building CXX object test/CMakeFiles/jackson_g_test.dir/jackson_g_test.cpp.o
+[ 72%] Building CXX object src/CMakeFiles/lsquant.dir/lsquant.cpp.o
+[ 72%] Building CXX object src/CMakeFiles/inline_compute-kpm-MeanSquareDisplacement.dir/inline_compute-kpm-MeanSquareDisplacement.cpp.o
+[ 73%] Linking CXX executable ../lsquant_inspect
+[ 73%] Built target lsquant_inspect
+[ 73%] Linking CXX executable ../inline_compute-kpm-spectralOp
+[ 73%] Linking CXX executable ../inline_compute-kpm-MeanSquareDisplacement
+[ 73%] Built target inline_compute-kpm-spectralOp
+[ 73%] Built target inline_compute-kpm-MeanSquareDisplacement
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:35,
+                 from /home/ICN2/jgarcia/lsquant-unified/src/kuboGreenwoodFromChebmom_FFTgrid.cpp:9:
+/home/ICN2/jgarcia/lsquant-unified/include/units.hpp:16:9: warning: inline variables are only available with ‘-std=c++17’ or ‘-std=gnu++17’
+   16 |         inline constexpr double HBAR = 0.6582119624; // eV*fs
+      |         ^~~~~~
+In file included from /home/ICN2/jgarcia/lsquant-unified/src/kuboGreenwoodFromChebmom_FFTgrid.cpp:9:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp: In constructor ‘chebyshev::Moments2D::Moments2D(chebyshev::Moments2D, size_t, size_t)’:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:32: warning: narrowing conversion of ‘(size_t)m0’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                ^~
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:35: warning: narrowing conversion of ‘(size_t)m1’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                   ^~
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:35,
+                 from /home/ICN2/jgarcia/lsquant-unified/src/kuboBastinFromChebmom.cpp:9:
+/home/ICN2/jgarcia/lsquant-unified/include/units.hpp:16:9: warning: inline variables are only available with ‘-std=c++17’ or ‘-std=gnu++17’
+   16 |         inline constexpr double HBAR = 0.6582119624; // eV*fs
+      |         ^~~~~~
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:35,
+                 from /home/ICN2/jgarcia/lsquant-unified/src/kuboGreenwoodFromChebmom.cpp:9:
+/home/ICN2/jgarcia/lsquant-unified/include/units.hpp:16:9: warning: inline variables are only available with ‘-std=c++17’ or ‘-std=gnu++17’
+   16 |         inline constexpr double HBAR = 0.6582119624; // eV*fs
+      |         ^~~~~~
+In file included from /home/ICN2/jgarcia/lsquant-unified/src/kuboBastinFromChebmom.cpp:9:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp: In constructor ‘chebyshev::Moments2D::Moments2D(chebyshev::Moments2D, size_t, size_t)’:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:32: warning: narrowing conversion of ‘(size_t)m0’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                ^~
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:35: warning: narrowing conversion of ‘(size_t)m1’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                   ^~
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:35,
+                 from /home/ICN2/jgarcia/lsquant-unified/include/chebyshev_solver.hpp:29,
+                 from /home/ICN2/jgarcia/lsquant-unified/src/kuboBastinSeaFromChebmom.cpp:10:
+/home/ICN2/jgarcia/lsquant-unified/include/units.hpp:16:9: warning: inline variables are only available with ‘-std=c++17’ or ‘-std=gnu++17’
+   16 |         inline constexpr double HBAR = 0.6582119624; // eV*fs
+      |         ^~~~~~
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:35,
+                 from /home/ICN2/jgarcia/lsquant-unified/include/observable.hpp:7,
+                 from /home/ICN2/jgarcia/lsquant-unified/test/recon_kernel_oracle_test.cpp:37:
+/home/ICN2/jgarcia/lsquant-unified/include/units.hpp:16:9: warning: inline variables are only available with ‘-std=c++17’ or ‘-std=gnu++17’
+   16 |         inline constexpr double HBAR = 0.6582119624; // eV*fs
+      |         ^~~~~~
+In file included from /home/ICN2/jgarcia/lsquant-unified/src/kuboGreenwoodFromChebmom.cpp:9:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp: In constructor ‘chebyshev::Moments2D::Moments2D(chebyshev::Moments2D, size_t, size_t)’:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:32: warning: narrowing conversion of ‘(size_t)m0’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                ^~
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:35: warning: narrowing conversion of ‘(size_t)m1’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                   ^~
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:35,
+                 from /home/ICN2/jgarcia/lsquant-unified/test/phase6_wired_test.cpp:16:
+/home/ICN2/jgarcia/lsquant-unified/include/units.hpp:16:9: warning: inline variables are only available with ‘-std=c++17’ or ‘-std=gnu++17’
+   16 |         inline constexpr double HBAR = 0.6582119624; // eV*fs
+      |         ^~~~~~
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/chebyshev_solver.hpp:29,
+                 from /home/ICN2/jgarcia/lsquant-unified/src/kuboBastinSeaFromChebmom.cpp:10:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp: In constructor ‘chebyshev::Moments2D::Moments2D(chebyshev::Moments2D, size_t, size_t)’:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:32: warning: narrowing conversion of ‘(size_t)m0’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                ^~
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/observable.hpp:7,
+                 from /home/ICN2/jgarcia/lsquant-unified/test/recon_kernel_oracle_test.cpp:37:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp: In constructor ‘chebyshev::Moments2D::Moments2D(chebyshev::Moments2D, size_t, size_t)’:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:32: warning: narrowing conversion of ‘(size_t)m0’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                ^~
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:35: warning: narrowing conversion of ‘(size_t)m1’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                   ^~
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:35: warning: narrowing conversion of ‘(size_t)m1’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                   ^~
+In file included from /home/ICN2/jgarcia/lsquant-unified/test/phase6_wired_test.cpp:16:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp: In constructor ‘chebyshev::Moments2D::Moments2D(chebyshev::Moments2D, size_t, size_t)’:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:32: warning: narrowing conversion of ‘(size_t)m0’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                ^~
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:35: warning: narrowing conversion of ‘(size_t)m1’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                   ^~
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:35,
+                 from /home/ICN2/jgarcia/lsquant-unified/test/jackson_g_test.cpp:14:
+/home/ICN2/jgarcia/lsquant-unified/include/units.hpp:16:9: warning: inline variables are only available with ‘-std=c++17’ or ‘-std=gnu++17’
+   16 |         inline constexpr double HBAR = 0.6582119624; // eV*fs
+      |         ^~~~~~
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:35,
+                 from /home/ICN2/jgarcia/lsquant-unified/src/inline_compute-kpm-nonEqOp.cpp:10:
+/home/ICN2/jgarcia/lsquant-unified/include/units.hpp:16:9: warning: inline variables are only available with ‘-std=c++17’ or ‘-std=gnu++17’
+   16 |         inline constexpr double HBAR = 0.6582119624; // eV*fs
+      |         ^~~~~~
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:35,
+                 from /home/ICN2/jgarcia/lsquant-unified/src/kuboBastinFromChebmom_FFTgrid.cpp:9:
+/home/ICN2/jgarcia/lsquant-unified/include/units.hpp:16:9: warning: inline variables are only available with ‘-std=c++17’ or ‘-std=gnu++17’
+   16 |         inline constexpr double HBAR = 0.6582119624; // eV*fs
+      |         ^~~~~~
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:35,
+                 from /home/ICN2/jgarcia/lsquant-unified/include/chebyshev_solver.hpp:29,
+                 from /home/ICN2/jgarcia/lsquant-unified/src/timeCorrelationsFromChebmom.cpp:10:
+/home/ICN2/jgarcia/lsquant-unified/include/units.hpp:16:9: warning: inline variables are only available with ‘-std=c++17’ or ‘-std=gnu++17’
+   16 |         inline constexpr double HBAR = 0.6582119624; // eV*fs
+      |         ^~~~~~
+In file included from /home/ICN2/jgarcia/lsquant-unified/test/jackson_g_test.cpp:14:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp: In constructor ‘chebyshev::Moments2D::Moments2D(chebyshev::Moments2D, size_t, size_t)’:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:32: warning: narrowing conversion of ‘(size_t)m0’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                ^~
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:35: warning: narrowing conversion of ‘(size_t)m1’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                   ^~
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:35,
+                 from /home/ICN2/jgarcia/lsquant-unified/include/chebyshev_solver.hpp:29,
+                 from /home/ICN2/jgarcia/lsquant-unified/src/kuboBastinSurfFromChebmom.cpp:10:
+/home/ICN2/jgarcia/lsquant-unified/include/units.hpp:16:9: warning: inline variables are only available with ‘-std=c++17’ or ‘-std=gnu++17’
+   16 |         inline constexpr double HBAR = 0.6582119624; // eV*fs
+      |         ^~~~~~
+In file included from /home/ICN2/jgarcia/lsquant-unified/src/kuboBastinFromChebmom_FFTgrid.cpp:9:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp: In constructor ‘chebyshev::Moments2D::Moments2D(chebyshev::Moments2D, size_t, size_t)’:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:32: warning: narrowing conversion of ‘(size_t)m0’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                ^~
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:35: warning: narrowing conversion of ‘(size_t)m1’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                   ^~
+In file included from /home/ICN2/jgarcia/lsquant-unified/src/inline_compute-kpm-nonEqOp.cpp:10:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp: In constructor ‘chebyshev::Moments2D::Moments2D(chebyshev::Moments2D, size_t, size_t)’:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:32: warning: narrowing conversion of ‘(size_t)m0’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                ^~
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:35: warning: narrowing conversion of ‘(size_t)m1’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                   ^~
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:35,
+                 from /home/ICN2/jgarcia/lsquant-unified/src/inline_kpm-DOS-standalone.cpp:10:
+/home/ICN2/jgarcia/lsquant-unified/include/units.hpp:16:9: warning: inline variables are only available with ‘-std=c++17’ or ‘-std=gnu++17’
+   16 |         inline constexpr double HBAR = 0.6582119624; // eV*fs
+      |         ^~~~~~
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/chebyshev_solver.hpp:29,
+                 from /home/ICN2/jgarcia/lsquant-unified/src/timeCorrelationsFromChebmom.cpp:10:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp: In constructor ‘chebyshev::Moments2D::Moments2D(chebyshev::Moments2D, size_t, size_t)’:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:32: warning: narrowing conversion of ‘(size_t)m0’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                ^~
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:35: warning: narrowing conversion of ‘(size_t)m1’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                   ^~
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/chebyshev_solver.hpp:29,
+                 from /home/ICN2/jgarcia/lsquant-unified/src/kuboBastinSurfFromChebmom.cpp:10:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp: In constructor ‘chebyshev::Moments2D::Moments2D(chebyshev::Moments2D, size_t, size_t)’:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:32: warning: narrowing conversion of ‘(size_t)m0’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                ^~
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:35: warning: narrowing conversion of ‘(size_t)m1’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                   ^~
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:35,
+                 from /home/ICN2/jgarcia/lsquant-unified/src/inline_compute-kpm-CorrOp.cpp:10:
+/home/ICN2/jgarcia/lsquant-unified/include/units.hpp:16:9: warning: inline variables are only available with ‘-std=c++17’ or ‘-std=gnu++17’
+   16 |         inline constexpr double HBAR = 0.6582119624; // eV*fs
+      |         ^~~~~~
+In file included from /home/ICN2/jgarcia/lsquant-unified/src/inline_kpm-DOS-standalone.cpp:10:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp: In constructor ‘chebyshev::Moments2D::Moments2D(chebyshev::Moments2D, size_t, size_t)’:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:32: warning: narrowing conversion of ‘(size_t)m0’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                ^~
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:35: warning: narrowing conversion of ‘(size_t)m1’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                   ^~
+In file included from /home/ICN2/jgarcia/lsquant-unified/src/inline_compute-kpm-CorrOp.cpp:10:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp: In constructor ‘chebyshev::Moments2D::Moments2D(chebyshev::Moments2D, size_t, size_t)’:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:32: warning: narrowing conversion of ‘(size_t)m0’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                ^~
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:35: warning: narrowing conversion of ‘(size_t)m1’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                   ^~
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:35,
+                 from /home/ICN2/jgarcia/lsquant-unified/src/spectralFunctionFromChebmom.cpp:10:
+/home/ICN2/jgarcia/lsquant-unified/include/units.hpp:16:9: warning: inline variables are only available with ‘-std=c++17’ or ‘-std=gnu++17’
+   16 |         inline constexpr double HBAR = 0.6582119624; // eV*fs
+      |         ^~~~~~
+In file included from /home/ICN2/jgarcia/lsquant-unified/src/spectralFunctionFromChebmom.cpp:10:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp: In constructor ‘chebyshev::Moments2D::Moments2D(chebyshev::Moments2D, size_t, size_t)’:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:32: warning: narrowing conversion of ‘(size_t)m0’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                ^~
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:35: warning: narrowing conversion of ‘(size_t)m1’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                   ^~
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:35,
+                 from /home/ICN2/jgarcia/lsquant-unified/test/jackson_kernel_test.cpp:16:
+/home/ICN2/jgarcia/lsquant-unified/include/units.hpp:16:9: warning: inline variables are only available with ‘-std=c++17’ or ‘-std=gnu++17’
+   16 |         inline constexpr double HBAR = 0.6582119624; // eV*fs
+      |         ^~~~~~
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:35,
+                 from /home/ICN2/jgarcia/lsquant-unified/src/inline_compute-kpm-TimeEvProjetedOp.cpp:10:
+/home/ICN2/jgarcia/lsquant-unified/include/units.hpp:16:9: warning: inline variables are only available with ‘-std=c++17’ or ‘-std=gnu++17’
+   16 |         inline constexpr double HBAR = 0.6582119624; // eV*fs
+      |         ^~~~~~
+In file included from /home/ICN2/jgarcia/lsquant-unified/test/jackson_kernel_test.cpp:16:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp: In constructor ‘chebyshev::Moments2D::Moments2D(chebyshev::Moments2D, size_t, size_t)’:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:32: warning: narrowing conversion of ‘(size_t)m0’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                ^~
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:35: warning: narrowing conversion of ‘(size_t)m1’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                   ^~
+In file included from /home/ICN2/jgarcia/lsquant-unified/src/inline_compute-kpm-TimeEvProjetedOp.cpp:10:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp: In constructor ‘chebyshev::Moments2D::Moments2D(chebyshev::Moments2D, size_t, size_t)’:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:32: warning: narrowing conversion of ‘(size_t)m0’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                ^~
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:35: warning: narrowing conversion of ‘(size_t)m1’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                   ^~
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:35,
+                 from /home/ICN2/jgarcia/lsquant-unified/include/observable.hpp:7,
+                 from /home/ICN2/jgarcia/lsquant-unified/src/lsquant.cpp:14:
+/home/ICN2/jgarcia/lsquant-unified/include/units.hpp:16:9: warning: inline variables are only available with ‘-std=c++17’ or ‘-std=gnu++17’
+   16 |         inline constexpr double HBAR = 0.6582119624; // eV*fs
+      |         ^~~~~~
+In file included from /home/ICN2/jgarcia/lsquant-unified/include/observable.hpp:7,
+                 from /home/ICN2/jgarcia/lsquant-unified/src/lsquant.cpp:14:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp: In constructor ‘chebyshev::Moments2D::Moments2D(chebyshev::Moments2D, size_t, size_t)’:
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:32: warning: narrowing conversion of ‘(size_t)m0’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                ^~
+/home/ICN2/jgarcia/lsquant-unified/include/chebyshev_moments.hpp:304:35: warning: narrowing conversion of ‘(size_t)m1’ from ‘size_t’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+  304 |                 this->numMoms={m0,m1};
+      |                                   ^~
+[ 74%] Linking CXX executable ../jackson_g_test
+[ 75%] Linking CXX executable ../inline_kuboGreenwoodFromChebmom_FFTgrid
+[ 76%] Linking CXX executable ../inline_kuboBastinFromChebmom
+[ 77%] Linking CXX executable ../inline_kuboGreenwoodFromChebmom
+[ 78%] Linking CXX executable ../phase6_wired_test
+[ 79%] Linking CXX executable ../inline_kuboBastinFromChebmom_FFTgrid
+[ 79%] Built target jackson_g_test
+[ 79%] Built target inline_kuboGreenwoodFromChebmom
+[ 80%] Linking CXX executable ../inline_kuboBastinSeaFromChebmom
+[ 80%] Built target inline_kuboGreenwoodFromChebmom_FFTgrid
+[ 80%] Built target inline_kuboBastinFromChebmom
+[ 81%] Linking CXX executable ../inline_spectralFunctionFromChebmom
+[ 81%] Built target phase6_wired_test
+[ 82%] Linking CXX executable ../recon_kernel_oracle_test
+[ 84%] Linking CXX executable ../jackson_kernel_test
+[ 84%] Linking CXX executable ../inline_kuboBastinSurfFromChebmom
+[ 84%] Built target inline_kuboBastinFromChebmom_FFTgrid
+[ 85%] Linking CXX executable ../inline_timeCorrelationsFromChebmom
+[ 86%] Linking CXX executable ../inline_compute-kpm-nonEqOp
+[ 86%] Built target inline_spectralFunctionFromChebmom
+[ 86%] Built target inline_kuboBastinSeaFromChebmom
+[ 86%] Built target inline_kuboBastinSurfFromChebmom
+[ 86%] Built target recon_kernel_oracle_test
+[ 86%] Built target jackson_kernel_test
+[ 86%] Built target inline_timeCorrelationsFromChebmom
+[ 86%] Built target inline_compute-kpm-nonEqOp
+[ 86%] Linking CXX executable ../spmm_batchmultiply_equiv_test
+[ 86%] Built target spmm_batchmultiply_equiv_test
+[ 87%] Linking CXX executable ../inline_kpm-DOS-standalone
+[ 88%] Linking CXX executable ../inline_compute-kpm-TimeEvProjetedOp
+[ 89%] Linking CXX executable ../inline_compute-kpm-CorrOp
+[ 90%] Linking CXX executable ../spmv_threaded_bitexact_test
+[ 90%] Built target inline_kpm-DOS-standalone
+[ 90%] Built target inline_compute-kpm-TimeEvProjetedOp
+[ 90%] Built target inline_compute-kpm-CorrOp
+[ 90%] Built target spmv_threaded_bitexact_test
+[ 91%] Linking CXX static library ../lib/liblsquant_core.a
+[ 91%] Built target lsquant_core
+[ 92%] Building CXX object lsquant_core/CMakeFiles/stage6_nonorth.dir/apps/stage6_nonorth.cpp.o
+[ 94%] Building CXX object lsquant_core/CMakeFiles/stage1_moments.dir/apps/stage1_moments.cpp.o
+[ 94%] Building CXX object lsquant_core/CMakeFiles/stage_1_check.dir/__/tests/dev/stage_1_check.cpp.o
+[ 95%] Building CXX object lsquant_core/CMakeFiles/_core.dir/compat/legacy_kernels.cpp.o
+[ 95%] Building CXX object lsquant_core/CMakeFiles/_core.dir/api/bindings.cpp.o
+[ 96%] Linking CXX executable ../lsquant
+[ 96%] Built target lsquant
+[ 97%] Linking CXX executable stage1_moments
+[ 97%] Built target stage1_moments
+[ 97%] Linking CXX executable stage6_nonorth
+[ 97%] Built target stage6_nonorth
+[ 98%] Linking CXX executable stage_1_check
+[ 98%] Built target stage_1_check
+[100%] Linking CXX shared module _core.cpython-310-x86_64-linux-gnu.so
+[100%] Built target _core
+BUILD_EXIT 0

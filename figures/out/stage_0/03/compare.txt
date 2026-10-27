@@ -1,0 +1,4 @@
+figure data vs goldens/stage0/tutorials/03: 9 IDENTICAL, 0 DIFFERS
+png fig_bands.png IDENTICAL
+png fig_haldane_hall.png IDENTICAL
+png fig_phase_diagram.png IDENTICAL

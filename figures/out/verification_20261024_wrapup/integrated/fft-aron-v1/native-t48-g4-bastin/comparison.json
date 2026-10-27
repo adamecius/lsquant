@@ -1,0 +1,28 @@
+{
+  "engine_profile": "native",
+  "source_profile": "golden",
+  "formula": "bastin",
+  "broadening_meV": 10.0,
+  "backends": {
+    "tables": {
+      "wall_seconds": [
+        0.004294395446777344,
+        0.004319004714488983,
+        0.004271816462278366
+      ],
+      "curve_sha256": "598b8fd58a76b0ff876333eb1a358124aa3e10a8bf534e3247f57d5351133f16"
+    },
+    "fft": {
+      "wall_seconds": [
+        0.003332667052745819,
+        0.0034164488315582275,
+        0.0034842006862163544
+      ],
+      "curve_sha256": "6daa36c78a240873494b909b413800ab4dcfc47ed70fffe13d49d324cd90a98d"
+    }
+  },
+  "grid_identical": true,
+  "max_absolute_difference": 1.0238920822303044e-11,
+  "relative_to_max_norm": 5.86134094178001e-13,
+  "max_pointwise_relative_difference": 1.210404130933344e-07
+}

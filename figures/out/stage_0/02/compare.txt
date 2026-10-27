@@ -1,0 +1,3 @@
+figure data vs goldens/stage0/tutorials/02: 194 IDENTICAL, 0 DIFFERS
+png fig_anderson.png IDENTICAL
+png fig_localization.png IDENTICAL

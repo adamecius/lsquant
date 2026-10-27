@@ -1,0 +1,25 @@
+{
+ "dim": 30000,
+ "cells": 2500,
+ "M": 1024,
+ "states": 16,
+ "broadening_meV": 10.0,
+ "plateaus_e2h_pauli": {
+  "total": {
+   "trivial_gap": 0.04722693559300734,
+   "topological_gap": 0.18345392009277275
+  },
+  "sea": {
+   "trivial_gap": 0.04722693559300734,
+   "topological_gap": 0.14275335098393338
+  },
+  "surf": {
+   "trivial_gap": 1.9741594350237316e-11,
+   "topological_gap": 0.04001037701619519
+  },
+  "exact": {
+   "trivial_gap": -0.044571282462590345,
+   "topological_gap": 0.07505147648775479
+  }
+ }
+}

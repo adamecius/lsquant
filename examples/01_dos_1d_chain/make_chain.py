@@ -22,9 +22,8 @@ numerical CSR carries the matrix. They live side by side. The bounds use the
 field names the .desc reader parses (`spectral_min`, `spectral_max`), so
 `lsquant inspect operators/<label>.HAM.desc` reports them.
 
-The spectral driver this tutorial uses (`inline_compute-kpm-spectralOp`) reads
-its bounds from the BOUNDS file, so this script writes BOUNDS as well; the
-descriptor travels alongside as the physical record.
+The spectral window can also be read from the BOUNDS file, so this script writes
+BOUNDS as well; the descriptor travels alongside as the physical record.
 
 Usage:
     python make_chain.py 512

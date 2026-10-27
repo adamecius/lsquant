@@ -1,0 +1,16 @@
+HEAD before merge: 63ff1c7
+origin/handoff/0003-agi: cac5da6
+Merge made by the 'ort' strategy.
+ handoff/0003-rank2-reconstruction/report.md   |  2 +
+ handoff/0003-rank2-reconstruction/review-2.md | 34 ++++++++++++++
+ python/lsquant/apps/stage3_kubo.py            |  5 ++-
+ python/lsquant/apps/tutorial03.py             | 65 ++++++++++++++++++++-------
+ 4 files changed, 89 insertions(+), 17 deletions(-)
+ create mode 100644 handoff/0003-rank2-reconstruction/review-2.md
+merge exit: 0
+HEAD after merge: 3dfa53c
+3dfa53c Merge remote-tracking branch 'origin/handoff/0003-agi' into handoff/0003-codex
+63ff1c7 stage 3 outputs: keep the 0774db7 run logs and caption under *_run2_0774db7 names before the review-2 rerun
+cac5da6 Update stage-3 report for review-2 tutorial03 changes
+03b4eba Add --operators option to tutorial03 defaulting to goldens/stage0/haldane/operators
+f4fdbcb Round-trip moments through WriteLegacyChebmom2D/ReadChebmom in tutorial03 and stage3_kubo

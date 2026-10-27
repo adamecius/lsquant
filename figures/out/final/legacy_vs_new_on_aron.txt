@@ -1,0 +1,14 @@
+# tcn-aronnode, 2026-10-22 18:45 UTC: legacy-final drivers (built with figures/out/final/scripts/cxx14_launcher.sh,
+# ~/fv2/legacy_build) run on the golden inputs exactly as scripts/check_goldens.sh stage 0 (legacy_haldane, T=16,
+# KPM_SEED=12345), and the G4c command of goldens/stage0/PROVENANCE.md, cmp'd against the new code's outputs on
+# Aron (python -m lsquant run runs/goldens/g5.json / g4c.json at OMP_NUM_THREADS=16, ~/fv2/thr/T16).
+IDENTICAL legacy(Aron) vs new(Aron, g5.json T16): NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom2D
+IDENTICAL legacy(Aron) vs new(Aron, g5.json T16): NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom2D
+IDENTICAL legacy(Aron) vs new(Aron, g5.json T16): KuboBastinSea_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat
+IDENTICAL legacy(Aron) vs new(Aron, g5.json T16): KuboBastinSurf_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat
+IDENTICAL legacy(Aron) vs new(Aron, g5.json T16): KuboBastin_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat
+IDENTICAL legacy(Aron) vs new(Aron, g5.json T16): KuboGreenWood_NonEqOpVX-VXhaldaneKPM_M128x128_stateexactJACKSON.dat
+# G4c: inline_compute-kpm-nonEqOp graphene_golden VX VY 128 exact (BOUNDS -8.5 7.5)
+IDENTICAL legacy(Aron) vs new(Aron, g4c.json): NonEqOpVX-VYgraphene_goldenKPM_M128x128_stateexact.chebmom2D
+# legacy(Aron) G4c vs the fat-node golden (golden_diff.py):
+first-diff line 4 (m,n)=(0,1) re, new=-1.9907565551609e-28 golden=-2.8117012878739e-20; max abs diff 5.272e-18 at line 4048 (m,n)=(31,77) re; max rel diff 1.975e+00 at line 5058 (m,n)=(39,63) re; DEFECT level (>= 1e-12)

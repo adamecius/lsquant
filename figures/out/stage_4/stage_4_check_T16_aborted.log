@@ -1,0 +1,8 @@
+$ PYTHONPATH=build/lsquant_core:python OMP_NUM_THREADS=16 python3 -u tests/dev/stage_4_check.py
+(a) G7 chain1d_mag Gershgorin window = [-2.31, 2.31], BandWidth = 4.62
+(a) G7 TimeProjSX-PX array_equal vs golden: True
+(a) G7 TimeProjSY-PX array_equal vs golden: True
+(a) G7 TimeProjSZ-PX array_equal vs golden: True
+Terminated
+wall 2946.85 s
+exit: 143

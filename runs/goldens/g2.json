@@ -1,0 +1,26 @@
+{
+  "model": {
+    "kind": "csr",
+    "dir": "goldens/stage0/chain1d/operators",
+    "label": "chain1d",
+    "operators": ["VX"]
+  },
+  "basis": {
+    "name": "real"
+  },
+  "metric": {
+    "policy": "orthogonal"
+  },
+  "word": "Tr[VX delta(E-H) VX delta(E-H)]",
+  "expansion": {
+    "moments": 64,
+    "window": [-2.0, 2.0],
+    "trace": "exact",
+    "states": 2048
+  },
+  "output": {
+    "dir": "out/g2",
+    "legacy_names": true,
+    "legacy_layout": true
+  }
+}

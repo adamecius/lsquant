@@ -1,0 +1,23 @@
+{
+  "model": "haldane",
+  "variant": "complex",
+  "dimension": 512,
+  "seed": 12345,
+  "alpha": 0.55,
+  "window": [
+    -4.5,
+    4.5
+  ],
+  "lambda_min(S')": 0.38717798606128334,
+  "lambda_max(S')": 2.020663701889391,
+  "cond(S')": 5.218952974174405,
+  "nnz(S')": 15872,
+  "nnz(H')": 32768,
+  "max |eigvalsh(H', S') - eigvalsh(H)|": 1.3766765505351941e-14,
+  "sha256": {
+    "haldane.S.CSR": "557f35d954dfc88169d941c0378c48566f705b7c38bbff37cf1bb40c43834197",
+    "haldane.HAM.CSR": "224f23bfb1c1d2d8e30bbd5badce20d6b907cc94125566d3ed28e903adca1e6f",
+    "haldane.VX.CSR": "d658cda1d87869b97264191fcbf191a6dc7a9af089b3dd5aa97510d24b7a084a",
+    "haldane.VY.CSR": "7db4c32cce9bce8a71dcf41937094496f141647aaf1e4c6782c2cde82b6c6976"
+  }
+}

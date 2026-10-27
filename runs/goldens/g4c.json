@@ -1,0 +1,32 @@
+{
+  "model": {
+    "kind": "csr",
+    "dir": "goldens/stage0/graphene/operators",
+    "label": "graphene_golden",
+    "operators": ["VX", "VY"]
+  },
+  "basis": {
+    "name": "real"
+  },
+  "metric": {
+    "policy": "orthogonal"
+  },
+  "word": "Tr[VX delta(E-H) VY dG-(E)/dE]",
+  "expansion": {
+    "moments": 128,
+    "window": [-8.5, 7.5],
+    "trace": "exact",
+    "states": 256
+  },
+  "reconstruction": {
+    "kernel": "jackson",
+    "broadening_meV": 10.0,
+    "formulas": ["bastin"],
+    "legacy_text_round_trip": true
+  },
+  "output": {
+    "dir": "out/g4c",
+    "legacy_names": true,
+    "legacy_layout": true
+  }
+}

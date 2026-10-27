@@ -1,0 +1,6 @@
+{
+  "comparisons": 16,
+  "runfile_replays": 8,
+  "passed": true,
+  "scope": "clean toy, hard/shift, both metric routes; radius 1.2 Angstrom is a truncation diagnostic, not an accepted model"
+}

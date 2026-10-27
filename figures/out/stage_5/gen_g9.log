@@ -1,0 +1,14 @@
+dos: nk=48^2, eta=40 meV, integral=2.000 (~num_wann)
+sigma_xx: nk=48^2, eta=40 meV -> /home/ICN2/jgarcia/lsquant-unified-0005/goldens/stage0/bases/graphene/G9_sigma_xx.json
+dos: nk=240^2, eta=40 meV, integral=2.000 (~num_wann)
+sigma_xx: nk=240^2, eta=40 meV -> /home/ICN2/jgarcia/lsquant-unified-0005/goldens/stage0/bases/graphene/finite_size_shifted240_sigma_xx.json
+graphene: G9 Gamma 48x48 and shifted 240x240, eta 0.040 eV, grid [-3.6, 3.6] x 2881
+dos: nk=48^2, eta=40 meV, integral=2.000 (~num_wann)
+sigma_xx: nk=48^2, eta=40 meV -> /home/ICN2/jgarcia/lsquant-unified-0005/goldens/stage0/bases/haldane/G9_sigma_xx.json
+dos: nk=240^2, eta=40 meV, integral=2.000 (~num_wann)
+sigma_xx: nk=240^2, eta=40 meV -> /home/ICN2/jgarcia/lsquant-unified-0005/goldens/stage0/bases/haldane/finite_size_shifted240_sigma_xx.json
+haldane: G9 Gamma 48x48 and shifted 240x240, eta 0.040 eV, grid [-3.6, 3.6] x 2881
+
+real	0m39.835s
+user	1m20.866s
+sys	0m6.021s

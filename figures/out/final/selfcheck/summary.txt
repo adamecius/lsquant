@@ -1,0 +1,8 @@
+stage_1_check rc=0 wall 0 s
+stage_2_check.py rc=0 wall 336 s
+stage_3_check.py rc=1 wall 294 s
+stage_4_check.py rc=1 wall 47 s
+stage_5_check.py rc=1 wall 50 s
+stage_6_check.py rc=0 wall 2157 s
+stage_7_check.py rc=1 wall 21 s
+SELF_DONE

@@ -1,0 +1,4 @@
+figure data vs goldens/stage0/tutorials/05: 17 IDENTICAL, 0 DIFFERS
+png fig_diffusion.png IDENTICAL
+png fig_fermi.png IDENTICAL
+png fig_transport.png IDENTICAL

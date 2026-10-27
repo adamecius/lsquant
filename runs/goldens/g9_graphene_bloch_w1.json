@@ -1,0 +1,45 @@
+{
+  "model": {
+    "kind": "wannier",
+    "dir": "goldens/stage0/bases/graphene/model",
+    "seed": "graphene"
+  },
+  "basis": {
+    "name": "bloch",
+    "supercell": [
+      48,
+      48,
+      1
+    ],
+    "disorder": {
+      "W": 1.0,
+      "seed": 7
+    }
+  },
+  "metric": {
+    "policy": "orthogonal"
+  },
+  "word": "Tr[delta(E-H)]",
+  "words": [
+    "Tr[delta(E-H)]",
+    "Tr[VX delta(E-H) VX delta(E-H)]"
+  ],
+  "expansion": {
+    "moments": 256,
+    "window": "eigen",
+    "trace": "random",
+    "states": 32,
+    "seed": 12345
+  },
+  "reconstruction": {
+    "kernel": "jackson",
+    "broadening_meV": 40.0
+  },
+  "output": {
+    "dir": "out/g9_graphene_bloch_w1",
+    "legacy_names": true,
+    "legacy_layout": true,
+    "write_chebmom": true,
+    "write_basis_json": true
+  }
+}

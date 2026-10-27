@@ -1,0 +1,493 @@
+== stage 1: /home/ICN2/jgarcia/lsquant-unified-build5/lsquant_core/stage1_moments vs goldens/stage0/chain1d (KPM_SEED=12345)
+IDENTICAL [T=1] chain1d/SpectralOp1chain1dKPM_M64_stateexact.chebmom1D (G1)
+IDENTICAL [T=1] chain1d/NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D (G2)
+IDENTICAL [T=8] chain1d/SpectralOp1chain1dKPM_M64_stateexact.chebmom1D (G1)
+IDENTICAL [T=8] chain1d/NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D (G2)
+IDENTICAL [T=64] chain1d/SpectralOp1chain1dKPM_M64_stateexact.chebmom1D (G1)
+IDENTICAL [T=64] chain1d/NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D (G2)
+IDENTICAL [T=8, batch 16] chain1d/NonEqOpVX-VXchain1dKPM_M64x64_stateexact.chebmom2D (G2, batched)
+IDENTICAL [random, run2 vs run1] NonEqOpVX-VXchain1dKPM_M64x64_statedefault.chebmom
+IDENTICAL [random, run2 vs run1] NonEqOpVX-VXchain1dKPM_M64x64_statedefault.chebmom2D
+IDENTICAL [random, run2 vs run1] SpectralOp1chain1dKPM_M64_statedefault.chebmom
+IDENTICAL [random, run2 vs run1] SpectralOp1chain1dKPM_M64_statedefault.chebmom1D
+GREP      grep -rn "basis\|std::cout\|getenv" lsquant/core: empty
+== stage 2: python3 -m lsquant.apps.stage2_dos, PYTHONPATH=/home/ICN2/jgarcia/lsquant-unified-build5/lsquant_core:python, vs goldens/stage0/chain1d (KPM_SEED=12345)
+          [T=1] (a) printed: meanSpectralOp1chain1dKPM_M64_stateexactJACKSON.dat
+IDENTICAL [T=1] (a) --moments G1 -> chain1d/meanSpectralOp1chain1dKPM_M64_stateexactJACKSON.dat (G3)
+          [T=1] (b) printed: SpectralOp1chain1dKPM_M64_stateexact.chebmom1D
+          [T=1] (b) printed: meanSpectralOp1chain1dKPM_M64_stateexactJACKSON.dat
+IDENTICAL [T=1] (b) --operators -> chain1d/SpectralOp1chain1dKPM_M64_stateexact.chebmom1D (G1)
+IDENTICAL [T=1] (b) --operators -> chain1d/meanSpectralOp1chain1dKPM_M64_stateexactJACKSON.dat (G3)
+          [T=16] (a) printed: meanSpectralOp1chain1dKPM_M64_stateexactJACKSON.dat
+IDENTICAL [T=16] (a) --moments G1 -> chain1d/meanSpectralOp1chain1dKPM_M64_stateexactJACKSON.dat (G3)
+          [T=16] (b) printed: SpectralOp1chain1dKPM_M64_stateexact.chebmom1D
+          [T=16] (b) printed: meanSpectralOp1chain1dKPM_M64_stateexactJACKSON.dat
+IDENTICAL [T=16] (b) --operators -> chain1d/SpectralOp1chain1dKPM_M64_stateexact.chebmom1D (G1)
+IDENTICAL [T=16] (b) --operators -> chain1d/meanSpectralOp1chain1dKPM_M64_stateexactJACKSON.dat (G3)
+GREP      grep -rn "delta\|DOS\|Kubo\|basis\|std::cout\|getenv" lsquant/core lsquant/io, code lines: empty
+          excluded comment line: lsquant/core/chebyshev/chebyshev_moments.hpp:27: * recording whether the `(2 - delta_{m0})` KPM weights (`kpmWeighted`) and Hermitian
+          excluded comment line: lsquant/core/chebyshev/chebyshev_moments.hpp:32: *      Never apply KPM `(2 - delta_{m0})` weights or symmetrisation twice; check
+          excluded comment line: lsquant/core/chebyshev/chebyshev_moments.hpp:160: * @brief Apply the legacy rank-2 KPM `(2 - delta_{m0})` weights and optional Hermitian symmetrisation.
+== stage 3: python3 -m lsquant.apps.stage3_kubo, PYTHONPATH=/home/ICN2/jgarcia/lsquant-unified-build5/lsquant_core:python, vs goldens/stage0/{haldane,graphene}
+          [T=16] G5 VX-VY moments printed: NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom2D
+          [T=16] G5 VX-VY moments printed: NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom
+          [T=16] G5 VX-VX moments printed: NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom2D
+          [T=16] G5 VX-VX moments printed: NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom
+IDENTICAL [T=16] haldane/NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom2D (G5 moments)
+IDENTICAL [T=16] haldane/NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom2D (G5 moments)
+          [T=16] G5 bastin printed: KuboBastin_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat
+          [T=16] G5 sea printed: KuboBastinSea_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat
+          [T=16] G5 surf printed: KuboBastinSurf_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat
+          [T=16] G5 greenwood printed: KuboGreenWood_NonEqOpVX-VXhaldaneKPM_M128x128_stateexactJACKSON.dat
+IDENTICAL [T=16] haldane/KuboBastin_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat (G5 curve)
+IDENTICAL [T=16] haldane/KuboBastinSea_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat (G5 curve)
+IDENTICAL [T=16] haldane/KuboBastinSurf_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat (G5 curve)
+IDENTICAL [T=16] haldane/KuboGreenWood_NonEqOpVX-VXhaldaneKPM_M128x128_stateexactJACKSON.dat (G5 curve)
+          [T=16] G4 VX-VX moments printed: NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefault.chebmom2D
+          [T=16] G4 VX-VX moments printed: NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefault.chebmom
+IDENTICAL [T=16] graphene/NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefault.chebmom2D (G4 moments)
+          [T=16] G4 bastin 64 meV printed: KuboBastin_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON.dat
+          [T=16] G4 sea 10 meV printed: KuboBastinSea_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON.dat
+          [T=16] G4 surf 10 meV printed: KuboBastinSurf_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON.dat
+          [T=16] G4 greenwood_fft 10 meV printed: KuboGreenWood_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON_FFTgrid.dat
+          [T=16] G4 bastin_fft 10 meV printed: KuboBastin_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON_FFTgrid.dat
+IDENTICAL [T=16] graphene/KuboBastin_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON.dat (G4 curve, 64 meV)
+IDENTICAL [T=16] graphene/sea_surf/KuboBastinSea_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON.dat (G4 curve, 10 meV)
+IDENTICAL [T=16] graphene/sea_surf/KuboBastinSurf_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON.dat (G4 curve, 10 meV)
+IDENTICAL [T=16] graphene/fft_grid/KuboGreenWood_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON_FFTgrid.dat (G4 curve, 10 meV)
+IDENTICAL [T=16] graphene/fft_grid/KuboBastin_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON_FFTgrid.dat (G4 curve, 10 meV)
+          [T=1] G5 VX-VY moments printed: NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom2D
+          [T=1] G5 VX-VY moments printed: NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom
+          [T=1] G5 VX-VX moments printed: NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom2D
+          [T=1] G5 VX-VX moments printed: NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom
+IDENTICAL [T=1] haldane/NonEqOpVX-VYhaldaneKPM_M128x128_stateexact.chebmom2D (G5 moments)
+IDENTICAL [T=1] haldane/NonEqOpVX-VXhaldaneKPM_M128x128_stateexact.chebmom2D (G5 moments)
+          [T=1] G5 bastin printed: KuboBastin_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat
+          [T=1] G5 sea printed: KuboBastinSea_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat
+          [T=1] G5 surf printed: KuboBastinSurf_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat
+          [T=1] G5 greenwood printed: KuboGreenWood_NonEqOpVX-VXhaldaneKPM_M128x128_stateexactJACKSON.dat
+IDENTICAL [T=1] haldane/KuboBastin_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat (G5 curve)
+IDENTICAL [T=1] haldane/KuboBastinSea_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat (G5 curve)
+IDENTICAL [T=1] haldane/KuboBastinSurf_NonEqOpVX-VYhaldaneKPM_M128x128_stateexactJACKSON.dat (G5 curve)
+IDENTICAL [T=1] haldane/KuboGreenWood_NonEqOpVX-VXhaldaneKPM_M128x128_stateexactJACKSON.dat (G5 curve)
+          [T=1] G4 VX-VX moments printed: NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefault.chebmom2D
+          [T=1] G4 VX-VX moments printed: NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefault.chebmom
+IDENTICAL [T=1] graphene/NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefault.chebmom2D (G4 moments)
+          [T=1] G4 bastin 64 meV printed: KuboBastin_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON.dat
+          [T=1] G4 sea 10 meV printed: KuboBastinSea_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON.dat
+          [T=1] G4 surf 10 meV printed: KuboBastinSurf_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON.dat
+          [T=1] G4 greenwood_fft 10 meV printed: KuboGreenWood_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON_FFTgrid.dat
+          [T=1] G4 bastin_fft 10 meV printed: KuboBastin_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON_FFTgrid.dat
+IDENTICAL [T=1] graphene/KuboBastin_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON.dat (G4 curve, 64 meV)
+IDENTICAL [T=1] graphene/sea_surf/KuboBastinSea_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON.dat (G4 curve, 10 meV)
+IDENTICAL [T=1] graphene/sea_surf/KuboBastinSurf_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON.dat (G4 curve, 10 meV)
+IDENTICAL [T=1] graphene/fft_grid/KuboGreenWood_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON_FFTgrid.dat (G4 curve, 10 meV)
+IDENTICAL [T=1] graphene/fft_grid/KuboBastin_NonEqOpVX-VXgraphene_goldenKPM_M64x64_statedefaultJACKSON_FFTgrid.dat (G4 curve, 10 meV)
+GREP      grep -rn "compat/" lsquant/core lsquant/io: empty
+== stage 4: python3 -m lsquant.apps.stage4_time, PYTHONPATH=/home/ICN2/jgarcia/lsquant-unified-build5/lsquant_core:python, vs goldens/stage0/{chain1d_ballistic,chain1d_mag}
+          [T=16] G6 msd moments printed: CorrelationVXchain1dKPM_M256_state20exact.chebmomTD
+          [T=16] G6 msd moments printed: CorrelationVXchain1dKPM_M256_state20exact.chebmom
+          [T=16] G6 msd moments wall 507 s
+IDENTICAL [T=16] chain1d_ballistic/CorrelationVXchain1dKPM_M256_state20exact.chebmomTD (G6 moments)
+          [T=16] G6 curves (golden moments) printed: meanCorrelationVXchain1dKPM_M256_state20exactEF0.000000JACKSON.dat
+          [T=16] G6 curves (golden moments) printed: meanCorrelationVXchain1dKPM_M256_state20exactEF0.500000JACKSON.dat
+          [T=16] G6 curves (golden moments) printed: meanCorrelationVXchain1dKPM_M256_state20exactEF1.000000JACKSON.dat
+          [T=16] G6 curves (golden moments) printed: meanCorrelationVXchain1dKPM_M256_state20exactEF1.500000JACKSON.dat
+IDENTICAL [T=16] chain1d_ballistic/meanCorrelationVXchain1dKPM_M256_state20exactEF0.000000JACKSON.dat (G6 curve from golden moments)
+IDENTICAL [T=16] chain1d_ballistic/meanCorrelationVXchain1dKPM_M256_state20exactEF0.500000JACKSON.dat (G6 curve from golden moments)
+IDENTICAL [T=16] chain1d_ballistic/meanCorrelationVXchain1dKPM_M256_state20exactEF1.000000JACKSON.dat (G6 curve from golden moments)
+IDENTICAL [T=16] chain1d_ballistic/meanCorrelationVXchain1dKPM_M256_state20exactEF1.500000JACKSON.dat (G6 curve from golden moments)
+          [T=16] G6 curves (new moments) printed: meanCorrelationVXchain1dKPM_M256_state20exactEF0.000000JACKSON.dat
+          [T=16] G6 curves (new moments) printed: meanCorrelationVXchain1dKPM_M256_state20exactEF0.500000JACKSON.dat
+          [T=16] G6 curves (new moments) printed: meanCorrelationVXchain1dKPM_M256_state20exactEF1.000000JACKSON.dat
+          [T=16] G6 curves (new moments) printed: meanCorrelationVXchain1dKPM_M256_state20exactEF1.500000JACKSON.dat
+IDENTICAL [T=16] chain1d_ballistic/meanCorrelationVXchain1dKPM_M256_state20exactEF0.000000JACKSON.dat (G6 curve from new moments)
+IDENTICAL [T=16] chain1d_ballistic/meanCorrelationVXchain1dKPM_M256_state20exactEF0.500000JACKSON.dat (G6 curve from new moments)
+IDENTICAL [T=16] chain1d_ballistic/meanCorrelationVXchain1dKPM_M256_state20exactEF1.000000JACKSON.dat (G6 curve from new moments)
+IDENTICAL [T=16] chain1d_ballistic/meanCorrelationVXchain1dKPM_M256_state20exactEF1.500000JACKSON.dat (G6 curve from new moments)
+          [T=16] G7 SX-PX moments printed: TimeProjSX-PXchain1d_magKPM_M32_stateexact.chebmomTD
+          [T=16] G7 SX-PX moments printed: TimeProjSX-PXchain1d_magKPM_M32_stateexact.chebmom
+          [T=16] G7 SX-PX moments wall 32 s
+          [T=16] G7 SY-PX moments printed: TimeProjSY-PXchain1d_magKPM_M32_stateexact.chebmomTD
+          [T=16] G7 SY-PX moments printed: TimeProjSY-PXchain1d_magKPM_M32_stateexact.chebmom
+          [T=16] G7 SY-PX moments wall 22 s
+          [T=16] G7 SZ-PX moments printed: TimeProjSZ-PXchain1d_magKPM_M32_stateexact.chebmomTD
+          [T=16] G7 SZ-PX moments printed: TimeProjSZ-PXchain1d_magKPM_M32_stateexact.chebmom
+          [T=16] G7 SZ-PX moments wall 26 s
+IDENTICAL [T=16] chain1d_mag/TimeProjSX-PXchain1d_magKPM_M32_stateexact.chebmomTD (G7 moments)
+IDENTICAL [T=16] chain1d_mag/TimeProjSY-PXchain1d_magKPM_M32_stateexact.chebmomTD (G7 moments)
+IDENTICAL [T=16] chain1d_mag/TimeProjSZ-PXchain1d_magKPM_M32_stateexact.chebmomTD (G7 moments)
+          [T=1] G6 msd moments printed: CorrelationVXchain1dKPM_M256_state20exact.chebmomTD
+          [T=1] G6 msd moments printed: CorrelationVXchain1dKPM_M256_state20exact.chebmom
+          [T=1] G6 msd moments wall 23 s
+IDENTICAL [T=1] chain1d_ballistic/CorrelationVXchain1dKPM_M256_state20exact.chebmomTD (G6 moments)
+          [T=1] G6 curves (golden moments) printed: meanCorrelationVXchain1dKPM_M256_state20exactEF0.000000JACKSON.dat
+          [T=1] G6 curves (golden moments) printed: meanCorrelationVXchain1dKPM_M256_state20exactEF0.500000JACKSON.dat
+          [T=1] G6 curves (golden moments) printed: meanCorrelationVXchain1dKPM_M256_state20exactEF1.000000JACKSON.dat
+          [T=1] G6 curves (golden moments) printed: meanCorrelationVXchain1dKPM_M256_state20exactEF1.500000JACKSON.dat
+IDENTICAL [T=1] chain1d_ballistic/meanCorrelationVXchain1dKPM_M256_state20exactEF0.000000JACKSON.dat (G6 curve from golden moments)
+IDENTICAL [T=1] chain1d_ballistic/meanCorrelationVXchain1dKPM_M256_state20exactEF0.500000JACKSON.dat (G6 curve from golden moments)
+IDENTICAL [T=1] chain1d_ballistic/meanCorrelationVXchain1dKPM_M256_state20exactEF1.000000JACKSON.dat (G6 curve from golden moments)
+IDENTICAL [T=1] chain1d_ballistic/meanCorrelationVXchain1dKPM_M256_state20exactEF1.500000JACKSON.dat (G6 curve from golden moments)
+          [T=1] G6 curves (new moments) printed: meanCorrelationVXchain1dKPM_M256_state20exactEF0.000000JACKSON.dat
+          [T=1] G6 curves (new moments) printed: meanCorrelationVXchain1dKPM_M256_state20exactEF0.500000JACKSON.dat
+          [T=1] G6 curves (new moments) printed: meanCorrelationVXchain1dKPM_M256_state20exactEF1.000000JACKSON.dat
+          [T=1] G6 curves (new moments) printed: meanCorrelationVXchain1dKPM_M256_state20exactEF1.500000JACKSON.dat
+IDENTICAL [T=1] chain1d_ballistic/meanCorrelationVXchain1dKPM_M256_state20exactEF0.000000JACKSON.dat (G6 curve from new moments)
+IDENTICAL [T=1] chain1d_ballistic/meanCorrelationVXchain1dKPM_M256_state20exactEF0.500000JACKSON.dat (G6 curve from new moments)
+IDENTICAL [T=1] chain1d_ballistic/meanCorrelationVXchain1dKPM_M256_state20exactEF1.000000JACKSON.dat (G6 curve from new moments)
+IDENTICAL [T=1] chain1d_ballistic/meanCorrelationVXchain1dKPM_M256_state20exactEF1.500000JACKSON.dat (G6 curve from new moments)
+          [T=1] G7 SX-PX moments printed: TimeProjSX-PXchain1d_magKPM_M32_stateexact.chebmomTD
+          [T=1] G7 SX-PX moments printed: TimeProjSX-PXchain1d_magKPM_M32_stateexact.chebmom
+          [T=1] G7 SX-PX moments wall 4 s
+          [T=1] G7 SY-PX moments printed: TimeProjSY-PXchain1d_magKPM_M32_stateexact.chebmomTD
+          [T=1] G7 SY-PX moments printed: TimeProjSY-PXchain1d_magKPM_M32_stateexact.chebmom
+          [T=1] G7 SY-PX moments wall 4 s
+          [T=1] G7 SZ-PX moments printed: TimeProjSZ-PXchain1d_magKPM_M32_stateexact.chebmomTD
+          [T=1] G7 SZ-PX moments printed: TimeProjSZ-PXchain1d_magKPM_M32_stateexact.chebmom
+          [T=1] G7 SZ-PX moments wall 3 s
+IDENTICAL [T=1] chain1d_mag/TimeProjSX-PXchain1d_magKPM_M32_stateexact.chebmomTD (G7 moments)
+IDENTICAL [T=1] chain1d_mag/TimeProjSY-PXchain1d_magKPM_M32_stateexact.chebmomTD (G7 moments)
+IDENTICAL [T=1] chain1d_mag/TimeProjSZ-PXchain1d_magKPM_M32_stateexact.chebmomTD (G7 moments)
+GREP      grep -rnwE "time|velocity|spin|projector|bessel|gsl" lsquant/core lsquant/io, code lines: empty
+          excluded comment line: lsquant/core/chebyshev/contraction.hpp:54: * for each grid index `i in 0 .. N - 1`. Complexity is `O(M * N)` time and `O(N)` output space.
+          excluded comment line: lsquant/core/chebyshev/contraction.hpp:97: * is `O(M0 * M1 * numPoints)` time and `O(1)` auxiliary space.
+          excluded comment line: lsquant/core/chebyshev/contraction.hpp:145: * is `O(M0 * M1 * numPoints)` time and `O(1)` auxiliary space.
+          excluded comment line: lsquant/core/chebyshev/contraction.hpp:191: * is `O(M0 * M1 * numPoints)` time and `O(1)` auxiliary space.
+          excluded comment line: lsquant/core/algebra/sparse_matrix.hpp:28: * Hamiltonians, eV*Angstrom for velocity matrices) or dimensionless units after rescaling.
+          excluded comment line: lsquant/core/algebra/sparse_matrix.hpp:116:   * @return Number of rows (equal to number of columns) in `O(1)` time.
+          excluded comment line: lsquant/core/algebra/sparse_matrix.hpp:127:   * @return Count of compressed non-zero elements in `O(1)` time.
+          excluded comment line: lsquant/core/algebra/sparse_matrix.hpp:208:   *      purely imaginary velocity operators (`VX`), shifting signed zeros in moment outputs.
+          excluded comment line: lsquant/core/algebra/sparse_matrix.hpp:216:   * in `O(dim + nnz)` time.
+          excluded comment line: lsquant/core/algebra/sparse_matrix.hpp:247: * copying matrix data. Caches Hermiticity at construction time in `O(dim + nnz)` so subsequent
+          excluded comment line: lsquant/core/algebra/linalg.hpp:21: * `O(N)` time.
+          excluded comment line: lsquant/core/algebra/linalg.hpp:36: * Maps `x` as an Eigen vector and multiplies every entry by `a` in `O(N)` time.
+          excluded comment line: lsquant/core/algebra/linalg.hpp:52: * Maps `x` and `y` as Eigen vectors and assigns `eig_y = eig_x` in `O(N)` time, matching
+          excluded comment line: lsquant/core/algebra/linalg.hpp:69: * time, matching legacy `linalg::vdot(x, y)` bit for bit.
+          excluded comment line: lsquant/core/algebra/linalg.hpp:85: * Evaluates `Eigen::Map(x).squaredNorm()` in `O(N)` time, matching legacy `linalg::nrm2`.
+          excluded comment line: lsquant/core/algebra/bloch_transform.hpp:33: * coordinates and Bloch k-space coordinates in `O(N_k * W * log N_k)` time
+          excluded comment line: lsquant/core/algebra/composite_operators.hpp:27: * Implements `y = a * x + b * y` in `O(N)` time and reports `IsIdentity() == true` so
+          excluded comment line: lsquant/core/algebra/composite_operators.hpp:90: * disorder `V`) or diagonal eigenvalue tables `eps_n(k)` in `O(N)` time and memory
+          excluded comment line: lsquant/core/algebra/linear_operator.hpp:42:   * Queries the square dimension `N` of the linear map `C^N -> C^N` in `O(1)` time.
+          excluded comment line: lsquant/core/algebra/linear_operator.hpp:95:   * Allows callers to elide redundant operator applications in `O(1)` time when a slot in an
+          excluded comment line: lsquant/core/algebra/block_diagonal_operator.hpp:22: * Solves the problem of applying k-local operators (`H(k)`, velocity `dH/dk`,
+          excluded comment line: lsquant/core/algebra/block_diagonal_operator.hpp:23: * or per-k unitary rotations `U(k)`) in `O(N_k * W^2)` time with contiguous
+          excluded comment line: lsquant/core/algebra/block_diagonal_operator.hpp:52:   *      Hermiticity is evaluated and cached once at construction time within
+          excluded comment line: lsquant/core/algebra/state_generator.hpp:27: * Solves the problem of streaming source states `|r>` one at a time into the moment engine
+          excluded comment line: lsquant/io/csr_text.hpp:25: * to `+0.0`). Complexity is `O(dim + nnz)` in time and memory.
+          excluded comment line: lsquant/io/chebmom_file.hpp:95: * @brief Write a rank-2 time-dependent `ChebyshevMoments` tensor in the byte-exact legacy `.chebmomTD` layout.
+== stage 5: python3 -m lsquant.apps.stage5_bases, PYTHONPATH=/home/ICN2/jgarcia/lsquant-unified-build5/lsquant_core:python, vs goldens/stage0/bases (G9)
+   graphene: window [-3.3000000000, 3.3000000000] (W=0), [-3.8500000000, 3.8500000000] (W=1); broadening 40.4970928 meV (W=0), 47.2466083 meV (W=1); M=256, 32 random-phase states seed 12345, disorder seed 7
+          PASS  CONV graphene 6x4x1 dense B = exp(-i k.(R+tau))/sqrt(Nk) (implemented sign, gated): RealToBloch vs B x 3.589e-15, BlochToReal vs B^+ x 3.309e-15 (tol 1e-12)
+          INFO  CONV graphene 6x4x1 dense B = exp(+i k.(R+tau))/sqrt(Nk) (brief.md sign, reported): RealToBloch vs B x 1.523e+00, BlochToReal vs B^+ x 1.455e+00
+          FAIL  CONV graphene 6x4x1 lsquant supercell CSR vs wannier2sparse CSR: H 1.174e+00, VX 9.140e-01 (tol 1e-12)
+          INFO  CONV graphene 6x4x1 localisation: lsquant CSR with the cell index renumbered n1-fastest (n1 + N1 n2) vs wannier2sparse CSR: H 1.182e-16, VX 1.406e-16
+          PASS  CONV graphene 48x48x1 max|B^+ B x - x|/max|x| = 3.883e-16 (tol 1e-12)
+          PASS  CONV graphene 48x48x1 lsquant supercell CSR vs wannier2sparse CSR: H 0.000e+00, VX 0.000e+00 (tol 1e-12)
+          INFO  CONV graphene 48x48x1 localisation: lsquant CSR with the cell index renumbered n1-fastest (n1 + N1 n2) vs wannier2sparse CSR: H 1.801e-16, VX 1.813e-16
+          PASS  CONV graphene 48x48x1 B H_w2s B^+ x vs H_k x: 7.058e-16 (tol 1e-10)
+          PASS  CONV graphene 48x48x1 B VX_w2s B^+ x vs v_x(k) x: 6.652e-16 (tol 1e-10, brief.md section 3)
+          [T=16] graphene W=0 real  dos (random 32) wall    2.43 s  -> mean_SpectralOp1graphene_real_KPM_M256_statedefaultJACKSON.dat SpectralOp1graphene_real_KPM_M256_statedefault.chebmom 
+          [T=16] graphene W=0 bloch dos (random 32) wall    2.44 s  -> mean_SpectralOp1graphene_bloch_KPM_M256_statedefaultJACKSON.dat SpectralOp1graphene_bloch_KPM_M256_statedefault.chebmom 
+          [T=16] graphene W=0 bloch dos (exact)     wall    1.90 s  -> mean_SpectralOp1graphene_bloch_KPM_M256_stateexactJACKSON.dat SpectralOp1graphene_bloch_KPM_M256_stateexact.chebmom 
+          [T=16] graphene W=0 eigen dos (exact)     wall    1.91 s  -> mean_SpectralOp1graphene_eigen_KPM_M256_stateexactJACKSON.dat SpectralOp1graphene_eigen_KPM_M256_stateexact.chebmom 
+          [T=16] graphene W=1 real  dos (random 32) wall    2.68 s  -> mean_SpectralOp1graphene_real_KPM_M256_statedefaultJACKSON.dat SpectralOp1graphene_real_KPM_M256_statedefault.chebmom 
+          [T=16] graphene W=1 bloch dos (random 32) wall    8.72 s  -> mean_SpectralOp1graphene_bloch_KPM_M256_statedefaultJACKSON.dat SpectralOp1graphene_bloch_KPM_M256_statedefault.chebmom 
+          [T=16] graphene W=0 real  kuboxx (random 32) wall   31.55 s  -> KuboGreenWood_NonEqOpVX-VXgraphene_real_KPM_M256x256_statedefaultJACKSON.dat NonEqOpVX-VXgraphene_real_KPM_M256x256_statedefault.chebmom 
+          [T=16] graphene W=0 bloch kuboxx (random 32) wall   28.11 s  -> KuboGreenWood_NonEqOpVX-VXgraphene_bloch_KPM_M256x256_statedefaultJACKSON.dat NonEqOpVX-VXgraphene_bloch_KPM_M256x256_statedefault.chebmom 
+          [T=16] graphene W=0 bloch kuboxx (exact)  wall    2.75 s  -> KuboGreenWood_NonEqOpVX-VXgraphene_bloch_KPM_M256x256_stateexactJACKSON.dat NonEqOpVX-VXgraphene_bloch_KPM_M256x256_stateexact.chebmom 
+          [T=16] graphene W=0 eigen kuboxx (exact)  wall    2.65 s  -> KuboGreenWood_NonEqOpVX-VXgraphene_eigen_KPM_M256x256_stateexactJACKSON.dat NonEqOpVX-VXgraphene_eigen_KPM_M256x256_stateexact.chebmom 
+          [T=16] graphene W=1 real  kuboxx (random 32) wall   28.72 s  -> KuboGreenWood_NonEqOpVX-VXgraphene_real_KPM_M256x256_statedefaultJACKSON.dat NonEqOpVX-VXgraphene_real_KPM_M256x256_statedefault.chebmom 
+          [T=16] graphene W=1 bloch kuboxx (random 32) wall   49.57 s  -> KuboGreenWood_NonEqOpVX-VXgraphene_bloch_KPM_M256x256_statedefaultJACKSON.dat NonEqOpVX-VXgraphene_bloch_KPM_M256x256_statedefault.chebmom 
+          [T=1] graphene W=0 real  dos (random 32) wall    2.20 s  -> mean_SpectralOp1graphene_real_KPM_M256_statedefaultJACKSON.dat SpectralOp1graphene_real_KPM_M256_statedefault.chebmom 
+          [T=1] graphene W=0 bloch dos (random 32) wall    2.05 s  -> mean_SpectralOp1graphene_bloch_KPM_M256_statedefaultJACKSON.dat SpectralOp1graphene_bloch_KPM_M256_statedefault.chebmom 
+          [T=1] graphene W=0 bloch dos (exact)     wall    1.81 s  -> mean_SpectralOp1graphene_bloch_KPM_M256_stateexactJACKSON.dat SpectralOp1graphene_bloch_KPM_M256_stateexact.chebmom 
+          [T=1] graphene W=0 eigen dos (exact)     wall    1.89 s  -> mean_SpectralOp1graphene_eigen_KPM_M256_stateexactJACKSON.dat SpectralOp1graphene_eigen_KPM_M256_stateexact.chebmom 
+          [T=1] graphene W=1 real  dos (random 32) wall    2.54 s  -> mean_SpectralOp1graphene_real_KPM_M256_statedefaultJACKSON.dat SpectralOp1graphene_real_KPM_M256_statedefault.chebmom 
+          [T=1] graphene W=1 bloch dos (random 32) wall    4.05 s  -> mean_SpectralOp1graphene_bloch_KPM_M256_statedefaultJACKSON.dat SpectralOp1graphene_bloch_KPM_M256_statedefault.chebmom 
+          [T=1] graphene W=0 real  kuboxx (random 32) wall   20.40 s  -> KuboGreenWood_NonEqOpVX-VXgraphene_real_KPM_M256x256_statedefaultJACKSON.dat NonEqOpVX-VXgraphene_real_KPM_M256x256_statedefault.chebmom 
+          [T=1] graphene W=0 bloch kuboxx (random 32) wall   19.68 s  -> KuboGreenWood_NonEqOpVX-VXgraphene_bloch_KPM_M256x256_statedefaultJACKSON.dat NonEqOpVX-VXgraphene_bloch_KPM_M256x256_statedefault.chebmom 
+          [T=1] graphene W=0 bloch kuboxx (exact)  wall    2.21 s  -> KuboGreenWood_NonEqOpVX-VXgraphene_bloch_KPM_M256x256_stateexactJACKSON.dat NonEqOpVX-VXgraphene_bloch_KPM_M256x256_stateexact.chebmom 
+          [T=1] graphene W=0 eigen kuboxx (exact)  wall    2.20 s  -> KuboGreenWood_NonEqOpVX-VXgraphene_eigen_KPM_M256x256_stateexactJACKSON.dat NonEqOpVX-VXgraphene_eigen_KPM_M256x256_stateexact.chebmom 
+          [T=1] graphene W=1 real  kuboxx (random 32) wall   21.21 s  -> KuboGreenWood_NonEqOpVX-VXgraphene_real_KPM_M256x256_statedefaultJACKSON.dat NonEqOpVX-VXgraphene_real_KPM_M256x256_statedefault.chebmom 
+          [T=1] graphene W=1 bloch kuboxx (random 32) wall   23.75 s  -> KuboGreenWood_NonEqOpVX-VXgraphene_bloch_KPM_M256x256_statedefaultJACKSON.dat NonEqOpVX-VXgraphene_bloch_KPM_M256x256_statedefault.chebmom 
+INFO      [T=1 vs T=16] graphene/W0/bloch/dos/SpectralOp1graphene_bloch_KPM_M256_statedefault.chebmom identical
+INFO      [T=1 vs T=16] graphene/W0/bloch/dos/mean_SpectralOp1graphene_bloch_KPM_M256_statedefaultJACKSON.dat identical
+INFO      [T=1 vs T=16] graphene/W0/bloch/kuboxx/NonEqOpVX-VXgraphene_bloch_KPM_M256x256_statedefault.chebmom identical
+INFO      [T=1 vs T=16] graphene/W0/bloch/kuboxx/KuboGreenWood_NonEqOpVX-VXgraphene_bloch_KPM_M256x256_statedefaultJACKSON.dat identical
+INFO      [T=1 vs T=16] graphene/W0/blochx/dos/SpectralOp1graphene_bloch_KPM_M256_stateexact.chebmom identical
+INFO      [T=1 vs T=16] graphene/W0/blochx/dos/mean_SpectralOp1graphene_bloch_KPM_M256_stateexactJACKSON.dat identical
+INFO      [T=1 vs T=16] graphene/W0/blochx/kuboxx/NonEqOpVX-VXgraphene_bloch_KPM_M256x256_stateexact.chebmom identical
+INFO      [T=1 vs T=16] graphene/W0/blochx/kuboxx/KuboGreenWood_NonEqOpVX-VXgraphene_bloch_KPM_M256x256_stateexactJACKSON.dat identical
+INFO      [T=1 vs T=16] graphene/W0/eigen/dos/SpectralOp1graphene_eigen_KPM_M256_stateexact.chebmom identical
+INFO      [T=1 vs T=16] graphene/W0/eigen/dos/mean_SpectralOp1graphene_eigen_KPM_M256_stateexactJACKSON.dat identical
+INFO      [T=1 vs T=16] graphene/W0/eigen/kuboxx/NonEqOpVX-VXgraphene_eigen_KPM_M256x256_stateexact.chebmom identical
+INFO      [T=1 vs T=16] graphene/W0/eigen/kuboxx/KuboGreenWood_NonEqOpVX-VXgraphene_eigen_KPM_M256x256_stateexactJACKSON.dat identical
+IDENTICAL [T=1 vs T=16] graphene/W0/real/dos/SpectralOp1graphene_real_KPM_M256_statedefault.chebmom
+IDENTICAL [T=1 vs T=16] graphene/W0/real/dos/mean_SpectralOp1graphene_real_KPM_M256_statedefaultJACKSON.dat
+IDENTICAL [T=1 vs T=16] graphene/W0/real/kuboxx/NonEqOpVX-VXgraphene_real_KPM_M256x256_statedefault.chebmom
+IDENTICAL [T=1 vs T=16] graphene/W0/real/kuboxx/KuboGreenWood_NonEqOpVX-VXgraphene_real_KPM_M256x256_statedefaultJACKSON.dat
+INFO      [T=1 vs T=16] graphene/W1/bloch/dos/SpectralOp1graphene_bloch_KPM_M256_statedefault.chebmom identical
+INFO      [T=1 vs T=16] graphene/W1/bloch/dos/mean_SpectralOp1graphene_bloch_KPM_M256_statedefaultJACKSON.dat identical
+INFO      [T=1 vs T=16] graphene/W1/bloch/kuboxx/NonEqOpVX-VXgraphene_bloch_KPM_M256x256_statedefault.chebmom identical
+INFO      [T=1 vs T=16] graphene/W1/bloch/kuboxx/KuboGreenWood_NonEqOpVX-VXgraphene_bloch_KPM_M256x256_statedefaultJACKSON.dat identical
+IDENTICAL [T=1 vs T=16] graphene/W1/real/dos/SpectralOp1graphene_real_KPM_M256_statedefault.chebmom
+IDENTICAL [T=1 vs T=16] graphene/W1/real/dos/mean_SpectralOp1graphene_real_KPM_M256_statedefaultJACKSON.dat
+IDENTICAL [T=1 vs T=16] graphene/W1/real/kuboxx/NonEqOpVX-VXgraphene_real_KPM_M256x256_statedefault.chebmom
+IDENTICAL [T=1 vs T=16] graphene/W1/real/kuboxx/KuboGreenWood_NonEqOpVX-VXgraphene_real_KPM_M256x256_statedefaultJACKSON.dat
+   haldane: window [-3.3000000000, 3.3000000000] (W=0), [-3.8500000000, 3.8500000000] (W=1); broadening 40.4970928 meV (W=0), 47.2466083 meV (W=1); M=256, 32 random-phase states seed 12345, disorder seed 7
+          PASS  CONV haldane 6x4x1 dense B = exp(-i k.(R+tau))/sqrt(Nk) (implemented sign, gated): RealToBloch vs B x 3.589e-15, BlochToReal vs B^+ x 3.309e-15 (tol 1e-12)
+          INFO  CONV haldane 6x4x1 dense B = exp(+i k.(R+tau))/sqrt(Nk) (brief.md sign, reported): RealToBloch vs B x 1.523e+00, BlochToReal vs B^+ x 1.455e+00
+          FAIL  CONV haldane 6x4x1 lsquant supercell CSR vs wannier2sparse CSR: H 1.142e+00, VX 1.069e+00 (tol 1e-12)
+          INFO  CONV haldane 6x4x1 localisation: lsquant CSR with the cell index renumbered n1-fastest (n1 + N1 n2) vs wannier2sparse CSR: H 1.793e-16, VX 1.938e-16
+          PASS  CONV haldane 48x48x1 max|B^+ B x - x|/max|x| = 3.883e-16 (tol 1e-12)
+          FAIL  CONV haldane 48x48x1 lsquant supercell CSR vs wannier2sparse CSR: H 4.592e-01, VX 7.165e-01 (tol 1e-12)
+          INFO  CONV haldane 48x48x1 localisation: lsquant CSR with the cell index renumbered n1-fastest (n1 + N1 n2) vs wannier2sparse CSR: H 2.831e-16, VX 3.274e-16
+          FAIL  CONV haldane 48x48x1 B H_w2s B^+ x vs H_k x: 5.076e-01 (tol 1e-10)
+          FAIL  CONV haldane 48x48x1 B VX_w2s B^+ x vs v_x(k) x: 9.117e-01 (tol 1e-10, brief.md section 3)
+          [T=16] haldane W=0 real  dos (random 32)  wall    2.99 s  -> mean_SpectralOp1haldane_real_KPM_M256_statedefaultJACKSON.dat SpectralOp1haldane_real_KPM_M256_statedefault.chebmom 
+          [T=16] haldane W=0 bloch dos (random 32)  wall    2.81 s  -> mean_SpectralOp1haldane_bloch_KPM_M256_statedefaultJACKSON.dat SpectralOp1haldane_bloch_KPM_M256_statedefault.chebmom 
+          [T=16] haldane W=0 bloch dos (exact)      wall    1.87 s  -> mean_SpectralOp1haldane_bloch_KPM_M256_stateexactJACKSON.dat SpectralOp1haldane_bloch_KPM_M256_stateexact.chebmom 
+          [T=16] haldane W=0 eigen dos (exact)      wall    1.89 s  -> mean_SpectralOp1haldane_eigen_KPM_M256_stateexactJACKSON.dat SpectralOp1haldane_eigen_KPM_M256_stateexact.chebmom 
+          [T=16] haldane W=1 real  dos (random 32)  wall    2.61 s  -> mean_SpectralOp1haldane_real_KPM_M256_statedefaultJACKSON.dat SpectralOp1haldane_real_KPM_M256_statedefault.chebmom 
+          [T=16] haldane W=1 bloch dos (random 32)  wall    8.08 s  -> mean_SpectralOp1haldane_bloch_KPM_M256_statedefaultJACKSON.dat SpectralOp1haldane_bloch_KPM_M256_statedefault.chebmom 
+          [T=16] haldane W=0 real  kuboxx (random 32) wall   33.46 s  -> KuboGreenWood_NonEqOpVX-VXhaldane_real_KPM_M256x256_statedefaultJACKSON.dat NonEqOpVX-VXhaldane_real_KPM_M256x256_statedefault.chebmom 
+          [T=16] haldane W=0 bloch kuboxx (random 32) wall   27.94 s  -> KuboGreenWood_NonEqOpVX-VXhaldane_bloch_KPM_M256x256_statedefaultJACKSON.dat NonEqOpVX-VXhaldane_bloch_KPM_M256x256_statedefault.chebmom 
+          [T=16] haldane W=0 bloch kuboxx (exact)   wall    2.32 s  -> KuboGreenWood_NonEqOpVX-VXhaldane_bloch_KPM_M256x256_stateexactJACKSON.dat NonEqOpVX-VXhaldane_bloch_KPM_M256x256_stateexact.chebmom 
+          [T=16] haldane W=0 eigen kuboxx (exact)   wall    2.93 s  -> KuboGreenWood_NonEqOpVX-VXhaldane_eigen_KPM_M256x256_stateexactJACKSON.dat NonEqOpVX-VXhaldane_eigen_KPM_M256x256_stateexact.chebmom 
+          [T=16] haldane W=1 real  kuboxx (random 32) wall   34.03 s  -> KuboGreenWood_NonEqOpVX-VXhaldane_real_KPM_M256x256_statedefaultJACKSON.dat NonEqOpVX-VXhaldane_real_KPM_M256x256_statedefault.chebmom 
+          [T=16] haldane W=1 bloch kuboxx (random 32) wall   53.96 s  -> KuboGreenWood_NonEqOpVX-VXhaldane_bloch_KPM_M256x256_statedefaultJACKSON.dat NonEqOpVX-VXhaldane_bloch_KPM_M256x256_statedefault.chebmom 
+          [T=1] haldane W=0 real  dos (random 32)  wall    2.83 s  -> mean_SpectralOp1haldane_real_KPM_M256_statedefaultJACKSON.dat SpectralOp1haldane_real_KPM_M256_statedefault.chebmom 
+          [T=1] haldane W=0 bloch dos (random 32)  wall    2.23 s  -> mean_SpectralOp1haldane_bloch_KPM_M256_statedefaultJACKSON.dat SpectralOp1haldane_bloch_KPM_M256_statedefault.chebmom 
+          [T=1] haldane W=0 bloch dos (exact)      wall    1.68 s  -> mean_SpectralOp1haldane_bloch_KPM_M256_stateexactJACKSON.dat SpectralOp1haldane_bloch_KPM_M256_stateexact.chebmom 
+          [T=1] haldane W=0 eigen dos (exact)      wall    1.69 s  -> mean_SpectralOp1haldane_eigen_KPM_M256_stateexactJACKSON.dat SpectralOp1haldane_eigen_KPM_M256_stateexact.chebmom 
+          [T=1] haldane W=1 real  dos (random 32)  wall    3.21 s  -> mean_SpectralOp1haldane_real_KPM_M256_statedefaultJACKSON.dat SpectralOp1haldane_real_KPM_M256_statedefault.chebmom 
+          [T=1] haldane W=1 bloch dos (random 32)  wall    4.17 s  -> mean_SpectralOp1haldane_bloch_KPM_M256_statedefaultJACKSON.dat SpectralOp1haldane_bloch_KPM_M256_statedefault.chebmom 
+          [T=1] haldane W=0 real  kuboxx (random 32) wall   21.73 s  -> KuboGreenWood_NonEqOpVX-VXhaldane_real_KPM_M256x256_statedefaultJACKSON.dat NonEqOpVX-VXhaldane_real_KPM_M256x256_statedefault.chebmom 
+          [T=1] haldane W=0 bloch kuboxx (random 32) wall   19.51 s  -> KuboGreenWood_NonEqOpVX-VXhaldane_bloch_KPM_M256x256_statedefaultJACKSON.dat NonEqOpVX-VXhaldane_bloch_KPM_M256x256_statedefault.chebmom 
+          [T=1] haldane W=0 bloch kuboxx (exact)   wall    2.50 s  -> KuboGreenWood_NonEqOpVX-VXhaldane_bloch_KPM_M256x256_stateexactJACKSON.dat NonEqOpVX-VXhaldane_bloch_KPM_M256x256_stateexact.chebmom 
+          [T=1] haldane W=0 eigen kuboxx (exact)   wall    2.67 s  -> KuboGreenWood_NonEqOpVX-VXhaldane_eigen_KPM_M256x256_stateexactJACKSON.dat NonEqOpVX-VXhaldane_eigen_KPM_M256x256_stateexact.chebmom 
+          [T=1] haldane W=1 real  kuboxx (random 32) wall   21.84 s  -> KuboGreenWood_NonEqOpVX-VXhaldane_real_KPM_M256x256_statedefaultJACKSON.dat NonEqOpVX-VXhaldane_real_KPM_M256x256_statedefault.chebmom 
+          [T=1] haldane W=1 bloch kuboxx (random 32) wall   22.65 s  -> KuboGreenWood_NonEqOpVX-VXhaldane_bloch_KPM_M256x256_statedefaultJACKSON.dat NonEqOpVX-VXhaldane_bloch_KPM_M256x256_statedefault.chebmom 
+INFO      [T=1 vs T=16] haldane/W0/bloch/dos/SpectralOp1haldane_bloch_KPM_M256_statedefault.chebmom identical
+INFO      [T=1 vs T=16] haldane/W0/bloch/dos/mean_SpectralOp1haldane_bloch_KPM_M256_statedefaultJACKSON.dat identical
+INFO      [T=1 vs T=16] haldane/W0/bloch/kuboxx/NonEqOpVX-VXhaldane_bloch_KPM_M256x256_statedefault.chebmom identical
+INFO      [T=1 vs T=16] haldane/W0/bloch/kuboxx/KuboGreenWood_NonEqOpVX-VXhaldane_bloch_KPM_M256x256_statedefaultJACKSON.dat identical
+INFO      [T=1 vs T=16] haldane/W0/blochx/dos/SpectralOp1haldane_bloch_KPM_M256_stateexact.chebmom identical
+INFO      [T=1 vs T=16] haldane/W0/blochx/dos/mean_SpectralOp1haldane_bloch_KPM_M256_stateexactJACKSON.dat identical
+INFO      [T=1 vs T=16] haldane/W0/blochx/kuboxx/NonEqOpVX-VXhaldane_bloch_KPM_M256x256_stateexact.chebmom identical
+INFO      [T=1 vs T=16] haldane/W0/blochx/kuboxx/KuboGreenWood_NonEqOpVX-VXhaldane_bloch_KPM_M256x256_stateexactJACKSON.dat identical
+INFO      [T=1 vs T=16] haldane/W0/eigen/dos/SpectralOp1haldane_eigen_KPM_M256_stateexact.chebmom identical
+INFO      [T=1 vs T=16] haldane/W0/eigen/dos/mean_SpectralOp1haldane_eigen_KPM_M256_stateexactJACKSON.dat identical
+INFO      [T=1 vs T=16] haldane/W0/eigen/kuboxx/NonEqOpVX-VXhaldane_eigen_KPM_M256x256_stateexact.chebmom identical
+INFO      [T=1 vs T=16] haldane/W0/eigen/kuboxx/KuboGreenWood_NonEqOpVX-VXhaldane_eigen_KPM_M256x256_stateexactJACKSON.dat identical
+IDENTICAL [T=1 vs T=16] haldane/W0/real/dos/SpectralOp1haldane_real_KPM_M256_statedefault.chebmom
+IDENTICAL [T=1 vs T=16] haldane/W0/real/dos/mean_SpectralOp1haldane_real_KPM_M256_statedefaultJACKSON.dat
+IDENTICAL [T=1 vs T=16] haldane/W0/real/kuboxx/NonEqOpVX-VXhaldane_real_KPM_M256x256_statedefault.chebmom
+IDENTICAL [T=1 vs T=16] haldane/W0/real/kuboxx/KuboGreenWood_NonEqOpVX-VXhaldane_real_KPM_M256x256_statedefaultJACKSON.dat
+INFO      [T=1 vs T=16] haldane/W1/bloch/dos/SpectralOp1haldane_bloch_KPM_M256_statedefault.chebmom identical
+INFO      [T=1 vs T=16] haldane/W1/bloch/dos/mean_SpectralOp1haldane_bloch_KPM_M256_statedefaultJACKSON.dat identical
+INFO      [T=1 vs T=16] haldane/W1/bloch/kuboxx/NonEqOpVX-VXhaldane_bloch_KPM_M256x256_statedefault.chebmom identical
+INFO      [T=1 vs T=16] haldane/W1/bloch/kuboxx/KuboGreenWood_NonEqOpVX-VXhaldane_bloch_KPM_M256x256_statedefaultJACKSON.dat identical
+IDENTICAL [T=1 vs T=16] haldane/W1/real/dos/SpectralOp1haldane_real_KPM_M256_statedefault.chebmom
+IDENTICAL [T=1 vs T=16] haldane/W1/real/dos/mean_SpectralOp1haldane_real_KPM_M256_statedefaultJACKSON.dat
+IDENTICAL [T=1 vs T=16] haldane/W1/real/kuboxx/NonEqOpVX-VXhaldane_real_KPM_M256x256_statedefault.chebmom
+IDENTICAL [T=1 vs T=16] haldane/W1/real/kuboxx/KuboGreenWood_NonEqOpVX-VXhaldane_real_KPM_M256x256_statedefaultJACKSON.dat
+   tolerance table, T=16
+          INFO  graphene DOS real     written .dat vs recomputed curve: nrel 2.42e-06 (6-digit text)
+          INFO  graphene DOS bloch    written .dat vs recomputed curve: nrel 2.42e-06 (6-digit text)
+          INFO  graphene DOS blochx   written .dat vs recomputed curve: nrel 2.49e-06 (6-digit text)
+          INFO  graphene DOS eigen    written .dat vs recomputed curve: nrel 2.49e-06 (6-digit text)
+          INFO  graphene DOS W1 real  written .dat vs recomputed curve: nrel 3.59e-06 (6-digit text)
+          INFO  graphene DOS W1 bloch written .dat vs recomputed curve: nrel 3.59e-06 (6-digit text)
+          PASS  graphene DOS W=0 real vs bloch moments (random 32, seed 12345): nrel 2.465e-14 (tol 1e-09); prel 6.253e-12
+          INFO  graphene DOS W=0 real vs bloch curve: nrel 1.694e-14
+          PASS  graphene DOS W=0 bloch(exact) vs eigen curve: nrel 1.925e-15 (tol 1e-08); moments nrel 1.360e-15
+          INFO  graphene DOS W=0 bloch(random 32) vs eigen curve: nrel 2.938e-02 (stochastic trace error)
+          INFO  graphene DOS W=0 real(random 32) vs eigen curve: nrel 2.938e-02 (stochastic trace error)
+          FAIL  graphene DOS W=0 real   vs G9 on |E|<2.5: nrel 1.520e-01 at E=-1.001 (tol 2e-02); prel 3.870e-01
+          FAIL  graphene DOS W=0 bloch  vs G9 on |E|<2.5: nrel 1.520e-01 at E=-1.001 (tol 2e-02); prel 3.870e-01
+          FAIL  graphene DOS W=0 blochx vs G9 on |E|<2.5: nrel 1.221e-01 at E=+0.999 (tol 2e-02); prel 4.385e-01
+          FAIL  graphene DOS W=0 eigen  vs G9 on |E|<2.5: nrel 1.221e-01 at E=+0.999 (tol 2e-02); prel 4.385e-01
+          INFO  graphene DOS W=0 eigen vs G9 over the whole KPM grid |E| <= 3.135: nrel 1.221e-01
+          INFO  graphene DOS W=0 independent moments (hr_exactdiag H(k) + wannier2sparse VX, Gamma mesh n/48, exact): eigen nrel 2.442e-14, bloch(exact) nrel 2.442e-14, real(random 32) nrel 1.446e-02, bloch(random 32) nrel 1.446e-02
+          INFO  graphene DOS W=0 mesh effect: G9 (mesh (i+1/2)/48) vs the same Gaussian formula on the Gamma mesh n/48: nrel 8.479e-02 on the mask
+          INFO  graphene DOS W=0 kernel effect: eigen (Jackson, M=256) vs Gaussian on the Gamma mesh n/48: nrel 3.281e-02 on the mask
+          INFO  graphene DOS W=0 eigen vs G9 on the mask without |(|E| - E_vH)| <= 0.15 eV (E_vH = 1.000, M-point energies): nrel 1.297e-01 at E=-1.183; real 1.379e-01, bloch 1.379e-01
+          PASS  graphene DOS W=1 (seed 7) real vs bloch moments (random 32, seed 12345): nrel 2.105e-14 (tol 1e-09); prel 1.800e-12
+          INFO  graphene DOS W=1 real vs bloch curve: nrel 2.145e-14
+          INFO  graphene DOS W=1 eigen: skipped as codex.md 2.4 directs (no per-k eigenbasis with disorder; N_k W = 4608)
+          INFO  graphene sigma_xx real     written .dat vs recomputed curve: nrel 1.19e-06 (6-digit text)
+          INFO  graphene sigma_xx bloch    written .dat vs recomputed curve: nrel 1.19e-06 (6-digit text)
+          INFO  graphene sigma_xx blochx   written .dat vs recomputed curve: nrel 1.23e-06 (6-digit text)
+          INFO  graphene sigma_xx eigen    written .dat vs recomputed curve: nrel 1.23e-06 (6-digit text)
+          INFO  graphene sigma_xx W1 real  written .dat vs recomputed curve: nrel 5.26e-07 (6-digit text)
+          INFO  graphene sigma_xx W1 bloch written .dat vs recomputed curve: nrel 5.26e-07 (6-digit text)
+          PASS  graphene sigma_xx W=0 real vs bloch moments (random 32, seed 12345): nrel 2.425e-15 (tol 1e-09); prel 1.273e-10
+          INFO  graphene sigma_xx W=0 real vs bloch curve: nrel 4.649e-15
+          PASS  graphene sigma_xx W=0 bloch(exact) vs eigen curve: nrel 2.890e-15 (tol 1e-08); moments nrel 5.542e-15
+          INFO  graphene sigma_xx W=0 bloch(random 32) vs eigen curve: nrel 4.365e-02 (stochastic trace error)
+          INFO  graphene sigma_xx W=0 real(random 32) vs eigen curve: nrel 4.365e-02 (stochastic trace error)
+          INFO  graphene sigma_xx units: analytic factor 2 pi/(A_hr N_k) = 2.099305e-03 (A_hr = 1.299038, true cell area 2.598076), least squares 1.608725e-03, ratio 0.76631
+          FAIL  graphene sigma_xx W=0 real   vs G9 on |E|<2.5: nrel 8.076e-01 at E=-0.996 (tol 5e-02); prel 8.385e-01
+          FAIL  graphene sigma_xx W=0 bloch  vs G9 on |E|<2.5: nrel 8.076e-01 at E=-0.996 (tol 5e-02); prel 8.385e-01
+          FAIL  graphene sigma_xx W=0 blochx vs G9 on |E|<2.5: nrel 7.684e-01 at E=+0.996 (tol 5e-02); prel 8.284e-01
+          FAIL  graphene sigma_xx W=0 eigen  vs G9 on |E|<2.5: nrel 7.684e-01 at E=+0.996 (tol 5e-02); prel 8.284e-01
+          INFO  graphene sigma_xx W=0 eigen vs G9 over the whole KPM grid |E| <= 3.135: nrel 7.684e-01
+          INFO  graphene sigma_xx W=0 independent moments (hr_exactdiag H(k) + wannier2sparse VX, Gamma mesh n/48, exact): eigen nrel 1.146e-14, bloch(exact) nrel 1.109e-14, real(random 32) nrel 9.478e-03, bloch(random 32) nrel 9.478e-03
+          INFO  graphene sigma_xx W=0 mesh effect: G9 (mesh (i+1/2)/48) vs the same Gaussian formula on the Gamma mesh n/48: nrel 6.129e-01 on the mask
+          INFO  graphene sigma_xx W=0 kernel effect: eigen (Jackson, M=256) vs Gaussian on the Gamma mesh n/48: nrel 2.758e-01 on the mask
+          INFO  graphene sigma_xx W=0 eigen vs G9 on the mask without |(|E| - E_vH)| <= 0.15 eV (E_vH = 1.000, M-point energies): nrel 5.597e-01 at E=+1.242; real 5.748e-01, bloch 5.748e-01
+          PASS  graphene sigma_xx W=1 (seed 7) real vs bloch moments (random 32, seed 12345): nrel 3.869e-16 (tol 1e-09); prel 3.346e-12
+          INFO  graphene sigma_xx W=1 real vs bloch curve: nrel 2.527e-15
+          INFO  graphene sigma_xx W=1 eigen: skipped as codex.md 2.4 directs (no per-k eigenbasis with disorder; N_k W = 4608)
+          INFO  haldane DOS real     written .dat vs recomputed curve: nrel 1.79e-06 (6-digit text)
+          INFO  haldane DOS bloch    written .dat vs recomputed curve: nrel 1.79e-06 (6-digit text)
+          INFO  haldane DOS blochx   written .dat vs recomputed curve: nrel 1.81e-06 (6-digit text)
+          INFO  haldane DOS eigen    written .dat vs recomputed curve: nrel 1.81e-06 (6-digit text)
+          INFO  haldane DOS W1 real  written .dat vs recomputed curve: nrel 2.89e-06 (6-digit text)
+          INFO  haldane DOS W1 bloch written .dat vs recomputed curve: nrel 2.89e-06 (6-digit text)
+          PASS  haldane DOS W=0 real vs bloch moments (random 32, seed 12345): nrel 2.465e-14 (tol 1e-09); prel 9.021e-12
+          INFO  haldane DOS W=0 real vs bloch curve: nrel 1.254e-14
+          PASS  haldane DOS W=0 bloch(exact) vs eigen curve: nrel 1.858e-15 (tol 1e-08); moments nrel 2.319e-15
+          INFO  haldane DOS W=0 bloch(random 32) vs eigen curve: nrel 1.450e-02 (stochastic trace error)
+          INFO  haldane DOS W=0 real(random 32) vs eigen curve: nrel 1.450e-02 (stochastic trace error)
+          FAIL  haldane DOS W=0 real   vs G9 on 0.5<|E|<2.5: nrel 3.670e-02 at E=+2.003 (tol 2e-02); prel 1.000e+00
+          FAIL  haldane DOS W=0 bloch  vs G9 on 0.5<|E|<2.5: nrel 3.670e-02 at E=+2.003 (tol 2e-02); prel 1.000e+00
+          FAIL  haldane DOS W=0 blochx vs G9 on 0.5<|E|<2.5: nrel 2.851e-02 at E=+2.110 (tol 2e-02); prel 1.000e+00
+          FAIL  haldane DOS W=0 eigen  vs G9 on 0.5<|E|<2.5: nrel 2.851e-02 at E=+2.110 (tol 2e-02); prel 1.000e+00
+          INFO  haldane DOS W=0 eigen vs G9 over the whole KPM grid |E| <= 3.135: nrel 4.979e-02
+          INFO  haldane DOS W=0 independent moments (hr_exactdiag H(k) + wannier2sparse VX, Gamma mesh n/48, exact): eigen nrel 2.442e-14, bloch(exact) nrel 2.442e-14, real(random 32) nrel 1.065e-02, bloch(random 32) nrel 1.065e-02
+          INFO  haldane DOS W=0 mesh effect: G9 (mesh (i+1/2)/48) vs the same Gaussian formula on the Gamma mesh n/48: nrel 1.353e-02 on the mask
+          INFO  haldane DOS W=0 kernel effect: eigen (Jackson, M=256) vs Gaussian on the Gamma mesh n/48: nrel 2.234e-02 on the mask
+          INFO  haldane DOS W=0 eigen vs G9 on the mask without |(|E| - E_vH)| <= 0.15 eV (E_vH = 1.000, M-point energies): nrel 4.844e-02 at E=+2.110; real 6.235e-02, bloch 6.235e-02
+          PASS  haldane DOS W=1 (seed 7) real vs bloch moments (random 32, seed 12345): nrel 2.172e-14 (tol 1e-09); prel 2.695e-12
+          INFO  haldane DOS W=1 real vs bloch curve: nrel 1.770e-14
+          INFO  haldane DOS W=1 eigen: skipped as codex.md 2.4 directs (no per-k eigenbasis with disorder; N_k W = 4608)
+          INFO  haldane sigma_xx real     written .dat vs recomputed curve: nrel 1.61e-06 (6-digit text)
+          INFO  haldane sigma_xx bloch    written .dat vs recomputed curve: nrel 1.61e-06 (6-digit text)
+          INFO  haldane sigma_xx blochx   written .dat vs recomputed curve: nrel 1.59e-06 (6-digit text)
+          INFO  haldane sigma_xx eigen    written .dat vs recomputed curve: nrel 1.59e-06 (6-digit text)
+          INFO  haldane sigma_xx W1 real  written .dat vs recomputed curve: nrel 5.99e-07 (6-digit text)
+          INFO  haldane sigma_xx W1 bloch written .dat vs recomputed curve: nrel 5.99e-07 (6-digit text)
+          PASS  haldane sigma_xx W=0 real vs bloch moments (random 32, seed 12345): nrel 2.216e-15 (tol 1e-09); prel 9.533e-11
+          INFO  haldane sigma_xx W=0 real vs bloch curve: nrel 5.866e-15
+          PASS  haldane sigma_xx W=0 bloch(exact) vs eigen curve: nrel 5.741e-15 (tol 1e-08); moments nrel 3.570e-15
+          INFO  haldane sigma_xx W=0 bloch(random 32) vs eigen curve: nrel 4.854e-02 (stochastic trace error)
+          INFO  haldane sigma_xx W=0 real(random 32) vs eigen curve: nrel 4.854e-02 (stochastic trace error)
+          INFO  haldane sigma_xx units: analytic factor 2 pi/(A_hr N_k) = 2.099305e-03 (A_hr = 1.299038, true cell area 2.598076), least squares 1.670020e-03, ratio 0.79551
+          FAIL  haldane sigma_xx W=0 real   vs G9 on 0.5<|E|<2.5: nrel 5.318e-01 at E=+2.004 (tol 5e-02); prel 1.000e+00
+          FAIL  haldane sigma_xx W=0 bloch  vs G9 on 0.5<|E|<2.5: nrel 5.318e-01 at E=+2.004 (tol 5e-02); prel 1.000e+00
+          FAIL  haldane sigma_xx W=0 blochx vs G9 on 0.5<|E|<2.5: nrel 4.773e-01 at E=-1.783 (tol 5e-02); prel 1.000e+00
+          FAIL  haldane sigma_xx W=0 eigen  vs G9 on 0.5<|E|<2.5: nrel 4.773e-01 at E=+1.783 (tol 5e-02); prel 1.000e+00
+          INFO  haldane sigma_xx W=0 eigen vs G9 over the whole KPM grid |E| <= 3.135: nrel 4.773e-01
+          INFO  haldane sigma_xx W=0 independent moments (hr_exactdiag H(k) + wannier2sparse VX, Gamma mesh n/48, exact): eigen nrel 9.792e-15, bloch(exact) nrel 9.588e-15, real(random 32) nrel 9.429e-03, bloch(random 32) nrel 9.429e-03
+          INFO  haldane sigma_xx W=0 mesh effect: G9 (mesh (i+1/2)/48) vs the same Gaussian formula on the Gamma mesh n/48: nrel 1.871e-01 on the mask
+          INFO  haldane sigma_xx W=0 kernel effect: eigen (Jackson, M=256) vs Gaussian on the Gamma mesh n/48: nrel 3.587e-01 on the mask
+          INFO  haldane sigma_xx W=0 eigen vs G9 on the mask without |(|E| - E_vH)| <= 0.15 eV (E_vH = 1.000, M-point energies): nrel 4.773e-01 at E=+1.783; real 5.318e-01, bloch 5.318e-01
+          PASS  haldane sigma_xx W=1 (seed 7) real vs bloch moments (random 32, seed 12345): nrel 4.899e-16 (tol 1e-09); prel 6.276e-12
+          INFO  haldane sigma_xx W=1 real vs bloch curve: nrel 2.332e-15
+          INFO  haldane sigma_xx W=1 eigen: skipped as codex.md 2.4 directs (no per-k eigenbasis with disorder; N_k W = 4608)
+   tolerance table, T=1
+          INFO  graphene DOS real     written .dat vs recomputed curve: nrel 2.42e-06 (6-digit text)
+          INFO  graphene DOS bloch    written .dat vs recomputed curve: nrel 2.42e-06 (6-digit text)
+          INFO  graphene DOS blochx   written .dat vs recomputed curve: nrel 2.49e-06 (6-digit text)
+          INFO  graphene DOS eigen    written .dat vs recomputed curve: nrel 2.49e-06 (6-digit text)
+          INFO  graphene DOS W1 real  written .dat vs recomputed curve: nrel 3.59e-06 (6-digit text)
+          INFO  graphene DOS W1 bloch written .dat vs recomputed curve: nrel 3.59e-06 (6-digit text)
+          PASS  graphene DOS W=0 real vs bloch moments (random 32, seed 12345): nrel 2.465e-14 (tol 1e-09); prel 6.253e-12
+          INFO  graphene DOS W=0 real vs bloch curve: nrel 1.694e-14
+          PASS  graphene DOS W=0 bloch(exact) vs eigen curve: nrel 1.925e-15 (tol 1e-08); moments nrel 1.360e-15
+          INFO  graphene DOS W=0 bloch(random 32) vs eigen curve: nrel 2.938e-02 (stochastic trace error)
+          INFO  graphene DOS W=0 real(random 32) vs eigen curve: nrel 2.938e-02 (stochastic trace error)
+          FAIL  graphene DOS W=0 real   vs G9 on |E|<2.5: nrel 1.520e-01 at E=-1.001 (tol 2e-02); prel 3.870e-01
+          FAIL  graphene DOS W=0 bloch  vs G9 on |E|<2.5: nrel 1.520e-01 at E=-1.001 (tol 2e-02); prel 3.870e-01
+          FAIL  graphene DOS W=0 blochx vs G9 on |E|<2.5: nrel 1.221e-01 at E=+0.999 (tol 2e-02); prel 4.385e-01
+          FAIL  graphene DOS W=0 eigen  vs G9 on |E|<2.5: nrel 1.221e-01 at E=+0.999 (tol 2e-02); prel 4.385e-01
+          INFO  graphene DOS W=0 eigen vs G9 over the whole KPM grid |E| <= 3.135: nrel 1.221e-01
+          INFO  graphene DOS W=0 independent moments (hr_exactdiag H(k) + wannier2sparse VX, Gamma mesh n/48, exact): eigen nrel 2.442e-14, bloch(exact) nrel 2.442e-14, real(random 32) nrel 1.446e-02, bloch(random 32) nrel 1.446e-02
+          INFO  graphene DOS W=0 mesh effect: G9 (mesh (i+1/2)/48) vs the same Gaussian formula on the Gamma mesh n/48: nrel 8.479e-02 on the mask
+          INFO  graphene DOS W=0 kernel effect: eigen (Jackson, M=256) vs Gaussian on the Gamma mesh n/48: nrel 3.281e-02 on the mask
+          INFO  graphene DOS W=0 eigen vs G9 on the mask without |(|E| - E_vH)| <= 0.15 eV (E_vH = 1.000, M-point energies): nrel 1.297e-01 at E=-1.183; real 1.379e-01, bloch 1.379e-01
+          PASS  graphene DOS W=1 (seed 7) real vs bloch moments (random 32, seed 12345): nrel 2.105e-14 (tol 1e-09); prel 1.800e-12
+          INFO  graphene DOS W=1 real vs bloch curve: nrel 2.145e-14
+          INFO  graphene DOS W=1 eigen: skipped as codex.md 2.4 directs (no per-k eigenbasis with disorder; N_k W = 4608)
+          INFO  graphene sigma_xx real     written .dat vs recomputed curve: nrel 1.19e-06 (6-digit text)
+          INFO  graphene sigma_xx bloch    written .dat vs recomputed curve: nrel 1.19e-06 (6-digit text)
+          INFO  graphene sigma_xx blochx   written .dat vs recomputed curve: nrel 1.23e-06 (6-digit text)
+          INFO  graphene sigma_xx eigen    written .dat vs recomputed curve: nrel 1.23e-06 (6-digit text)
+          INFO  graphene sigma_xx W1 real  written .dat vs recomputed curve: nrel 5.26e-07 (6-digit text)
+          INFO  graphene sigma_xx W1 bloch written .dat vs recomputed curve: nrel 5.26e-07 (6-digit text)
+          PASS  graphene sigma_xx W=0 real vs bloch moments (random 32, seed 12345): nrel 2.425e-15 (tol 1e-09); prel 1.273e-10
+          INFO  graphene sigma_xx W=0 real vs bloch curve: nrel 4.649e-15
+          PASS  graphene sigma_xx W=0 bloch(exact) vs eigen curve: nrel 2.890e-15 (tol 1e-08); moments nrel 5.542e-15
+          INFO  graphene sigma_xx W=0 bloch(random 32) vs eigen curve: nrel 4.365e-02 (stochastic trace error)
+          INFO  graphene sigma_xx W=0 real(random 32) vs eigen curve: nrel 4.365e-02 (stochastic trace error)
+          INFO  graphene sigma_xx units: analytic factor 2 pi/(A_hr N_k) = 2.099305e-03 (A_hr = 1.299038, true cell area 2.598076), least squares 1.608725e-03, ratio 0.76631
+          FAIL  graphene sigma_xx W=0 real   vs G9 on |E|<2.5: nrel 8.076e-01 at E=-0.996 (tol 5e-02); prel 8.385e-01
+          FAIL  graphene sigma_xx W=0 bloch  vs G9 on |E|<2.5: nrel 8.076e-01 at E=-0.996 (tol 5e-02); prel 8.385e-01
+          FAIL  graphene sigma_xx W=0 blochx vs G9 on |E|<2.5: nrel 7.684e-01 at E=+0.996 (tol 5e-02); prel 8.284e-01
+          FAIL  graphene sigma_xx W=0 eigen  vs G9 on |E|<2.5: nrel 7.684e-01 at E=+0.996 (tol 5e-02); prel 8.284e-01
+          INFO  graphene sigma_xx W=0 eigen vs G9 over the whole KPM grid |E| <= 3.135: nrel 7.684e-01
+          INFO  graphene sigma_xx W=0 independent moments (hr_exactdiag H(k) + wannier2sparse VX, Gamma mesh n/48, exact): eigen nrel 1.146e-14, bloch(exact) nrel 1.109e-14, real(random 32) nrel 9.478e-03, bloch(random 32) nrel 9.478e-03
+          INFO  graphene sigma_xx W=0 mesh effect: G9 (mesh (i+1/2)/48) vs the same Gaussian formula on the Gamma mesh n/48: nrel 6.129e-01 on the mask
+          INFO  graphene sigma_xx W=0 kernel effect: eigen (Jackson, M=256) vs Gaussian on the Gamma mesh n/48: nrel 2.758e-01 on the mask
+          INFO  graphene sigma_xx W=0 eigen vs G9 on the mask without |(|E| - E_vH)| <= 0.15 eV (E_vH = 1.000, M-point energies): nrel 5.597e-01 at E=+1.242; real 5.748e-01, bloch 5.748e-01
+          PASS  graphene sigma_xx W=1 (seed 7) real vs bloch moments (random 32, seed 12345): nrel 3.869e-16 (tol 1e-09); prel 3.346e-12
+          INFO  graphene sigma_xx W=1 real vs bloch curve: nrel 2.527e-15
+          INFO  graphene sigma_xx W=1 eigen: skipped as codex.md 2.4 directs (no per-k eigenbasis with disorder; N_k W = 4608)
+          INFO  haldane DOS real     written .dat vs recomputed curve: nrel 1.79e-06 (6-digit text)
+          INFO  haldane DOS bloch    written .dat vs recomputed curve: nrel 1.79e-06 (6-digit text)
+          INFO  haldane DOS blochx   written .dat vs recomputed curve: nrel 1.81e-06 (6-digit text)
+          INFO  haldane DOS eigen    written .dat vs recomputed curve: nrel 1.81e-06 (6-digit text)
+          INFO  haldane DOS W1 real  written .dat vs recomputed curve: nrel 2.89e-06 (6-digit text)
+          INFO  haldane DOS W1 bloch written .dat vs recomputed curve: nrel 2.89e-06 (6-digit text)
+          PASS  haldane DOS W=0 real vs bloch moments (random 32, seed 12345): nrel 2.465e-14 (tol 1e-09); prel 9.021e-12
+          INFO  haldane DOS W=0 real vs bloch curve: nrel 1.254e-14
+          PASS  haldane DOS W=0 bloch(exact) vs eigen curve: nrel 1.858e-15 (tol 1e-08); moments nrel 2.319e-15
+          INFO  haldane DOS W=0 bloch(random 32) vs eigen curve: nrel 1.450e-02 (stochastic trace error)
+          INFO  haldane DOS W=0 real(random 32) vs eigen curve: nrel 1.450e-02 (stochastic trace error)
+          FAIL  haldane DOS W=0 real   vs G9 on 0.5<|E|<2.5: nrel 3.670e-02 at E=+2.003 (tol 2e-02); prel 1.000e+00
+          FAIL  haldane DOS W=0 bloch  vs G9 on 0.5<|E|<2.5: nrel 3.670e-02 at E=+2.003 (tol 2e-02); prel 1.000e+00
+          FAIL  haldane DOS W=0 blochx vs G9 on 0.5<|E|<2.5: nrel 2.851e-02 at E=+2.110 (tol 2e-02); prel 1.000e+00
+          FAIL  haldane DOS W=0 eigen  vs G9 on 0.5<|E|<2.5: nrel 2.851e-02 at E=+2.110 (tol 2e-02); prel 1.000e+00
+          INFO  haldane DOS W=0 eigen vs G9 over the whole KPM grid |E| <= 3.135: nrel 4.979e-02
+          INFO  haldane DOS W=0 independent moments (hr_exactdiag H(k) + wannier2sparse VX, Gamma mesh n/48, exact): eigen nrel 2.442e-14, bloch(exact) nrel 2.442e-14, real(random 32) nrel 1.065e-02, bloch(random 32) nrel 1.065e-02
+          INFO  haldane DOS W=0 mesh effect: G9 (mesh (i+1/2)/48) vs the same Gaussian formula on the Gamma mesh n/48: nrel 1.353e-02 on the mask
+          INFO  haldane DOS W=0 kernel effect: eigen (Jackson, M=256) vs Gaussian on the Gamma mesh n/48: nrel 2.234e-02 on the mask
+          INFO  haldane DOS W=0 eigen vs G9 on the mask without |(|E| - E_vH)| <= 0.15 eV (E_vH = 1.000, M-point energies): nrel 4.844e-02 at E=+2.110; real 6.235e-02, bloch 6.235e-02
+          PASS  haldane DOS W=1 (seed 7) real vs bloch moments (random 32, seed 12345): nrel 2.172e-14 (tol 1e-09); prel 2.695e-12
+          INFO  haldane DOS W=1 real vs bloch curve: nrel 1.770e-14
+          INFO  haldane DOS W=1 eigen: skipped as codex.md 2.4 directs (no per-k eigenbasis with disorder; N_k W = 4608)
+          INFO  haldane sigma_xx real     written .dat vs recomputed curve: nrel 1.61e-06 (6-digit text)
+          INFO  haldane sigma_xx bloch    written .dat vs recomputed curve: nrel 1.61e-06 (6-digit text)
+          INFO  haldane sigma_xx blochx   written .dat vs recomputed curve: nrel 1.59e-06 (6-digit text)
+          INFO  haldane sigma_xx eigen    written .dat vs recomputed curve: nrel 1.59e-06 (6-digit text)
+          INFO  haldane sigma_xx W1 real  written .dat vs recomputed curve: nrel 5.99e-07 (6-digit text)
+          INFO  haldane sigma_xx W1 bloch written .dat vs recomputed curve: nrel 5.99e-07 (6-digit text)
+          PASS  haldane sigma_xx W=0 real vs bloch moments (random 32, seed 12345): nrel 2.216e-15 (tol 1e-09); prel 9.533e-11
+          INFO  haldane sigma_xx W=0 real vs bloch curve: nrel 5.866e-15
+          PASS  haldane sigma_xx W=0 bloch(exact) vs eigen curve: nrel 5.741e-15 (tol 1e-08); moments nrel 3.570e-15
+          INFO  haldane sigma_xx W=0 bloch(random 32) vs eigen curve: nrel 4.854e-02 (stochastic trace error)
+          INFO  haldane sigma_xx W=0 real(random 32) vs eigen curve: nrel 4.854e-02 (stochastic trace error)
+          INFO  haldane sigma_xx units: analytic factor 2 pi/(A_hr N_k) = 2.099305e-03 (A_hr = 1.299038, true cell area 2.598076), least squares 1.670020e-03, ratio 0.79551
+          FAIL  haldane sigma_xx W=0 real   vs G9 on 0.5<|E|<2.5: nrel 5.318e-01 at E=+2.004 (tol 5e-02); prel 1.000e+00
+          FAIL  haldane sigma_xx W=0 bloch  vs G9 on 0.5<|E|<2.5: nrel 5.318e-01 at E=+2.004 (tol 5e-02); prel 1.000e+00
+          FAIL  haldane sigma_xx W=0 blochx vs G9 on 0.5<|E|<2.5: nrel 4.773e-01 at E=-1.783 (tol 5e-02); prel 1.000e+00
+          FAIL  haldane sigma_xx W=0 eigen  vs G9 on 0.5<|E|<2.5: nrel 4.773e-01 at E=+1.783 (tol 5e-02); prel 1.000e+00
+          INFO  haldane sigma_xx W=0 eigen vs G9 over the whole KPM grid |E| <= 3.135: nrel 4.773e-01
+          INFO  haldane sigma_xx W=0 independent moments (hr_exactdiag H(k) + wannier2sparse VX, Gamma mesh n/48, exact): eigen nrel 9.792e-15, bloch(exact) nrel 9.588e-15, real(random 32) nrel 9.429e-03, bloch(random 32) nrel 9.429e-03
+          INFO  haldane sigma_xx W=0 mesh effect: G9 (mesh (i+1/2)/48) vs the same Gaussian formula on the Gamma mesh n/48: nrel 1.871e-01 on the mask
+          INFO  haldane sigma_xx W=0 kernel effect: eigen (Jackson, M=256) vs Gaussian on the Gamma mesh n/48: nrel 3.587e-01 on the mask
+          INFO  haldane sigma_xx W=0 eigen vs G9 on the mask without |(|E| - E_vH)| <= 0.15 eV (E_vH = 1.000, M-point energies): nrel 4.773e-01 at E=+1.783; real 5.318e-01, bloch 5.318e-01
+          PASS  haldane sigma_xx W=1 (seed 7) real vs bloch moments (random 32, seed 12345): nrel 4.899e-16 (tol 1e-09); prel 6.276e-12
+          INFO  haldane sigma_xx W=1 real vs bloch curve: nrel 2.332e-15
+          INFO  haldane sigma_xx W=1 eigen: skipped as codex.md 2.4 directs (no per-k eigenbasis with disorder; N_k W = 4608)
+   stage-5 outputs kept in /home/ICN2/jgarcia/s5work/s5out
+GREP      grep -rni "fftw" lsquant/core/chebyshev lsquant/io: empty
+== 149 files compared; failures: 37
+GATE FAIL (stage 5)
+
+real	53m34.052s
+user	534m50.776s
+sys	12m20.398s

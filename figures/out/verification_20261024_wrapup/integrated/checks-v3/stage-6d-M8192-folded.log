@@ -1,0 +1,69 @@
+(a) symbolic residuals: {'idempotent': '0', 's_self_adjoint': '0', 'hard_retained_eigenpairs': '0', 'shift_retained_eigenpairs': '0', 'hard_complement_zero': '0', 'physical_operator_equals_coefficient_form': '0', 'projected_identity': '0', 'hard_from_coefficient_hamiltonian': '0', 'shift_as_update': '0', 'hard_physical_hermitian': '0', 'shift_physical_hermitian': '0', 'projected_physical_hermitian': '0'}
+(a) symbolic forms: {'projector': C*W*C_dagger*S, 'projector_adjoint': S*C*W*C_dagger, 'hard': {'physical': S*C*W*D*C_dagger*S, 'generalised': X*S*C*W*D*C_dagger*S, 'lowdin': Y*S*C*W*D*C_dagger*S*Y, 'anticommutator': (S*C*W*D*C_dagger*S*X + X*S*C*W*D*C_dagger*S)/2}, 'shift': {'physical': S*C*D_shift*C_dagger*S, 'generalised': X*S*C*D_shift*C_dagger*S, 'lowdin': Y*S*C*D_shift*C_dagger*S*Y, 'anticommutator': (S*C*D_shift*C_dagger*S*X + X*S*C*D_shift*C_dagger*S)/2}, 'operator': {'physical': S*C*W*C_dagger*O*C*W*C_dagger*S, 'generalised': X*S*C*W*C_dagger*O*C*W*C_dagger*S, 'lowdin': Y*S*C*W*C_dagger*O*C*W*C_dagger*S*Y, 'anticommutator': (S*C*W*C_dagger*O*C*W*C_dagger*S*X + X*S*C*W*C_dagger*O*C*W*C_dagger*S)/2}, 'shift_update': H + S*C*(-D + D_shift)*C_dagger*S, 'identity': S*C*W*C_dagger*S*C*W*C_dagger*S, 'coefficient_operator': X*O, 'symbols': {'C': C, 'Cd': C_dagger, 'D': D, 'W': W, 'Ds': D_shift, 'O': O}}
+eigen JXSZ: Hermitian fold removed anti-Hermitian norm=8.1950629191487165e-16 operator_scale=3.6166282640050293 relative_norm=2.265940074823604e-16
+eigen VY: Hermitian fold removed anti-Hermitian norm=8.0234025036793695e-16 operator_scale=4.0000000000000044 relative_norm=2.0058506259198401e-16
+(b) lowdin unprojected exact-trace KPM M=8192 starting
+eigen JXSZ: Hermitian fold removed anti-Hermitian norm=9.6455365655006513e-16 operator_scale=3.6166282640050271 relative_norm=2.6669969544559319e-16
+eigen VY: Hermitian fold removed anti-Hermitian norm=8.7001846064972405e-16 operator_scale=3.9999999999999978 relative_norm=2.1750461516243114e-16
+Captured /home/jgarcia/lsquant-wrapup-20261024/checks-v3/6d-moments-1.npz moment_and_capture_seconds 43.90022091567516
+(b) lowdin unprojected KPM plateau=[2.000194574472356, 2.000194587199911, 2.000194523659089], oracle=[1.999923700484807, 1.999923700484807, 1.999923700484807]
+(b) lowdin shift exact-trace KPM M=8192 starting
+Captured /home/jgarcia/lsquant-wrapup-20261024/checks-v3/6d-moments-2.npz moment_and_capture_seconds 44.380880273878574
+(b) lowdin shift KPM plateau=[2.000214518745826, 2.0002145536237514, 2.000214514367278], oracle=[1.999923700484807, 1.999923700484807, 1.999923700484807]
+(b) lowdin spectral ranges 63 -> 6.1 eV; nominal fixed-M resolution gain=10.3278688525; pi*range/(2M)=0.0120800987046 -> 0.00116966035076 eV
+eigen JXSZ: Hermitian fold removed anti-Hermitian norm=8.1950629191487165e-16 operator_scale=3.6166282640050293 relative_norm=2.265940074823604e-16
+eigen VY: Hermitian fold removed anti-Hermitian norm=8.0234025036793695e-16 operator_scale=4.0000000000000044 relative_norm=2.0058506259198401e-16
+(b) generalised unprojected exact-trace KPM M=8192 starting
+eigen JXSZ: Hermitian fold removed anti-Hermitian norm=9.6455365655006513e-16 operator_scale=3.6166282640050271 relative_norm=2.6669969544559319e-16
+eigen VY: Hermitian fold removed anti-Hermitian norm=8.7001846064972405e-16 operator_scale=3.9999999999999978 relative_norm=2.1750461516243114e-16
+Captured /home/jgarcia/lsquant-wrapup-20261024/checks-v3/6d-moments-3.npz moment_and_capture_seconds 43.11111557856202
+(b) generalised unprojected KPM plateau=[2.000194574472356, 2.000194587199911, 2.000194523659089], oracle=[1.999923700484807, 1.999923700484807, 1.999923700484807]
+(b) generalised shift exact-trace KPM M=8192 starting
+Captured /home/jgarcia/lsquant-wrapup-20261024/checks-v3/6d-moments-4.npz moment_and_capture_seconds 42.286818750202656
+(b) generalised shift KPM plateau=[2.000214518745826, 2.0002145536237514, 2.000214514367278], oracle=[1.999923700484807, 1.999923700484807, 1.999923700484807]
+(b) generalised spectral ranges 63 -> 6.1 eV; nominal fixed-M resolution gain=10.3278688525; pi*range/(2M)=0.0120800987046 -> 0.00116966035076 eV
+(b) oracle comparisons: [
+  {
+    "route": "lowdin",
+    "kind": "hard",
+    "oracle": [
+      1.9999237004848127,
+      1.9999237004848127,
+      1.9999237004848127
+    ],
+    "oracle_error": 5.773159728050814e-15
+  },
+  {
+    "route": "lowdin",
+    "kind": "shift",
+    "oracle": [
+      1.9999237004848118,
+      1.9999237004848118,
+      1.9999237004848118
+    ],
+    "oracle_error": 4.884981308350689e-15
+  },
+  {
+    "route": "generalised",
+    "kind": "hard",
+    "oracle": [
+      1.9999237004848127,
+      1.9999237004848127,
+      1.9999237004848127
+    ],
+    "oracle_error": 5.773159728050814e-15
+  },
+  {
+    "route": "generalised",
+    "kind": "shift",
+    "oracle": [
+      1.9999237004848118,
+      1.9999237004848118,
+      1.9999237004848118
+    ],
+    "oracle_error": 4.884981308350689e-15
+  }
+]
+(c) orthogonal off-grid band validation: {'max_band_error_eV': 2.3092638912203256e-14, 'off_grid_points': 40, 'seed': 1}
+local untruncated/truncated: {'radius_Angstrom': None, 'fft_mesh': [4, 3, 1], 'interpolation_max_frobenius': 4.004555513382824e-15, 'truncation_max_frobenius': 0.0, 'retained_hoppings': 2160, 'untruncated_hoppings': 2160, 'certificate': 'training mesh; independent off-grid comparison reported separately'} {'radius_Angstrom': 0.0, 'fft_mesh': [4, 3, 1], 'interpolation_max_frobenius': 4.004555513382824e-15, 'truncation_max_frobenius': 10.440000000000007, 'retained_hoppings': 72, 'untruncated_hoppings': 2160, 'certificate': 'training mesh; independent off-grid comparison reported separately'}
+stage6d developer self-check reached all assertions; this is not a golden gate

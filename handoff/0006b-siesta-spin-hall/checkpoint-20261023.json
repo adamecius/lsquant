@@ -1,0 +1,96 @@
+{
+  "purpose": "Unmerged work-in-progress checkpoint requested by the maintainer. Existing artifacts preserved; no numerical closure is implied.",
+  "base_commit": "2c790f19320ad41abfee3043b00ee379f2fe35ac",
+  "source_checkout": "C:\\Users\\adame\\LSQUANT\\lsquant",
+  "raw_local_snapshot": "C:\\Users\\adame\\LSQUANT\\checkpoints\\20261023\\local-uncommitted.tar.gz",
+  "files": [
+    {
+      "path": "handoff/0006b-siesta-spin-hall/tests.md",
+      "sha256": "7f1a800ceb762d8d3679dbd0e63cfadb57d943eb84a6c0bc09347d300d3cca4f",
+      "original_source_sha256": "b783f3536f23286d2a2b5735bc1bc93f61e133344bd82224192a4c2ebcdde43f"
+    },
+    {
+      "path": "figures/out/kanemele_shc/fig_kanemele_shc.pdf",
+      "sha256": "39889aa96e40aa627b12f4bc02c7620bb3c58141fab8b36e335deb63e4413042",
+      "original_source_sha256": "39889aa96e40aa627b12f4bc02c7620bb3c58141fab8b36e335deb63e4413042"
+    },
+    {
+      "path": "figures/out/kanemele_shc/fig_kanemele_shc.png",
+      "sha256": "6c772c454077d59ebae43d1104fa19197d6e51d1a919b4df86b09b4623a0883e",
+      "original_source_sha256": "6c772c454077d59ebae43d1104fa19197d6e51d1a919b4df86b09b4623a0883e"
+    },
+    {
+      "path": "figures/out/kanemele_shc/summary.json",
+      "sha256": "1cde9e109e291c5c999b178a46f7d992097c3ffd1bed913e3163d3a3164d2aa5",
+      "original_source_sha256": "1cde9e109e291c5c999b178a46f7d992097c3ffd1bed913e3163d3a3164d2aa5"
+    },
+    {
+      "path": "figures/out/shc_bi/santiago_conductivity_sweep_2026-09-23.png",
+      "sha256": "b34adcdc57733fce973e71112debe41997573cf4e37f1e6b6713c724f6554739",
+      "original_source_sha256": "b34adcdc57733fce973e71112debe41997573cf4e37f1e6b6713c724f6554739"
+    },
+    {
+      "path": "figures/out/shc_bi/santiago_conductivity_W_sweep.jpg",
+      "sha256": "90b38b0ca539aaf93bc1bf6581b91fddfeddd5fd37a3f51843c0fb7e65b50e56",
+      "original_source_sha256": "90b38b0ca539aaf93bc1bf6581b91fddfeddd5fd37a3f51843c0fb7e65b50e56"
+    },
+    {
+      "path": "figures/out/shc_pdse2_wannier/bands_check.png",
+      "sha256": "7ddbaa44a846194ed6982f8ce59006c95c7ed38b44c3c79a221b5f41a2b069fa",
+      "original_source_sha256": "7ddbaa44a846194ed6982f8ce59006c95c7ed38b44c3c79a221b5f41a2b069fa"
+    },
+    {
+      "path": "figures/out/shc_pdse2_wannier/fig_pdse2_wannier_shc.png",
+      "sha256": "d10af48196c0efa436d3842b8ac1212568fa41563ecdd049ef1a2e65d3267536",
+      "original_source_sha256": "d10af48196c0efa436d3842b8ac1212568fa41563ecdd049ef1a2e65d3267536"
+    },
+    {
+      "path": "figures/out/shc_pdse2_wannier/fig_pdse2_wannier_shc_kpm_win.png",
+      "sha256": "19b7bd052e89b4b22dce5acb1215c1742ec1c4aa04c5db20c74e40a727e51f96",
+      "original_source_sha256": "19b7bd052e89b4b22dce5acb1215c1742ec1c4aa04c5db20c74e40a727e51f96"
+    },
+    {
+      "path": "figures/out/shc_pdse2_wannier/pdse2_bands.png",
+      "sha256": "8d4da81c926a00489593f6fe959641cc19d653c587762c308c52155809c16415",
+      "original_source_sha256": "8d4da81c926a00489593f6fe959641cc19d653c587762c308c52155809c16415"
+    },
+    {
+      "path": "figures/out/shc_pdse2_wannier/summary.json",
+      "sha256": "5337fa57e1c39965ef8094828c187056619531a602eeba04dd43a597178a4994",
+      "original_source_sha256": "5337fa57e1c39965ef8094828c187056619531a602eeba04dd43a597178a4994"
+    },
+    {
+      "path": "figures/out/verification_20261023/bi-disorder-progress.png",
+      "sha256": "b14b9a0f01080145668911a92c054db0fe1fd7af9664af816566ceb5f371cad8",
+      "original_source_sha256": "b14b9a0f01080145668911a92c054db0fe1fd7af9664af816566ceb5f371cad8"
+    },
+    {
+      "path": "handoff/0006b-siesta-spin-hall/checkpoint-gate-stage3.log",
+      "sha256": "3f7940e57004fe555e7174196fd02f70eedf38ad2355f2de7776cac525c35b1f"
+    }
+  ],
+  "validation": {
+    "branch": "handoff/0006b-dev",
+    "commit": "2c790f19320ad41abfee3043b00ee379f2fe35ac",
+    "step": "golden-stage3",
+    "returncode": 0,
+    "seconds": 378.37085795402527,
+    "log": "handoff/0006b-siesta-spin-hall/checkpoint-gate-stage3.log",
+    "seed": 12345,
+    "hostname": "fatnode-tacn",
+    "utc": "2026-10-23T13:30:58.907528Z",
+    "summary": "GATE PASS (stage 3)"
+  },
+  "sha256_convention": "SHA-256 of bytes stored in Git, after configured text line-ending normalization. original_source_sha256 records the original local snapshot bytes.",
+  "metadata_followup_validation": {
+    "returncode": 0,
+    "seed": 12345,
+    "seconds": 769.7430469989777,
+    "commit": "2c790f19320ad41abfee3043b00ee379f2fe35ac",
+    "note": "Fresh same-implementation regression before metadata-only follow-up; no source changes",
+    "hostname": "fatnode-tacn",
+    "summary": "47 files compared; failures: 0; GATE PASS (stage 3)",
+    "log_sha256": "3f7940e57004fe555e7174196fd02f70eedf38ad2355f2de7776cac525c35b1f",
+    "log_local_archive": "C:\\Users\\adame\\LSQUANT\\checkpoints\\20261023\\gate-receipts.tar.gz"
+  }
+}

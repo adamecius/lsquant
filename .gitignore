@@ -1,12 +1,16 @@
 .vscode*
 *.o
-build/
+build*/
 *.d
 .projectile
 .cache/
+.pytest_cache/
+.lsquant-cache/
 .venv/
 .venv-docs/
 __pycache__/
+*.pyc
+*.pyo
 
 # build artifacts
 a.out
@@ -15,20 +19,25 @@ a.out
 *.bin
 CMakeCache.txt
 CMakeFiles/
+compile_commands.json
 
 # generated transport data -- NEVER commit (regenerable cache)
 *.CSR
-*.chebmom
-*.chebmom1D
-*.chebmom2D
-*.chebmomTD
-# but keep the committed test fixtures (goldens + model operators)
-!test/golden/**
-!test/models/**
+*.chebmom*
+*.results.json
+*.report.html
+# keep the committed golden fixtures
+!goldens/**
 
-# Phase-F benchmark generated artifacts (regenerable; data ban)
+# example run outputs and generated figures
+/examples/**/out/
+/examples/**/*.png
+
+# benchmark generated artifacts
 bench/gr/
 bench/*.csv
 bench/run.log
 bench/fig_*.png
 bench/fig_*.pdf
+bench/block_domains/block_kpm
+bench/block_domains/*.o

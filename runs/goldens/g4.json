@@ -1,0 +1,49 @@
+{
+  "model": {
+    "kind": "csr",
+    "dir": "goldens/stage0/graphene/operators",
+    "label": "graphene_golden",
+    "operators": ["VX"]
+  },
+  "basis": {
+    "name": "real"
+  },
+  "metric": {
+    "policy": "orthogonal"
+  },
+  "word": "Tr[VX delta(E-H) VX dG-(E)/dE]",
+  "expansion": {
+    "moments": 64,
+    "window": "gershgorin",
+    "trace": "random",
+    "states": 1,
+    "seed": 12345
+  },
+  "reconstruction": {
+    "kernel": "jackson",
+    "broadening_meV": 64.0,
+    "formulas": ["bastin"],
+    "legacy_text_round_trip": true,
+    "targets": [
+      {
+        "formulas": ["sea", "surf"],
+        "broadening_meV": 10.0,
+        "subdir": "sea_surf",
+        "also_top_dir": true,
+        "legacy_text_round_trip": true
+      },
+      {
+        "formulas": ["greenwood_fft", "bastin_fft"],
+        "broadening_meV": 10.0,
+        "subdir": "fft_grid",
+        "also_top_dir": true,
+        "legacy_text_round_trip": true
+      }
+    ]
+  },
+  "output": {
+    "dir": "out/g4",
+    "legacy_names": true,
+    "legacy_layout": true
+  }
+}

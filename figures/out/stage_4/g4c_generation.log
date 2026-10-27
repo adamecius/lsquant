@@ -1,0 +1,56 @@
+== offcentre: BOUNDS '-3.5 2.5' (cwd /tmp/g4c_work/offcentre)
+$ KPM_SEED=12345 OMP_NUM_THREADS=16 /home/ICN2/jgarcia/lsquant-unified-0004/build_legacy/inline_compute-kpm-nonEqOp graphene_golden VX VY 128 exact
+exit 0
+
+[23:57:36.164] [INFO ] [139858137947136] saved moments in NonEqOpVX-VYgraphene_goldenKPM_M128x128_stateexact.chebmom2D
+End of program
+$ OMP_NUM_THREADS=16 /home/ICN2/jgarcia/lsquant-unified-0004/build_legacy/inline_kuboBastinFromChebmom NonEqOpVX-VYgraphene_goldenKPM_M128x128_stateexact.chebmom2D 10
+exit 0
+PARAMETERS: 256 3
+The program finished succesfully.
+total 820
+drwxr-xr-x 3 jgarcia Theoretical   4096 Oct 20 23:57 .
+drwxr-xr-x 4 jgarcia Theoretical   4096 Oct 20 23:57 ..
+-rw-r--r-- 1 jgarcia Theoretical    367 Oct 20 23:57 bastin.log
+-rw-r--r-- 1 jgarcia Theoretical      9 Oct 20 23:57 BOUNDS
+-rw-r--r-- 1 jgarcia Theoretical    924 Oct 20 23:57 exact
+-rw-r--r-- 1 jgarcia Theoretical  87082 Oct 20 23:57 KuboBastin_NonEqOpVX-VYgraphene_goldenKPM_M128x128_stateexactJACKSON.dat
+-rw-r--r-- 1 jgarcia Theoretical  27371 Oct 20 23:57 nonEq.log
+-rw-r--r-- 1 jgarcia Theoretical 693718 Oct 20 23:57 NonEqOpVX-VYgraphene_goldenKPM_M128x128_stateexact.chebmom2D
+drwxr-xr-x 2 jgarcia Theoretical   4096 Oct 20 23:57 operators
+256 6  -0.5
+128 128 
+-3.01667 1.30457e+136
+-3.01518 2.43882e+136
+2.68036 -1.8824e+138
+2.68185 -1.35179e+138
+803471d0a6d5d4ba65058be2bf12ae2992463ce4  NonEqOpVX-VYgraphene_goldenKPM_M128x128_stateexact.chebmom2D
+2ecc877aed644707bfaed82c23f5df66bdbc0777  KuboBastin_NonEqOpVX-VYgraphene_goldenKPM_M128x128_stateexactJACKSON.dat
+== offcentre_enclosing: BOUNDS '-8.5 7.5' (cwd /tmp/g4c_work/offcentre_enclosing)
+$ KPM_SEED=12345 OMP_NUM_THREADS=16 /home/ICN2/jgarcia/lsquant-unified-0004/build_legacy/inline_compute-kpm-nonEqOp graphene_golden VX VY 128 exact
+exit 0
+
+[23:57:44.508] [INFO ] [139736487926784] saved moments in NonEqOpVX-VYgraphene_goldenKPM_M128x128_stateexact.chebmom2D
+End of program
+$ OMP_NUM_THREADS=16 /home/ICN2/jgarcia/lsquant-unified-0004/build_legacy/inline_kuboBastinFromChebmom NonEqOpVX-VYgraphene_goldenKPM_M128x128_stateexact.chebmom2D 10
+exit 0
+PARAMETERS: 256 8
+The program finished succesfully.
+total 816
+drwxr-xr-x 3 jgarcia Theoretical   4096 Oct 20 23:57 .
+drwxr-xr-x 4 jgarcia Theoretical   4096 Oct 20 23:57 ..
+-rw-r--r-- 1 jgarcia Theoretical    367 Oct 20 23:57 bastin.log
+-rw-r--r-- 1 jgarcia Theoretical      9 Oct 20 23:57 BOUNDS
+-rw-r--r-- 1 jgarcia Theoretical    924 Oct 20 23:57 exact
+-rw-r--r-- 1 jgarcia Theoretical  80311 Oct 20 23:57 KuboBastin_NonEqOpVX-VYgraphene_goldenKPM_M128x128_stateexactJACKSON.dat
+-rw-r--r-- 1 jgarcia Theoretical  27372 Oct 20 23:57 nonEq.log
+-rw-r--r-- 1 jgarcia Theoretical 698527 Oct 20 23:57 NonEqOpVX-VYgraphene_goldenKPM_M128x128_stateexact.chebmom2D
+drwxr-xr-x 2 jgarcia Theoretical   4096 Oct 20 23:57 operators
+256 16  -0.5
+128 128 
+-7.6625 1.13415e-17
+-7.65854 2.09632e-17
+7.52958 -1.29746e-16
+7.53354 -1.42347e-16
+56e4343963cdaf59a7c314689539aa117400ee40  NonEqOpVX-VYgraphene_goldenKPM_M128x128_stateexact.chebmom2D
+2485ef131a1af1a3e61e79e753e5e5dcf7d0d35f  KuboBastin_NonEqOpVX-VYgraphene_goldenKPM_M128x128_stateexactJACKSON.dat

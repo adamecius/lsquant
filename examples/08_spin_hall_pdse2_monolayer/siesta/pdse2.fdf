@@ -1,0 +1,53 @@
+SystemName  PdSe2 monolayer, SOC (geometry of wannier2sparse example 05)
+SystemLabel pdse2
+
+NumberOfAtoms   6
+NumberOfSpecies 2
+%block ChemicalSpeciesLabel
+ 1 46 Pd
+ 2 34 Se
+%endblock ChemicalSpeciesLabel
+
+LatticeConstant 1.0 Ang
+%block LatticeVectors
+  5.75046066952370  0.00000000000000   0.00000000000000
+  0.00000000000000  5.91993495884138   0.00000000000000
+  0.00000000000000  0.00000000000000  16.45073988400000
+%endblock LatticeVectors
+
+AtomicCoordinatesFormat Ang
+%block AtomicCoordinatesAndAtomicSpecies
+  2.8752303408  5.9199349579  8.2253699393  1
+  5.7504606650  2.9599674717  8.2253699353  1
+  0.6341168942  0.7084520231  7.4779217190  2
+  3.5093472325  2.2515154512  8.9728181620  2
+  5.1163437707  5.2114829246  8.9728181579  2
+  2.2411134371  3.6684194970  7.4779217203  2
+%endblock AtomicCoordinatesAndAtomicSpecies
+
+PAO.BasisSize    DZP
+PAO.EnergyShift  150 meV
+
+XC.functional   GGA
+XC.authors      PBE
+Spin            spin-orbit
+
+MeshCutoff      400. Ry
+ElectronicTemperature 5 meV
+SolutionMethod  diagon
+Diag.ParallelOverK true
+
+%block kgrid.MonkhorstPack
+  12  0  0  0.0
+   0 12  0  0.0
+   0  0  1  0.0
+%endblock kgrid.MonkhorstPack
+
+SCF.DM.Tolerance    1.0E-5
+MaxSCFIterations    300
+DM.MixingWeight     0.05
+DM.NumberPulay      6
+DM.UseSaveDM        T
+
+SaveHS      true
+TS.HS.Save  true

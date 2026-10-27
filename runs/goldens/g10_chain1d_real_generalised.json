@@ -1,0 +1,44 @@
+{
+  "model": {
+    "kind": "csr",
+    "dir": "goldens/stage0/nonorth/chain1d/real",
+    "label": "chain1d",
+    "operators": [
+      "VX"
+    ]
+  },
+  "basis": {
+    "name": "real"
+  },
+  "metric": {
+    "policy": "nonorthogonal",
+    "route": "generalised",
+    "applier": "exact",
+    "order": 60,
+    "tol": 1e-13
+  },
+  "word": "Tr[delta(E-H)]",
+  "words": [
+    "Tr[delta(E-H)]",
+    "Tr[VX delta(E-H) VX delta(E-H)]"
+  ],
+  "expansion": {
+    "moments": 64,
+    "window": [
+      -2.0,
+      2.0
+    ],
+    "trace": "exact",
+    "states": 2048
+  },
+  "reconstruction": {
+    "kernel": "jackson",
+    "broadening_meV": 120.0
+  },
+  "output": {
+    "dir": "out/g10_chain1d_real_generalised",
+    "legacy_names": true,
+    "legacy_layout": true,
+    "write_chebmom": true
+  }
+}

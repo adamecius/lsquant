@@ -73,7 +73,7 @@ $$ [[ \text{closed form, e.g. } \rho(E) = \dots ]] $$
 [[One sentence naming the operator and the quantity its spectral function gives.]]
 
 ```bash
-[[inline_compute-kpm-spectralOp <label> <op> <M> <state>]]
+[[python -m lsquant run run_*.json --output-dir out]]
 ```
 
 [[One sentence: this evaluates <the trace or estimator>, and writes one file:]]
@@ -91,7 +91,7 @@ $$ [[ \text{closed form, e.g. } \rho(E) = \dots ]] $$
 -->
 
 ```bash
-[[python -c "import lsqplot; lsqplot.figure_*( ... )"   or   python lsqplot.py]]
+[[python plot.py /tmp/tut_out]]
 ```
 
 ![[[alt text stating what this figure shows]]](fig_[[name]].png)

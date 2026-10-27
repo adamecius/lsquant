@@ -1,0 +1,14 @@
+Merge made by the 'ort' strategy.
+ handoff/0004-time-evolution/report.md    | 300 ++++++++++++++++++++++++++++++-
+ lsquant/api/bindings.cpp                 |   4 +-
+ lsquant/core/chebyshev/moment_engine.cpp |   4 +-
+ lsquant/core/chebyshev/plan.hpp          |  28 +--
+ python/lsquant/_core.pyi                 |   6 +-
+ python/lsquant/apps/stage4_time.py       |   5 +-
+ python/lsquant/apps/tutorial02.py        |   5 +-
+ python/lsquant/apps/tutorial04.py        |   9 +-
+ python/lsquant/apps/tutorial05.py        |   7 +-
+ python/lsquant/moments.py                |   6 +-
+ python/lsquant/reconstruct.py            |  14 +-
+ tests/dev/stage_4_check.py               |  15 +-
+ 12 files changed, 355 insertions(+), 48 deletions(-)

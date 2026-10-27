@@ -1,0 +1,23 @@
+HEAD before merge: c01b026
+origin/handoff/0003-agi: 0774db7
+Updating c01b026..0774db7
+Fast-forward
+ handoff/0003-rank2-reconstruction/report.md   |  6 ++--
+ handoff/0003-rank2-reconstruction/review-1.md | 30 ++++++++++++++++
+ python/lsquant/apps/stage2_dos.py             |  2 +-
+ python/lsquant/apps/stage3_kubo.py            |  8 ++++-
+ python/lsquant/apps/tutorial01.py             |  2 +-
+ python/lsquant/apps/tutorial03.py             |  8 +++--
+ python/lsquant/moments.py                     | 52 +++++++++++++++------------
+ tests/dev/stage_2_check.py                    | 10 ++++--
+ tests/dev/stage_3_check.py                    | 18 +++++++---
+ 9 files changed, 97 insertions(+), 39 deletions(-)
+ create mode 100644 handoff/0003-rank2-reconstruction/review-1.md
+merge exit: 0
+HEAD after merge: 0774db7
+0774db7 Update stage-3 report for kubo_plan and dos_plan review-1 changes
+b3c7fe2 Require explicit keyword indices and word in kubo_plan and word in dos_plan
+796564c handoff 0003: review 1 (Fable)
+c01b026 Add handoff 0003 stage-3 implementation report
+97668be Add stage3_kubo gate CLI, tutorial03 app, and stage_3_check self-check
+3e0d755 Add SymPy Green spectral functions, 2D Jackson damping, Gershgorin window, and rank-2 Kubo reconstructions
